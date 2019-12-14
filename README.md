@@ -1,12 +1,12 @@
-## Studi-Guide
+# Studi-Guide
 TH Nürnberg
 
-# Projektbeschreibung
+## Projektbeschreibung
 In diesem Projekt ist ein IT-gestütztes und mobil zugängliches Orientierungs- bzw. Leitsystem für
 Hochschulen neu zu entwickeln, prototypisch zu implementieren und für die Technische
 Hochschule Nürnberg zu testen.
 
-# Ausgangssituation
+## Ausgangssituation
 Trotz gut durchdachter Gebäudestruktur ist es für Besucher der Technischen Hochschule Nürnberg,
 aber auch für Studierende, Lehrende und Mitarbeiter nicht immer leicht, sich auf dem weitläufigen
 Campus-Gelände zurecht zu finden. Dabei kann auch das bisherige „Orientierungssystem“
@@ -15,7 +15,7 @@ Sich, vor allem unter Zeitdruck, effizient und zielgerichtet auf dem Campus zu b
 wie vor entsprechende Erfahrung voraus.
 
 
-# Ziel
+## Ziel
 Ein Orientierungssystem bzw. Besucherleitsystem soll es verschiedenen Zielgruppen ermöglichen,
 sich auf dem Gelände und in den Gebäuden der Hochschule schnell zu orientieren und sicher
 zurechtzufinden.
@@ -32,6 +32,6 @@ angehören. Zudem sollte das Orientierungssystem auch über mobile Endgeräte (w
 Smartphones) und ohne Vorkenntnisse intuitiv bedienbar sein. Einfache Wartbarkeit und
 Erweiterbarkeit werden als selbstverständlich vorausgesetzt.
 
-# Aufgaben 
+## Aufgaben 
 Ein IT-gestütztes und mobil zugängliches Orientierungssystem ist neu zu entwickeln, prototypisch
 zu implementieren und exemplarisch für die Technische Hochschule Nürnberg zu testen.
