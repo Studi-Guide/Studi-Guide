@@ -5,5 +5,6 @@ RUN dotnet publish app/StudiGuideAppService/StudiGuideAppService.csproj -c Relea
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
+WORKDIR /app
 COPY --from=build-env /app/out .
-ENTRYPOINT ["dotnet", "app/StudiGuideAppService.dll"]
+ENTRYPOINT ["dotnet", "StudiGuideAppService.dll"]
