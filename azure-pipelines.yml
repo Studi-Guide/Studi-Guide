@@ -9,11 +9,25 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+variables:
+  imageName: 'studiguide/studiguide_appservice'
+  tagname: 'latest'
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+steps:
+- script: echo Starting Studi-Guide Build!
+  displayName: 'SCM checkout'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: 'build'
+    projects: 'src/main/back/StudiGuideAppService.sln'
+   
+
+- task: Docker@2
+  displayName: Build docker container
+  inputs:
+    repository: $(imageName)
+    command: build
+    Dockerfile: src/main/back/Dockerfile
+    tags: $(tagname)
