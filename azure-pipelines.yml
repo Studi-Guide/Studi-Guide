@@ -38,5 +38,5 @@ steps:
   inputs:
     repository: $(imageName)
     command: build
-    Dockerfile: Dockerfile
+    Dockerfile: src/main/back/StudiGuideAppService/Dockerfile
     tags: $(tagname)
