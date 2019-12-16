@@ -38,5 +38,5 @@ steps:
   inputs:
     repository: $(imageName)
     command: build
-    Dockerfile: src/main/back/Dockerfile
+    Dockerfile: Dockerfile
     tags: $(tagname)
