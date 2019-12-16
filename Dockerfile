@@ -1,7 +1,7 @@
 # backend ----------------------
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1 AS build-env
 WORKDIR /src/main/back
-COPY *.csproj ./
+COPY . .
 RUN dotnet restore
 
 COPY . ./
