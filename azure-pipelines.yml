@@ -37,6 +37,6 @@ steps:
   displayName: Build docker container
   inputs:
     repository: $(imageName)
-    command: build
+    command: buildAndPush
     Dockerfile: src/main/back/StudiGuideAppService/Dockerfile
     tags: $(tagname)
