@@ -23,8 +23,8 @@ namespace StudiGuideAppService.Test
 
             using (var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole()))   // Need to use "using" in order to flush Console output
             {
-                var logger = loggerFactory.CreateLogger<WeatherForecastController>();
-                var controller = new WeatherForecastController(logger);
+                var logger = loggerFactory.CreateLogger<RoomCoordinateController>();
+                var controller = new RoomCoordinateController(logger);
                 var information = controller.Get();
                 Assert.IsTrue(information.Any());
             }
