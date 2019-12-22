@@ -32,11 +32,18 @@ steps:
     command: 'build'
     projects: 'src/main/back/StudiGuideAppService.sln'
    
+- task: DotNetCoreCLI@2
+  displayName: 'Run Unit Tests'
+  inputs:
+    command: 'test'
+    projects: 'src/main/back/StudiGuideAppService.sln'
 
 - task: Docker@2
   displayName: Build docker container
   inputs:
+    containerRegistry: 'DockerHub'
     repository: $(imageName)
-    command: build
+    command: buildAndPush
     Dockerfile: src/main/back/StudiGuideAppService/Dockerfile
     tags: $(tagname)
+    addPipelineData: false
