@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Geo location</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+<script>
+/*
+coords.latitude:          Breitenangabe als Dezimalzahl
+coords.longitude:         Längenangabe als Dezimalzahl
+coords.accuracy:          Genauigkeit der Koordinaten (in Meter)
+coords.altitude:          Höhenangabe (über dem Meeresspiegel)
+coords.altitudeAccuracy:  Genauigkeit der Höhenangabe
+coords.heading:           Richtung
+coords.speed:             Geschwindigkeit (in m/s)
+timestamp:                Zeit der Positionsangabe
+*/
+
+$(document).ready(function(){
+  if (!navigator.geolocation) {
+    alert("It seems that your device doesn't support geo location!");
+  } else {
+    getLocation();
+  }
+});
+
+// class GPS{
+//   constructor(longitude, latitude, accuracy, altitude, altitudeAccuracy) {
+//     this.longitude = 0;
+//     this.latitude = 0;
+//     this.accuracy = 0;
+//     this.altitude = 0;
+//     this.altitudeAccuracy = 0;
+//     this.options = {
+//       enableHighAccuracy: true
+//     };
+//   }
+//   updateLocationAttr(position) {
+//     this.longitude = position.coords.longitude;
+//     this.latitude = position.coords.latitude;
+//     this.accuracy = position.coords.accuracy;
+//     this.altitude = position.coords.altitude;
+//     this.altitudeAccuracy = position.coords.altitudeAccuracy;
+//   }
+//   callGeoLocation() {
+//     if (navigator.geolocation) {
+//       // position query
+//       navigator.geolocation.getCurrentPosition(this.updateLocationAttr, displayError, this.options);
+//     }
+//   }
+//   displayCoords() {
+//     document.getElementById('longitude-latitude').innerHTML("Ihre Koordinaten sind:<br> Breite: " + this.latitude + "<br>Länge: " + this.longitude);
+//   }
+//   displayAccuracy() {
+//     document.getElementById('accuracy').innerHTML("Genauigkeit der Koordinaten in Meter: " + this.accuracy);
+//   }
+//   displayHeight() {
+//     document.getElementById('altitude').innerHTML("Ihre Höhe über dem Meeresspiegel ist: " + this.altitude);
+//   }
+//   displayAltitudeAccuracy() {
+//     document.getElementById('altitude-accuracy').innerHTML("Genauigkeit Höhe in Meter: " + this.altitudeAccuracy);
+//   }
+//   embedInHtml() {
+//     this.displayCoords();
+//     this.displayAccuracy();
+//     this.displayHeight();
+//     this.displayAltitudeAccuracy();
+//   }
+// }
+
+// var studentLocation = new GPS();
+// studentLocation.callGeoLocation();
+// studentLocation.embedInHtml();
+
+// error callback
+function displayError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            alert("Benutzer lehnte Standortabfrage ab.");
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert("Standortdaten sind nicht verfügbar.");
+            break;
+        case error.TIMEOUT:
+            alert("Die Standortabfrage dauerte zu lange (Time-out).");
+            break;
+        case error.UNKNOWN_ERROR:
+            alert("unbekannter Fehler.");
+            break;
+    };
+}
+
+var student = {
+  location: {
+    longitude: 0,
+    latitude: 0,
+    altitude: 0
+  },
+  gps: {
+    accuracy: 0,
+    altitudeAccuracy: 0
+  }
+};
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.watchPosition(showPositionInMap, displayError, {enableHighAccuracy: true, maximumAge: 10000});
+  } else { 
+    $("#googleMap").html("Geolocation is not supported by this browser.");
+  }
+}
+    
+function showPositionInMap(position) {
+  student.location.latitude = position.coords.latitude;
+  student.location.longitude = position.coords.longitude;
+  student.location.altitude = position.coords.altitude;
+  student.gps.accuracy = position.coords.accuracy;
+  student.gps.altitudeAccuracy = position.coords.altitudeAccuracy;
+  myMap();
+  $('#longitude-latitude').html(student.location.latitude + "&minus;" + student.location.longitude);
+  $('#accuracy').html(student.gps.accuracy);
+  $('#altitude').html(student.location.altitude);
+  $('#altitude-accuracy').html(student.gps.altitudeAccuracy);
+}
+
+function myMap() {
+  var mapProp = {
+    center: new google.maps.LatLng(student.location.latitude, student.location.longitude), // 49.467648,11.110064
+    zoom: 18,
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+  var marker = new google.maps.Marker({
+    position: { lat: student.location.latitude, lng: student.location.longitude },
+    map: map,
+    icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png',
+    visible: true,
+    animation: google.maps.Animation.DROP
+  });
+  marker.setMap(map);
+}
+</script>
+
+</head>
+<body>
+<div class="jumbotron text-center">
+  <h1>Geo location - GPS Test</h1>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-6"><h6>Breiten- & Längengrad (B, L)</h6><span id="longitude-latitude"></span></div>
+    <div class="col-sm-6"><h6>Höhe (H)</h6><span id="altitude"></span></div>
+    <div class="col-sm-12">
+      <div id="googleMap" style="width:100%;height:400px;"></div>
+      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyChxmrrbDWbjQ6Q1shZdF_vojmQGNhY72c&callback=myMap"></script>
+    </div>
+    <div class="col-sm-6"><h6>Genauigkeit B & L</h6><span id="accuracy"></span></div>
+    <div class="col-sm-6"><h6>Genauigkeit H</h6><span id="altitude-accuracy"></span></div>
+  </div>
+</div>
+
+</body>
+</html>
+
