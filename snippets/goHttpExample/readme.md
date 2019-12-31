@@ -13,6 +13,4 @@ This go example uses mux of the gorilla webkit.
 
 ## Try
 
- - http://127.0.0.1:8080/hello?name=Studi%20Guide
- - http://127.0.0.1:8080/hello/Studi%20Guide
- - http://127.0.0.1:8080/static/style.css
+Hit http://127.0.0.1:8080/ (this redirects to http://127.0.0.1:8080/static/ )

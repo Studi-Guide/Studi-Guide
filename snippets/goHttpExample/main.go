@@ -63,6 +63,10 @@ func (a *App) Initialize() {
 	a.Router = router
 	
 	router.Handle("/hello/{name}", HelloWorldHandler())
+
+	router.HandleFunc("/app/test", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("Hello World!"))
+	})
 }
 
 func (a *App) Run(addr string) {
@@ -70,7 +74,7 @@ func (a *App) Run(addr string) {
 }
 
 func main() {
-	a := App{}
+	a := ShoppingList{}
 	a.Initialize()
 	a.Run(":8080")
 }
