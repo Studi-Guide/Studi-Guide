@@ -23,7 +23,7 @@ func (l *ShoppingList) Initialize(router *mux.Router ) {
 
 	l.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
 
-	l.router.Handle("/", http.RedirectHandler("/static/", 300))
+	l.router.Handle("/", http.RedirectHandler("/static/", 301))
 	l.router.HandleFunc("/shoppinglist", l.AddItem).Methods("POST")
 	l.router.HandleFunc("/shoppinglist", l.GetShoppingList)
 	l.router.HandleFunc("/shoppinglist/{name}", l.RemoveItem).Methods("DELETE")
