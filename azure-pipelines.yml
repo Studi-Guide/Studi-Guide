@@ -38,12 +38,12 @@ steps:
     command: 'test'
     projects: 'src/main/back/StudiGuideAppService.sln'
 
-- task: Docker@2
-  displayName: Build docker container
-  inputs:
-    containerRegistry: 'DockerHub'
-    repository: $(imageName)
-    command: buildAndPush
-    Dockerfile: src/main/back/StudiGuideAppService/Dockerfile
-    tags: $(tagname)
-    addPipelineData: false
+#- task: Docker@2
+#  displayName: Build docker container
+#  inputs:
+#    containerRegistry: 'DockerHub'
+#    repository: $(imageName)
+#    command: buildAndPush
+#    Dockerfile: src/main/back/StudiGuideAppService/Dockerfile
+#    tags: $(tagname)
+#    addPipelineData: false
