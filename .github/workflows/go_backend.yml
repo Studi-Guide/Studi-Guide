@@ -37,15 +37,22 @@ jobs:
     - name: Build Docker
       working-directory: ${{env.GO_HTTP}}
       run: docker build -t golang .
+
+    - name: Publish Docker 
+      working-directory: ${{env.GO_HTTP}}
+      run: |
+        docker login --password ${{ secrets.DOCKER_PASSWORD }} --username ${{ secrets.DOCKER_USER }}
+        docker push studiguide/studiguide_appservice:latest
+
     
-    - name: Build & Push to Docker Hub
-      uses: opspresso/action-docker@master
-      env:
-        USERNAME: ${{ secrets.DOCKER_USER }}
-        PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-        IMAGE_NAME: "studiguide/studiguide_appservice"
-        TAG_NAME: "latest"
-        LATEST: "true"
+    #- name: Build & Push to Docker Hub
+    #  uses: opspresso/action-docker@master
+    #  env:
+    #    USERNAME: ${{ secrets.DOCKER_USER }}
+    #    PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    #    IMAGE_NAME: "studiguide/studiguide_appservice"
+    #    TAG_NAME: "latest"
+    #    LATEST: "true"
       
 
 
