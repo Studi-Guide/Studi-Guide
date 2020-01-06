@@ -19,7 +19,7 @@ jobs:
       uses: actions/checkout@v1
       
     - name: Get dependencies
-      working-directory: ./snippets/goHttpExample/src
+      working-directory: ${{env.GO_HTTP}}
       run: |
         go get -v -t -d ./...
         if [ -f Gopkg.toml ]; then
@@ -28,7 +28,7 @@ jobs:
         fi
 
     - name: Build
-      working-directory: ${GO_HTTP}
+      working-directory: ${{env.GO_HTTP}}
       run: go build -v .
 
 
