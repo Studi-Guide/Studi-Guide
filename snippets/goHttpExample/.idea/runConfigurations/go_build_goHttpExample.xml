@@ -1,0 +1,12 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="go build goHttpExample" type="GoApplicationRunConfiguration" factoryName="Go Application">
+    <module name="goHttpExample" />
+    <working_directory value="$PROJECT_DIR$/src" />
+    <go_parameters value="-i" />
+    <kind value="DIRECTORY" />
+    <package value="main" />
+    <directory value="$PROJECT_DIR$/src" />
+    <output_directory value="$PROJECT_DIR$/bin" />
+    <method v="2" />
+  </configuration>
+</component>

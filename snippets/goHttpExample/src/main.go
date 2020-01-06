@@ -74,7 +74,12 @@ func (a *App) Run(addr string) {
 }
 
 func main() {
+	router := mux.NewRouter()
 	a := ShoppingList{}
-	a.Initialize()
-	a.Run(":8080")
+	a.Initialize(router)
+	roomController := RoomController{}
+	roomController.Initialize(router)
+	//a.Run(":8080")
+
+	http.ListenAndServe(":8080", router)
 }

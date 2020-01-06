@@ -17,9 +17,9 @@ type ShoppingList struct {
 	shoppingList []ShoppingItem
 }
 
-func (l *ShoppingList) Initialize() {
+func (l *ShoppingList) Initialize(router *mux.Router ) {
 	l.shoppingList = append(l.shoppingList, ShoppingItem{Name: "Item 0", Description: ""})
-	l.router = mux.NewRouter()
+	l.router = router
 
 	l.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
 

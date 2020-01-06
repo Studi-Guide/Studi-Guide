@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="308c96e0-c114-44ba-a1b7-cb218de0d535" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/goHttpExample.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/runConfigurations/go_build_goHttpExample.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/shoppingList.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/shoppingList.go" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="GOROOT" path="/usr/local/go" />
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GoLibraries">
+    <option name="indexEntireGoPath" value="false" />
+  </component>
+  <component name="ProjectId" id="1W1rrMJCYU1mDykPfXGdOAOt30g" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="configurable.Global.GOPATH.is.expanded" value="true" />
+    <property name="configurable.Module.GOPATH.is.expanded" value="false" />
+    <property name="configurable.Project.GOPATH.is.expanded" value="true" />
+    <property name="go.import.settings.migrated" value="true" />
+    <property name="go.tried.to.enable.integration.vgo.integrator" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.path.for.package.eslint" value="project" />
+    <property name="node.js.path.for.package.tslint" value="project" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+  </component>
+  <component name="RunManager">
+    <recent_temporary>
+      <list>
+        <item itemvalue="Go Build.go build goHttpExample" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="VgoProject">
+    <integration-enabled>true</integration-enabled>
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="590" y="215" width="800" height="684" key="#Go_Modules_(vgo)" timestamp="1578329342901">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="590" y="215" width="800" height="684" key="#Go_Modules_(vgo)/70.27.1850.1053@70.27.1850.1053" timestamp="1578329342901" />
+    <state x="453" y="211" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1578329016272">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="453" y="211" key="#com.intellij.execution.impl.EditConfigurationsDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1578329016272" />
+    <state x="637" y="358" width="706" height="397" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1578336854834">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="637" y="358" width="706" height="397" key="#com.intellij.fileTypes.FileTypeChooser/70.27.1850.1053@70.27.1850.1053" timestamp="1578336854833" />
+    <state x="669" y="181" width="642" height="752" key="#go_build_goHttpExample" timestamp="1578329409981">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="669" y="181" width="642" height="752" key="#go_build_goHttpExample/70.27.1850.1053@70.27.1850.1053" timestamp="1578329409981" />
+    <state x="669" y="181" width="642" height="752" key="#go_build_src/" timestamp="1578329120172">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="669" y="181" width="642" height="752" key="#go_build_src//70.27.1850.1053@70.27.1850.1053" timestamp="1578329120172" />
+    <state x="727" y="321" width="515" height="479" key="EnvironmentVariablesDialog" timestamp="1578329207384">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="727" y="321" width="515" height="479" key="EnvironmentVariablesDialog/70.27.1850.1053@70.27.1850.1053" timestamp="1578329207384" />
+    <state x="773" y="315" width="424" height="491" key="FileChooserDialogImpl" timestamp="1578329228369">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="773" y="315" width="424" height="491" key="FileChooserDialogImpl/70.27.1850.1053@70.27.1850.1053" timestamp="1578329228369" />
+    <state width="1804" height="340" key="GridCell.Tab.0.bottom" timestamp="1578336807704">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1804" height="340" key="GridCell.Tab.0.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807704" />
+    <state width="1804" height="340" key="GridCell.Tab.0.center" timestamp="1578336807702">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1804" height="340" key="GridCell.Tab.0.center/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807702" />
+    <state width="1804" height="340" key="GridCell.Tab.0.left" timestamp="1578336807701">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1804" height="340" key="GridCell.Tab.0.left/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807701" />
+    <state width="1804" height="340" key="GridCell.Tab.0.right" timestamp="1578336807703">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1804" height="340" key="GridCell.Tab.0.right/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807703" />
+    <state width="1804" height="340" key="GridCell.Tab.1.bottom" timestamp="1578336807707">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1804" height="340" key="GridCell.Tab.1.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807707" />
+    <state width="1804" height="340" key="GridCell.Tab.1.center" timestamp="1578336807706">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1804" height="340" key="GridCell.Tab.1.center/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807706" />
+    <state width="1804" height="340" key="GridCell.Tab.1.left" timestamp="1578336807706">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1804" height="340" key="GridCell.Tab.1.left/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807706" />
+    <state width="1804" height="340" key="GridCell.Tab.1.right" timestamp="1578336807707">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state width="1804" height="340" key="GridCell.Tab.1.right/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807707" />
+    <state x="484" y="188" width="1022" height="737" key="SettingsEditor" timestamp="1578329934737">
+      <screen x="70" y="27" width="1850" height="1053" />
+    </state>
+    <state x="484" y="188" width="1022" height="737" key="SettingsEditor/70.27.1850.1053@70.27.1850.1053" timestamp="1578329934737" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/src/main.go</url>
+          <line>78</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="DlvLineBreakpoint">
+          <url>file://$PROJECT_DIR$/src/main.go</url>
+          <line>77</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
