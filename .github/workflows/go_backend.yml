@@ -31,4 +31,8 @@ jobs:
       working-directory: ${{env.GO_HTTP}}
       run: go build -v .
 
+    - name: Run Unit Tests
+      echo: "dummy message"
+
+
 
