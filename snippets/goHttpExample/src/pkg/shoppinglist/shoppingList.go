@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	"io/ioutil"
+	"log"
 	"net/http"
 )
 
@@ -35,6 +36,7 @@ func (l *ShoppingList) Run(addr string) {
 }
 
 func (l *ShoppingList) GetShoppingList(w http.ResponseWriter, r *http.Request) {
+	log.Print("[ShoppingList] Request RoomList received")
 	json.NewEncoder(w).Encode(l.shoppingList)
 }
 

@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="308c96e0-c114-44ba-a1b7-cb218de0d535" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cmd/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/cmd/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pkg/roomcontroller/roomcontroller.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/pkg/roomcontroller/roomcontroller.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/pkg/shoppinglist/shoppingList.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/pkg/shoppinglist/shoppingList.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +64,17 @@
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>
   </component>
@@ -95,22 +107,22 @@
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
     <state x="773" y="315" width="424" height="491" key="FileChooserDialogImpl/70.27.1850.1053@70.27.1850.1053" timestamp="1578329228369" />
-    <state width="1804" height="340" key="GridCell.Tab.0.bottom" timestamp="1578336807704">
+    <state width="1804" height="275" key="GridCell.Tab.0.bottom" timestamp="1579362995144">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1804" height="340" key="GridCell.Tab.0.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807704" />
-    <state width="1804" height="340" key="GridCell.Tab.0.center" timestamp="1578336807702">
+    <state width="1804" height="275" key="GridCell.Tab.0.bottom/70.27.1850.1053@70.27.1850.1053" timestamp="1579362995144" />
+    <state width="1804" height="275" key="GridCell.Tab.0.center" timestamp="1579362995143">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1804" height="340" key="GridCell.Tab.0.center/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807702" />
-    <state width="1804" height="340" key="GridCell.Tab.0.left" timestamp="1578336807701">
+    <state width="1804" height="275" key="GridCell.Tab.0.center/70.27.1850.1053@70.27.1850.1053" timestamp="1579362995143" />
+    <state width="1804" height="275" key="GridCell.Tab.0.left" timestamp="1579362995143">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1804" height="340" key="GridCell.Tab.0.left/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807701" />
-    <state width="1804" height="340" key="GridCell.Tab.0.right" timestamp="1578336807703">
+    <state width="1804" height="275" key="GridCell.Tab.0.left/70.27.1850.1053@70.27.1850.1053" timestamp="1579362995142" />
+    <state width="1804" height="275" key="GridCell.Tab.0.right" timestamp="1579362995144">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>
-    <state width="1804" height="340" key="GridCell.Tab.0.right/70.27.1850.1053@70.27.1850.1053" timestamp="1578336807703" />
+    <state width="1804" height="275" key="GridCell.Tab.0.right/70.27.1850.1053@70.27.1850.1053" timestamp="1579362995144" />
     <state width="1804" height="340" key="GridCell.Tab.1.bottom" timestamp="1578336807707">
       <screen x="70" y="27" width="1850" height="1053" />
     </state>

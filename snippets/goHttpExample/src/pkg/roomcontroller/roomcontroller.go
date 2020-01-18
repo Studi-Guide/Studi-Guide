@@ -6,6 +6,7 @@ import (
 	"image"
 	"io/ioutil"
 	"net/http"
+	"log"
 )
 
 type Room struct {
@@ -35,6 +36,7 @@ func (l *RoomController) Run(addr string) {
 }
 
 func (l *RoomController) GetRoomList(w http.ResponseWriter, r *http.Request) {
+	log.Print("[RoomController] Request RoomList received")
 	json.NewEncoder(w).Encode(l.roomList)
 }
 
