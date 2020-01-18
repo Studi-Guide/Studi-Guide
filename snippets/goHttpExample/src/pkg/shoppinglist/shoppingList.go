@@ -36,7 +36,7 @@ func (l *ShoppingList) Run(addr string) {
 }
 
 func (l *ShoppingList) GetShoppingList(w http.ResponseWriter, r *http.Request) {
-	log.Print("[ShoppingList] Request RoomList received")
+	log.Print("[ShoppingList] Request shoppingList received")
 	json.NewEncoder(w).Encode(l.shoppingList)
 }
 

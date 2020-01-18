@@ -2,8 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="308c96e0-c114-44ba-a1b7-cb218de0d535" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/pkg/roomcontroller/roomcontroller.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/pkg/roomcontroller/roomcontroller.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/pkg/shoppinglist/shoppingList.go" beforeDir="false" afterPath="$PROJECT_DIR$/src/pkg/shoppinglist/shoppingList.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
