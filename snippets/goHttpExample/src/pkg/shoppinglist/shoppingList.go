@@ -26,10 +26,10 @@ func (l *ShoppingList) Initialize(router *mux.Router) {
 
 	log.Print("Mapping static files..")
 	printMainDirectory()
-	if exist, err := exists("./static"); !exist {
-		log.Fatal(err)
-		log.Fatal("static folder does not exist")
-	}
+	//f exist, err := exists("./static"); !exist {
+	//	log.Fatal(err)
+	//	log.Fatal("static folder does not exist")
+	// }
 	l.router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
 
 	l.router.Handle("/", http.RedirectHandler("/static/", 301))
