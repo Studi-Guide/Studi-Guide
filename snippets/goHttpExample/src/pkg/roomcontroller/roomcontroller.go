@@ -5,27 +5,27 @@ import (
 	"github.com/gorilla/mux"
 	"image"
 	"io/ioutil"
-	"net/http"
 	"log"
+	"net/http"
 )
 
 type Room struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
 	Coordinates image.Rectangle `json:"coordinates"`
 }
 
 type RoomController struct {
-	router       *mux.Router
+	router   *mux.Router
 	roomList []Room
 }
 
 func (l *RoomController) Initialize(router *mux.Router) {
 
-	l.roomList = append(l.roomList, Room{Name: "RoomN01", Description: "Dummy" })
-	l.roomList = append(l.roomList, Room{Name: "RoomN02", Description: "Dummy" })
-	l.roomList = append(l.roomList, Room{Name: "RoomN03", Description: "Dummy" })
-	l.roomList = append(l.roomList, Room{Name: "RoomN04", Description: "Dummy" })
+	l.roomList = append(l.roomList, Room{Name: "RoomN01", Description: "Dummy"})
+	l.roomList = append(l.roomList, Room{Name: "RoomN02", Description: "Dummy"})
+	l.roomList = append(l.roomList, Room{Name: "RoomN03", Description: "Dummy"})
+	l.roomList = append(l.roomList, Room{Name: "RoomN04", Description: "Dummy"})
 	l.router = router
 
 	l.router.HandleFunc("/roomlist", l.GetRoomList).Methods("GET")

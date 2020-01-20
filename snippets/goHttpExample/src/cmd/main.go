@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-func Main() (error) {
+func Main() error {
 	log.Print("Starting initializing main controllers ...")
 	router := mux.NewRouter()
 
@@ -23,7 +23,7 @@ func Main() (error) {
 
 	port := ":8080"
 	log.Printf("Starting http listener on %s", port)
-	http.ListenAndServe(port, router)
+	log.Fatal(http.ListenAndServe(port, router))
 
 	return nil
 
