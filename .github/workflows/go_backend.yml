@@ -36,7 +36,7 @@ jobs:
       
     - name: Build Docker
       working-directory: ${{env.GO_HTTP}}
-      run: docker build -t studiguide/studiguide_appservice .
+      run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice .
 
     - name: Publish Docker 
       working-directory: ${{env.GO_HTTP}}
