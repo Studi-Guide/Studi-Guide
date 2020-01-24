@@ -28,7 +28,7 @@ func (l *RoomController) Initialize(router *mux.Router) {
 	l.roomList = append(l.roomList, Room{Name: "RoomN04", Description: "Dummy"})
 	l.router = router
 
-	l.router.HandleFunc("/roomlist", l.GetRoomList).Methods("GET")
+	l.router.HandleFunc("/", l.GetRoomList).Methods("GET")
 }
 
 func (l *RoomController) Run(addr string) {
