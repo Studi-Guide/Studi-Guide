@@ -58,7 +58,7 @@ func testMethod(c *gin.Context) {
 // @Success 200 {array} models.ShoppingItem
 // @Router /shoppinglist/list/ [get]
 func (l *ShoppingListController) getShoppingList(c *gin.Context) {
-	json.NewEncoder(c.Writer).Encode(l.shoppingList)
+	c.JSON(http.StatusOK, l.shoppingList)
 }
 
 func (l *ShoppingListController) getItem(c *gin.Context) {
@@ -66,7 +66,7 @@ func (l *ShoppingListController) getItem(c *gin.Context) {
 
 	for _, item := range l.shoppingList {
 		if item.Name == name {
-			json.NewEncoder(c.Writer).Encode(item)
+			c.JSON(http.StatusOK, item)
 		}
 	}
 }

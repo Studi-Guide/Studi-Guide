@@ -5,7 +5,7 @@
         "license": {}
     },
     "paths": {
-        "/roomlist": {
+        "/roomlist/": {
             "get": {
                 "description": "Gets all available rooms",
                 "consumes": [

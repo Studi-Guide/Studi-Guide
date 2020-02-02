@@ -6,6 +6,7 @@ import (
 	"image"
 	"io/ioutil"
 	"log"
+	"net/http"
 )
 
 type Room struct {
@@ -38,10 +39,13 @@ func (l *RoomController) Initialize(router *gin.RouterGroup) {
 // @Tags RoomController
 // @Produce  json
 // @Success 200 {array} Room
-// @Router /roomlist [get]
+// @Router /roomlist/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
 	log.Print("[RoomController] Request RoomList received")
-	json.NewEncoder(c.Writer).Encode(l.roomList)
+	c.JSON(http.StatusOK, gin.H{
+		"code" : http.StatusOK,
+		"message": l.roomList,// cast it to string before showing
+	})
 }
 
 func (l *RoomController) GetItem(c *gin.Context) {
@@ -49,7 +53,7 @@ func (l *RoomController) GetItem(c *gin.Context) {
 
 	for _, item := range l.roomList {
 		if item.Name == name {
-			json.NewEncoder(c.Writer).Encode(item)
+			c.JSON(http.StatusOK ,item)
 		}
 	}
 }

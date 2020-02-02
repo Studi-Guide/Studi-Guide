@@ -21,7 +21,7 @@ info:
   contact: {}
   license: {}
 paths:
-  /roomlist:
+  /roomlist/:
     get:
       consumes:
       - application/json
