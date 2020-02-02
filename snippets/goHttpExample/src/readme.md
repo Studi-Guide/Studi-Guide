@@ -13,4 +13,4 @@ This go example uses mux of the gorilla webkit.
 
 ## Try
 
-Hit http://127.0.0.1:8080/ (this redirects to http://127.0.0.1:8080/static/ )
+Hit http://127.0.0.1:8080/shoppinglist/index
