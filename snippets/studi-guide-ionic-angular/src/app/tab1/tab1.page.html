@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Indoor Navigation
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content fullscreen>
+  <div style="border: 3px solid black; padding: 12px; height: 720px;">
+    <h3>Daten Test</h3>
+    <svg ng-hide="mapIsVisible" xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}">
+      <rect *ngFor="let room of testRooms"
+        attr.fill="{{room.fill}}"
+        attr.width="{{room.width}}"
+        attr.height="{{room.height}}"
+        attr.x="{{room.x}}"
+        attr.y="{{room.y}}"
+      ></rect>
+  </svg>
+  </div>
+  <!-- <ion-grid>
+    <ion-row>
+      <ion-col>
+        <div>
+          <svg width="350" height="140" xmlns="http://www.w3.org/2000/svg">
+              <svg:rect *ngFor="let room of floor"
+                attr.width="{{width}}"
+                attr.height="{{height}}"
+                attr.x="{{x}}"
+                attr.y="{{y}}"
+              />
+          </svg>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid> -->
+  <ion-card class="">
+    <img src="/assets/floors/4th-floor.svg" alt="" />
+  </ion-card>
+  <ion-item>
+    <ion-label position="stacked"><ion-text color="primary">Start room</ion-text></ion-label>
+    <ion-input type="text" placeholder="Start room"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="stacked"><ion-text color="primary">Destination</ion-text></ion-label>
+    <ion-input type="text" placeholder="Destination"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-button expand="block" color="dark">Go!</ion-button>
+  </ion-item>
+</ion-content>
