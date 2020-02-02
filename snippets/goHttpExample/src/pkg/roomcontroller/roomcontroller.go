@@ -30,6 +30,14 @@ func (l *RoomController) Initialize(router *gin.RouterGroup) {
 	l.router.GET("/", l.GetRoomList)
 }
 
+// GetRoomList godoc
+// @Summary Get Room List
+// @Description Gets all available rooms
+// @ID get-room-list
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} Room
+// @Router /roomlist [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
 	log.Print("[RoomController] Request RoomList received")
 	json.NewEncoder(c.Writer).Encode(l.roomList)

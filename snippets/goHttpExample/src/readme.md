@@ -13,4 +13,14 @@ This go example uses mux of the gorilla webkit.
 
 ## Try
 
-Hit http://127.0.0.1:8080/shoppinglist/index
+Hit http://localhost:8080/shoppinglist/index
+
+## Swagger
+
+   - execute `swag init`
+   - run the application
+   - Hit http://localhost:8080/swagger/index.html to open the swagger api page
+
+API infos:
+https://github.com/swaggo/swag#getting-started
+

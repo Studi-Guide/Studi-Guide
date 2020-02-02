@@ -1,5 +1,31 @@
+definitions:
+  roomcontroller.Room:
+    properties:
+      coordinates:
+        type: string
+      description:
+        type: string
+      name:
+        type: string
+    type: object
 info:
   contact: {}
   license: {}
-paths: {}
+paths:
+  /roomlist:
+    get:
+      consumes:
+      - application/json
+      description: Gets all available rooms
+      operationId: get-room-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/roomcontroller.Room'
+            type: array
+      summary: Get Room List
 swagger: "2.0"
