@@ -48,6 +48,15 @@ func testMethod(c *gin.Context) {
 	fmt.Fprint(c.Writer, "Hello testMethod!")
 }
 
+// GetShoppingList godoc
+// @Summary Get Shopping List
+// @Description Gets all shopping items
+// @ID get-shopping-list
+// @Accept  json
+// @Produce  json
+// @Tags ShoopingListController
+// @Success 200 {array} models.ShoppingItem
+// @Router /shoppinglist/list/ [get]
 func (l *ShoppingListController) getShoppingList(c *gin.Context) {
 	json.NewEncoder(c.Writer).Encode(l.shoppingList)
 }

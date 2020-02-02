@@ -35,6 +35,7 @@ func (l *RoomController) Initialize(router *gin.RouterGroup) {
 // @Description Gets all available rooms
 // @ID get-room-list
 // @Accept  json
+// @Tags RoomController
 // @Produce  json
 // @Success 200 {array} Room
 // @Router /roomlist [get]

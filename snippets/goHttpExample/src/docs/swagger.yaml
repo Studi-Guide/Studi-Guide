@@ -1,4 +1,13 @@
 definitions:
+  models.ShoppingItem:
+    properties:
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+    type: object
   roomcontroller.Room:
     properties:
       coordinates:
@@ -28,4 +37,24 @@ paths:
               $ref: '#/definitions/roomcontroller.Room'
             type: array
       summary: Get Room List
+      tags:
+      - RoomController
+  /shoppinglist/list/:
+    get:
+      consumes:
+      - application/json
+      description: Gets all shopping items
+      operationId: get-shopping-list
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.ShoppingItem'
+            type: array
+      summary: Get Shopping List
+      tags:
+      - ShoopingListController
 swagger: "2.0"
