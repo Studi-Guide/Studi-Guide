@@ -1,8 +1,8 @@
 package main
 
-import(
-	"os"
+import (
 	"httpExample/cmd/studi-guide-ctl/ctl"
+	"os"
 )
 
 func main() {

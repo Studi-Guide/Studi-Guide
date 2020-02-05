@@ -41,7 +41,7 @@ func StudiGuideServer() error {
 	roomRouter := router.Group("/roomlist")
 	{
 		log.Print("Creating room controller")
-		roomController := roomcontroller.RoomController{}
+		roomController := roomcontroller.RoomControllerApp{}
 		roomController.Initialize(roomRouter)
 		//a.Run(":8080")
 	}
