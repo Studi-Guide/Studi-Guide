@@ -1,4 +1,4 @@
-package cmd
+package server
 
 import (
 	"github.com/gin-gonic/gin"
@@ -10,7 +10,7 @@ import (
 	"net/http"
 )
 
-func Main() error {
+func StudiGuideServer() error {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 

@@ -9,7 +9,7 @@ This go example uses mux of the gorilla webkit.
 ## Run
 
  - verify that no other process runs on port 8080
- - execute `go run .`
+ - execute `go run ./cmd/studi-guide`
 
 ## Try
 

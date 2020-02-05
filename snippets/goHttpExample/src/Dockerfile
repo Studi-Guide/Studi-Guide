@@ -5,11 +5,11 @@ FROM golang:latest
 
 ADD . /go/src/httpExample
 WORKDIR /go/src/httpExample
-RUN go get
-RUN go install
+RUN go mod download
+RUN go install ./cmd/...
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
 
 # Command to run the executable
-CMD ["/go/bin/httpExample"]
+CMD ["/go/bin/studi-guide"]
