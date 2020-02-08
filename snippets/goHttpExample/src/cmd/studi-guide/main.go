@@ -1,6 +1,7 @@
 package main
 
 import (
+	"httpExample/cmd"
 	"httpExample/cmd/studi-guide/server"
 	"httpExample/docs"
 	"log"
@@ -15,5 +16,8 @@ func main() {
 	docs.SwaggerInfo.BasePath = "/"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
-	log.Fatal(server.StudiGuideServer())
+	env := cmd.GetEnv()
+	log.Println(env)
+
+	log.Fatal(server.StudiGuideServer(env))
 }

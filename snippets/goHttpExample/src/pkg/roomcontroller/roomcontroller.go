@@ -2,21 +2,22 @@ package roomcontroller
 
 import (
 	"github.com/gin-gonic/gin"
-	"httpExample/pkg/roomcontroller/conntrollers"
+	"httpExample/cmd"
+	"httpExample/pkg/roomcontroller/controllers"
 	"httpExample/pkg/roomcontroller/models"
 )
 
 type RoomControllerApp struct {
-	roomController *controllers.RoomController
+	roomcontroller *controllers.RoomController
 }
 
-func (l *RoomControllerApp) Initialize(router *gin.RouterGroup) {
+func (r *RoomControllerApp) Initialize(env *cmd.Env, router *gin.RouterGroup) (error) {
 
-	var roomList []models.Room
-	roomList = append(roomList, models.Room{Name: "RoomN01", Description: "Dummy"})
-	roomList = append(roomList, models.Room{Name: "RoomN02", Description: "Dummy"})
-	roomList = append(roomList, models.Room{Name: "RoomN03", Description: "Dummy"})
-	roomList = append(roomList, models.Room{Name: "RoomN04", Description: "Dummy"})
+	provider, err := models.NewRoomDbService(env.DbDriverName(), env.DbDataSource(), "rooms")
+	if err != nil {
+		return err
+	}
 
-	l.roomController = controllers.NewRoomController(router, roomList)
+	r.roomcontroller = controllers.NewRoomController(router, provider)
+	return nil
 }

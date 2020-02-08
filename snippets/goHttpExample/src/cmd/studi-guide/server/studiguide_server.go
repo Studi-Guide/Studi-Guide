@@ -4,13 +4,14 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
+	"httpExample/cmd"
 	"httpExample/pkg/roomcontroller"
 	"httpExample/pkg/shoppinglist"
 	"log"
 	"net/http"
 )
 
-func StudiGuideServer() error {
+func StudiGuideServer(env *cmd.Env) error {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -42,7 +43,12 @@ func StudiGuideServer() error {
 	{
 		log.Print("Creating room controller")
 		roomController := roomcontroller.RoomControllerApp{}
-		roomController.Initialize(roomRouter)
+		err := roomController.Initialize(env, roomRouter)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Print("Successfully initialized room controller")
+		}
 		//a.Run(":8080")
 	}
 

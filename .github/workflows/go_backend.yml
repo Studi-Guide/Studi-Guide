@@ -32,7 +32,7 @@ jobs:
       run: go build -v ./cmd/...
 
     - name: Run Unit Tests
-      run: echo 'dummy unit test'
+      run: go test -cover ./...
       
     - name: Build Docker
       working-directory: ${{env.GO_HTTP}}

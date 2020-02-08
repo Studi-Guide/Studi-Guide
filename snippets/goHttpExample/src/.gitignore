@@ -2,3 +2,5 @@
 goHttpExample
 studi-guide
 studi-guide-ctl
+*.sqlite3
+go_build*
