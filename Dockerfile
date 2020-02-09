@@ -22,6 +22,7 @@ RUN go install ./cmd/...
 
 WORKDIR /go/bin/ionic
 COPY --from=ionicbuilder /www/app/www .
+RUN ls
 
 WORKDIR /go/bin
 
