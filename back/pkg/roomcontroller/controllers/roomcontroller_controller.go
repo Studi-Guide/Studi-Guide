@@ -3,9 +3,9 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"studi-guide/pkg/roomcontroller/models"
 	"log"
 	"net/http"
+	"studi-guide/pkg/roomcontroller/models"
 )
 
 type RoomController struct {
@@ -13,7 +13,7 @@ type RoomController struct {
 	provider models.RoomServiceProvider
 }
 
-func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvider) (*RoomController) {
+func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvider) *RoomController {
 	r := RoomController{router: router, provider: provider}
 	r.router.GET("/", r.GetRoomList)
 	r.router.GET("/:name", r.GetRoom)
@@ -27,7 +27,7 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Accept  json
 // @Tags RoomController
 // @Produce  json
-// @Success 200 {array} Room
+// @Success 200 {array} models.Room
 // @Router /roomlist/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
 	log.Print("[RoomController] Request RoomList received")
@@ -36,7 +36,7 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 	if err != nil {
 		fmt.Println("GetAllRomms() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
-			"code": http.StatusBadRequest,
+			"code":    http.StatusBadRequest,
 			"message": err.Error(),
 		})
 	} else {

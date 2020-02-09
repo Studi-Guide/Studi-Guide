@@ -17,7 +17,7 @@ Hit http://localhost:8080/shoppinglist/index
 
 ## Swagger
 
-   - execute `swag init`
+   - execute `swag init -g cmd/studi-guide/main.go`
    - run the application
    - Hit http://localhost:8080/swagger/index.html to open the swagger api page
 

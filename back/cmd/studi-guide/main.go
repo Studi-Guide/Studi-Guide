@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 	"studi-guide/cmd"
-	"studi-guide/cmd/studi-guide/docs"
 	"studi-guide/cmd/studi-guide/server"
+	"studi-guide/docs"
 )
 
 func main() {
