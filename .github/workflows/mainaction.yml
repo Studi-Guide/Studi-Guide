@@ -52,11 +52,11 @@ jobs:
         ionic build --engine=browser
       
     - name: Build Docker
-      working-directory: ${{env.GO_HTTP}}
+      #working-directory: ${{env.GO_HTTP}}
       run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice .
 
     - name: Publish Docker 
-      working-directory: ${{env.GO_HTTP}}
+      #working-directory: ${{env.GO_HTTP}}
       run: |
         docker login --password ${{ secrets.DOCKER_PASSWORD }} --username ${{ secrets.DOCKER_USER }}
         docker push studiguide/studiguide_appservice:latest

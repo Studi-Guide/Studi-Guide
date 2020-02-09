@@ -3,12 +3,28 @@
 # Start from the latest golang base image
 FROM golang:latest as builder
 
-WORKDIR /go/src/httpExample
+WORKDIR /go/src/studiguide
 RUN ls
-COPY . .
+COPY /back .
 RUN go get
-RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-s" -o ../../bin/httpExample .
+RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -ldflags="-s" -o ../../bin/studiguide .
 
+
+
+# --------------------- IONIC Build ------------------------
+#FROM node:0.12
+
+COPY /front /www/app
+
+RUN npm install -g ionic
+
+WORKDIR /www/app
+RUN npm install
+
+RUN ionic build --engine=browser
+
+
+# blank container -------------------------------
 FROM iron/base
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
@@ -16,7 +32,7 @@ WORKDIR /go
 COPY --from=builder go ./
 
 # copy static files
-WORKDIR /go/src/httpExample/static
+WORKDIR /go/src/studiguide/static
 RUN ls
 COPY . /go/bin/static
 
@@ -27,4 +43,4 @@ RUN ls
 EXPOSE 8080
 
 # Command to run the executable
-CMD ["/go/bin/httpExample"]
+CMD ["/go/bin/studiguide"]
