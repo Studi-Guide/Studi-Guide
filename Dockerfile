@@ -15,16 +15,18 @@ RUN ls
 # Start from the latest golang base image
 FROM golang:latest
 
-ADD back /go/src/httpExample
-WORKDIR /go/src/httpExample
+COPY back /go/src/studi-guide
+WORKDIR /go/src/studi-guide
+RUN ls
 RUN go mod download
-RUN go install ./cmd/...
+RUN go install ./cmd/studi-guide
 
 WORKDIR /go/bin/ionic
 COPY --from=ionicbuilder /www/app/www .
-RUN ls
+#RUN ls
 
 WORKDIR /go/bin
+RUN ls
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
