@@ -16,17 +16,15 @@ jobs:
         go-version: 1.13.5
       id: go
 
-    - name: install Node.js and angular
-      uses: actions/setup-node@v1 #this installs node and npm for us
-      with:
-        node-version: '10.x'
-      
-    - run: npm install
-    - run: npm install -g @angular/cli > /dev/null
-
     - name: Setup Ionic
       uses: coturiv/setup-ionic@v1.0.0
         
+    - name: install Node.js and angular
+      uses: actions/setup-node@v1 #this installs node and npm for us
+      
+    - run: npm install
+    - run: npm install -g @angular/cli > /dev/null
+      
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
       
