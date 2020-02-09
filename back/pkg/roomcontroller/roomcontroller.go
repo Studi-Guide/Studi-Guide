@@ -2,9 +2,9 @@ package roomcontroller
 
 import (
 	"github.com/gin-gonic/gin"
-	"httpExample/cmd"
-	"httpExample/pkg/roomcontroller/controllers"
-	"httpExample/pkg/roomcontroller/models"
+	"studi-guide/cmd"
+	"studi-guide/pkg/roomcontroller/controllers"
+	"studi-guide/pkg/roomcontroller/models"
 )
 
 type RoomControllerApp struct {

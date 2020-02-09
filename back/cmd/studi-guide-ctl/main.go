@@ -1,7 +1,7 @@
 package main
 
 import (
-	"httpExample/cmd/studi-guide-ctl/ctl"
+	"studi-guide/cmd/studi-guide-ctl/ctl"
 	"os"
 )
 

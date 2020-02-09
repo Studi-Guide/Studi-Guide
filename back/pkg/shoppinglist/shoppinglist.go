@@ -2,7 +2,7 @@ package shoppinglist
 
 import (
 	"github.com/gin-gonic/gin"
-	"httpExample/pkg/shoppinglist/controllers"
+	"studi-guide/pkg/shoppinglist/controllers"
 )
 
 type ShoppingListApp struct {

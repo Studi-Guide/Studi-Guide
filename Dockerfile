@@ -19,7 +19,7 @@ COPY back /go/src/studi-guide
 WORKDIR /go/src/studi-guide
 RUN ls
 RUN go mod download
-RUN go install ./cmd/studi-guide
+RUN go install ./cmd/studi-guide/...
 
 WORKDIR /go/bin/ionic
 COPY --from=ionicbuilder /www/app/www .

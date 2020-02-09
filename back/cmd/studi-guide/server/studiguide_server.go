@@ -4,9 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
-	"httpExample/cmd"
-	"httpExample/pkg/roomcontroller"
-	"httpExample/pkg/shoppinglist"
+	"studi-guide/cmd"
+	"studi-guide/pkg/roomcontroller"
+	"studi-guide/pkg/shoppinglist"
 	"log"
 	"net/http"
 )

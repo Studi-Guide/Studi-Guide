@@ -1,4 +1,4 @@
-module httpExample
+module studi-guide
 
 go 1.13
 

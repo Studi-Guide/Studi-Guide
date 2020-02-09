@@ -3,7 +3,7 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"httpExample/pkg/roomcontroller/models"
+	"studi-guide/pkg/roomcontroller/models"
 	"log"
 	"net/http"
 )

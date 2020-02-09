@@ -1,9 +1,9 @@
 package main
 
 import (
-	"httpExample/cmd"
-	"httpExample/cmd/studi-guide/docs"
-	"httpExample/cmd/studi-guide/server"
+	"studi-guide/cmd"
+	"studi-guide/cmd/studi-guide/docs"
+	"studi-guide/cmd/studi-guide/server"
 	"log"
 )
 
