@@ -16,15 +16,12 @@ jobs:
         go-version: 1.13.5
       id: go
 
-    - name: Setup Ionic
-      uses: coturiv/setup-ionic@v1.0.0
         
-#    - name: install Node.js and angular
- #     uses: actions/setup-node@v1 #this installs node and npm for us
+    - name: install Node.js and angular
+      uses: actions/setup-node@v1 #this installs node and npm for us
       
-   # - run: npm install
-  #  - run: npm install -g @angular/cli > /dev/null
-      
+    - run: npm install -g ionic
+            
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
       
@@ -45,10 +42,14 @@ jobs:
       working-directory: ${{env.GO_HTTP}}
       run: go test -cover ./...
       
+    - name: Get dependencies Frontend
+      run: npm install
+      working-directory: ${{env.IONIC}}
+      
     - name: Build frontend
       working-directory: ${{env.IONIC}}
       run: |
-        ionic cordova build --engine=browser
+        ionic build --engine=browser
       
     - name: Build Docker
       working-directory: ${{env.GO_HTTP}}
