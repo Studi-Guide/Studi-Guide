@@ -1,13 +1,16 @@
 package main
 
 import (
+	"log"
 	"studi-guide/cmd"
 	"studi-guide/cmd/studi-guide/docs"
 	"studi-guide/cmd/studi-guide/server"
-	"log"
 )
 
 func main() {
+
+	log.Print("Starting service")
+
 	// programatically set swagger info
 	docs.SwaggerInfo.Title = "StuidGuide API"
 	docs.SwaggerInfo.Description = "This is a sample server StudiGuide server."
