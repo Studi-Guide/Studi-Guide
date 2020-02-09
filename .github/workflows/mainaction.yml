@@ -6,7 +6,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:  
-      GO_HTTP: "./snippets/goHttpExample/src"
+      GO_HTTP: "./back"
     steps:
 
     - name: Set up Go 1.13.5
