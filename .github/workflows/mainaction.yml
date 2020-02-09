@@ -19,6 +19,9 @@ jobs:
     - name: Setup Ionic
       uses: coturiv/setup-ionic@v1.0.0
     
+    - name: Setup Angular
+      run: npm install -g @angular/cli
+    
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
       
