@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:  
       GO_HTTP: "./back"
+      IONIC: "./front"
     steps:
 
     - name: Set up Go 1.13.5
@@ -15,6 +16,9 @@ jobs:
         go-version: 1.13.5
       id: go
 
+    - name: Setup Ionic
+      uses: coturiv/setup-ionic@v1.0.0
+    
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
       
@@ -27,13 +31,18 @@ jobs:
             dep ensure
         fi
 
-    - name: Build
+    - name: Build backend
       working-directory: ${{env.GO_HTTP}}
       run: go build -v ./cmd/...
 
-    - name: Run Unit Tests
+    - name: Run backend Unit Tests
       working-directory: ${{env.GO_HTTP}}
       run: go test -cover ./...
+      
+    - name: Build frontend
+      working-directory: ${{env.IONIC}}
+      run: |
+        ionic build --engine=browser
       
     - name: Build Docker
       working-directory: ${{env.GO_HTTP}}
