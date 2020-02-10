@@ -1,3 +1,6 @@
+# Build status
+![Go](https://github.com/Studi-Guide/Studi-Guide/workflows/Go/badge.svg?branch=master)
+
 # Studi-Guide
 TH Nürnberg
 
