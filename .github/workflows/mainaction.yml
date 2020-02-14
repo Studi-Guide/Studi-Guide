@@ -49,6 +49,14 @@ jobs:
       working-directory: ${{env.IONIC}}
       run: |
         ionic build --engine=browser
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: master_artefacts
+        # Directory containing files to upload
+        path: "./"
 
   test:
     name: Test
