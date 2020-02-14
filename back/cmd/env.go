@@ -4,26 +4,28 @@ import (
 	"log"
 	"os"
 )
+
 type Env struct {
-	dbDriverName, dbDataSource string
+	dbDriverName, dbDataSource, frontendPath string
 }
 
 var dBDriverNameKey string = "DB_DRIVER_NAME"
 var dbDataSourceKey string = "DB_DATA_SOURCE"
+var frontendPath string = "FRONTEND_PATH"
 
 var env *Env
 
-func GetEnv() (*Env) {
+func GetEnv() *Env {
 
 	if env == nil {
-		env = &Env{os.Getenv(dBDriverNameKey), os.Getenv(dbDataSourceKey)}
+		env = &Env{os.Getenv(dBDriverNameKey), os.Getenv(dbDataSourceKey), os.Getenv(frontendPath)}
 	}
-
 
 	if len(env.dbDriverName) == 0 && len(env.dbDataSource) == 0 {
 		log.Println("Using sqlite3 DB driver as no environment variables were provided.")
 		env.dbDriverName = "sqlite3"
 		env.dbDataSource = "db.sqlite3"
+		env.frontendPath = "./ionic"
 	}
 
 	return env
@@ -40,4 +42,8 @@ func (e *Env) DbDriverName() string {
 
 func (e *Env) DbDataSource() string {
 	return e.dbDataSource
+}
+
+func (e *Env) FrontendPath() string {
+	return e.frontendPath
 }

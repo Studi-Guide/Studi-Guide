@@ -30,8 +30,9 @@ func StudiGuideServer(env *cmd.Env) error {
 	//router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
 
 	// TODO verify IONIC input
-	if _, err := os.Stat("./ionic/index.html"); err == nil {
-		router.Use(static.Serve("/", static.LocalFile("./ionic", true)))
+	if _, err := os.Stat(env.FrontendPath()); err == nil {
+		log.Print("IONIC found! Serving files ....")
+		router.Use(static.Serve("/", static.LocalFile(env.FrontendPath(), true)))
 	}
 
 	shoppingRouter := router.Group("/shoppinglist")
