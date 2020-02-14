@@ -1,22 +1,25 @@
 name: Go
 on: [push]
+
+env:  
+  GO_HTTP: "./back"
+  IONIC: "./front"
+  GO_VERSION: 1.13.5
+
+
 jobs:
 
   build:
     name: Build
     runs-on: ubuntu-latest
-    env:  
-      GO_HTTP: "./back"
-      IONIC: "./front"
     steps:
 
     - name: Set up Go 1.13.5
       uses: actions/setup-go@v1
       with:
-        go-version: 1.13.5
+        go-version: ${{env.GO_VERSION}}
       id: go
 
-        
     - name: install Node.js and angular
       uses: actions/setup-node@v1 #this installs node and npm for us
       
@@ -24,7 +27,7 @@ jobs:
             
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
-      
+
     - name: Get dependencies
       working-directory: ${{env.GO_HTTP}}
       run: |
@@ -37,10 +40,6 @@ jobs:
     - name: Build backend
       working-directory: ${{env.GO_HTTP}}
       run: go build -v ./cmd/...
-
-    - name: Run backend Unit Tests
-      working-directory: ${{env.GO_HTTP}}
-      run: go test -cover ./...
       
     - name: Get dependencies Frontend
       run: npm install
@@ -50,7 +49,49 @@ jobs:
       working-directory: ${{env.IONIC}}
       run: |
         ionic build --engine=browser
-      
+        
+    - name: Upload frontend artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: front_artefacts
+        # Directory containing files to upload
+        path: "${{env.IONIC}}/www"
+        
+    - name: Upload backend artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: back_artefacts
+        # Directory containing files to upload
+        path: ${{env.GO_HTTP}}
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    
+    - name: Set up Go 1.13.5
+      uses: actions/setup-go@v1
+      with:
+        go-version: ${{env.GO_VERSION}}
+      id: go
+    
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+    
+    - name: Run backend Unit Tests
+      working-directory: ${{env.GO_HTTP}}
+      run: go test -cover ./...
+
+  deploy:
+    needs: [build,test]
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+          
     - name: Build Docker
       #working-directory: ${{env.GO_HTTP}}
       run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice .
