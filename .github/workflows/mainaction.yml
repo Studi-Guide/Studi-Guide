@@ -1,13 +1,16 @@
 name: Go
 on: [push]
+
+env:  
+  GO_HTTP: "./back"
+  IONIC: "./front"
+
+
 jobs:
 
-  build:
-    name: Build
+  setup:
+    name: Setup Environmnet
     runs-on: ubuntu-latest
-    env:  
-      GO_HTTP: "./back"
-      IONIC: "./front"
     steps:
 
     - name: Set up Go 1.13.5
@@ -24,7 +27,11 @@ jobs:
             
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
-      
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
     - name: Get dependencies
       working-directory: ${{env.GO_HTTP}}
       run: |
@@ -37,10 +44,6 @@ jobs:
     - name: Build backend
       working-directory: ${{env.GO_HTTP}}
       run: go build -v ./cmd/...
-
-    - name: Run backend Unit Tests
-      working-directory: ${{env.GO_HTTP}}
-      run: go test -cover ./...
       
     - name: Get dependencies Frontend
       run: npm install
@@ -50,7 +53,19 @@ jobs:
       working-directory: ${{env.IONIC}}
       run: |
         ionic build --engine=browser
-      
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Run backend Unit Tests
+      working-directory: ${{env.GO_HTTP}}
+      run: go test -cover ./...
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
     - name: Build Docker
       #working-directory: ${{env.GO_HTTP}}
       run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice .
