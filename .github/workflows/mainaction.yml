@@ -56,7 +56,7 @@ jobs:
         # Artifact name
         name: front_artefacts
         # Directory containing files to upload
-        path: ${{env.IONIC}}
+        path: "${{env.IONIC}}/www"
         
     - name: Upload backend artifact
       uses: actions/upload-artifact@v1.0.0
