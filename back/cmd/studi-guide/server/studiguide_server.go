@@ -4,11 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
+	"log"
+	"net/http"
+	"os"
+	"path/filepath"
 	"studi-guide/cmd"
 	"studi-guide/pkg/roomcontroller"
 	"studi-guide/pkg/shoppinglist"
-	"log"
-	"net/http"
 )
 
 func StudiGuideServer(env *cmd.Env) error {
@@ -24,8 +26,28 @@ func StudiGuideServer(env *cmd.Env) error {
 	router.Use(gin.Recovery())
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-	router.GET("/", RedirectRootToAPI(router))
+	//router.GET("/", RedirectRootToAPI(router))
 	//router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
+
+	// TODO verify IONIC input
+	if _, err := os.Stat("./ionic/index.html"); err == nil {
+		log.Print("Ionic folder found. Mapping files...")
+		router.Static("/ionic", "./ionic")
+		//l.router.StaticFile("/start/index.html", "./ionic/index.html")
+
+		router.NoRoute(func(context *gin.Context) {
+			staticFileThatIsBeingRequested := filepath.Join("ionic/", context.Request.URL.Path)
+
+			if _, err := os.Stat(staticFileThatIsBeingRequested); err == nil {
+				log.Printf("200 : %s \n", context.Request.URL.Path)
+				context.Request.URL.Path = "/ionic" + context.Request.URL.Path
+				context.File(staticFileThatIsBeingRequested)
+			} else {
+				log.Printf("404 : %s \n", context.Request.URL.Path)
+			}
+		})
+
+	}
 
 	shoppingRouter := router.Group("/shoppinglist")
 	{
@@ -76,7 +98,7 @@ func auth() gin.HandlerFunc {
 // RedirectRootToAPI redirects all calls from root endpoint to current API documentation endpoint
 func RedirectRootToAPI(r *gin.Engine) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		c.Request.URL.Path = "/shoppinglist/index" // <- this line
+		c.Request.URL.Path = "/shoppinglist/index.html" // <- this line
 		r.HandleContext(c)
 	}
 }

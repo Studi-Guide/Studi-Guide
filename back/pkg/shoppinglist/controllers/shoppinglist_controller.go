@@ -4,11 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"studi-guide/pkg/shoppinglist/models"
-	"studi-guide/pkg/shoppinglist/utils"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
+	"studi-guide/pkg/shoppinglist/models"
+	"studi-guide/pkg/shoppinglist/utils"
 )
 
 type ShoppingListController struct {
@@ -31,7 +32,14 @@ func NewShoppingListController(router *gin.RouterGroup, subRouterPrefix, package
 
 	//l.router.Handle("/", http.StripPrefix(subRouterPrefix, http.FileServer(http.Dir(packagePrefix + "/views/"))))
 	//gin.Default().LoadHTMLFiles(packagePrefix + "/views/*")
-	l.router.StaticFS("/index/", http.Dir(packagePrefix+"/views/"))
+
+	//PrintCurrentDir()
+	if _, err := os.Stat("./ionicframework/index.html"); err == nil {
+		log.Print("Ionic folder found. Mapping files...")
+		//l.router.StaticFile("/start/index.html", "./ionic/index.html")
+	} else {
+		l.router.StaticFS("/index/", http.Dir(packagePrefix+"/views/"))
+	}
 
 	l.router.POST("/list/", l.addItem)
 	l.router.GET("/list/", l.getShoppingList)
