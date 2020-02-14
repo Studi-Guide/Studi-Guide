@@ -30,12 +30,7 @@ jobs:
 
     - name: Get dependencies
       working-directory: ${{env.GO_HTTP}}
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
+      run: go mod download
 
     - name: Build backend
       working-directory: ${{env.GO_HTTP}}
