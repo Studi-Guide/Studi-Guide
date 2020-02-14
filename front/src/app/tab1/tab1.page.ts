@@ -25,7 +25,7 @@ export class Tab1Page {
   public svgHeight:number = this.calcSvgHeight();
 
   constructor() {
-    this.http = new HttpClient('sdfsdf');
+    // this.http = new HttpClient('sdfsdf');
   }
 
   private calcSvgWidth() {
