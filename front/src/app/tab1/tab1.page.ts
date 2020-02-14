@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import {HttpClient, HttpHandler} from '@angular/common/http';
 import { floor } from '../building-objects-if';
 import { room } from '../building-objects-if';
 import { corridor } from '../building-objects-if';
 import { testDataRooms } from './building-data';
+import {Component} from "@angular/core";
+import {parseJson} from "@angular-devkit/core";
+import {stringify} from "querystring";
 
 @Component({
   selector: 'app-tab1',
@@ -10,16 +13,22 @@ import { testDataRooms } from './building-data';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-  public mapIsVisible:boolean = true;
+//  public mapIsVisible:boolean = true;
+//  public cssSvgMap:string;
+  private http:HttpClient;
   public startRoom:room;
   public destinationRoom:room;
   public testRooms:room[] = testDataRooms;
   
-  // todo: these values should be sent from backend
+  // TODO these values should be sent from backend
   public svgWidth:number = this.calcSvgWidth();
   public svgHeight:number = this.calcSvgHeight();
-  
-  public calcSvgWidth() {
+
+  constructor() {
+    // this.http = new HttpClient('sdfsdf');
+  }
+
+  private calcSvgWidth() {
     let sum:number = 0;
     this.testRooms.forEach(room => {
       if ( room.x + room.width > sum ) {
@@ -29,7 +38,7 @@ export class Tab1Page {
     return sum;
   }
 
-  public calcSvgHeight() {
+  private calcSvgHeight() {
     let sum:number = 0;
     this.testRooms.forEach(room => {
       if ( room.y + room.height > sum ) {
@@ -39,6 +48,18 @@ export class Tab1Page {
     return sum;
   }
 
-  constructor() {}
+  public requestBuildingData(floorOne, floorTwo=null){
+    // call ajax here
+    if (floorTwo != null) {
+      // a route is requested
+    } else {
+      // only the view of one floor is needed
 
+    }
+  };
+
+  sendPostRequest() {
+    let res = this.http.get('http://127.0.0.1:8080/roomlist/');
+    console.log(stringify(res));
+  }
 }

@@ -49,6 +49,22 @@ jobs:
       working-directory: ${{env.IONIC}}
       run: |
         ionic build --engine=browser
+        
+    - name: Upload frontend artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: front_artefacts
+        # Directory containing files to upload
+        path: "${{env.IONIC}}/www"
+        
+    - name: Upload backend artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        # Artifact name
+        name: back_artefacts
+        # Directory containing files to upload
+        path: ${{env.GO_HTTP}}
 
   test:
     name: Test
