@@ -25,6 +25,9 @@ func GetEnv() *Env {
 		log.Println("Using sqlite3 DB driver as no environment variables were provided.")
 		env.dbDriverName = "sqlite3"
 		env.dbDataSource = "db.sqlite3"
+	}
+
+	if len(env.frontendPath) == 0 {
 		env.frontendPath = "./ionic"
 	}
 
