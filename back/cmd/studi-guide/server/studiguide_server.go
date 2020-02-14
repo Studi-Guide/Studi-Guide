@@ -1,13 +1,13 @@
 package server
 
 import (
+	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"studi-guide/cmd"
 	"studi-guide/pkg/roomcontroller"
 	"studi-guide/pkg/shoppinglist"
@@ -31,22 +31,7 @@ func StudiGuideServer(env *cmd.Env) error {
 
 	// TODO verify IONIC input
 	if _, err := os.Stat("./ionic/index.html"); err == nil {
-		log.Print("Ionic folder found. Mapping files...")
-		router.Static("/ionic", "./ionic")
-		//l.router.StaticFile("/start/index.html", "./ionic/index.html")
-
-		router.NoRoute(func(context *gin.Context) {
-			staticFileThatIsBeingRequested := filepath.Join("ionic/", context.Request.URL.Path)
-
-			if _, err := os.Stat(staticFileThatIsBeingRequested); err == nil {
-				log.Printf("200 : %s \n", context.Request.URL.Path)
-				context.Request.URL.Path = "/ionic" + context.Request.URL.Path
-				context.File(staticFileThatIsBeingRequested)
-			} else {
-				log.Printf("404 : %s \n", context.Request.URL.Path)
-			}
-		})
-
+		router.Use(static.Serve("/", static.LocalFile("./ionic", true)))
 	}
 
 	shoppingRouter := router.Group("/shoppinglist")
@@ -73,6 +58,10 @@ func StudiGuideServer(env *cmd.Env) error {
 		}
 		//a.Run(":8080")
 	}
+
+	router.NoRoute(func(c *gin.Context) {
+		c.Redirect(301, "/")
+	})
 
 	port := ":8080"
 	log.Printf("Starting http listener on %s", port)

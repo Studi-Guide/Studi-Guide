@@ -34,10 +34,8 @@ func NewShoppingListController(router *gin.RouterGroup, subRouterPrefix, package
 	//gin.Default().LoadHTMLFiles(packagePrefix + "/views/*")
 
 	//PrintCurrentDir()
-	if _, err := os.Stat("./ionicframework/index.html"); err == nil {
-		log.Print("Ionic folder found. Mapping files...")
-		//l.router.StaticFile("/start/index.html", "./ionic/index.html")
-	} else {
+	if _, err := os.Stat("./ionic/index.html"); err != nil {
+		log.Print("Ionic not found. Mapping files backup files...")
 		l.router.StaticFS("/index/", http.Dir(packagePrefix+"/views/"))
 	}
 
