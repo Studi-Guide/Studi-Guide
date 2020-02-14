@@ -10,7 +10,7 @@ env:
 jobs:
 
   build:
-    name: Setup Environmnet
+    name: Build
     runs-on: ubuntu-latest
     steps:
 
@@ -73,6 +73,9 @@ jobs:
     name: Deploy
     runs-on: ubuntu-latest
     steps:
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+          
     - name: Build Docker
       #working-directory: ${{env.GO_HTTP}}
       run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice .
