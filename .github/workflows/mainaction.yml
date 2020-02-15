@@ -78,6 +78,20 @@ jobs:
     - name: Run backend Unit Tests
       working-directory: ${{env.GO_HTTP}}
       run: go test -race -coverprofile=coverage.txt -covermode=atomic ./... 
+      
+    - name: Codecov
+      uses: codecov/codecov-action@v1.0.5
+      with:
+        # User defined upload name. Visible in Codecov UI
+        name: master
+        # Repository upload token - get it from codecov.io
+        token: ${{ secrets.CODECOV }} 
+        # Path to coverage file to upload
+        file: coverage.txt
+        # Flag upload to group coverage metrics (e.g. unittests | integration | ui,chrome)
+        flags: unittests
+        # Specify whether or not CI build should fail if Codecov runs into an error during upload
+        fail_ci_if_error: true
 
   deploy:
     needs: [build,test]
