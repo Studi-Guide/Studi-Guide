@@ -77,7 +77,7 @@ jobs:
     
     - name: Run backend Unit Tests
       working-directory: ${{env.GO_HTTP}}
-      run: go test -cover ./...
+      run: go test -race -coverprofile=coverage.txt -covermode=atomic ./... 
 
   deploy:
     needs: [build,test]
