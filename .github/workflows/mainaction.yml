@@ -78,10 +78,6 @@ jobs:
     - name: Run backend Unit Tests
       working-directory: ${{env.GO_HTTP}}
       run: go test -race -coverprofile=coverage.txt -covermode=atomic ./... 
-      
-    - name: Upload to CodeCov
-      working-directory: ${{env.GO_HTTP}}
-      run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV }}
    
     - uses: codecov/codecov-action@v1
       with:
