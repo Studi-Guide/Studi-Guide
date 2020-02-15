@@ -1,7 +1,7 @@
 name: Go
 on: [push]
 
-env:  
+env:
   GO_HTTP: "./back"
   IONIC: "./front"
   GO_VERSION: 1.13.5
@@ -14,103 +14,107 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-    - name: Set up Go 1.13.5
-      uses: actions/setup-go@v1
-      with:
-        go-version: ${{env.GO_VERSION}}
-      id: go
+      - name: Set up Go 1.13.5
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{env.GO_VERSION}}
+        id: go
 
-    - name: install Node.js and angular
-      uses: actions/setup-node@v1 #this installs node and npm for us
-      
-    - run: npm install -g ionic
-            
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
+      - name: install Node.js and angular
+        uses: actions/setup-node@v1 #this installs node and npm for us
 
-    - name: Get dependencies
-      working-directory: ${{env.GO_HTTP}}
-      run: |
-        go get -v -t -d ./...
-        if [ -f Gopkg.toml ]; then
-            curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
-            dep ensure
-        fi
+      - run: npm install -g ionic
 
-    - name: Build backend
-      working-directory: ${{env.GO_HTTP}}
-      run: go build -v ./cmd/...
-      
-    - name: Get dependencies Frontend
-      run: npm install
-      working-directory: ${{env.IONIC}}
-      
-    - name: Build frontend
-      working-directory: ${{env.IONIC}}
-      run: |
-        ionic build --engine=browser
-        
-    - name: Upload frontend artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        # Artifact name
-        name: front_artefacts
-        # Directory containing files to upload
-        path: "${{env.IONIC}}/www"
-        
-    - name: Upload backend artifact
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        # Artifact name
-        name: back_artefacts
-        # Directory containing files to upload
-        path: ${{env.GO_HTTP}}
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+
+      - name: Get dependencies
+        working-directory: ${{env.GO_HTTP}}
+        run: go mod download
+
+      - name: Build backend
+        working-directory: ${{env.GO_HTTP}}
+        run: go build -v ./cmd/...
+
+      - name: Get dependencies Frontend
+        run: npm install
+        working-directory: ${{env.IONIC}}
+
+      - name: Build frontend
+        working-directory: ${{env.IONIC}}
+        run: |
+          ionic build --engine=browser
+
+      - name: Upload frontend artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          # Artifact name
+          name: front_artefacts
+          # Directory containing files to upload
+          path: "${{env.IONIC}}/www"
+
+      - name: Upload backend artifact
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          # Artifact name
+          name: back_artefacts
+          # Directory containing files to upload
+          path: ${{env.GO_HTTP}}
 
   test:
     name: Test
     runs-on: ubuntu-latest
     steps:
-    
-    - name: Set up Go 1.13.5
-      uses: actions/setup-go@v1
-      with:
-        go-version: ${{env.GO_VERSION}}
-      id: go
-    
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
-    
-    - name: Run backend Unit Tests
-      working-directory: ${{env.GO_HTTP}}
-      run: go test -cover ./...
+
+      - name: Set up Go 1.13.5
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{env.GO_VERSION}}
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+
+      - name: Run backend Unit Tests
+        working-directory: ${{env.GO_HTTP}}
+        run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
+
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV }} #required
+          file: "${{env.GO_HTTP}}/coverage.txt" #optional
+          flags: unittests #optional
+          fail_ci_if_error: true #optional (default = false)
+          yml: ./codecov.yml #optional
 
   deploy:
     needs: [build,test]
     name: Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
-          
-    - name: Build Docker
-      #working-directory: ${{env.GO_HTTP}}
-      run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice .
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
 
-    - name: Publish Docker 
-      #working-directory: ${{env.GO_HTTP}}
-      run: |
-        docker login --password ${{ secrets.DOCKER_PASSWORD }} --username ${{ secrets.DOCKER_USER }}
-        docker push studiguide/studiguide_appservice:latest
+      - name: Build Docker
+        #working-directory: ${{env.GO_HTTP}}
+        run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice .
 
-    
-    #- name: Build & Push to Docker Hub
-    #  uses: opspresso/action-docker@master
-    #  env:
-    #    USERNAME: ${{ secrets.DOCKER_USER }}
-    #    PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-    #    IMAGE_NAME: "studiguide/studiguide_appservice"
-    #    TAG_NAME: "latest"
-    #    LATEST: "true"
+      - name: Publish Docker
+        if: github.ref == 'refs/heads/master'
+        #working-directory: ${{env.GO_HTTP}}
+        run: |
+          docker login --password ${{ secrets.DOCKER_PASSWORD }} --username ${{ secrets.DOCKER_USER }}
+          docker push studiguide/studiguide_appservice:latest
+
+
+        #- name: Build & Push to Docker Hub
+        #  uses: opspresso/action-docker@master
+        #  env:
+        #    USERNAME: ${{ secrets.DOCKER_USER }}
+        #    PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        #    IMAGE_NAME: "studiguide/studiguide_appservice"
+        #    TAG_NAME: "latest"
+        #    LATEST: "true"
       
 
 
