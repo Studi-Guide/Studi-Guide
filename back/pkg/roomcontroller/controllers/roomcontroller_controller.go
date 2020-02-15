@@ -34,6 +34,7 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 
 	rooms, err := l.provider.GetAllRooms()
 	if err != nil {
+		log.Print("GetAllRomms() failed with error", err)
 		fmt.Println("GetAllRomms() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
