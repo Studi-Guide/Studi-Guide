@@ -8,12 +8,12 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"studi-guide/cmd"
+	"studi-guide/pkg/env"
 	"studi-guide/pkg/roomcontroller"
 	"studi-guide/pkg/shoppinglist"
 )
 
-func StudiGuideServer(env *cmd.Env) error {
+func StudiGuideServer(env *env.Env) error {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 

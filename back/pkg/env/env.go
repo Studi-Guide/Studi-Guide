@@ -1,4 +1,4 @@
-package cmd
+package env
 
 import (
 	"log"
@@ -36,7 +36,8 @@ func GetEnv() *Env {
 
 func (e Env) String() string {
 	return dBDriverNameKey + "=" + e.dbDriverName + ";" +
-		dbDataSourceKey + "=" + e.dbDataSource
+		dbDataSourceKey + "=" + e.dbDataSource + ";" +
+		frontendPath + "=" + e.frontendPath
 }
 
 func (e *Env) DbDriverName() string {
