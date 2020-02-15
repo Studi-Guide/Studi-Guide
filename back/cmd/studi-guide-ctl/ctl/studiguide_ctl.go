@@ -58,13 +58,6 @@ func StudiGuideCtlCli() (*cli.App) {
 							},
 						},
 					},
-					{
-						Name: "init",
-						Usage: "initialize database",
-						Action: func(context *cli.Context) error {
-							return nil
-						},
-					},
 				},
 			},
 		},
