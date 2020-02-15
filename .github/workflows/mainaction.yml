@@ -82,6 +82,14 @@ jobs:
     - name: Upload to CodeCov
       working-directory: ${{env.GO_HTTP}}
       run: bash <(curl -s https://codecov.io/bash) -t ${{ secrets.CODECOV }}
+   
+    - uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV }} #required
+        file: ${{env.GO_HTTP}}/coverage.xml #optional
+        flags: unittests #optional
+        name: codecov-umbrella #optional
+        fail_ci_if_error: true #optional (default = false)
 
   deploy:
     needs: [build,test]
