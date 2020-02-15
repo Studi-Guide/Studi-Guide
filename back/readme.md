@@ -24,3 +24,8 @@ Hit http://localhost:8080/shoppinglist/index
 API infos:
 https://github.com/swaggo/swag#getting-started
 
+## Frontend integration
+   - download latest frontend binaries from https://github.com/Studi-Guide/Studi-Guide/actions?query=workflow%3AGo
+   - copy files into build outputfolder `./ionic`
+   - execute  `go run ./cmd/studi-guide`
+   - hit http://localhost:8080

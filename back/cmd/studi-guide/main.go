@@ -11,7 +11,7 @@ func main() {
 
 	log.Print("Starting service")
 
-	// programatically set swagger info
+	// programmatically set swagger info
 	docs.SwaggerInfo.Title = "StuidGuide API"
 	docs.SwaggerInfo.Description = "This is a sample server StudiGuide server."
 	docs.SwaggerInfo.Version = "1.0"
