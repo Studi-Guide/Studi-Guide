@@ -14,6 +14,7 @@ require (
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.5
 	github.com/urfave/cli/v2 v2.1.1
+	go.uber.org/dig v1.8.0
 	golang.org/x/net v0.0.0-20200202094626-16171245cfb2 // indirect
 	golang.org/x/tools v0.0.0-20200131211209-ecb101ed6550 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect

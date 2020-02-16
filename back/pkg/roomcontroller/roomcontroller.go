@@ -11,9 +11,9 @@ type RoomControllerApp struct {
 	roomcontroller *controllers.RoomController
 }
 
-func (r *RoomControllerApp) Initialize(env *env.Env, router *gin.RouterGroup) (error) {
+func (r *RoomControllerApp) Initialize(env *env.Env, router *gin.RouterGroup) error {
 
-	provider, err := models.NewRoomDbService(env.DbDriverName(), env.DbDataSource(), "rooms")
+	provider, err := models.NewRoomDbService(env)
 	if err != nil {
 		return err
 	}

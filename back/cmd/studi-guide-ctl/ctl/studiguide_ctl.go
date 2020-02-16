@@ -1,6 +1,6 @@
 package ctl
 
-import(
+import (
 	"encoding/json"
 	"github.com/urfave/cli/v2"
 	"log"
@@ -11,22 +11,22 @@ import(
 
 //StudiGuideCtlCli
 // get the CLI to run control commands on the studi guide server
-func StudiGuideCtlCli() (*cli.App) {
+func StudiGuideCtlCli() *cli.App {
 
 	app := cli.App{
-		Name: 	"studi-guide-ctl",
-		Usage: 	"Manage studi-guide server",
-		Commands: []*cli.Command {
+		Name:  "studi-guide-ctl",
+		Usage: "Manage studi-guide server",
+		Commands: []*cli.Command{
 			{
-				Name: "migrate",
+				Name:  "migrate",
 				Usage: "run database migrations",
 				Subcommands: []*cli.Command{
 					{
-						Name: "import",
+						Name:  "import",
 						Usage: "import data from json text file",
 						Subcommands: []*cli.Command{
 							{
-								Name: "rooms",
+								Name:  "rooms",
 								Usage: "import room data",
 								Action: func(context *cli.Context) error {
 									file, err := os.Open(context.Args().First())
@@ -34,18 +34,18 @@ func StudiGuideCtlCli() (*cli.App) {
 										return err
 									}
 
-									var rooms[] models.Room
+									var rooms []models.Room
 									err = json.NewDecoder(file).Decode(&rooms)
 									if err != nil {
 										return err
 									}
 
-									dbService, err := models.NewRoomDbService(env.GetEnv().DbDriverName(), env.GetEnv().DbDataSource(), "rooms")
+									dbService, err := models.NewRoomDbService(env.GetEnv())
 									if err != nil {
 										return nil
 									}
 
-									for _, room := range(rooms) {
+									for _, room := range rooms {
 										if err = dbService.AddRoom(room); err != nil {
 											log.Println(err, "room:", room)
 										} else {
