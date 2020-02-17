@@ -5,13 +5,12 @@ import (
 	"github.com/urfave/cli/v2"
 	"log"
 	"os"
-	"studi-guide/pkg/env"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
 //StudiGuideCtlCli
 // get the CLI to run control commands on the studi guide server
-func StudiGuideCtlCli() *cli.App {
+func StudiGuideCtlCli(dbService *models.RoomDbService) *cli.App {
 
 	app := cli.App{
 		Name:  "studi-guide-ctl",
@@ -38,11 +37,6 @@ func StudiGuideCtlCli() *cli.App {
 									err = json.NewDecoder(file).Decode(&rooms)
 									if err != nil {
 										return err
-									}
-
-									dbService, err := models.NewRoomDbService(env.GetEnv())
-									if err != nil {
-										return nil
 									}
 
 									for _, room := range rooms {

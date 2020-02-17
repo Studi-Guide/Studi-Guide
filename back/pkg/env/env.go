@@ -13,13 +13,10 @@ var dBDriverNameKey string = "DB_DRIVER_NAME"
 var dbDataSourceKey string = "DB_DATA_SOURCE"
 var frontendPath string = "FRONTEND_PATH"
 
-var env *Env
+func NewEnv() *Env {
 
-func GetEnv() *Env {
+	env := &Env{os.Getenv(dBDriverNameKey), os.Getenv(dbDataSourceKey), os.Getenv(frontendPath)}
 
-	if env == nil {
-		env = &Env{os.Getenv(dBDriverNameKey), os.Getenv(dbDataSourceKey), os.Getenv(frontendPath)}
-	}
 	if len(env.dbDriverName) == 0 && len(env.dbDataSource) == 0 {
 		log.Println("Using sqlite3 DB driver as no environment variables were provided.")
 		env.dbDriverName = "sqlite3"
