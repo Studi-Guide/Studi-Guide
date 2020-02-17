@@ -52,7 +52,7 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider) 
 		//v1.GET("/users/:id", apis.GetUser)
 	}
 
-	roomRouter := router.Group("/NewRoomDbServiceroomlist")
+	roomRouter := router.Group("/roomlist")
 	{
 		log.Print("Creating room controller")
 		roomController := roomcontroller.RoomControllerApp{}

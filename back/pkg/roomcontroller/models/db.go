@@ -26,7 +26,7 @@ func NewRoomDbService(env *env.Env) (RoomServiceProvider, error) {
 	}
 	defer tx.Commit()
 
-	_, _ = db.Exec(`CREATE TABLE rooms(
+	_, _ = db.Exec(`CREATE TABLE "rooms"(
 		"ID"	INTEGER,
 		"Name"	TEXT UNIQUE,
 		"Description"	TEXT,
@@ -36,10 +36,10 @@ func NewRoomDbService(env *env.Env) (RoomServiceProvider, error) {
 	return &RoomDbService{db: db, table: table}, nil
 }
 
-func (roomservice *RoomDbService) GetAllRooms() ([]Room, error) {
+func (r *RoomDbService) GetAllRooms() ([]Room, error) {
 	var rooms []Room
 
-	stmt, err := roomservice.db.Prepare("select * from rooms")
+	stmt, err := r.db.Prepare("select * from rooms")
 	if err != nil {
 		return nil, err
 	}
@@ -64,10 +64,10 @@ func (roomservice *RoomDbService) GetAllRooms() ([]Room, error) {
 	return rooms, nil
 }
 
-func (roomservice *RoomDbService) GetRoom(name string) (Room, error) {
+func (r *RoomDbService) GetRoom(name string) (Room, error) {
 	var room Room
 
-	stmt, err := roomservice.db.Prepare("select ID, Name, Description from " + roomservice.table + " where Name = ?")
+	stmt, err := r.db.Prepare("select ID, Name, Description from " + r.table + " where Name = ?")
 	if err != nil {
 		return room, err
 	}
@@ -81,10 +81,10 @@ func (roomservice *RoomDbService) GetRoom(name string) (Room, error) {
 	return room, nil
 }
 
-func (roomservice *RoomDbService) QueryRooms(query string) ([]Room, error) {
+func (r *RoomDbService) QueryRooms(query string) ([]Room, error) {
 	var rooms []Room
 
-	stmt, err := roomservice.db.Prepare(query)
+	stmt, err := r.db.Prepare(query)
 	if err != nil {
 		return nil, err
 	}
@@ -109,9 +109,9 @@ func (roomservice *RoomDbService) QueryRooms(query string) ([]Room, error) {
 	return rooms, nil
 }
 
-func (roomservice *RoomDbService) AddRoom(room Room) error {
+func (r *RoomDbService) AddRoom(room Room) error {
 
-	tx, err := roomservice.db.Begin()
+	tx, err := r.db.Begin()
 	if err != nil {
 		return err
 	}
