@@ -11,12 +11,6 @@ type RoomControllerApp struct {
 }
 
 func (r *RoomControllerApp) Initialize(provider models.RoomServiceProvider, router *gin.RouterGroup) error {
-
-	// provider, err := models.NewRoomDbService(env)
-	//if err != nil {
-	//	return err
-	//}
-
 	r.roomcontroller = controllers.NewRoomController(router, provider)
 	return nil
 }

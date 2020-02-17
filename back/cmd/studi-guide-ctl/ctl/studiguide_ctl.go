@@ -10,7 +10,7 @@ import (
 
 //StudiGuideCtlCli
 // get the CLI to run control commands on the studi guide server
-func StudiGuideCtlCli(dbService *models.RoomDbService) *cli.App {
+func StudiGuideCtlCli(dbService models.RoomServiceProvider) *cli.App {
 
 	app := cli.App{
 		Name:  "studi-guide-ctl",

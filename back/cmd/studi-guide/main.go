@@ -18,17 +18,18 @@ func main() {
 	docs.SwaggerInfo.Title = "StuidGuide API"
 	docs.SwaggerInfo.Description = "This is a sample server StudiGuide server."
 	docs.SwaggerInfo.Version = "1.0"
-	//docs.SwaggerInfo.Host = "studiguide.swagger.io"
 	docs.SwaggerInfo.BasePath = "/"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
 
 	container := BuildContainer()
 
-	container.Invoke(func(server *server.StudiGuideServer) {
+	error := container.Invoke(func(server *server.StudiGuideServer) {
 		port := ":8080"
 		log.Printf("Starting http listener on %s", port)
 		log.Fatal(server.Start(port))
 	})
+
+	log.Fatal(error)
 }
 
 func BuildContainer() *dig.Container {
@@ -39,5 +40,6 @@ func BuildContainer() *dig.Container {
 	container.Provide(env.NewArgs)
 	container.Provide(config.NewConfig)
 	container.Provide(models.NewRoomDbService)
+	container.Provide(server.NewStudiGuideServer)
 	return container
 }

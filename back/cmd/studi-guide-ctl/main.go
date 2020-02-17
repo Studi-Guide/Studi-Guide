@@ -13,12 +13,12 @@ import (
 
 func main() {
 	container := BuildContainer()
-	container.Invoke(func(cli *cli.App) {
+	log.Fatal(container.Invoke(func(cli *cli.App) {
 		err := cli.Run(os.Args)
 		if err != nil {
 			log.Fatal(err)
 		}
-	})
+	}))
 }
 
 func BuildContainer() *dig.Container {
