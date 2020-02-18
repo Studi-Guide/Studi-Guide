@@ -3,16 +3,20 @@ package models
 import (
 	"database/sql"
 	_ "github.com/mattn/go-sqlite3"
+	"studi-guide/pkg/env"
 )
 
 type RoomDbService struct {
-	db *sql.DB
+	db    *sql.DB
 	table string
 }
 
-func NewRoomDbService(driverName, dataSourceName, table string) (*RoomDbService, error) {
+func NewRoomDbService(env *env.Env) (RoomServiceProvider, error) {
+	driverName := env.DbDriverName()
+	dataSourceName := env.DbDataSource()
+	table := "rooms"
 	db, err := sql.Open(driverName, dataSourceName)
-	if (err != nil) {
+	if err != nil {
 		return nil, err
 	}
 
@@ -22,7 +26,7 @@ func NewRoomDbService(driverName, dataSourceName, table string) (*RoomDbService,
 	}
 	defer tx.Commit()
 
-	_, _ = db.Exec(`CREATE TABLE "rooms" (
+	_, _ = db.Exec(`CREATE TABLE "rooms"(
 		"ID"	INTEGER,
 		"Name"	TEXT UNIQUE,
 		"Description"	TEXT,
@@ -77,7 +81,7 @@ func (r *RoomDbService) GetRoom(name string) (Room, error) {
 	return room, nil
 }
 
-func (r* RoomDbService) QueryRooms(query string) ([]Room, error) {
+func (r *RoomDbService) QueryRooms(query string) ([]Room, error) {
 	var rooms []Room
 
 	stmt, err := r.db.Prepare(query)
@@ -105,7 +109,7 @@ func (r* RoomDbService) QueryRooms(query string) ([]Room, error) {
 	return rooms, nil
 }
 
-func (r* RoomDbService) AddRoom(room Room) (error) {
+func (r *RoomDbService) AddRoom(room Room) error {
 
 	tx, err := r.db.Begin()
 	if err != nil {

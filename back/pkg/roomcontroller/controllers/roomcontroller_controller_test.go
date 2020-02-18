@@ -46,6 +46,11 @@ func (r *RoomMockService) QueryRooms(query string) ([]models.Room, error) {
 	return rooms, nil
 }
 
+func (r *RoomMockService) AddRoom(room models.Room) error {
+	r.RoomList = append(r.RoomList, room)
+	return nil
+}
+
 func TestRoomlistIndex(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/", nil)

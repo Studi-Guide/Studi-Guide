@@ -10,10 +10,15 @@ import (
 	"os"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/roomcontroller"
+	"studi-guide/pkg/roomcontroller/models"
 	"studi-guide/pkg/shoppinglist"
 )
 
-func StudiGuideServer(env *env.Env) error {
+type StudiGuideServer struct {
+	router *gin.Engine
+}
+
+func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -51,7 +56,8 @@ func StudiGuideServer(env *env.Env) error {
 	{
 		log.Print("Creating room controller")
 		roomController := roomcontroller.RoomControllerApp{}
-		err := roomController.Initialize(env, roomRouter)
+
+		err := roomController.Initialize(roomprovider, roomRouter)
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -64,12 +70,13 @@ func StudiGuideServer(env *env.Env) error {
 		c.Redirect(301, "/")
 	})
 
-	port := ":8080"
-	log.Printf("Starting http listener on %s", port)
-	log.Fatal(http.ListenAndServe(port, router))
+	server := StudiGuideServer{router: router}
+	return &server
+}
 
+func (server *StudiGuideServer) Start(port string) error {
+	http.ListenAndServe(port, server.router)
 	return nil
-
 }
 
 func auth() gin.HandlerFunc {
