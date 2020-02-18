@@ -51,6 +51,13 @@ func (r *RoomMockService) AddRoom(room models.Room) error {
 	return nil
 }
 
+func (r *RoomMockService) AddRooms(rooms []models.Room) error {
+	for _, room := range rooms {
+		_ = r.AddRoom(room)
+	}
+	return nil
+}
+
 func TestRoomlistIndex(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/", nil)
