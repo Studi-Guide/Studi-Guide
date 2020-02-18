@@ -9,27 +9,27 @@ import (
 )
 
 type RoomImporter interface {
-	RunImport() (error)
+	RunImport() error
 }
 
 type RoomJsonImporter struct {
 	dbService RoomServiceProvider
-	file string
+	file      string
 }
 
-func (r *RoomJsonImporter) RunImport() (error) {
+func (r *RoomJsonImporter) RunImport() error {
 	file, err := os.Open(r.file)
 	if err != nil {
 		return err
 	}
 
-	var rooms[] Room
+	var rooms []Room
 	err = json.NewDecoder(file).Decode(&rooms)
 	if err != nil {
 		return err
 	}
 
-	for _, room := range(rooms) {
+	for _, room := range rooms {
 		if err = r.dbService.AddRoom(room); err != nil {
 			log.Println(err, "room:", room)
 		} else {
