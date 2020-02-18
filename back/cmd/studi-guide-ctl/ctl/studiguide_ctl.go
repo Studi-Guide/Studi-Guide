@@ -1,10 +1,7 @@
 package ctl
 
 import (
-	"encoding/json"
 	"github.com/urfave/cli/v2"
-	"log"
-	"os"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
@@ -22,32 +19,17 @@ func StudiGuideCtlCli(dbService models.RoomServiceProvider) *cli.App {
 				Subcommands: []*cli.Command{
 					{
 						Name:  "import",
-						Usage: "import data from json text file",
+						Usage: "import data from json or xml text file",
 						Subcommands: []*cli.Command{
 							{
 								Name:  "rooms",
 								Usage: "import room data",
 								Action: func(context *cli.Context) error {
-									file, err := os.Open(context.Args().First())
+									importer, err := models.NewRoomImporter(context.Args().First(), dbService)
 									if err != nil {
 										return err
 									}
-
-									var rooms []models.Room
-									err = json.NewDecoder(file).Decode(&rooms)
-									if err != nil {
-										return err
-									}
-
-									for _, room := range rooms {
-										if err = dbService.AddRoom(room); err != nil {
-											log.Println(err, "room:", room)
-										} else {
-											log.Println("add room:", room)
-										}
-									}
-
-									return nil
+									return importer.RunImport()
 								},
 							},
 						},
