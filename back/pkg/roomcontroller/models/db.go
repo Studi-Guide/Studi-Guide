@@ -2,7 +2,11 @@ package models
 
 import (
 	"database/sql"
+	"errors"
 	_ "github.com/mattn/go-sqlite3"
+	"log"
+	"strconv"
+	"strings"
 	"studi-guide/pkg/env"
 )
 
@@ -128,5 +132,22 @@ func (r *RoomDbService) AddRoom(room Room) error {
 		return err
 	}
 
+	return nil
+}
+
+func (r *RoomDbService) AddRooms(rooms []Room) error {
+	var errorStr []string
+	for _, room := range rooms {
+		if err := r.AddRoom(room); err != nil {
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(room.Id))
+			log.Println(err, "room:", room)
+		} else {
+			log.Println("add room:", room)
+		}
+	}
+
+	if len(errorStr) > 0 {
+		return errors.New(strings.Join(errorStr, "; "))
+	}
 	return nil
 }

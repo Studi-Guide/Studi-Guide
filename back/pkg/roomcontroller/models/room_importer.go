@@ -2,8 +2,8 @@ package models
 
 import (
 	"encoding/json"
+	"encoding/xml"
 	"errors"
-	"log"
 	"os"
 	"path/filepath"
 )
@@ -29,25 +29,41 @@ func (r *RoomJsonImporter) RunImport() error {
 		return err
 	}
 
-	for _, room := range rooms {
-		if err = r.dbService.AddRoom(room); err != nil {
-			log.Println(err, "room:", room)
-		} else {
-			log.Println("add room:", room)
-		}
+	return r.dbService.AddRooms(rooms)
+}
+
+type RoomXmlImporter struct {
+	dbService RoomServiceProvider
+	file      string
+}
+
+func (r *RoomXmlImporter) RunImport() error {
+	file, err := os.Open(r.file)
+	if err != nil {
+		return err
 	}
 
-	return nil
+	var rooms struct {
+		Rooms []Room `xml:"Room"`
+	}
+	err = xml.NewDecoder(file).Decode(&rooms)
+	if err != nil {
+		return err
+	}
+
+	return r.dbService.AddRooms(rooms.Rooms)
 }
 
 func NewRoomImporter(file string, dbService RoomServiceProvider) (RoomImporter, error) {
+	var i RoomImporter = nil
 	ext := filepath.Ext(file)
 	if ext == ".xml" {
-
+		i = &RoomXmlImporter{dbService: dbService, file: file}
 	} else if ext == ".json" {
-		i := RoomJsonImporter{dbService: dbService, file: file}
-		return &i, nil
+		i = &RoomJsonImporter{dbService: dbService, file: file}
+	} else {
+		return nil, errors.New("Unknown extension")
 	}
 
-	return nil, errors.New("Unknown extension")
+	return i, nil
 }

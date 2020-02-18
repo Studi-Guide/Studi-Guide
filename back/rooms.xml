@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<rooms>
+    <Room>
+        <id>4</id>
+        <name>RoomN04</name>
+        <description>description</description>
+        <coordinates>
+            <Min><X>0</X><Y>0</Y></Min>
+            <Max><X>0</X><Y>0</Y></Max>
+        </coordinates>
+    </Room>
+    <Room>
+        <id>5</id>
+        <name>RoomN05</name>
+        <description>description</description>
+        <coordinates>
+            <Min><X>0</X><Y>0</Y></Min>
+            <Max><X>0</X><Y>0</Y></Max>
+        </coordinates>
+    </Room>
+    <Room>
+        <id>6</id>
+        <name>RoomN06</name>
+        <description>description</description>
+        <coordinates>
+            <Min><X>0</X><Y>0</Y></Min>
+            <Max><X>0</X><Y>0</Y></Max>
+        </coordinates>
+    </Room>
+</rooms>
