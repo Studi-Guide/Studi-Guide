@@ -19,7 +19,7 @@ func StudiGuideCtlCli(dbService models.RoomServiceProvider) *cli.App {
 				Subcommands: []*cli.Command{
 					{
 						Name:  "import",
-						Usage: "import data from json text file",
+						Usage: "import data from json or xml text file",
 						Subcommands: []*cli.Command{
 							{
 								Name:  "rooms",
