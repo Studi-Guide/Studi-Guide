@@ -3,9 +3,9 @@ package models
 import "image"
 
 type Room struct {
-	Id          int             `json:"id" xml:"id"`
-	Name        string          `json:"name" xml:"name"`
-	Description string          `json:"description" xml:"description"`
+	Id          int             `json:"id" xml:"id" db:"ID"`
+	Name        string          `json:"name" xml:"name" db:"Name"`
+	Description string          `json:"description" xml:"description" db:"Description"`
 	Coordinates image.Rectangle `json:"coordinates" xml:"coordinates"`
 }
 

@@ -1,8 +1,8 @@
 package models
 
 import (
-	"database/sql"
 	"errors"
+	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"strconv"
@@ -11,31 +11,28 @@ import (
 )
 
 type RoomDbService struct {
-	db    *sql.DB
+	db    *sqlx.DB
 	table string
 }
+
+var schema string = `CREATE TABLE "rooms"(
+		"ID"	INTEGER,
+		"Name"	TEXT UNIQUE,
+		"Description"	TEXT,
+		PRIMARY KEY("ID")
+		);`
 
 func NewRoomDbService(env *env.Env) (RoomServiceProvider, error) {
 	driverName := env.DbDriverName()
 	dataSourceName := env.DbDataSource()
 	table := "rooms"
-	db, err := sql.Open(driverName, dataSourceName)
+	db, err := sqlx.Open(driverName, dataSourceName)
+
 	if err != nil {
 		return nil, err
 	}
 
-	tx, err := db.Begin()
-	if err != nil {
-		return nil, err
-	}
-	defer tx.Commit()
-
-	_, _ = db.Exec(`CREATE TABLE "rooms"(
-		"ID"	INTEGER,
-		"Name"	TEXT UNIQUE,
-		"Description"	TEXT,
-		PRIMARY KEY("ID")
-		);`)
+	_, _ = db.Exec(schema)
 
 	return &RoomDbService{db: db, table: table}, nil
 }
@@ -43,26 +40,9 @@ func NewRoomDbService(env *env.Env) (RoomServiceProvider, error) {
 func (r *RoomDbService) GetAllRooms() ([]Room, error) {
 	var rooms []Room
 
-	stmt, err := r.db.Prepare("select * from rooms")
+	err := r.db.Select(&rooms, "select * from rooms")
 	if err != nil {
 		return nil, err
-	}
-	defer stmt.Close()
-
-	rows, err := stmt.Query()
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-
-	for rows.Next() {
-		var room Room
-		err = rows.Scan(&room.Id, &room.Name, &room.Description)
-		if err != nil {
-
-		} else {
-			rooms = append(rooms, room)
-		}
 	}
 
 	return rooms, nil
