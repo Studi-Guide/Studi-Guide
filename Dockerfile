@@ -19,6 +19,11 @@ COPY back /go/src/studi-guide
 WORKDIR /go/src/studi-guide
 RUN ls
 RUN go mod download
+
+# update swagger files
+RUN go get -u github.com/swaggo/swag/cmd/swag
+RUN swag init -g ./cmd/studi-guide/main.go
+
 RUN go install ./cmd/studi-guide
 
 WORKDIR /go/bin/ionic
