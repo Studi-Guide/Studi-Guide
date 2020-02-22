@@ -15,7 +15,7 @@ import {stringify} from "querystring";
 export class Tab1Page {
 //  public mapIsVisible:boolean = true;
 //  public cssSvgMap:string;
-  private http:HttpClient;
+//  private http:HttpClient;
   public startRoom:room;
   public destinationRoom:room;
   public testRooms:room[] = testDataRooms;
@@ -24,7 +24,7 @@ export class Tab1Page {
   public svgWidth:number = this.calcSvgWidth();
   public svgHeight:number = this.calcSvgHeight();
 
-  constructor() {
+  constructor(private http:HttpClient) {
     // this.http = new HttpClient('sdfsdf');
   }
 
@@ -48,18 +48,41 @@ export class Tab1Page {
     return sum;
   }
 
-  public requestBuildingData(floorOne, floorTwo=null){
-    // call ajax here
-    if (floorTwo != null) {
-      // a route is requested
-    } else {
-      // only the view of one floor is needed
+  // public requestBuildingData(floorOne, floorTwo=null){
+  //   // call ajax here
+  //   if (floorTwo != null) {
+  //     // a route is requested
+  //   } else {
+  //     // only the view of one floor is needed
+  //     // sendPostRequest(floorOne);
+  //   }
+  // };
 
-    }
-  };
+  // public sendPostRequest(/*dataToSent*/) {
+  //   // let res = this.http.get('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fsagarhani.files.wordpress.com%2F2015%2F07%2Fduck_duck_go.png&f=1&nofb=1'); // http://127.0.0.1:8080/roomlist/
+  //
+  //   let res = null;
+  //   $http({
+  //     method : "GET",
+  //     url : "https://www.w3schools.com/js/demo_get.asp?t=0.5814227109783404"
+  //   }).then(function(response) {
+  //     res = response.data;
+  //   });
+  //   console.log(res);
+  // }
 
-  sendPostRequest() {
-    let res = this.http.get('http://127.0.0.1:8080/roomlist/');
-    console.log(stringify(res));
+  public getData() {
+    var req = new XMLHttpRequest();
+    req.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+        console.log(req.responseText)
+      }
+    };
+    let method:string = "GET";
+    // TODO solve blocked Cross-Origin request caused by different ports of the dev servers (8100 & 8080)
+    let url:string = "http://127.0.0.1:8080/roomlist/";
+    let async:boolean = true;
+    req.open(method, url, async);
+    req.send();
   }
 }
