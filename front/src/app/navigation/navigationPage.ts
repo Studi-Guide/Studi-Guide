@@ -4,11 +4,11 @@ import {Component} from "@angular/core";
 import {RequestBuildingDataService} from "../services/requestBuildingData.service";
 
 @Component({
-  selector: 'app-tab1',
-  templateUrl: 'tab1.page.html',
-  styleUrls: ['tab1.page.scss']
+  selector: 'app-navigation',
+  templateUrl: 'navigation.page.html',
+  styleUrls: ['navigation.page.scss']
 })
-export class Tab1Page {
+export class NavigationPage {
   //  public mapIsVisible:boolean = true;
   public startRoom:room;
   public destinationRoom:room;

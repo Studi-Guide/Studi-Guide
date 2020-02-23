@@ -11,13 +11,11 @@ export interface corridor {
   x: number;
   y: number;
 }
-  
-export interface room {
-  name: string;
-  section: section[];
-  alias;
-  doors: door[];
-  fill: string;
+
+export interface coordinate {
+  x: number;
+  y: number;
+  z: number;
 }
 
 export interface door {
@@ -29,8 +27,10 @@ export interface section {
   end: coordinate;
 }
 
-export interface coordinate {
-  x: number;
-  y: number;
-  // z: int;
+export interface room {
+  name: string;
+  sections: section[];
+  alias: string;
+  doors: door[];
+  fill: string;
 }

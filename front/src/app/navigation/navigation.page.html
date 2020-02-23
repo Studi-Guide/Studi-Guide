@@ -12,12 +12,18 @@
     <!-- *ngIf="mapIsVisible" -->
     <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}">
       <rect *ngFor="let room of testRooms"
-        attr.fill="{{room.fill}}"
         attr.width="{{room.width}}"
         attr.height="{{room.height}}"
         attr.x="{{room.x}}"
         attr.y="{{room.y}}"
+        attr.fill="{{room.fill}}"
       ></rect>
+      <path *ngFor="let room of testRooms"
+            attr.d="M{{room.sections[0].start.x}} {{room.sections[0].start.y}}
+                    L{{room.sections[1].start.x}} {{room.sections[1].start.y}}
+                    L{{room.sections[2].start.x}} {{room.sections[2].start.y}}
+                    L{{room.sections[3].start.x}} {{room.sections[3].start.y}}"
+      /> <!-- M0 0 L0 200 L250 200 L250 0 Z -->
     </svg>
   </div>
   <ion-button color="dark" (click)="discoverFloor()">
