@@ -7,14 +7,14 @@ export let testDataRooms:room[] = [
     sections: [
       {
         start: { x: 0, y: 0, z: 3 },
-        end: { x: 100, y: 0, z: 3 }
+        end: { x: 150, y: 0, z: 3 }
       },
       {
-        start: { x: 100, y: 0, z: 3 },
-        end: { x: 100, y: 100, z: 3 }
+        start: { x: 150, y: 0, z: 3 },
+        end: { x: 150, y: 100, z: 3 }
       },
       {
-        start: { x: 100, y: 100, z: 3 },
+        start: { x: 150, y: 100, z: 3 },
         end: { x: 0, y: 100, z: 3 }
       },
       {
@@ -24,7 +24,135 @@ export let testDataRooms:room[] = [
     ],
     alias: '',
     doors: [],
-    fill: '#676d7d'
+    fill: '#5682a3'
+  },
+  {
+    name: 'KA.302',
+    sections: [
+      {
+        start: { x: 150, y: 0, z: 3 },
+        end: { x: 300, y: 0, z: 3 }
+      },
+      {
+        start: { x: 300, y: 0, z: 3 },
+        end: { x: 300, y: 100, z: 3 }
+      },
+      {
+        start: { x: 300, y: 100, z: 3 },
+        end: { x: 150, y: 100, z: 3 }
+      },
+      {
+        start: { x: 150, y: 100, z: 3 },
+        end: { x: 150, y: 0, z: 3 }
+      }
+    ],
+    alias: '',
+    doors: [],
+    fill: '#5682a3'
+  },
+  {
+    name: 'stair',
+    sections: [
+      {
+        start: { x: 360, y: 0, z: 3 },
+        end: { x: 400, y: 0, z: 3 }
+      },
+      {
+        start: { x: 400, y: 0, z: 3 },
+        end: { x: 400, y: 100, z: 3 }
+      },
+      {
+        start: { x: 400, y: 100, z: 3 },
+        end: { x: 360, y: 100, z: 3 }
+      },
+      {
+        start: { x: 360, y: 100, z: 3 },
+        end: { x: 360, y: 0, z: 3 }
+      }
+    ],
+    alias: '',
+    doors: [],
+    fill: '#AEA693'
+  },
+  {
+    name: 'KA.306',
+    sections: [
+      {
+        start: { x: 0, y: 100, z: 3 },
+        end: { x: 100, y: 100, z: 3 }
+      },
+      {
+        start: { x: 100, y: 100, z: 3 },
+        end: { x: 100, y: 130, z: 3 }
+      },
+      {
+        start: { x: 100, y: 130, z: 3 },
+        end: { x: 0, y: 130, z: 3 }
+      },
+      {
+        start: { x: 0, y: 130, z: 3 },
+        end: { x: 0, y: 100, z: 3 }
+      }
+    ],
+    alias: '',
+    doors: [],
+    fill: '#467689'
+  },
+  {
+    name: '', // corridor
+    sections: [
+      {
+        start: { x: 100, y: 100, z: 3 },
+        end: { x: 300, y: 100, z: 3 }
+      },
+      {
+        start: { x: 300, y: 100, z: 3 },
+        end: { x: 300, y: 0, z: 3 }
+      },
+      {
+        start: { x: 300, y: 0, z: 3 },
+        end: { x: 360, y: 0, z: 3 }
+      },
+      {
+        start: { x: 360, y: 0, z: 3 },
+        end: { x: 360, y: 130, z: 3 }
+      },
+      {
+        start: { x: 360, y: 130, z: 3 },
+        end: { x: 100, y: 130, z: 3 }
+      },
+      {
+        start: { x: 100, y: 130, z: 3 },
+        end: { x: 100, y: 100, z: 3 }
+      }
+    ],
+    alias: '',
+    doors: [],
+    fill: '#AEA693'
+  },
+  {
+    name: 'Elevator',
+    sections: [
+      {
+        start: { x: 360, y: 100, z: 3 },
+        end: { x: 400, y: 100, z: 3 }
+      },
+      {
+        start: { x: 400, y: 100, z: 3 },
+        end: { x: 400, y: 130, z: 3 }
+      },
+      {
+        start: { x: 400, y: 130, z: 3 },
+        end: { x: 360, y: 130, z: 3 }
+      },
+      {
+        start: { x: 360, y: 130, z: 3 },
+        end: { x: 360, y: 100, z: 3 }
+      }
+    ],
+    alias: '',
+    doors: [],
+    fill: '#817464'
   }
 ];
 

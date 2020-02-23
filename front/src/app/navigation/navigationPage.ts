@@ -12,6 +12,8 @@ export class NavigationPage {
   //  public mapIsVisible:boolean = true;
   public startRoom:room;
   public destinationRoom:room;
+  // TODO build strings from the building data to bind only the string on the attr.d
+  // e.g. "M100 100 L300 100 L300 0 L360 0 L360 130 L100 130 Z"
   public testRooms:room[] = testDataRooms;
   
   // TODO these values should be sent from backend or be clear because of the building data json response
