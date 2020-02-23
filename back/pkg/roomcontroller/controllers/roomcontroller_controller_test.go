@@ -40,12 +40,6 @@ func (r *RoomMockService) GetRoom(name string) (models.Room, error) {
 	return models.Room{}, errors.New("no such room")
 }
 
-func (r *RoomMockService) QueryRooms(query string) ([]models.Room, error) {
-	var rooms []models.Room
-
-	return rooms, nil
-}
-
 func (r *RoomMockService) AddRoom(room models.Room) error {
 	r.RoomList = append(r.RoomList, room)
 	return nil
