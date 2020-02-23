@@ -20,7 +20,7 @@
       ></rect>
     </svg>
   </div>
-  <ion-button color="dark" (click)="getData()">
+  <ion-button color="dark" (click)="discoverFloor()">
     <ion-icon slot="end" name="star"></ion-icon>
     ajax test
   </ion-button>
@@ -31,11 +31,11 @@
   -->
   <ion-item>
     <ion-label position="stacked"><ion-text color="primary">Start room</ion-text></ion-label>
-    <ion-input type="text" placeholder="Start room"></ion-input>
+    <ion-input type="text" placeholder="Start room" [(ngModel)]="startInput"></ion-input>
   </ion-item>
   <ion-item>
     <ion-label position="stacked"><ion-text color="primary">Destination</ion-text></ion-label>
-    <ion-input type="text" placeholder="Destination"></ion-input>
+    <ion-input type="text" placeholder="Destination" [(ngModel)]="destinationInput"></ion-input>
   </ion-item>
   <ion-item>
     <ion-button expand="block" color="dark">Go!</ion-button>

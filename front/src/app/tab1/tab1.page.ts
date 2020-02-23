@@ -1,11 +1,7 @@
-import {HttpClient, HttpHandler} from '@angular/common/http';
-import { floor } from '../building-objects-if';
 import { room } from '../building-objects-if';
-import { corridor } from '../building-objects-if';
 import { testDataRooms } from './building-data';
 import {Component} from "@angular/core";
-import {parseJson} from "@angular-devkit/core";
-import {stringify} from "querystring";
+import {RequestBuildingDataService} from "../services/requestBuildingData.service";
 
 @Component({
   selector: 'app-tab1',
@@ -13,76 +9,45 @@ import {stringify} from "querystring";
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-//  public mapIsVisible:boolean = true;
-//  public cssSvgMap:string;
-//  private http:HttpClient;
+  //  public mapIsVisible:boolean = true;
   public startRoom:room;
   public destinationRoom:room;
   public testRooms:room[] = testDataRooms;
   
-  // TODO these values should be sent from backend
-  public svgWidth:number = this.calcSvgWidth();
-  public svgHeight:number = this.calcSvgHeight();
+  // TODO these values should be sent from backend or be clear because of the building data json response
+  public svgWidth:number = 500; // this.calcSvgWidth();
+  public svgHeight:number = 300; // this.calcSvgHeight();
 
-  constructor(private http:HttpClient) {
-    // this.http = new HttpClient('sdfsdf');
-  }
+  constructor() {}
 
-  private calcSvgWidth() {
-    let sum:number = 0;
-    this.testRooms.forEach(room => {
-      if ( room.x + room.width > sum ) {
-        sum = room.x + room.width;
-      }
-    });
-    return sum;
-  }
-
-  private calcSvgHeight() {
-    let sum:number = 0;
-    this.testRooms.forEach(room => {
-      if ( room.y + room.height > sum ) {
-        sum = room.y + room.height;
-      }
-    });
-    return sum;
-  }
-
-  // public requestBuildingData(floorOne, floorTwo=null){
-  //   // call ajax here
-  //   if (floorTwo != null) {
-  //     // a route is requested
-  //   } else {
-  //     // only the view of one floor is needed
-  //     // sendPostRequest(floorOne);
-  //   }
-  // };
-
-  // public sendPostRequest(/*dataToSent*/) {
-  //   // let res = this.http.get('https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fsagarhani.files.wordpress.com%2F2015%2F07%2Fduck_duck_go.png&f=1&nofb=1'); // http://127.0.0.1:8080/roomlist/
-  //
-  //   let res = null;
-  //   $http({
-  //     method : "GET",
-  //     url : "https://www.w3schools.com/js/demo_get.asp?t=0.5814227109783404"
-  //   }).then(function(response) {
-  //     res = response.data;
+  // TODO adapt to the current UML model
+  // private calcSvgWidth() {
+  //   let sum:number = 0;
+  //   this.testRooms.forEach(room => {
+  //     if ( room.x + room.width > sum ) {
+  //       sum = room.x + room.width;
+  //     }
   //   });
-  //   console.log(res);
+  //   return sum;
+  // }
+  //
+  // private calcSvgHeight() {
+  //   let sum:number = 0;
+  //   this.testRooms.forEach(room => {
+  //     if ( room.y + room.height > sum ) {
+  //       sum = room.y + room.height;
+  //     }
+  //   });
+  //   return sum;
   // }
 
-  public getData() {
-    var req = new XMLHttpRequest();
-    req.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        console.log(req.responseText)
-      }
+  public discoverFloor() {
+    // let floorToDisplay = this.startInput;
+    let handleReceivedFloor = function (Tab1page, data) {
+      Tab1page.testRooms = data; // JSON.parse()
     };
-    let method:string = "GET";
-    // TODO solve blocked Cross-Origin request caused by different ports of the dev servers (8100 & 8080)
-    let url:string = "http://127.0.0.1:8080/roomlist/";
-    let async:boolean = true;
-    req.open(method, url, async);
-    req.send();
+    let xhr = new RequestBuildingDataService();
+    // TODO exchange GET to POST and uncomment floorToDisplay when API is built
+    xhr.fetchDiscoverFloorData("GET", /*floorToDisplay,*/ handleReceivedFloor);
   }
 }
