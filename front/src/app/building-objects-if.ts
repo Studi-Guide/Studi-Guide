@@ -19,7 +19,8 @@ export interface coordinate {
 }
 
 export interface door {
-  coordinates: coordinate[];
+  start: coordinate;
+  end: coordinate;
 }
 
 export interface section {
@@ -31,6 +32,11 @@ export interface room {
   name: string;
   sections: section[];
   alias: string;
-  doors: door[];
+  doors: section[];
+  fill: string;
+}
+
+export interface svgPath {
+  d: string;
   fill: string;
 }

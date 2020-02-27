@@ -1,7 +1,8 @@
-import { room } from '../building-objects-if';
+import {room, svgPath} from '../building-objects-if';
 import { testDataRooms } from './building-data';
 import {Component} from "@angular/core";
 import {RequestBuildingDataService} from "../services/requestBuildingData.service";
+import {forEach} from "@angular-devkit/schematics";
 
 @Component({
   selector: 'app-navigation',
@@ -15,33 +16,42 @@ export class NavigationPage {
   // TODO build strings from the building data to bind only the string on the attr.d
   // e.g. "M100 100 L300 100 L300 0 L360 0 L360 130 L100 130 Z"
   public testRooms:room[] = testDataRooms;
+  public calculatedPaths:svgPath[];
   
-  // TODO these values should be sent from backend or be clear because of the building data json response
+  // TODO These values we have to determine: which size will have the scrollable map?
   public svgWidth:number = 500; // this.calcSvgWidth();
-  public svgHeight:number = 300; // this.calcSvgHeight();
-
-  constructor() {}
+  public svgHeight:number = 1000; // this.calcSvgHeight();
 
   // TODO adapt to the current UML model
-  // private calcSvgWidth() {
-  //   let sum:number = 0;
-  //   this.testRooms.forEach(room => {
-  //     if ( room.x + room.width > sum ) {
-  //       sum = room.x + room.width;
-  //     }
-  //   });
-  //   return sum;
-  // }
-  //
-  // private calcSvgHeight() {
-  //   let sum:number = 0;
-  //   this.testRooms.forEach(room => {
-  //     if ( room.y + room.height > sum ) {
-  //       sum = room.y + room.height;
-  //     }
-  //   });
-  //   return sum;
-  // }
+
+  private calculateSvgPaths() {
+    for (const room of this.testRooms) {
+      let roomShapePath:svgPath = {
+        d:'',
+        fill:''
+      };
+      roomShapePath.d = NavigationPage.buildRoomSvgPathFromSections(room.sections);
+      roomShapePath.fill = room.fill;
+      this.calculatedPaths.push(roomShapePath);
+      // path = NavigationPage.buildDoorSvgPath(room.doors);
+    }
+  }
+
+// TODO buildDoorSvgPathFromDoors is missing yet
+
+  private static buildRoomSvgPathFromSections(roomSections) : string {
+    let path_d:string = 'M';
+    for (const section of roomSections) {
+      path_d += section.start.x+' '+section.start.y+' ';
+    }
+    path_d += 'Z';
+    return path_d;
+  }
+
+  constructor() {
+    this.calculatedPaths = [];
+    this.calculateSvgPaths();
+  }
 
   public discoverFloor() {
     // let floorToDisplay = this.startInput;

@@ -7,37 +7,6 @@
 </ion-header>
 
 <ion-content fullscreen>
-  <div style="border: 3px solid black; padding: 12px;">
-    <h3>Daten Test</h3>
-    <!-- *ngIf="mapIsVisible" -->
-    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}">
-      <!-- TODO adapt path attribute rendering for dynamic amount of sections instead of 4 -->
-      <path *ngFor="let room of testRooms"
-            attr.d="M{{room.sections[0].start.x}} {{room.sections[0].start.y}}
-                    L{{room.sections[1].start.x}} {{room.sections[1].start.y}}
-                    L{{room.sections[2].start.x}} {{room.sections[2].start.y}}
-                    L{{room.sections[3].start.x}} {{room.sections[3].start.y}} Z"
-            attr.fill="{{room.fill}}"
-            stroke="#FFF"
-      />
-      <text *ngFor="let room of testRooms"
-            attr.x="{{room.sections[0].start.x+10}}"
-            attr.y="{{room.sections[0].start.y+20}}"
-            font-size="10px"
-            fill="#FFF">
-        {{room.name}}
-      </text>
-    </svg>
-  </div>
-  <ion-button color="dark" (click)="discoverFloor()">
-    <ion-icon slot="end" name="star"></ion-icon>
-    ajax test
-  </ion-button>
-  <!--
-  <ion-card attr.style="{{css}}" class="">
-    <img src="/assets/floors/4th-floor.svg" alt="" />
-  </ion-card>
-  -->
   <ion-item>
     <ion-label position="stacked"><ion-text color="primary">Start room</ion-text></ion-label>
     <ion-input type="text" placeholder="Start room" [(ngModel)]="startInput"></ion-input>
@@ -47,6 +16,28 @@
     <ion-input type="text" placeholder="Destination" [(ngModel)]="destinationInput"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-button expand="block" color="dark">Go!</ion-button>
+    <ion-button expand="block" color="dark"(click)="discoverFloor()">
+      <ion-icon slot="end" name="star"></ion-icon>
+      Go!
+    </ion-button>
   </ion-item>
+
+  <div style="padding: 6px;">
+    <!-- *ngIf="mapIsVisible" -->
+    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}">
+      <!-- TODO adapt path attribute rendering for dynamic amount of sections instead of 4 -->
+      <path *ngFor="let path of calculatedPaths"
+            attr.d="{{path.d}}"
+            attr.fill="{{path.fill}}"
+            stroke="#FFF"
+      />
+      <text *ngFor="let room of testRooms"
+            attr.x="{{room.sections[0].start.x+6}}"
+            attr.y="{{room.sections[0].start.y+16}}"
+            font-size="9px"
+            fill="#FFF">
+        {{room.name}}
+      </text>
+    </svg>
+  </div>
 </ion-content>

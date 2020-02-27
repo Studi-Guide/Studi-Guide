@@ -23,7 +23,12 @@ export let testDataRooms:room[] = [
       }
     ],
     "alias": "",
-    "doors": [],
+    "doors": [
+      {
+        "start": { "x": 135, "y": 100, "z": 3 },
+        "end": { "x": 120, "y": 100, "z": 3 }
+      }
+    ],
     "fill": "#5682a3"
   },
   {
@@ -47,11 +52,16 @@ export let testDataRooms:room[] = [
       }
     ],
     "alias": "",
-    "doors": [],
+    "doors": [
+      {
+        "start": { "x": 180, "y": 100, "z": 3 },
+        "end": { "x": 165, "y": 100, "z": 3 }
+      }
+    ],
     "fill": "#5682a3"
   },
   {
-    "name": "stair",
+    "name": "Treppe",
     "sections": [
       {
         "start": { "x": 360, "y": 0, "z": 3 },
@@ -72,7 +82,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#AEA693"
+    "fill": "#AFAFAF" // #BEB6A3
   },
   {
     "name": "KA.306",
@@ -95,11 +105,16 @@ export let testDataRooms:room[] = [
       }
     ],
     "alias": "",
-    "doors": [],
+    "doors": [
+      {
+        "start": { "x": 100, "y": 110, "z": 3 },
+        "end": { "x": 100, "y": 125, "z": 3 }
+      }
+    ],
     "fill": "#467689"
   },
   {
-    "name": "", // corridor
+    "name": "corridor",
     "sections": [
       {
         "start": { "x": 100, "y": 100, "z": 3 },
@@ -128,10 +143,10 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#AEA693"
+    "fill": "#BBB" // #AEA693
   },
   {
-    "name": "", // elevator
+    "name": "Aufzug", // elevator
     "sections": [
       {
         "start": { "x": 360, "y": 100, "z": 3 },
@@ -180,7 +195,7 @@ export let testDataRooms:room[] = [
     "fill": "#467689"
   },
   {
-    "name": "stair2",
+    "name": "Treppe",
     "sections": [
       {
         "start": { "x": 225, "y": 130, "z": 3 },
@@ -201,7 +216,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#AEA693"
+    "fill": "#AFAFAF" // #AEA693
   },
   { // TODO 6 sections per room -> split into 2 rooms
     "name": "WC",
@@ -313,7 +328,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#AEA693"
+    "fill": "#BBB" // #AEA693
   },
   {
     "name": "KA.305",
@@ -555,7 +570,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#AEA693"
+    "fill": "#BBB" // #AEA693
   },
   // side: TOP RIGHT
   {
