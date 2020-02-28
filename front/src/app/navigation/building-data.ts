@@ -557,14 +557,14 @@ export let testDataRooms:room[] = [
       },
       {
         "start": { "x": 290, "y": 265, "z": 3 },
-        "end": { "x": 290, "y": 550, "z": 3 }
+        "end": { "x": 290, "y": 650, "z": 3 }
       },
       {
-        "start": { "x": 290, "y": 550, "z": 3 },
-        "end": { "x": 240, "y": 550, "z": 3 }
+        "start": { "x": 290, "y": 650, "z": 3 },
+        "end": { "x": 240, "y": 650, "z": 3 }
       },
       {
-        "start": { "x": 240, "y": 550, "z": 3 },
+        "start": { "x": 240, "y": 650, "z": 3 },
         "end": { "x": 240, "y": 265, "z": 3 }
       }
     ],
@@ -668,160 +668,77 @@ export let testDataRooms:room[] = [
     "alias": "",
     "doors": [],
     "fill": "#AEA693"
+  },
+  {
+    "name": "Treppe", // left under KA.328
+    "sections": [
+      {
+        "start": { "x": 130, "y": 550, "z": 3 },
+        "end": { "x": 240, "y": 550, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 550, "z": 3 },
+        "end": { "x": 240, "y": 590, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 590, "z": 3 },
+        "end": { "x": 130, "y": 590, "z": 3 }
+      },
+      {
+        "start": { "x": 130, "y": 590, "z": 3 },
+        "end": { "x": 130, "y": 550, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#AFAFAF"
+  },
+  {
+    "name": "WC Damen",
+    "sections": [
+      {
+        "start": { "x": 130, "y": 590, "z": 3 },
+        "end": { "x": 190, "y": 590, "z": 3 }
+      },
+      {
+        "start": { "x": 190, "y": 590, "z": 3 },
+        "end": { "x": 190, "y": 620, "z": 3 }
+      },
+      {
+        "start": { "x": 190, "y": 620, "z": 3 },
+        "end": { "x": 130, "y": 620, "z": 3 }
+      },
+      {
+        "start": { "x": 130, "y": 620, "z": 3 },
+        "end": { "x": 130, "y": 590, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#AFAFAF"
+  },
+  {
+    "name": "KA.313",
+    "sections": [
+      {
+        "start": { "x": 290, "y": 550, "z": 3 },
+        "end": { "x": 400, "y": 550, "z": 3 }
+      },
+      {
+        "start": { "x": 400, "y": 550, "z": 3 },
+        "end": { "x": 400, "y": 650, "z": 3 }
+      },
+      {
+        "start": { "x": 400, "y": 650, "z": 3 },
+        "end": { "x": 290, "y": 650, "z": 3 }
+      },
+      {
+        "start": { "x": 290, "y": 650, "z": 3 },
+        "end": { "x": 290, "y": 550, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#5682a3"
   }
 ];
-
-/*
-{
-    name: 'KA.304',
-    sections: [
-      {
-        start: { x: 0, y: 0, z: 3 },
-        end: { x: 150, y: 0, z: 3 }
-      },
-      {
-        start: { x: 150, y: 0, z: 3 },
-        end: { x: 150, y: 100, z: 3 }
-      },
-      {
-        start: { x: 150, y: 100, z: 3 },
-        end: { x: 0, y: 100, z: 3 }
-      },
-      {
-        start: { x: 0, y: 100, z: 3 },
-        end: { x: 0, y: 0, z: 3 }
-      }
-    ],
-    alias: '',
-    doors: [],
-    fill: '#5682a3'
-  },
-  {
-    name: 'KA.302',
-    sections: [
-      {
-        start: { x: 150, y: 0, z: 3 },
-        end: { x: 300, y: 0, z: 3 }
-      },
-      {
-        start: { x: 300, y: 0, z: 3 },
-        end: { x: 300, y: 100, z: 3 }
-      },
-      {
-        start: { x: 300, y: 100, z: 3 },
-        end: { x: 150, y: 100, z: 3 }
-      },
-      {
-        start: { x: 150, y: 100, z: 3 },
-        end: { x: 150, y: 0, z: 3 }
-      }
-    ],
-    alias: '',
-    doors: [],
-    fill: '#5682a3'
-  },
-  {
-    name: 'stair',
-    sections: [
-      {
-        start: { x: 360, y: 0, z: 3 },
-        end: { x: 400, y: 0, z: 3 }
-      },
-      {
-        start: { x: 400, y: 0, z: 3 },
-        end: { x: 400, y: 100, z: 3 }
-      },
-      {
-        start: { x: 400, y: 100, z: 3 },
-        end: { x: 360, y: 100, z: 3 }
-      },
-      {
-        start: { x: 360, y: 100, z: 3 },
-        end: { x: 360, y: 0, z: 3 }
-      }
-    ],
-    alias: '',
-    doors: [],
-    fill: '#AEA693'
-  },
-  {
-    name: 'KA.306',
-    sections: [
-      {
-        start: { x: 0, y: 100, z: 3 },
-        end: { x: 100, y: 100, z: 3 }
-      },
-      {
-        start: { x: 100, y: 100, z: 3 },
-        end: { x: 100, y: 130, z: 3 }
-      },
-      {
-        start: { x: 100, y: 130, z: 3 },
-        end: { x: 0, y: 130, z: 3 }
-      },
-      {
-        start: { x: 0, y: 130, z: 3 },
-        end: { x: 0, y: 100, z: 3 }
-      }
-    ],
-    alias: '',
-    doors: [],
-    fill: '#467689'
-  },
-  {
-    name: '', // corridor
-    sections: [
-      {
-        start: { x: 100, y: 100, z: 3 },
-        end: { x: 300, y: 100, z: 3 }
-      },
-      {
-        start: { x: 300, y: 100, z: 3 },
-        end: { x: 300, y: 0, z: 3 }
-      },
-      {
-        start: { x: 300, y: 0, z: 3 },
-        end: { x: 360, y: 0, z: 3 }
-      },
-      {
-        start: { x: 360, y: 0, z: 3 },
-        end: { x: 360, y: 130, z: 3 }
-      },
-      {
-        start: { x: 360, y: 130, z: 3 },
-        end: { x: 100, y: 130, z: 3 }
-      },
-      {
-        start: { x: 100, y: 130, z: 3 },
-        end: { x: 100, y: 100, z: 3 }
-      }
-    ],
-    alias: '',
-    doors: [],
-    fill: '#AEA693'
-  },
-  {
-    name: 'Elevator',
-    sections: [
-      {
-        start: { x: 360, y: 100, z: 3 },
-        end: { x: 400, y: 100, z: 3 }
-      },
-      {
-        start: { x: 400, y: 100, z: 3 },
-        end: { x: 400, y: 130, z: 3 }
-      },
-      {
-        start: { x: 400, y: 130, z: 3 },
-        end: { x: 360, y: 130, z: 3 }
-      },
-      {
-        start: { x: 360, y: 130, z: 3 },
-        end: { x: 360, y: 100, z: 3 }
-      }
-    ],
-    alias: '',
-    doors: [],
-    fill: '#817464'
-  }
-*/
