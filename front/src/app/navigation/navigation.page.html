@@ -25,8 +25,7 @@
   <div style="padding: 6px;">
     <!-- *ngIf="mapIsVisible" -->
     <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}">
-      <!-- TODO adapt path attribute rendering for dynamic amount of sections instead of 4 -->
-      <path *ngFor="let path of calculatedPaths"
+      <path *ngFor="let path of calculatedRoomPaths"
             attr.d="{{path.d}}"
             attr.fill="{{path.fill}}"
             stroke="#FFF"
@@ -38,6 +37,7 @@
             fill="#FFF">
         {{room.name}}
       </text>
+      <path *ngFor="let doorLine of calculatedDoorLines" attr.d="{{doorLine.d}}" attr.stroke="{{doorLine.fill}}" />
     </svg>
   </div>
 </ion-content>

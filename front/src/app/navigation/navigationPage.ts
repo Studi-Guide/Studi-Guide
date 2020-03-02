@@ -1,8 +1,7 @@
-import {room, svgPath} from '../building-objects-if';
+import {room, section, svgPath} from '../building-objects-if';
 import { testDataRooms } from './building-data';
 import {Component} from "@angular/core";
 import {RequestBuildingDataService} from "../services/requestBuildingData.service";
-import {forEach} from "@angular-devkit/schematics";
 
 @Component({
   selector: 'app-navigation',
@@ -13,10 +12,9 @@ export class NavigationPage {
   //  public mapIsVisible:boolean = true;
   public startRoom:room;
   public destinationRoom:room;
-  // TODO build strings from the building data to bind only the string on the attr.d
-  // e.g. "M100 100 L300 100 L300 0 L360 0 L360 130 L100 130 Z"
   public testRooms:room[] = testDataRooms;
-  public calculatedPaths:svgPath[];
+  public calculatedRoomPaths:svgPath[];
+  public calculatedDoorLines:svgPath[];
   
   // TODO These values we have to determine: which size will have the scrollable map?
   public svgWidth:number = 500; // this.calcSvgWidth();
@@ -27,29 +25,43 @@ export class NavigationPage {
   private calculateSvgPaths() {
     for (const room of this.testRooms) {
       let roomShapePath:svgPath = {
-        d:'',
-        fill:''
+        d : NavigationPage.buildRoomSvgPathFromSections(room.sections),
+        fill : room.fill
       };
-      roomShapePath.d = NavigationPage.buildRoomSvgPathFromSections(room.sections);
-      roomShapePath.fill = room.fill;
-      this.calculatedPaths.push(roomShapePath);
-      // path = NavigationPage.buildDoorSvgPath(room.doors);
+      this.calculatedRoomPaths.push(roomShapePath);
+      if (room.doors.length >= 1) {
+        for (const door of room.doors) {
+          let doorLine:svgPath = {
+            d : NavigationPage.buildDoorSvgLineFromSection(door),
+            fill : roomShapePath.fill
+          };
+          this.calculatedDoorLines.push(doorLine);
+        }
+      }
     }
   }
 
-// TODO buildDoorSvgPathFromDoors is missing yet
+  private static buildDoorSvgLineFromSection(doorSection:section) : string {
+    let path:string = 'M' + doorSection.start.x + ' ' + doorSection.start.y;
+    path += ' L' + doorSection.end.x + ' ' + doorSection.end.y;
+    return path;
+  }
 
-  private static buildRoomSvgPathFromSections(roomSections) : string {
+  private static buildRoomSvgPathFromSections(roomSections:section[]) : string {
     let path_d:string = 'M';
     for (const section of roomSections) {
-      path_d += section.start.x+' '+section.start.y+' ';
+      if (path_d !== 'M') {
+        path_d += 'L';
+      }
+      path_d += section.start.x + ' ' + section.start.y + ' ';
     }
     path_d += 'Z';
     return path_d;
   }
 
   constructor() {
-    this.calculatedPaths = [];
+    this.calculatedRoomPaths = [];
+    this.calculatedDoorLines = [];
     this.calculateSvgPaths();
   }
 
