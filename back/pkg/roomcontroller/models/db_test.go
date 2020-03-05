@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/jmoiron/sqlx"
 	"os"
+	"reflect"
 	"studi-guide/pkg/env"
 	"testing"
 )
@@ -19,19 +20,18 @@ func setupTestRoomDbService() (RoomServiceProvider, *sqlx.DB) {
 	testRooms = append(testRooms, Room{Id: 2, Name: "02", Description: "d"})
 	testRooms = append(testRooms, Room{Id: 3, Name: "03", Description: "d"})
 
-
 	db := sqlx.MustConnect(e.DbDriverName(), e.DbDataSource())
 
 	db.Exec(schema)
 
 	insert := "insert into rooms (ID, Name, Description) values(:ID, :Name, :Description)"
 	tx := db.MustBegin()
-	for _, room := range(testRooms) {
+	for _, room := range testRooms {
 		tx.NamedExec(insert, &room)
 	}
 	tx.Commit()
 
-	dbService := RoomDbService{db: db, table:"rooms"}
+	dbService := RoomDbService{db: db, table: "rooms"}
 
 	return &dbService, db
 }
@@ -73,12 +73,12 @@ func TestGetRoomAllRooms(t *testing.T) {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
 
-	compare := func(a []Room, b []Room) (bool) {
+	compare := func(a []Room, b []Room) bool {
 		if len(a) != len(b) {
 			return false
 		}
-		for i, _ := range(a) {
-			if a[i] != b[i] {
+		for i, _ := range a {
+			if !reflect.DeepEqual(a[i], b[i]) {
 				return false
 			}
 		}
@@ -111,7 +111,7 @@ func TestGetRoom(t *testing.T) {
 		t.Error(err)
 	}
 
-	if room != testRooms[1] {
+	if !reflect.DeepEqual(room, testRooms[1]) {
 		t.Error("expected: ", testRooms[1], "; got: ", room)
 	}
 
@@ -120,14 +120,13 @@ func TestGetRoom(t *testing.T) {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
 	var noneRoom Room
-	if room !=  noneRoom{
+	if !reflect.DeepEqual(room, noneRoom) {
 		t.Error("expected: ", noneRoom, "; got: ", room)
 	}
 }
 
 func TestAddRoom(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
-
 
 	testRoom := Room{Id: 4, Name: "04", Description: "description"}
 	err := dbService.AddRoom(testRoom)
