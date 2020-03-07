@@ -5,6 +5,7 @@ This go example uses mux of the gorilla webkit.
 ## Set Up
 
  - execute `go mod download`
+ - create database schema `go run github.com/facebookincubator/ent/cmd/entc generate ./ent/schema`
 
 ## Run
 
