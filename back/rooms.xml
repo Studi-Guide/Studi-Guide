@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <rooms>
     <Room>
-        <id>4</id>
-        <name>RoomN04</name>
-        <description>description</description>
+        <Id>4</Id>
+        <Name>RoomN04</Name>
+        <Description>description</Description>
         <coordinates>
             <Min><X>0</X><Y>0</Y></Min>
             <Max><X>0</X><Y>0</Y></Max>
         </coordinates>
     </Room>
     <Room>
-        <id>5</id>
-        <name>RoomN05</name>
-        <description>description</description>
+        <Id>5</Id>
+        <Name>RoomN05</Name>
+        <Description>description</Description>
         <coordinates>
             <Min><X>0</X><Y>0</Y></Min>
             <Max><X>0</X><Y>0</Y></Max>
         </coordinates>
     </Room>
     <Room>
-        <id>6</id>
-        <name>RoomN06</name>
-        <description>description</description>
+        <Id>6</Id>
+        <Name>RoomN06</Name>
+        <Description>description</Description>
         <coordinates>
             <Min><X>0</X><Y>0</Y></Min>
             <Max><X>0</X><Y>0</Y></Max>

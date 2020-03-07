@@ -24,7 +24,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sqlx.DB) {
 
 	db.Exec(schema)
 
-	insert := "insert into rooms (ID, Name, Description) values(:ID, :Name, :Description)"
+	insert := "insert into rooms (Id, Name, Description) values(:Id, :Name, :Description)"
 	tx := db.MustBegin()
 	for _, room := range testRooms {
 		tx.NamedExec(insert, &room)

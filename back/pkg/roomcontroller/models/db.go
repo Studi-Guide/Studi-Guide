@@ -16,7 +16,7 @@ type RoomDbService struct {
 }
 
 var schema string = `CREATE TABLE "rooms"(
-		"ID"	INTEGER,
+		"Id"	INTEGER,
 		"Name"	TEXT UNIQUE,
 		"Description"	TEXT,
 		PRIMARY KEY("ID")
@@ -64,7 +64,7 @@ func (r *RoomDbService) AddRoom(room Room) error {
 	tx := r.db.MustBegin()
 	defer tx.Commit()
 
-	_, err := tx.NamedExec("insert into "+r.table+" (ID, Name, Description) values(:ID, :Name, :Description)", &room)
+	_, err := tx.NamedExec("insert into "+r.table+" (Id, Name, Description) values(:Id, :Name, :Description)", &room)
 	if err != nil {
 		return err
 	}
