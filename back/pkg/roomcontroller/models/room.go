@@ -7,6 +7,7 @@ type Room struct {
 	Name        string          `json:"name" xml:"name" db:"Name"`
 	Description string          `json:"description" xml:"description" db:"Description"`
 	Coordinates image.Rectangle `json:"coordinates" xml:"coordinates"`
+	Floor		int 			`json:"floor" xml:"floor" db:"Floor"`
 }
 
 type RoomServiceProvider interface {

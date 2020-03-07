@@ -150,6 +150,7 @@ func ExampleRoom() {
 	r := client.Room.
 		Create().
 		SetName("string").
+		SetDescription("string").
 		SetFloor(1).
 		SetID(1).
 		AddDoors(d0).

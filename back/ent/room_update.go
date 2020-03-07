@@ -19,6 +19,7 @@ import (
 type RoomUpdate struct {
 	config
 	Name             *string
+	Description      *string
 	Floor            *int
 	addFloor         *int
 	Id               *int
@@ -44,10 +45,16 @@ func (ru *RoomUpdate) SetName(s string) *RoomUpdate {
 	return ru
 }
 
-// SetNillableName sets the Name field if the given value is not nil.
-func (ru *RoomUpdate) SetNillableName(s *string) *RoomUpdate {
+// SetDescription sets the Description field.
+func (ru *RoomUpdate) SetDescription(s string) *RoomUpdate {
+	ru.Description = &s
+	return ru
+}
+
+// SetNillableDescription sets the Description field if the given value is not nil.
+func (ru *RoomUpdate) SetNillableDescription(s *string) *RoomUpdate {
 	if s != nil {
-		ru.SetName(*s)
+		ru.SetDescription(*s)
 	}
 	return ru
 }
@@ -266,6 +273,13 @@ func (ru *RoomUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			Column: room.FieldName,
 		})
 	}
+	if value := ru.Description; value != nil {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  *value,
+			Column: room.FieldDescription,
+		})
+	}
 	if value := ru.Floor; value != nil {
 		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
 			Type:   field.TypeInt,
@@ -422,6 +436,7 @@ type RoomUpdateOne struct {
 	config
 	id               int
 	Name             *string
+	Description      *string
 	Floor            *int
 	addFloor         *int
 	Id               *int
@@ -440,10 +455,16 @@ func (ruo *RoomUpdateOne) SetName(s string) *RoomUpdateOne {
 	return ruo
 }
 
-// SetNillableName sets the Name field if the given value is not nil.
-func (ruo *RoomUpdateOne) SetNillableName(s *string) *RoomUpdateOne {
+// SetDescription sets the Description field.
+func (ruo *RoomUpdateOne) SetDescription(s string) *RoomUpdateOne {
+	ruo.Description = &s
+	return ruo
+}
+
+// SetNillableDescription sets the Description field if the given value is not nil.
+func (ruo *RoomUpdateOne) SetNillableDescription(s *string) *RoomUpdateOne {
 	if s != nil {
-		ruo.SetName(*s)
+		ruo.SetDescription(*s)
 	}
 	return ruo
 }
@@ -654,6 +675,13 @@ func (ruo *RoomUpdateOne) sqlSave(ctx context.Context) (r *Room, err error) {
 			Type:   field.TypeString,
 			Value:  *value,
 			Column: room.FieldName,
+		})
+	}
+	if value := ruo.Description; value != nil {
+		_spec.Fields.Set = append(_spec.Fields.Set, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  *value,
+			Column: room.FieldDescription,
 		})
 	}
 	if value := ruo.Floor; value != nil {

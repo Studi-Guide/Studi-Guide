@@ -7,6 +7,7 @@ import (
 	"log"
 	"strconv"
 	"strings"
+	"studi-guide/ent"
 	"studi-guide/pkg/env"
 )
 

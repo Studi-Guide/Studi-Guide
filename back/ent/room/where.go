@@ -99,6 +99,13 @@ func Name(v string) predicate.Room {
 	})
 }
 
+// Description applies equality check predicate on the "Description" field. It's identical to DescriptionEQ.
+func Description(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDescription), v))
+	})
+}
+
 // Floor applies equality check predicate on the "Floor" field. It's identical to FloorEQ.
 func Floor(v int) predicate.Room {
 	return predicate.Room(func(s *sql.Selector) {
@@ -221,6 +228,117 @@ func NameEqualFold(v string) predicate.Room {
 func NameContainsFold(v string) predicate.Room {
 	return predicate.Room(func(s *sql.Selector) {
 		s.Where(sql.ContainsFold(s.C(FieldName), v))
+	})
+}
+
+// DescriptionEQ applies the EQ predicate on the "Description" field.
+func DescriptionEQ(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.EQ(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionNEQ applies the NEQ predicate on the "Description" field.
+func DescriptionNEQ(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.NEQ(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionIn applies the In predicate on the "Description" field.
+func DescriptionIn(vs ...string) predicate.Room {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Room(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(vs) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.In(s.C(FieldDescription), v...))
+	})
+}
+
+// DescriptionNotIn applies the NotIn predicate on the "Description" field.
+func DescriptionNotIn(vs ...string) predicate.Room {
+	v := make([]interface{}, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.Room(func(s *sql.Selector) {
+		// if not arguments were provided, append the FALSE constants,
+		// since we can't apply "IN ()". This will make this predicate falsy.
+		if len(vs) == 0 {
+			s.Where(sql.False())
+			return
+		}
+		s.Where(sql.NotIn(s.C(FieldDescription), v...))
+	})
+}
+
+// DescriptionGT applies the GT predicate on the "Description" field.
+func DescriptionGT(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.GT(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionGTE applies the GTE predicate on the "Description" field.
+func DescriptionGTE(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.GTE(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionLT applies the LT predicate on the "Description" field.
+func DescriptionLT(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.LT(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionLTE applies the LTE predicate on the "Description" field.
+func DescriptionLTE(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.LTE(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionContains applies the Contains predicate on the "Description" field.
+func DescriptionContains(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.Contains(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionHasPrefix applies the HasPrefix predicate on the "Description" field.
+func DescriptionHasPrefix(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.HasPrefix(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionHasSuffix applies the HasSuffix predicate on the "Description" field.
+func DescriptionHasSuffix(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.HasSuffix(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionEqualFold applies the EqualFold predicate on the "Description" field.
+func DescriptionEqualFold(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.EqualFold(s.C(FieldDescription), v))
+	})
+}
+
+// DescriptionContainsFold applies the ContainsFold predicate on the "Description" field.
+func DescriptionContainsFold(v string) predicate.Room {
+	return predicate.Room(func(s *sql.Selector) {
+		s.Where(sql.ContainsFold(s.C(FieldDescription), v))
 	})
 }
 

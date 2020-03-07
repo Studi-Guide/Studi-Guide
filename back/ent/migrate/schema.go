@@ -28,7 +28,7 @@ var (
 				Symbol:  "doors_rooms_doors",
 				Columns: []*schema.Column{DoorsColumns[2]},
 
-				RefColumns: []*schema.Column{RoomsColumns[0], RoomsColumns[3]},
+				RefColumns: []*schema.Column{RoomsColumns[0], RoomsColumns[4]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -60,7 +60,7 @@ var (
 				Symbol:  "path_nodes_rooms_pathNodes",
 				Columns: []*schema.Column{PathNodesColumns[6]},
 
-				RefColumns: []*schema.Column{RoomsColumns[0], RoomsColumns[3]},
+				RefColumns: []*schema.Column{RoomsColumns[0], RoomsColumns[4]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -68,16 +68,24 @@ var (
 	// RoomsColumns holds the columns for the "rooms" table.
 	RoomsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "name", Type: field.TypeString, Default: room.DefaultName},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Default: room.DefaultDescription},
 		{Name: "floor", Type: field.TypeInt, Default: room.DefaultFloor},
-		{Name: "id", Type: field.TypeInt, Unique: true},
+		{Name: "id", Type: field.TypeInt},
 	}
 	// RoomsTable holds the schema information for the "rooms" table.
 	RoomsTable = &schema.Table{
 		Name:        "rooms",
 		Columns:     RoomsColumns,
-		PrimaryKey:  []*schema.Column{RoomsColumns[0], RoomsColumns[3]},
+		PrimaryKey:  []*schema.Column{RoomsColumns[0], RoomsColumns[4]},
 		ForeignKeys: []*schema.ForeignKey{},
+		Indexes: []*schema.Index{
+			{
+				Name:    "room_id_name",
+				Unique:  true,
+				Columns: []*schema.Column{RoomsColumns[0], RoomsColumns[4], RoomsColumns[1]},
+			},
+		},
 	}
 	// SequencesColumns holds the columns for the "sequences" table.
 	SequencesColumns = []*schema.Column{
@@ -107,7 +115,7 @@ var (
 				Symbol:  "sequences_rooms_sequences",
 				Columns: []*schema.Column{SequencesColumns[7]},
 
-				RefColumns: []*schema.Column{RoomsColumns[0], RoomsColumns[3]},
+				RefColumns: []*schema.Column{RoomsColumns[0], RoomsColumns[4]},
 				OnDelete:   schema.SetNull,
 			},
 		},

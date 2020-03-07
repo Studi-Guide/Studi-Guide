@@ -17,6 +17,8 @@ type Room struct {
 	ID int `json:"id,omitempty"`
 	// Name holds the value of the "Name" field.
 	Name string `json:"Name,omitempty"`
+	// Description holds the value of the "Description" field.
+	Description string `json:"Description,omitempty"`
 	// Floor holds the value of the "Floor" field.
 	Floor int `json:"Floor,omitempty"`
 	// ID holds the value of the "Id" field.
@@ -71,6 +73,7 @@ func (*Room) scanValues() []interface{} {
 	return []interface{}{
 		&sql.NullInt64{},  // id
 		&sql.NullString{}, // Name
+		&sql.NullString{}, // Description
 		&sql.NullInt64{},  // Floor
 		&sql.NullInt64{},  // Id
 	}
@@ -93,13 +96,18 @@ func (r *Room) assignValues(values ...interface{}) error {
 	} else if value.Valid {
 		r.Name = value.String
 	}
-	if value, ok := values[1].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field Floor", values[1])
+	if value, ok := values[1].(*sql.NullString); !ok {
+		return fmt.Errorf("unexpected type %T for field Description", values[1])
+	} else if value.Valid {
+		r.Description = value.String
+	}
+	if value, ok := values[2].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field Floor", values[2])
 	} else if value.Valid {
 		r.Floor = int(value.Int64)
 	}
-	if value, ok := values[2].(*sql.NullInt64); !ok {
-		return fmt.Errorf("unexpected type %T for field Id", values[2])
+	if value, ok := values[3].(*sql.NullInt64); !ok {
+		return fmt.Errorf("unexpected type %T for field Id", values[3])
 	} else if value.Valid {
 		r.ID = int(value.Int64)
 	}
@@ -146,6 +154,8 @@ func (r *Room) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v", r.ID))
 	builder.WriteString(", Name=")
 	builder.WriteString(r.Name)
+	builder.WriteString(", Description=")
+	builder.WriteString(r.Description)
 	builder.WriteString(", Floor=")
 	builder.WriteString(fmt.Sprintf("%v", r.Floor))
 	builder.WriteString(", Id=")

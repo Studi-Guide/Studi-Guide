@@ -13,6 +13,8 @@ const (
 	FieldID = "id"
 	// FieldName holds the string denoting the name vertex property in the database.
 	FieldName = "name"
+	// FieldDescription holds the string denoting the description vertex property in the database.
+	FieldDescription = "description"
 	// FieldFloor holds the string denoting the floor vertex property in the database.
 	FieldFloor = "floor"
 	// FieldID holds the string denoting the id vertex property in the database.
@@ -47,6 +49,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldName,
+	FieldDescription,
 	FieldFloor,
 	FieldID,
 }
@@ -54,13 +57,13 @@ var Columns = []string{
 var (
 	fields = schema.Room{}.Fields()
 
-	// descName is the schema descriptor for Name field.
-	descName = fields[0].Descriptor()
-	// DefaultName holds the default value on creation for the Name field.
-	DefaultName = descName.Default.(string)
+	// descDescription is the schema descriptor for Description field.
+	descDescription = fields[1].Descriptor()
+	// DefaultDescription holds the default value on creation for the Description field.
+	DefaultDescription = descDescription.Default.(string)
 
 	// descFloor is the schema descriptor for Floor field.
-	descFloor = fields[1].Descriptor()
+	descFloor = fields[2].Descriptor()
 	// DefaultFloor holds the default value on creation for the Floor field.
 	DefaultFloor = descFloor.Default.(int)
 )

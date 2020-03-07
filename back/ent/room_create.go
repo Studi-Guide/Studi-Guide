@@ -17,12 +17,13 @@ import (
 // RoomCreate is the builder for creating a Room entity.
 type RoomCreate struct {
 	config
-	Name      *string
-	Floor     *int
-	Id        *int
-	doors     map[int]struct{}
-	sequences map[int]struct{}
-	pathNodes map[int]struct{}
+	Name        *string
+	Description *string
+	Floor       *int
+	Id          *int
+	doors       map[int]struct{}
+	sequences   map[int]struct{}
+	pathNodes   map[int]struct{}
 }
 
 // SetName sets the Name field.
@@ -31,10 +32,16 @@ func (rc *RoomCreate) SetName(s string) *RoomCreate {
 	return rc
 }
 
-// SetNillableName sets the Name field if the given value is not nil.
-func (rc *RoomCreate) SetNillableName(s *string) *RoomCreate {
+// SetDescription sets the Description field.
+func (rc *RoomCreate) SetDescription(s string) *RoomCreate {
+	rc.Description = &s
+	return rc
+}
+
+// SetNillableDescription sets the Description field if the given value is not nil.
+func (rc *RoomCreate) SetNillableDescription(s *string) *RoomCreate {
 	if s != nil {
-		rc.SetName(*s)
+		rc.SetDescription(*s)
 	}
 	return rc
 }
@@ -122,8 +129,11 @@ func (rc *RoomCreate) AddPathNodes(p ...*PathNode) *RoomCreate {
 // Save creates the Room in the database.
 func (rc *RoomCreate) Save(ctx context.Context) (*Room, error) {
 	if rc.Name == nil {
-		v := room.DefaultName
-		rc.Name = &v
+		return nil, errors.New("ent: missing required field \"Name\"")
+	}
+	if rc.Description == nil {
+		v := room.DefaultDescription
+		rc.Description = &v
 	}
 	if rc.Floor == nil {
 		v := room.DefaultFloor
@@ -162,6 +172,14 @@ func (rc *RoomCreate) sqlSave(ctx context.Context) (*Room, error) {
 			Column: room.FieldName,
 		})
 		r.Name = *value
+	}
+	if value := rc.Description; value != nil {
+		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
+			Type:   field.TypeString,
+			Value:  *value,
+			Column: room.FieldDescription,
+		})
+		r.Description = *value
 	}
 	if value := rc.Floor; value != nil {
 		_spec.Fields = append(_spec.Fields, &sqlgraph.FieldSpec{
