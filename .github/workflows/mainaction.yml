@@ -32,6 +32,10 @@ jobs:
         working-directory: ${{env.GO_HTTP}}
         run: go mod download
 
+      - name: Generate Database Schema
+        working-directory: ${{env.GO_HTTP}}
+        run: go run github.com/facebookincubator/ent/cmd/entc generate ./ent/schema
+
       - name: Build backend
         working-directory: ${{env.GO_HTTP}}
         run: go build -v ./cmd/...
