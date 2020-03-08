@@ -34,7 +34,7 @@ jobs:
 
       - name: Generate Database Schema
         working-directory: ${{env.GO_HTTP}}
-        run: go run github.com/facebookincubator/ent/cmd/entc generate ./ent/schema
+        run: go generate ./ent
 
       - name: Build backend
         working-directory: ${{env.GO_HTTP}}
@@ -81,7 +81,7 @@ jobs:
 
       - name: Generate Database Schema
         working-directory: ${{env.GO_HTTP}}
-        run: go run github.com/facebookincubator/ent/cmd/entc generate ./ent/schema
+        run: go generate ./ent
 
       - name: Run backend Unit Tests
         working-directory: ${{env.GO_HTTP}}
