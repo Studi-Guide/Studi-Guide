@@ -1,4 +1,4 @@
-*
-!schema/
+*.go
+!schema/*.go
 !.gitignore
 !generate.go

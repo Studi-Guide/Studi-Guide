@@ -1,5 +1,4 @@
 package schema
-
 import (
 	"github.com/facebookincubator/ent"
 	"github.com/facebookincubator/ent/schema/edge"
@@ -8,31 +7,25 @@ import (
 )
 
 // Room holds the schema definition for the Room entity.
-type Room struct {
+type Color struct {
 	ent.Schema
 }
 
 // Fields of the Room.
-func (Room) Fields() []ent.Field {
+func (Color) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("Name").Unique(),
-		field.String("Description").Default(""),
-		field.Int("Floor").Default(0),
+		field.String("Color").Default(""),
 	}
 }
 
-// Edges of the Room.
-func (Room) Edges() []ent.Edge {
+func (Color) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("doors", Door.Type),
-		edge.To("sequences", Sequence.Type),
-		edge.To("pathNodes", PathNode.Type),
-		edge.To("color", Color.Type).Unique(),
+		edge.To("rooms", Room.Type),
 	}
 }
 
-
-func (Room) Indexes() []ent.Index {
+func (Color) Indexes() []ent.Index {
 	return []ent.Index{
 		// unique index.
 		index.Fields("Name").Unique(),
