@@ -6,30 +6,30 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
-	"studi-guide/pkg/roomcontroller/models"
+	"studi-guide/ent"
 	"testing"
 )
 
 type RoomMockService struct {
-	RoomList []models.Room
+	RoomList []*ent.Room
 }
 
 func NewRoomMockService() *RoomMockService {
 	var rms RoomMockService
 
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN01", Description: "Dummy"})
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN02", Description: "Dummy"})
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN03", Description: "Dummy"})
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN04", Description: "Dummy"})
+	rms.RoomList = append(rms.RoomList, &ent.Room{Name: "RoomN01", Description: "Dummy"})
+	rms.RoomList = append(rms.RoomList, &ent.Room{Name: "RoomN02", Description: "Dummy"})
+	rms.RoomList = append(rms.RoomList, &ent.Room{Name: "RoomN03", Description: "Dummy"})
+	rms.RoomList = append(rms.RoomList, &ent.Room{Name: "RoomN04", Description: "Dummy"})
 
 	return &rms
 }
 
-func (r *RoomMockService) GetAllRooms() ([]models.Room, error) {
+func (r *RoomMockService) GetAllRooms() ([]*ent.Room, error) {
 	return r.RoomList, nil
 }
 
-func (r *RoomMockService) GetRoom(name string) (models.Room, error) {
+func (r *RoomMockService) GetRoom(name string) (*ent.Room, error) {
 
 	for _, room := range r.RoomList {
 		if room.Name == name {
@@ -37,15 +37,15 @@ func (r *RoomMockService) GetRoom(name string) (models.Room, error) {
 		}
 	}
 
-	return models.Room{}, errors.New("no such room")
+	return &ent.Room{}, errors.New("no such room")
 }
 
-func (r *RoomMockService) AddRoom(room models.Room) error {
-	r.RoomList = append(r.RoomList, room)
+func (r *RoomMockService) AddRoom(room ent.Room) error {
+	r.RoomList = append(r.RoomList, &room)
 	return nil
 }
 
-func (r *RoomMockService) AddRooms(rooms []models.Room) error {
+func (r *RoomMockService) AddRooms(rooms []ent.Room) error {
 	for _, room := range rooms {
 		_ = r.AddRoom(room)
 	}

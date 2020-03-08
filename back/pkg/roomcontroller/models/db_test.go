@@ -1,39 +1,59 @@
 package models
 
 import (
-	"github.com/jmoiron/sqlx"
+	"context"
+	"database/sql"
+	"fmt"
+	fbsql "github.com/facebookincubator/ent/dialect/sql"
+	"log"
 	"os"
-	"reflect"
+	"studi-guide/ent"
 	"studi-guide/pkg/env"
 	"testing"
 )
 
-var testRooms []Room
+var testRooms []*ent.Room
 
-func setupTestRoomDbService() (RoomServiceProvider, *sqlx.DB) {
+func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 	os.Setenv("DB_DRIVER_NAME", "sqlite3")
 	os.Setenv("DB_DATA_SOURCE", ":memory:")
 
 	e := env.NewEnv()
 
-	testRooms = append(testRooms, Room{Id: 1, Name: "01", Description: "d"})
-	testRooms = append(testRooms, Room{Id: 2, Name: "02", Description: "d"})
-	testRooms = append(testRooms, Room{Id: 3, Name: "03", Description: "d"})
+	testRooms = append(testRooms, &ent.Room{ID: 1, Name: "01", Description: "d"})
+	testRooms = append(testRooms, &ent.Room{ID: 2, Name: "02", Description: "d"})
+	testRooms = append(testRooms, &ent.Room{ID: 3, Name: "03", Description: "d"})
 
-	db := sqlx.MustConnect(e.DbDriverName(), e.DbDataSource())
-
-	db.Exec(schema)
-
-	insert := "insert into rooms (Id, Name, Description) values(:Id, :Name, :Description)"
-	tx := db.MustBegin()
-	for _, room := range testRooms {
-		tx.NamedExec(insert, &room)
+	drv, err := fbsql.Open(e.DbDriverName(), "file:"+e.DbDataSource()+"?_fk=1")
+	if err != nil {
+		return nil, nil
 	}
-	tx.Commit()
 
-	dbService := RoomDbService{db: db, table: "rooms"}
+	client := ent.NewClient(ent.Driver(drv))
+	if err != nil {
+		log.Fatalf("failed opening connection to sqlite: %v", err)
+	}
+	//defer client.Close()
+	// run the auto migration tool.
+	ctx := context.Background()
 
-	return &dbService, db
+	if err := client.Schema.Create(ctx); err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
+
+
+
+	for _, room := range testRooms {
+		client.Room.Create().
+			SetFloor(room.Floor).
+			SetName(room.Name).
+			SetDescription(room.Description).
+			Save(ctx)
+	}
+
+	dbService := RoomEntityService{client: client, table: "", context: ctx}
+
+	return &dbService, drv.DB()
 }
 
 func TestNewRoomDbService(t *testing.T) {
@@ -42,7 +62,7 @@ func TestNewRoomDbService(t *testing.T) {
 
 	e := env.NewEnv()
 
-	dbService, err := NewRoomDbService(e)
+	dbService, err := NewRoomEntityService(e)
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
@@ -54,7 +74,7 @@ func TestNewRoomDbService(t *testing.T) {
 	os.Setenv("DB_DATA_SOURCE", ":memory:")
 
 	e = env.NewEnv()
-	dbService, err = NewRoomDbService(e)
+	dbService, err = NewRoomEntityService(e)
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
@@ -73,12 +93,13 @@ func TestGetRoomAllRooms(t *testing.T) {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
 
-	compare := func(a []Room, b []Room) bool {
+	compare := func(a []*ent.Room, b []*ent.Room) bool {
 		if len(a) != len(b) {
 			return false
 		}
 		for i, _ := range a {
-			if !reflect.DeepEqual(a[i], b[i]) {
+			fmt.Println("comparing index", i)
+			if a[i].ID != b[i].ID {
 				return false
 			}
 		}
@@ -89,14 +110,14 @@ func TestGetRoomAllRooms(t *testing.T) {
 		t.Error("expected: ", testRooms, "; got: ", getRooms)
 	}
 
-	db.MustExec("drop table rooms")
+	db.Exec("drop table rooms")
 
 	getRooms, err = dbService.GetAllRooms()
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
 
-	var compareRooms []Room
+	var compareRooms []*ent.Room
 	if !compare(compareRooms, getRooms) {
 		t.Error("expected: ", compareRooms, "; got: ", getRooms)
 	}
@@ -111,7 +132,7 @@ func TestGetRoom(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !reflect.DeepEqual(room, testRooms[1]) {
+	if testRooms[1].ID != room.ID {
 		t.Error("expected: ", testRooms[1], "; got: ", room)
 	}
 
@@ -119,8 +140,8 @@ func TestGetRoom(t *testing.T) {
 	if err == nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
-	var noneRoom Room
-	if !reflect.DeepEqual(room, noneRoom) {
+	var noneRoom ent.Room
+	if room.ID != noneRoom.ID {
 		t.Error("expected: ", noneRoom, "; got: ", room)
 	}
 }
@@ -128,7 +149,7 @@ func TestGetRoom(t *testing.T) {
 func TestAddRoom(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	testRoom := Room{Id: 4, Name: "04", Description: "description"}
+	testRoom := ent.Room{ID: 4, Name: "04", Description: "description"}
 	err := dbService.AddRoom(testRoom)
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
@@ -143,10 +164,10 @@ func TestAddRoom(t *testing.T) {
 func TestAddRooms(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	var newRooms []Room
-	newRooms = append(newRooms, Room{Id: 4, Name: "04", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 4, Name: "04", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 5, Name: "05", Description: "d"})
+	var newRooms []ent.Room
+	newRooms = append(newRooms, ent.Room{ID: 4, Name: "04", Description: "d"})
+	newRooms = append(newRooms, ent.Room{ID: 4, Name: "04", Description: "d"})
+	newRooms = append(newRooms, ent.Room{ID: 5, Name: "05", Description: "d"})
 
 	err := dbService.AddRooms(newRooms)
 	if err == nil {
@@ -154,9 +175,9 @@ func TestAddRooms(t *testing.T) {
 	}
 
 	newRooms = newRooms[:0]
-	newRooms = append(newRooms, Room{Id: 6, Name: "06", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 7, Name: "07", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 8, Name: "08", Description: "d"})
+	newRooms = append(newRooms, ent.Room{ID: 6, Name: "06", Description: "d"})
+	newRooms = append(newRooms, ent.Room{ID: 7, Name: "07", Description: "d"})
+	newRooms = append(newRooms, ent.Room{ID: 8, Name: "08", Description: "d"})
 
 	err = dbService.AddRooms(newRooms)
 	if err != nil {

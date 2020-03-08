@@ -1,5 +1,7 @@
 package models
 
+import "studi-guide/ent"
+
 type Room struct {
 	Id          int               `db:"Id"`
 	Name        string            `db:"Name"`
@@ -12,8 +14,8 @@ type Room struct {
 }
 
 type RoomServiceProvider interface {
-	GetAllRooms() ([]Room, error)
-	GetRoom(name string) (Room, error)
-	AddRoom(room Room) error
-	AddRooms(rooms []Room) error
+	GetAllRooms() ([]*ent.Room, error)
+	GetRoom(name string) (*ent.Room, error)
+	AddRoom(room ent.Room) error
+	AddRooms(rooms []ent.Room) error
 }

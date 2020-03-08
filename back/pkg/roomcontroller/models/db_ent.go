@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"errors"
+	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"os"
 	"strconv"
@@ -31,42 +32,27 @@ func NewRoomEntityService(env *env.Env) (RoomServiceProvider, error) {
 	return &RoomEntityService{client: client, table: table, context: ctx}, nil
 }
 
-func (r *RoomEntityService) GetAllRooms() ([]Room, error) {
+func (r *RoomEntityService) GetAllRooms() ([]*ent.Room, error) {
 
 	rooms, err := r.client.Room.Query().All(r.context)
 	if err != nil {
 		return nil, err
 	}
 
-	var mRooms []Room
-	for _, room := range(rooms) {
-		mRooms = append(mRooms, Room{
-			Id:          room.ID,
-			Name:        room.Name,
-			Description: room.Description,
-			Floor:       room.Floor,
-		})
-	}
-
-	return mRooms, nil
+	return rooms, nil
 }
 
-func (r *RoomEntityService) GetRoom(name string) (Room, error) {
+func (r *RoomEntityService) GetRoom(name string) (*ent.Room, error) {
 
 	room, err := r.client.Room.Query().Where(room.Name(name)).First(r.context)
 	if err != nil {
-		return Room{}, err
+		return &ent.Room{}, err
 	}
 
-	return Room{
-		Id:          room.ID,
-		Name:        room.Name,
-		Description: room.Description,
-		Floor:       room.Floor,
-	}, nil
+	return room, nil
 }
 
-func (r *RoomEntityService) AddRoom(room Room) error {
+func (r *RoomEntityService) AddRoom(room ent.Room) error {
 
 	_, err :=r.client.Room.Create().
 		SetFloor(room.Floor).
@@ -82,11 +68,11 @@ func (r *RoomEntityService) AddRoom(room Room) error {
 	return nil
 }
 
-func (r *RoomEntityService) AddRooms(rooms []Room) error {
+func (r *RoomEntityService) AddRooms(rooms []ent.Room) error {
 	var errorStr []string
 	for _, room := range rooms {
 		if err := r.AddRoom(room); err != nil {
-			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(room.Id))
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(room.ID))
 			log.Println(err, "room:", room)
 		} else {
 			log.Println("add room:", room)
@@ -102,7 +88,7 @@ func (r *RoomEntityService) AddRooms(rooms []Room) error {
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {
 	client, err := ent.Open(dbDriverName, "file:"+dbSourceName+"?cache=shared&_fk=1")
 	if err != nil {
-		log.Fatalf("failed opening connection to sqlite: %v", err)
+		return nil, nil, err
 	}
 	//defer client.Close()
 	// run the auto migration tool.
@@ -113,7 +99,7 @@ func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Cont
 	if _, err := os.Stat(dbSourceName); dbDriverName != "sqlite3" || (dbDriverName == "sqlite3" && os.IsNotExist(err)) {
 		log.Println("running one time migration")
 		if err := client.Schema.Create(ctx); err != nil {
-			log.Fatalf("failed creating schema resources: %v", err)
+			return nil, nil, err
 		}
 	}
 
