@@ -16,7 +16,7 @@ func (PathNode) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("X_Coordinate").Default(0),
 		field.Int("Y_Coordinate").Default(0),
-		field.Int("Floor").Default(0),
+		field.Int("Z_Coordinate").Default(0),
 	}
 }
 

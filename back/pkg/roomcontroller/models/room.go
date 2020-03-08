@@ -7,9 +7,7 @@ type Room struct {
 	Name        string            `db:"Name"`
 	Description string            `db:"Description"`
 	Alias       []string          `db:"Alias"`
-	Doors       []Door            `db:"Doors"`
 	Color       string            `db:"Color"`
-	Sections    []SectionProvider `db:"Sections"`
 	Floor		int 			`json:"floor" xml:"floor" db:"Floor"`
 }
 
