@@ -79,6 +79,10 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
 
+      - name: Generate Database Schema
+        working-directory: ${{env.GO_HTTP}}
+        run: go run github.com/facebookincubator/ent/cmd/entc generate ./ent/schema
+
       - name: Run backend Unit Tests
         working-directory: ${{env.GO_HTTP}}
         run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
