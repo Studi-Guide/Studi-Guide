@@ -39,7 +39,7 @@ func BuildContainer() *dig.Container {
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
 	container.Provide(config.NewConfig)
-	container.Provide(models.NewRoomDbService)
+	container.Provide(models.NewRoomEntityService)
 	container.Provide(server.NewStudiGuideServer)
 	return container
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"log"
+	"os"
 	"strconv"
 	"strings"
 	"studi-guide/ent"
@@ -17,15 +18,11 @@ type RoomEntityService struct {
 	table string
 }
 
-func NewRoomeEntityService(env *env.Env) (RoomServiceProvider, error) {
+func NewRoomEntityService(env *env.Env) (RoomServiceProvider, error) {
 	driverName := env.DbDriverName()
 	dataSourceName := env.DbDataSource()
 	table := "rooms"
 	client, ctx,  err := openDB(driverName, dataSourceName)
-
-	if err := client.Schema.Create(ctx); err != nil {
-		log.Fatal("failed creating schema resources:", err)
-	}
 
 	if err != nil {
 		return nil, err
@@ -103,16 +100,23 @@ func (r *RoomEntityService) AddRooms(rooms []Room) error {
 }
 
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {
-	client, err := ent.Open(dbDriverName, "file:ent?mode=memory&cache=shared&_fk=1")
+	client, err := ent.Open(dbDriverName, "file:"+dbSourceName+"?cache=shared&_fk=1")
 	if err != nil {
 		log.Fatalf("failed opening connection to sqlite: %v", err)
 	}
-	defer client.Close()
+	//defer client.Close()
 	// run the auto migration tool.
 	ctx := context.Background()
-	if err := client.Schema.Create(ctx); err != nil {
-		log.Fatalf("failed creating schema resources: %v", err)
+
+	// SQLite was developed only for testing, and it does not support the incremental updates for tables.
+	// https://entgo.io/docs/dialects/#sqlite
+	if _, err := os.Stat(dbSourceName); dbDriverName != "sqlite3" || (dbDriverName == "sqlite3" && os.IsNotExist(err)) {
+		log.Println("running one time migration")
+		if err := client.Schema.Create(ctx); err != nil {
+			log.Fatalf("failed creating schema resources: %v", err)
+		}
 	}
+
 
 	return client, ctx, err
 }
