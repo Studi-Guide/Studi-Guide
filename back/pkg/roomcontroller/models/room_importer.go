@@ -6,7 +6,6 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
-	"studi-guide/ent"
 )
 
 type RoomImporter interface {
@@ -24,7 +23,7 @@ func (r *RoomJsonImporter) RunImport() error {
 		return err
 	}
 
-	var rooms []ent.Room
+	var rooms []Room
 	err = json.NewDecoder(file).Decode(&rooms)
 	if err != nil {
 		return err
@@ -45,7 +44,7 @@ func (r *RoomXmlImporter) RunImport() error {
 	}
 
 	var rooms struct {
-		Rooms []ent.Room `xml:"Room"`
+		Rooms []Room `xml:"Room"`
 	}
 	err = xml.NewDecoder(file).Decode(&rooms)
 	if err != nil {

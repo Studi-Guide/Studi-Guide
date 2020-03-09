@@ -1,7 +1,7 @@
 package schema
+
 import (
 	"github.com/facebookincubator/ent"
-	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
 	"github.com/facebookincubator/ent/schema/index"
 )
@@ -21,7 +21,6 @@ func (Color) Fields() []ent.Field {
 
 func (Color) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("rooms", Room.Type),
 	}
 }
 
