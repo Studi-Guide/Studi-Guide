@@ -27,7 +27,7 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Accept  json
 // @Tags RoomController
 // @Produce  json
-// @Success 200 {array} ent.Room
+// @Success 200 {array} models.Room
 // @Router /roomlist/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
 	log.Print("[RoomController] Request RoomList received")

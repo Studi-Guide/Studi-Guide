@@ -1,14 +1,50 @@
 definitions:
+  models.Door:
+    properties:
+      id:
+        type: integer
+      pathNode:
+        $ref: '#/definitions/navigation.PathNode'
+        type: object
+      sequence:
+        $ref: '#/definitions/models.Sequence'
+        type: object
+    type: object
   models.Room:
     properties:
-      coordinates:
+      alias:
+        items:
+          type: string
+        type: array
+      color:
         type: string
       description:
         type: string
+      doors:
+        items:
+          $ref: '#/definitions/models.Door'
+        type: array
+      floor:
+        type: integer
       id:
         type: integer
       name:
         type: string
+      sections:
+        items:
+          $ref: '#/definitions/models.Sequence'
+        type: array
+    type: object
+  models.Sequence:
+    properties:
+      end:
+        $ref: '#/definitions/navigation.Coordinate'
+        type: object
+      id:
+        type: integer
+      start:
+        $ref: '#/definitions/navigation.Coordinate'
+        type: object
     type: object
   models.ShoppingItem:
     properties:
@@ -18,6 +54,41 @@ definitions:
         type: integer
       name:
         type: string
+    type: object
+  navigation.Coordinate:
+    properties:
+      x:
+        type: integer
+      "y":
+        type: integer
+      z:
+        type: integer
+    type: object
+  navigation.PathNode:
+    properties:
+      connectedNodes:
+        items:
+          $ref: '#/definitions/navigation.PathNode'
+        type: array
+      coordinate:
+        $ref: '#/definitions/navigation.Coordinate'
+        type: object
+      group:
+        $ref: '#/definitions/navigation.PathNodeGroup'
+        type: object
+      id:
+        type: integer
+    type: object
+  navigation.PathNodeGroup:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+      nodes:
+        items:
+          $ref: '#/definitions/navigation.PathNode'
+        type: array
     type: object
 info:
   contact: {}
