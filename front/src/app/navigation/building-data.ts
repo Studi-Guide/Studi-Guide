@@ -1,5 +1,4 @@
 import { room } from '../building-objects-if';
-import { section } from '../building-objects-if';
 
 export let testDataRooms:room[] = [
   {
@@ -111,7 +110,7 @@ export let testDataRooms:room[] = [
         "end": { "x": 100, "y": 125, "z": 3 }
       }
     ],
-    "fill": "#467689"
+    "fill": "#4b7989"
   },
   {
     "name": "corridor",
@@ -169,7 +168,6 @@ export let testDataRooms:room[] = [
     "doors": [],
     "fill": "#817464"
   },
-  /************************** at here still to verif"y" *****************************/
   {
     "name": "KA.308",
     "sections": [
@@ -191,8 +189,13 @@ export let testDataRooms:room[] = [
       }
     ],
     "alias": "",
-    "doors": [],
-    "fill": "#467689"
+    "doors": [
+      {
+        "start": { "x": 225, "y": 190, "z": 3 },
+        "end": { "x": 225, "y": 205, "z": 3 }
+      }
+    ],
+    "fill": "#4b7989"
   },
   {
     "name": "Treppe",
@@ -218,8 +221,8 @@ export let testDataRooms:room[] = [
     "doors": [],
     "fill": "#AFAFAF" // #AEA693
   },
-  { // TODO 6 sections per room -> split into 2 rooms
-    "name": "WC",
+  {
+    "name": "WC Herren",
     "sections": [
       {
         "start": { "x": 290, "y": 130, "z": 3 },
@@ -227,6 +230,51 @@ export let testDataRooms:room[] = [
       },
       {
         "start": { "x": 380, "y": 130, "z": 3 },
+        "end": { "x": 380, "y": 180, "z": 3 }
+      },
+      {
+        "start": { "x": 380, "y": 180, "z": 3 },
+        "end": { "x": 320, "y": 180, "z": 3 }
+      },
+      {
+        "start": { "x": 320, "y": 180, "z": 3 },
+        "end": { "x": 310, "y": 200, "z": 3 }
+      },
+      {
+        "start": { "x": 310, "y": 200, "z": 3 },
+        "end": { "x": 290, "y": 200, "z": 3 }
+      },
+      {
+        "start": { "x": 290, "y": 200, "z": 3 },
+        "end": { "x": 290, "y": 200, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [
+      {
+        "start": { "x": 325, "y": 180, "z": 3 },
+        "end": { "x": 340, "y": 180, "z": 3 }
+      }
+    ],
+    "fill": "#AEA693"
+  },
+  {
+    "name": "WC Damen",
+    "sections": [
+      {
+        "start": { "x": 290, "y": 200, "z": 3 },
+        "end": { "x": 310, "y": 200, "z": 3 }
+      },
+      {
+        "start": { "x": 310, "y": 200, "z": 3 },
+        "end": { "x": 320, "y": 180, "z": 3 }
+      },
+      {
+        "start": { "x": 320, "y": 180, "z": 3 },
+        "end": { "x": 380, "y": 180, "z": 3 }
+      },
+      {
+        "start": { "x": 380, "y": 180, "z": 3 },
         "end": { "x": 380, "y": 220, "z": 3 }
       },
       {
@@ -235,11 +283,16 @@ export let testDataRooms:room[] = [
       },
       {
         "start": { "x": 290, "y": 220, "z": 3 },
-        "end": { "x": 290, "y": 130, "z": 3 }
+        "end": { "x": 290, "y": 200, "z": 3 }
       }
     ],
     "alias": "",
-    "doors": [],
+    "doors": [
+      {
+        "start": { "x": 325, "y": 180, "z": 3 },
+        "end": { "x": 340, "y": 180, "z": 3 }
+      }
+    ],
     "fill": "#AEA693"
   },
   {
@@ -263,8 +316,13 @@ export let testDataRooms:room[] = [
       }
     ],
     "alias": "",
-    "doors": [],
-    "fill": "#467689"
+    "doors": [
+      {
+        "start": { "x": 225, "y": 215, "z": 3 },
+        "end": { "x": 225, "y": 225, "z": 3 }
+      }
+    ],
+    "fill": "#4b7989"
   },
   {
     "name": "KA.312",
@@ -287,48 +345,13 @@ export let testDataRooms:room[] = [
       }
     ],
     "alias": "",
-    "doors": [],
-    "fill": "#467689"
-  },
-  {
-    "name": "corridor", // Fachschaft: Maschinenbau & Versorgungstechnik
-    "sections": [
+    "doors": [
       {
-        "start": { "x": 225, "y": 210, "z": 3 },
-        "end": { "x": 290, "y": 210, "z": 3 }
-      },
-      {
-        "start": { "x": 290, "y": 210, "z": 3 },
-        "end": { "x": 290, "y": 220, "z": 3 }
-      },
-      {
-        "start": { "x": 290, "y": 220, "z": 3 },
-        "end": { "x": 380, "y": 220, "z": 3 }
-      },
-      {
-        "start": { "x": 380, "y": 220, "z": 3 },
-        "end": { "x": 380, "y": 235, "z": 3 }
-      },
-      {
-        "start": { "x": 380, "y": 235, "z": 3 },
-        "end": { "x": 290, "y": 245, "z": 3 }
-      },
-      {
-        "start": { "x": 290, "y": 245, "z": 3 },
-        "end": { "x": 290, "y": 265, "z": 3 }
-      },
-      {
-        "start": { "x": 290, "y": 265, "z": 3 },
-        "end": { "x": 225, "y": 265, "z": 3 }
-      },
-      {
-        "start": { "x": 225, "y": 265, "z": 3 },
-        "end": { "x": 225, "y": 210, "z": 3 }
+        "start": { "x": 225, "y": 240, "z": 3 },
+        "end": { "x": 225, "y": 250, "z": 3 }
       }
     ],
-    "alias": "",
-    "doors": [],
-    "fill": "#BBB" // #AEA693
+    "fill": "#4b7989"
   },
   {
     "name": "KA.305",
@@ -352,9 +375,8 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#467689"
+    "fill": "#4b7989"
   },
-  // side: TOP LEFT
   {
     "name": "KA.314",
     "sections": [
@@ -376,8 +398,17 @@ export let testDataRooms:room[] = [
       }
     ],
     "alias": "",
-    "doors": [],
-    "fill": "#467689"
+    "doors": [
+      {
+        "start": { "x": 240, "y": 275, "z": 3 },
+        "end": { "x": 240, "y": 285, "z": 3 }
+      },
+      {
+        "start": { "x": 205, "y": 295, "z": 3 },
+        "end": { "x": 220, "y": 295, "z": 3 }
+      }
+    ],
+    "fill": "#4b7989"
   },
   {
     "name": "KA.316",
@@ -400,8 +431,21 @@ export let testDataRooms:room[] = [
       }
     ],
     "alias": "",
-    "doors": [],
-    "fill": "#467689"
+    "doors": [
+      {
+        "start": { "x": 240, "y": 305, "z": 3 },
+        "end": { "x": 240, "y": 315, "z": 3 }
+      },
+      {
+        "start": { "x": 205, "y": 295, "z": 3 },
+        "end": { "x": 220, "y": 295, "z": 3 }
+      },
+      {
+        "start": { "x": 210, "y": 325, "z": 3 },
+        "end": { "x": 225, "y": 325, "z": 3 }
+      }
+    ],
+    "fill": "#4b7989"
   },
   {
     "name": "KA.318",
@@ -424,8 +468,17 @@ export let testDataRooms:room[] = [
       }
     ],
     "alias": "",
-    "doors": [],
-    "fill": "#467689"
+    "doors": [
+      {
+        "start": { "x": 240, "y": 330, "z": 3 },
+        "end": { "x": 240, "y": 340, "z": 3 }
+      },
+      {
+        "start": { "x": 210, "y": 325, "z": 3 },
+        "end": { "x": 225, "y": 325, "z": 3 }
+      }
+    ],
+    "fill": "#4b7989"
   },
   {
     "name": "KA.320",
@@ -449,7 +502,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#467689"
+    "fill": "#4b7989"
   },
   {
     "name": "KA.322",
@@ -473,7 +526,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#467689"
+    "fill": "#4b7989"
   },
   {
     "name": "KA.324",
@@ -497,7 +550,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#467689"
+    "fill": "#4b7989"
   },
   {
     "name": "KA.326",
@@ -521,7 +574,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#467689"
+    "fill": "#4b7989"
   },
   {
     "name": "KA.328",
@@ -545,32 +598,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#467689"
-  },
-  // side: MIDDLE
-  {
-    "name": "corridor",
-    "sections": [
-      {
-        "start": { "x": 240, "y": 265, "z": 3 },
-        "end": { "x": 290, "y": 265, "z": 3 }
-      },
-      {
-        "start": { "x": 290, "y": 265, "z": 3 },
-        "end": { "x": 290, "y": 650, "z": 3 }
-      },
-      {
-        "start": { "x": 290, "y": 650, "z": 3 },
-        "end": { "x": 240, "y": 650, "z": 3 }
-      },
-      {
-        "start": { "x": 240, "y": 650, "z": 3 },
-        "end": { "x": 240, "y": 265, "z": 3 }
-      }
-    ],
-    "alias": "",
-    "doors": [],
-    "fill": "#BBB" // #AEA693
+    "fill": "#4b7989"
   },
   // side: TOP RIGHT
   {
@@ -595,7 +623,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#467689"
+    "fill": "#4b7989"
   },
   {
     "name": "KA.309",
@@ -619,7 +647,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#467689"
+    "fill": "#4b7989"
   },
   {
     "name": "KA.311",
@@ -643,10 +671,10 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#467689"
+    "fill": "#4b7989"
   },
   {
-    "name": "corridor", // right above KA.313
+    "name": "", // right above KA.313 - room without name
     "sections": [
       {
         "start": { "x": 290, "y": 520, "z": 3 },
@@ -667,7 +695,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#AEA693"
+    "fill": "#949494"
   },
   {
     "name": "Treppe", // left under KA.328
@@ -702,10 +730,18 @@ export let testDataRooms:room[] = [
       },
       {
         "start": { "x": 190, "y": 590, "z": 3 },
-        "end": { "x": 190, "y": 620, "z": 3 }
+        "end": { "x": 190, "y": 610, "z": 3 }
       },
       {
-        "start": { "x": 190, "y": 620, "z": 3 },
+        "start": { "x": 190, "y": 610, "z": 3 },
+        "end": { "x": 170, "y": 610, "z": 3 }
+      },
+      {
+        "start": { "x": 170, "y": 610, "z": 3 },
+        "end": { "x": 170, "y": 620, "z": 3 }
+      },
+      {
+        "start": { "x": 170, "y": 620, "z": 3 },
         "end": { "x": 130, "y": 620, "z": 3 }
       },
       {
@@ -715,7 +751,223 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#AFAFAF"
+    "fill": "#AEA693"
+  },
+  {
+    "name": "WC Herren",
+    "sections": [
+      {
+        "start": { "x": 130, "y": 620, "z": 3 },
+        "end": { "x": 170, "y": 620, "z": 3 }
+      },
+      {
+        "start": { "x": 170, "y": 620, "z": 3 },
+        "end": { "x": 170, "y": 630, "z": 3 }
+      },
+      {
+        "start": { "x": 170, "y": 630, "z": 3 },
+        "end": { "x": 190, "y": 630, "z": 3 }
+      },
+      {
+        "start": { "x": 190, "y": 630, "z": 3 },
+        "end": { "x": 190, "y": 650, "z": 3 }
+      },
+      {
+        "start": { "x": 190, "y": 650, "z": 3 },
+        "end": { "x": 130, "y": 650, "z": 3 }
+      },
+      {
+        "start": { "x": 130, "y": 650, "z": 3 },
+        "end": { "x": 130, "y": 620, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#AEA693"
+  },
+  {
+    "name": "Aufzug", // elevator
+    "sections": [
+      {
+        "start": { "x": 190, "y": 590, "z": 3 },
+        "end": { "x": 240, "y": 590, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 590, "z": 3 },
+        "end": { "x": 240, "y": 610, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 610, "z": 3 },
+        "end": { "x": 190, "y": 610, "z": 3 }
+      },
+      {
+        "start": { "x": 190, "y": 610, "z": 3 },
+        "end": { "x": 190, "y": 590, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#817464"
+  },
+  {
+    "name": "corridor", // Fachschaft: Maschinenbau & Versorgungstechnik
+    "sections": [
+      {
+        "start": { "x": 225, "y": 210, "z": 3 },
+        "end": { "x": 290, "y": 210, "z": 3 }
+      },
+      {
+        "start": { "x": 290, "y": 210, "z": 3 },
+        "end": { "x": 290, "y": 220, "z": 3 }
+      },
+      {
+        "start": { "x": 290, "y": 220, "z": 3 },
+        "end": { "x": 380, "y": 220, "z": 3 }
+      },
+      {
+        "start": { "x": 380, "y": 220, "z": 3 },
+        "end": { "x": 380, "y": 235, "z": 3 }
+      },
+      {
+        "start": { "x": 380, "y": 235, "z": 3 },
+        "end": { "x": 290, "y": 245, "z": 3 }
+      },
+      {
+        "start": { "x": 290, "y": 245, "z": 3 },
+        "end": { "x": 290, "y": 930, "z": 3 }
+      },
+      {
+        "start": { "x": 290, "y": 930, "z": 3 },
+        "end": { "x": 240, "y": 930, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 930, "z": 3 },
+        "end": { "x": 240, "y": 630, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 630, "z": 3 },
+        "end": { "x": 170, "y": 630, "z": 3 }
+      },
+      {
+        "start": { "x": 170, "y": 630, "z": 3 },
+        "end": { "x": 170, "y": 610, "z": 3 }
+      },
+      {
+        "start": { "x": 170, "y": 610, "z": 3 },
+        "end": { "x": 240, "y": 610, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 610, "z": 3 },
+        "end": { "x": 240, "y": 265, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 265, "z": 3 },
+        "end": { "x": 225, "y": 265, "z": 3 }
+      },
+      {
+        "start": { "x": 225, "y": 265, "z": 3 },
+        "end": { "x": 225, "y": 210, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#BBB" // #AEA693
+  },
+  {
+    "name": "", // left above KA.334 - room without name
+    "sections": [
+      {
+        "start": { "x": 190, "y": 630, "z": 3 },
+        "end": { "x": 240, "y": 630, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 630, "z": 3 },
+        "end": { "x": 240, "y": 650, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 650, "z": 3 },
+        "end": { "x": 190, "y": 650, "z": 3 }
+      },
+      {
+        "start": { "x": 190, "y": 650, "z": 3 },
+        "end": { "x": 190, "y": 630, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#949494"
+  },
+  {
+    "name": "KA.334",
+    "sections": [
+      {
+        "start": { "x": 150, "y": 650, "z": 3 },
+        "end": { "x": 240, "y": 650, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 650, "z": 3 },
+        "end": { "x": 240, "y": 750, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 750, "z": 3 },
+        "end": { "x": 150, "y": 750, "z": 3 }
+      },
+      {
+        "start": { "x": 150, "y": 750, "z": 3 },
+        "end": { "x": 150, "y": 630, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#5682a3"
+  },
+  {
+    "name": "KA.336",
+    "sections": [
+      {
+        "start": { "x": 150, "y": 750, "z": 3 },
+        "end": { "x": 240, "y": 750, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 750, "z": 3 },
+        "end": { "x": 240, "y": 830, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 830, "z": 3 },
+        "end": { "x": 150, "y": 830, "z": 3 }
+      },
+      {
+        "start": { "x": 150, "y": 830, "z": 3 },
+        "end": { "x": 150, "y": 750, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#5682a3"
+  },
+  {
+    "name": "KA.338",
+    "sections": [
+      {
+        "start": { "x": 150, "y": 830, "z": 3 },
+        "end": { "x": 240, "y": 830, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 830, "z": 3 },
+        "end": { "x": 240, "y": 930, "z": 3 }
+      },
+      {
+        "start": { "x": 240, "y": 930, "z": 3 },
+        "end": { "x": 150, "y": 930, "z": 3 }
+      },
+      {
+        "start": { "x": 150, "y": 930, "z": 3 },
+        "end": { "x": 150, "y": 830, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#5682a3"
   },
   {
     "name": "KA.313",
@@ -740,5 +992,77 @@ export let testDataRooms:room[] = [
     "alias": "",
     "doors": [],
     "fill": "#5682a3"
+  },
+  {
+    "name": "KA.315",
+    "sections": [
+      {
+        "start": { "x": 290, "y": 650, "z": 3 },
+        "end": { "x": 380, "y": 650, "z": 3 }
+      },
+      {
+        "start": { "x": 380, "y": 650, "z": 3 },
+        "end": { "x": 380, "y": 750, "z": 3 }
+      },
+      {
+        "start": { "x": 380, "y": 750, "z": 3 },
+        "end": { "x": 290, "y": 750, "z": 3 }
+      },
+      {
+        "start": { "x": 290, "y": 750, "z": 3 },
+        "end": { "x": 290, "y": 650, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#4b7989"
+  },
+  {
+    "name": "KA.317",
+    "sections": [
+      {
+        "start": { "x": 290, "y": 750, "z": 3 },
+        "end": { "x": 380, "y": 750, "z": 3 }
+      },
+      {
+        "start": { "x": 380, "y": 750, "z": 3 },
+        "end": { "x": 380, "y": 850, "z": 3 }
+      },
+      {
+        "start": { "x": 380, "y": 850, "z": 3 },
+        "end": { "x": 290, "y": 850, "z": 3 }
+      },
+      {
+        "start": { "x": 290, "y": 850, "z": 3 },
+        "end": { "x": 290, "y": 750, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#4b7989"
+  },
+  {
+    "name": "KA.319",
+    "sections": [
+      {
+        "start": { "x": 290, "y": 850, "z": 3 },
+        "end": { "x": 380, "y": 850, "z": 3 }
+      },
+      {
+        "start": { "x": 380, "y": 850, "z": 3 },
+        "end": { "x": 380, "y": 930, "z": 3 }
+      },
+      {
+        "start": { "x": 380, "y": 930, "z": 3 },
+        "end": { "x": 290, "y": 930, "z": 3 }
+      },
+      {
+        "start": { "x": 290, "y": 930, "z": 3 },
+        "end": { "x": 290, "y": 850, "z": 3 }
+      }
+    ],
+    "alias": "",
+    "doors": [],
+    "fill": "#4b7989"
   }
 ];
