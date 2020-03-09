@@ -26,11 +26,10 @@ func (Room) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("doors", Door.Type),
 		edge.To("sequences", Sequence.Type),
-		edge.To("pathNodes", PathNode.Type),
+		edge.To("pathNode", PathNode.Type),
 		edge.To("color", Color.Type).Unique(),
 	}
 }
-
 
 func (Room) Indexes() []ent.Index {
 	return []ent.Index{

@@ -24,14 +24,16 @@ func (PathNode) Fields() []ent.Field {
 func (PathNode) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("door", Door.Type).
-			Ref("pathNodes").
+			Ref("pathNode").
 			Unique(),
 
 		edge.From("room", Room.Type).
-			Ref("pathNodes").
+			Ref("pathNode").
 			Unique(),
 
 		edge.To("linkedTo", PathNode.Type).
 			From("linkedFrom"),
+
+		edge.From("pathGroups", PathNodeGroup.Type).Ref("pathNodes"),
 	}
 }
