@@ -20,5 +20,6 @@ func (Door) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("sequence", Sequence.Type).Unique(),
 		edge.To("pathNode", PathNode.Type).Unique(),
+		edge.From("owner", Room.Type).Ref("doors"),
 	}
 }

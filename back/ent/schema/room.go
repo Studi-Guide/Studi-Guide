@@ -24,7 +24,7 @@ func (Room) Fields() []ent.Field {
 // Edges of the Room.
 func (Room) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("doors", Door.Type),
+		edge.To("doors", Door.Type).Required(),
 		edge.To("sequences", Sequence.Type),
 		edge.To("pathNode", PathNode.Type),
 		edge.To("color", Color.Type).Unique(),
