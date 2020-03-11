@@ -216,10 +216,10 @@ func (r *RoomEntityService) doorMapper(entDoor *ent.Door) (*Door) {
 	return &d
 }
 
-func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode) ([]navigation.PathNode) {
-	var pathNodes []navigation.PathNode
+func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode) ([]*navigation.PathNode) {
+	var pathNodes []*navigation.PathNode
 	for _, node := range pathNodePtr {
-		pathNodes = append(pathNodes, *r.pathNodeMapper(node))
+		pathNodes = append(pathNodes, r.pathNodeMapper(node))
 	}
 	return pathNodes
 }
