@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"os"
 	"studi-guide/pkg/env"
-	"studi-guide/pkg/roomcontroller"
+	"studi-guide/pkg/roomcontroller/controllers"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
@@ -42,9 +42,7 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider) 
 	roomRouter := router.Group("/roomlist")
 	{
 		log.Print("Creating room controller")
-		roomController := roomcontroller.RoomControllerApp{}
-
-		err := roomController.Initialize(roomprovider, roomRouter)
+		err := controllers.NewRoomController(roomRouter, roomprovider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
