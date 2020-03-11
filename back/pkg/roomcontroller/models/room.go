@@ -1,12 +1,17 @@
 package models
 
-import "image"
+import "studi-guide/pkg/navigation"
 
 type Room struct {
-	Id          int             `json:"id" xml:"id" db:"ID"`
-	Name        string          `json:"name" xml:"name" db:"Name"`
-	Description string          `json:"description" xml:"description" db:"Description"`
-	Coordinates image.Rectangle `json:"coordinates" xml:"coordinates"`
+	Id          int
+	Name        string
+	Description string
+	Alias       []string
+	Doors       []Door
+	Color       string
+	Sections    []Section
+	Floor		int
+	PathNode    navigation.PathNode
 }
 
 type RoomServiceProvider interface {

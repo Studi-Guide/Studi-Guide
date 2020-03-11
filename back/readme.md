@@ -5,6 +5,7 @@ This go example uses mux of the gorilla webkit.
 ## Set Up
 
  - execute `go mod download`
+ - create database schema `go generate ./ent`
 
 ## Run
 

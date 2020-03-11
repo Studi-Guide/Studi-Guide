@@ -61,20 +61,73 @@
         }
     },
     "definitions": {
+        "models.Door": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "pathNode": {
+                    "type": "object",
+                    "$ref": "#/definitions/navigation.PathNode"
+                },
+                "sequence": {
+                    "type": "object",
+                    "$ref": "#/definitions/models.Sequence"
+                }
+            }
+        },
         "models.Room": {
             "type": "object",
             "properties": {
-                "coordinates": {
+                "alias": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "color": {
                     "type": "string"
                 },
                 "description": {
                     "type": "string"
+                },
+                "doors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Door"
+                    }
+                },
+                "floor": {
+                    "type": "integer"
                 },
                 "id": {
                     "type": "integer"
                 },
                 "name": {
                     "type": "string"
+                },
+                "sections": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Sequence"
+                    }
+                }
+            }
+        },
+        "models.Sequence": {
+            "type": "object",
+            "properties": {
+                "end": {
+                    "type": "object",
+                    "$ref": "#/definitions/navigation.Coordinate"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "start": {
+                    "type": "object",
+                    "$ref": "#/definitions/navigation.Coordinate"
                 }
             }
         },
@@ -89,6 +142,59 @@
                 },
                 "name": {
                     "type": "string"
+                }
+            }
+        },
+        "navigation.Coordinate": {
+            "type": "object",
+            "properties": {
+                "x": {
+                    "type": "integer"
+                },
+                "y": {
+                    "type": "integer"
+                },
+                "z": {
+                    "type": "integer"
+                }
+            }
+        },
+        "navigation.PathNode": {
+            "type": "object",
+            "properties": {
+                "connectedNodes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/navigation.PathNode"
+                    }
+                },
+                "coordinate": {
+                    "type": "object",
+                    "$ref": "#/definitions/navigation.Coordinate"
+                },
+                "group": {
+                    "type": "object",
+                    "$ref": "#/definitions/navigation.PathNodeGroup"
+                },
+                "id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "navigation.PathNodeGroup": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nodes": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/navigation.PathNode"
+                    }
                 }
             }
         }
