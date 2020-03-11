@@ -76,11 +76,3 @@ func auth() gin.HandlerFunc {
 		c.Next()
 	}
 }
-
-// RedirectRootToAPI redirects all calls from root endpoint to current API documentation endpoint
-func RedirectRootToAPI(r *gin.Engine) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Request.URL.Path = "/shoppinglist/index.html" // <- this line
-		r.HandleContext(c)
-	}
-}
