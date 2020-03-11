@@ -42,4 +42,4 @@ EXPOSE 8080
 
 # Command to run the executable
 # Use shell form to import rooms and then start server
-CMD /go/bin/studi-guide-ctl migrate import rooms /go/src/studi-guide/internal/rooms.json && /go/bin/studi-guide
+CMD /go/bin/studi-guide-ctl migrate import rooms /go/src/studi-guide/internal/rooms.json; /go/bin/studi-guide

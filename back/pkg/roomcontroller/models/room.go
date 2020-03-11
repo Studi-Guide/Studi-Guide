@@ -1,5 +1,7 @@
 package models
 
+import "studi-guide/pkg/navigation"
+
 type Room struct {
 	Id          int
 	Name        string
@@ -7,8 +9,9 @@ type Room struct {
 	Alias       []string
 	Doors       []Door
 	Color       string
-	Sections    []Sequence
+	Sections    []Section
 	Floor		int
+	PathNode    navigation.PathNode
 }
 
 type RoomServiceProvider interface {

@@ -6,13 +6,13 @@ import (
 	"github.com/facebookincubator/ent/schema/field"
 )
 
-// Sequence holds the schema definition for the Sequence entity.
-type Sequence struct {
+// Section holds the schema definition for the Section entity.
+type Section struct {
 	ent.Schema
 }
 
-// Fields of the Sequence.
-func (Sequence) Fields() []ent.Field {
+// Fields of the Section.
+func (Section) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("X_Start").Default(0),
 		field.Int("Y_Start").Default(0),
@@ -21,15 +21,15 @@ func (Sequence) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Sequence.
-func (Sequence) Edges() []ent.Edge {
+// Edges of the Section.
+func (Section) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("door", Door.Type).
-			Ref("sequence").
+			Ref("section").
 			Unique(),
 
 		edge.From("room", Room.Type).
-			Ref("sequences").
+			Ref("sections").
 			Unique(),
 	}
 }

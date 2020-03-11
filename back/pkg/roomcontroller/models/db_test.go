@@ -3,13 +3,13 @@ package models
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	fbsql "github.com/facebookincubator/ent/dialect/sql"
 	"log"
 	"os"
 	"reflect"
 	"studi-guide/ent"
 	"studi-guide/pkg/env"
+	"studi-guide/pkg/navigation"
 	"testing"
 )
 
@@ -21,9 +21,9 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 
 	e := env.NewEnv()
 
-	testRooms = append(testRooms, Room{Id: 1, Name: "01", Description: "d"})
-	testRooms = append(testRooms, Room{Id: 2, Name: "02", Description: "d"})
-	testRooms = append(testRooms, Room{Id: 3, Name: "03", Description: "d"})
+	//testRooms = append(testRooms, Room{Id: 1, Name: "01", Description: "d"})
+	//testRooms = append(testRooms, Room{Id: 2, Name: "02", Description: "d"})
+	//testRooms = append(testRooms, Room{Id: 3, Name: "03", Description: "d"})
 
 	drv, err := fbsql.Open(e.DbDriverName(), "file:"+e.DbDataSource()+"?_fk=1")
 	if err != nil {
@@ -43,13 +43,47 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 	}
 
 
+	for i := 1; i < 4; i++ {
 
-	for _, room := range testRooms {
-		client.Room.Create().
-			SetFloor(room.Floor).
-			SetName(room.Name).
-			SetDescription(room.Description).
+		sequence, err := client.Section.Create().Save(ctx)
+		if err != nil {
+			log.Println("error creating sequence:", err)
+		}
+
+		door, err := client.Door.Create().SetSectionID(sequence.ID).Save(ctx)
+		if err != nil {
+			log.Println("error creating door: ", err)
+		}
+
+		pathNode, err := client.PathNode.Create().Save(ctx)
+		if err != nil {
+			log.Println("error creating pathnode:", err)
+		}
+
+		entRoom, err := client.Room.Create().
+			SetName(string(i)).
+			SetPathNodeID(pathNode.ID).
+			AddDoorIDs(door.ID).
 			Save(ctx)
+		if err != nil {
+			log.Println("error creating room:", err)
+		}
+
+		testRooms = append(testRooms, Room{
+			Id:          entRoom.ID,
+			Name:        entRoom.Name,
+			Description: entRoom.Description,
+			Alias:       nil,
+			Doors:       []Door{{
+				Id:       door.ID,
+				Section:  Section{Id: sequence.ID},
+				PathNode: navigation.PathNode{},
+			}},
+			Color:       "",
+			Sections:    nil,
+			Floor:       0,
+			PathNode:    navigation.PathNode{Id: pathNode.ID},
+		})
 	}
 
 	dbService := RoomEntityService{client: client, table: "", context: ctx}
@@ -99,8 +133,7 @@ func TestGetRoomAllRooms(t *testing.T) {
 			return false
 		}
 		for i, _ := range a {
-			fmt.Println("comparing index", i)
-			if !reflect.DeepEqual(a, b) {
+			if !reflect.DeepEqual(a[i], b[i]) {
 				return false
 			}
 		}
@@ -128,7 +161,7 @@ func TestGetRoomAllRooms(t *testing.T) {
 func TestGetRoom(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	room, err := dbService.GetRoom("02")
+	room, err := dbService.GetRoom(string(2))
 	if err != nil {
 		t.Error(err)
 	}
@@ -137,7 +170,7 @@ func TestGetRoom(t *testing.T) {
 		t.Error("expected: ", testRooms[1], "; got: ", room)
 	}
 
-	room, err = dbService.GetRoom("04")
+	room, err = dbService.GetRoom("4")
 	if err == nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
@@ -150,10 +183,12 @@ func TestGetRoom(t *testing.T) {
 func TestAddRoom(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
+
+
 	testRoom := Room{Id: 4, Name: "04", Description: "description"}
 	err := dbService.AddRoom(testRoom)
-	if err != nil {
-		t.Error("expected: ", nil, "; got: ", err)
+	if err == nil {
+		t.Error("expected: error", "; got: ", err)
 	}
 
 	err = dbService.AddRoom(testRoom)
@@ -181,7 +216,7 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{Id: 8, Name: "08", Description: "d"})
 
 	err = dbService.AddRooms(newRooms)
-	if err != nil {
-		t.Error("expected: ", nil, "; got: ", err)
+	if err == nil {
+		t.Error("expected: error", "; got: ", err)
 	}
 }

@@ -9,6 +9,8 @@ import (
 	"strconv"
 	"strings"
 	"studi-guide/ent"
+	"studi-guide/ent/door"
+	"studi-guide/ent/pathnode"
 	"studi-guide/ent/room"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
@@ -35,7 +37,7 @@ func NewRoomEntityService(env *env.Env) (RoomServiceProvider, error) {
 
 func (r *RoomEntityService) GetAllRooms() ([]Room, error) {
 
-	roomsPtr, err := r.client.Room.Query().WithColor().WithDoors().WithPathNode().WithSequences().All(r.context)
+	roomsPtr, err := r.client.Room.Query().WithSections().WithDoors().WithColor().WithPathNode().All(r.context)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +53,7 @@ func (r *RoomEntityService) GetAllRooms() ([]Room, error) {
 
 func (r *RoomEntityService) GetRoom(name string) (Room, error) {
 
-	room, err := r.client.Room.Query().Where(room.Name(name)).WithColor().WithDoors().WithPathNode().WithSequences().First(r.context)
+	room, err := r.client.Room.Query().Where(room.Name(name)).WithSections().WithDoors().WithColor().WithPathNode().First(r.context)
 	if err != nil {
 		return Room{}, err
 	}
@@ -63,10 +65,13 @@ func (r *RoomEntityService) GetRoom(name string) (Room, error) {
 
 func (r *RoomEntityService) AddRoom(room Room) error {
 
+
+
 	_, err :=r.client.Room.Create().
 		SetFloor(room.Floor).
 		SetName(room.Name).
 		SetDescription(room.Description).
+		AddDoors().
 		Save(r.context)
 	// Add other stuff like sequence etc.
 
@@ -116,38 +121,50 @@ func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Cont
 	return client, ctx, err
 }
 
-func (r *RoomEntityService)  roomMapper(room *ent.Room) (*Room) {
+func (r *RoomEntityService) roomMapper(entRoom *ent.Room) (*Room) {
+
+	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).WithPathNode().WithColor().WithDoors().WithSections().First(r.context)
 
 	rm := Room{
-		Id:          room.ID,
-		Name:        room.Name,
-		Description: room.Description,
+		Id:          entRoom.ID,
+		Name:        entRoom.Name,
+		Description: entRoom.Description,
 		Alias:       nil,
-		Doors:       r.doorArrayMapper(room.Edges.Doors),
+		Doors:       nil,
 		Color:       "",
-		Sections:    r.sequenceArrayMapper(room.Edges.Sequences),
-		Floor:       room.Floor,
+		Sections:    nil,
+		Floor:       entRoom.Floor,
+		PathNode:    navigation.PathNode{},
 	}
 
-	if room.Edges.Color != nil {
-		rm.Color = room.Edges.Color.Color
+	c, err := entRoom.Edges.ColorOrErr()
+	if err == nil {
+		rm.Color = c.Color
+	}
+
+	d, err := entRoom.Edges.DoorsOrErr()
+	if err == nil {
+		rm.Doors = r.doorArrayMapper(d)
+	}
+
+	s, err := entRoom.Edges.SectionsOrErr()
+	if err == nil {
+		rm.Sections = r.sectionArrayMapper(s)
+	}
+
+	p, err := entRoom.Edges.PathNodeOrErr()
+	if err == nil {
+		rm.PathNode = *r.pathNodeMapper(p)
 	}
 
 	return &rm
 }
 
-func (r *RoomEntityService)  sequenceMapper(sequence *ent.Sequence) (*Sequence) {
-	return &Sequence{
-		Id:    sequence.ID,
-		Start: navigation.Coordinate{X: sequence.XStart, Y: sequence.YStart, Z: 0},
-		End:   navigation.Coordinate{X: sequence.XEnd, Y: sequence.YEnd, Z: 0},
-	}
-}
 
-func (r *RoomEntityService)  sequenceArrayMapper(sequences []*ent.Sequence) ([]Sequence) {
-	var s []Sequence
-	for _, seq := range sequences {
-		s = append(s, Sequence{
+func (r *RoomEntityService) sectionArrayMapper(sections []*ent.Section) ([]Section) {
+	var s []Section
+	for _, seq := range sections {
+		s = append(s, Section{
 			Id:    seq.ID,
 			Start: navigation.Coordinate{},
 			End:   navigation.Coordinate{},
@@ -155,6 +172,15 @@ func (r *RoomEntityService)  sequenceArrayMapper(sequences []*ent.Sequence) ([]S
 	}
 	return s
 }
+
+func (r *RoomEntityService) sectionMapper(s *ent.Section) (*Section) {
+	return &Section{
+		Id:    s.ID,
+		Start: navigation.Coordinate{X: s.XStart, Y: s.YStart, Z: 0},
+		End:   navigation.Coordinate{X: s.XEnd, Y: s.YEnd, Z: 0},
+	}
+}
+
 
 func (r *RoomEntityService) doorArrayMapper(doors []*ent.Door) ([]Door) {
 	var d []Door
@@ -164,32 +190,53 @@ func (r *RoomEntityService) doorArrayMapper(doors []*ent.Door) ([]Door) {
 	return d
 }
 
-func (r *RoomEntityService)  doorMapper(door *ent.Door) (*Door) {
-	return &Door{
-		Id:       door.ID,
-		Sequence: *r.sequenceMapper(door.Edges.Sequence),
-		PathNode: navigation.PathNode{
-			Id:             door.Edges.PathNode.ID,
-			Coordinate:     navigation.Coordinate{X: door.Edges.PathNode.XCoordinate, Y: door.Edges.PathNode.YCoordinate, Z: door.Edges.PathNode.ZCoordinate},
-			Group:          nil,
-			ConnectedNodes: r.pathNodeArrayMapper(door.Edges.PathNode.Edges.LinkedTo),
-		},
-		}
-}
+func (r *RoomEntityService) doorMapper(entDoor *ent.Door) (*Door) {
 
-func (r *RoomEntityService)  pathNodeMapper(pathNode *ent.PathNode) (*navigation.PathNode) {
-	return &navigation.PathNode{
-		Id:             pathNode.ID,
-		Coordinate:     navigation.Coordinate{X: pathNode.XCoordinate, Y: pathNode.YCoordinate, Z: pathNode.ZCoordinate},
-		Group:          nil,
-		ConnectedNodes: r.pathNodeArrayMapper(pathNode.Edges.LinkedTo),
+	entDoor, err := r.client.Door.Query().WithPathNode().WithOwner().WithSection().Where(door.ID(entDoor.ID)).First(r.context)
+	if err != nil {
+		return &Door{}
 	}
+
+	d := Door{
+		Id:       entDoor.ID,
+		Section:  Section{},
+		PathNode: navigation.PathNode{},
+		}
+
+	s, err := entDoor.Edges.SectionOrErr()
+	if err == nil {
+		d.Section = *r.sectionMapper(s)
+	}
+
+	p, err := entDoor.Edges.PathNodeOrErr()
+	if err == nil {
+		d.PathNode = *r.pathNodeMapper(p)
+	}
+
+	return &d
 }
 
-func (r *RoomEntityService)  pathNodeArrayMapper(pathNodePtr []*ent.PathNode) ([]navigation.PathNode) {
+func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode) ([]navigation.PathNode) {
 	var pathNodes []navigation.PathNode
 	for _, node := range pathNodePtr {
 		pathNodes = append(pathNodes, *r.pathNodeMapper(node))
 	}
 	return pathNodes
+}
+
+func (r *RoomEntityService) pathNodeMapper(entPathNode *ent.PathNode) (*navigation.PathNode) {
+
+	entPathNode, err := r.client.PathNode.Query().WithPathGroups().WithLinkedTo().Where(pathnode.ID(entPathNode.ID)).First(r.context)
+	if err != nil {
+		return &navigation.PathNode{}
+	}
+
+	p := navigation.PathNode{
+		Id:             entPathNode.ID,
+		Coordinate:     navigation.Coordinate{X: entPathNode.XCoordinate, Y: entPathNode.YCoordinate, Z: entPathNode.ZCoordinate},
+		Group:          nil,
+		ConnectedNodes: r.pathNodeArrayMapper(entPathNode.Edges.LinkedTo),
+	}
+
+	return &p
 }
