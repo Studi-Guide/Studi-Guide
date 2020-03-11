@@ -11,7 +11,6 @@ import (
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/roomcontroller"
 	"studi-guide/pkg/roomcontroller/models"
-	"studi-guide/pkg/shoppinglist"
 )
 
 type StudiGuideServer struct {
@@ -38,18 +37,6 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider) 
 	if _, err := os.Stat(env.FrontendPath()); err == nil {
 		log.Print("IONIC found! Serving files ....")
 		router.Use(static.Serve("/", static.LocalFile(env.FrontendPath(), true)))
-	}
-
-	shoppingRouter := router.Group("/shoppinglist")
-	{
-		shoppingRouter.Use(auth())
-		log.Print("Creating shopping list")
-		a := shoppinglist.ShoppingListApp{}
-		a.Initialize(shoppingRouter,
-			"/shoppinglist",
-			"pkg/shoppinglist")
-
-		//v1.GET("/users/:id", apis.GetUser)
 	}
 
 	roomRouter := router.Group("/roomlist")
