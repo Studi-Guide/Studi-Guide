@@ -1,4 +1,4 @@
-package controller
+package controllers
 
 import (
 	"fmt"
@@ -13,12 +13,12 @@ type NavigationController struct {
 	service services.NavigationServiceProvider
 }
 
-func NewRoomController(router *gin.RouterGroup, service services.NavigationServiceProvider) *NavigationController {
+func MapNavigationController(router *gin.RouterGroup, service services.NavigationServiceProvider) error {
 	r := NavigationController{router: router, service: service}
 
 	// TODO decide whether to use url routing or parameter query (google maps uses url routing)
 	router.GET("/dir", r.GetNavigationRoute)
-	return &r
+	return nil
 }
 
 // GetNavigationRoute godoc

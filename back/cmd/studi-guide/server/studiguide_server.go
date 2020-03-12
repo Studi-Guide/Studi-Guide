@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 	"studi-guide/pkg/env"
+	navigation "studi-guide/pkg/navigation/controllers"
+	"studi-guide/pkg/navigation/services"
 	"studi-guide/pkg/roomcontroller/controllers"
 	"studi-guide/pkg/roomcontroller/models"
 )
@@ -17,7 +19,7 @@ type StudiGuideServer struct {
 	router *gin.Engine
 }
 
-func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider) *StudiGuideServer {
+func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, navigationprovider services.NavigationServiceProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -41,12 +43,24 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider) 
 
 	roomRouter := router.Group("/roomlist")
 	{
-		log.Print("Creating room controller")
-		err := controllers.NewRoomController(roomRouter, roomprovider)
+		log.Print("Creating room controllers")
+		err := controllers.MapRoomController(roomRouter, roomprovider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
-			log.Print("Successfully initialized room controller")
+			log.Print("Successfully initialized room controllers")
+		}
+		//a.Run(":8080")
+	}
+
+	navigationRouter := router.Group("/navigation")
+	{
+		log.Print("Creating navigation controllers")
+		err := navigation.MapNavigationController(navigationRouter, navigationprovider)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Print("Successfully initialized navigation controllers")
 		}
 		//a.Run(":8080")
 	}
