@@ -2,55 +2,11 @@ package controllers
 
 import (
 	"encoding/json"
-	"errors"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
-	"studi-guide/pkg/roomcontroller/models"
 	"testing"
 )
-
-type RoomMockService struct {
-	RoomList []models.Room
-}
-
-func NewRoomMockService() *RoomMockService {
-	var rms RoomMockService
-
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN01", Description: "Dummy"})
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN02", Description: "Dummy"})
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN03", Description: "Dummy"})
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN04", Description: "Dummy"})
-
-	return &rms
-}
-
-func (r *RoomMockService) GetAllRooms() ([]models.Room, error) {
-	return r.RoomList, nil
-}
-
-func (r *RoomMockService) GetRoom(name string) (models.Room, error) {
-
-	for _, room := range r.RoomList {
-		if room.Name == name {
-			return room, nil
-		}
-	}
-
-	return models.Room{}, errors.New("no such room")
-}
-
-func (r *RoomMockService) AddRoom(room models.Room) error {
-	r.RoomList = append(r.RoomList, room)
-	return nil
-}
-
-func (r *RoomMockService) AddRooms(rooms []models.Room) error {
-	for _, room := range rooms {
-		_ = r.AddRoom(room)
-	}
-	return nil
-}
 
 func TestRoomlistIndex(t *testing.T) {
 	rec := httptest.NewRecorder()

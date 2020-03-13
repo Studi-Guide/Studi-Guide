@@ -32,10 +32,10 @@ func NewNavigationController(router *gin.RouterGroup, service services.Navigatio
 // @Success 200 {array} navigation.Coordinate
 // @Router /navigation/dir [get]
 func (l *NavigationController) GetNavigationRoute(c *gin.Context) {
-	log.Print("[NavigationController] Request navigation received")
 	startroom := c.Query("startroom")
 	endroom := c.Query("endroom")
 
+	log.Printf("[NavigationController] Request navigation received for start '%v' and end '%v'", startroom, endroom)
 	coordinates, err := l.service.CalculateFromString(startroom, endroom)
 
 	if err != nil {
