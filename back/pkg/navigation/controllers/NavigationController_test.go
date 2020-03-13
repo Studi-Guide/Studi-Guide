@@ -1,14 +1,15 @@
-package services
+package controllers
 
 import (
 	"studi-guide/pkg/navigation"
+	"studi-guide/pkg/navigation/services"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
 type NavigationMockService struct {
 }
 
-func NewNavigationMockService() NavigationServiceProvider {
+func NewNavigationMockService() services.NavigationServiceProvider {
 	var rms NavigationMockService
 	return &rms
 }

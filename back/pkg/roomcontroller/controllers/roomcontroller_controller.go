@@ -13,7 +13,7 @@ type RoomController struct {
 	provider models.RoomServiceProvider
 }
 
-func MapRoomController(router *gin.RouterGroup, provider models.RoomServiceProvider) error {
+func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvider) error {
 	r := RoomController{router: router, provider: provider}
 	r.router.GET("/", r.GetRoomList)
 	r.router.GET("/:name", r.GetRoom)

@@ -44,7 +44,7 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, 
 	roomRouter := router.Group("/roomlist")
 	{
 		log.Print("Creating room controllers")
-		err := controllers.MapRoomController(roomRouter, roomprovider)
+		err := controllers.NewRoomController(roomRouter, roomprovider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -56,7 +56,7 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, 
 	navigationRouter := router.Group("/navigation")
 	{
 		log.Print("Creating navigation controllers")
-		err := navigation.MapNavigationController(navigationRouter, navigationprovider)
+		err := navigation.NewNavigationController(navigationRouter, navigationprovider)
 		if err != nil {
 			log.Fatal(err)
 		} else {

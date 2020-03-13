@@ -13,7 +13,7 @@ type NavigationController struct {
 	service services.NavigationServiceProvider
 }
 
-func MapNavigationController(router *gin.RouterGroup, service services.NavigationServiceProvider) error {
+func NewNavigationController(router *gin.RouterGroup, service services.NavigationServiceProvider) error {
 	r := NavigationController{router: router, service: service}
 
 	// TODO decide whether to use url routing or parameter query (google maps uses url routing)
