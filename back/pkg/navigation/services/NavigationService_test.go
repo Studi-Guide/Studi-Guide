@@ -14,16 +14,16 @@ func NewNavigationMockService() NavigationServiceProvider {
 }
 
 
-func (n *NavigationMockService) CalculateFromString(startRoomName string, endRoomName string) (*[]navigation.Coordinate, error) {
+func (n *NavigationMockService) CalculateFromString(startRoomName string, endRoomName string) (*[]navigation.PathNode, error) {
 
 	return nil, nil
 }
 
-func (n *NavigationMockService) Calculate(startRoom models.Room, endRoom models.Room) (*[]navigation.Coordinate, error) {
+func (n *NavigationMockService) Calculate(startRoom models.Room, endRoom models.Room) (*[]navigation.PathNode, error) {
 
 	return nil, nil
 }
 
-func (n *NavigationMockService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) (*[]navigation.Coordinate, error) {
+func (n *NavigationMockService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) (*[]navigation.PathNode, error) {
 	return nil, nil
 }
