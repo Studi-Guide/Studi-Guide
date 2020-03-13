@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -30,7 +31,7 @@ func NewRoomMockService(startroom, endrooom string) MockNavigationService {
 func (m MockNavigationService) CalculateFromString(startRoomName string, endRoomName string) (*[]navigation.PathNode, error) {
 	log.Print("Calculating entered")
 	if !(startRoomName == m.startroom) || !(endRoomName == m.endroom){
-		panic("wrong rooms")
+		return nil, errors.New("wrong rooms")
 	}
 
 	return m.nodes, nil
@@ -38,7 +39,7 @@ func (m MockNavigationService) CalculateFromString(startRoomName string, endRoom
 
 func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.Room) (*[]navigation.PathNode, error) {
 	if !(startRoom.Name == m.startroom) || !(endRoom.Name == m.endroom){
-		panic("wrong rooms")
+		return nil, errors.New("wrong rooms")
 	}
 
 	return m.nodes, nil
@@ -102,6 +103,31 @@ func TestNavigationCalculatefromString(t *testing.T) {
 
 	expected = append(expected, '\n')
 	if string(expected) != rec.Body.String() {
+		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
+
+
+func TestNavigationCalculatefromString_Negativ(t *testing.T) {
+	startroomname := "dummystart"
+	endroomname := "dummyend"
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/navigation/dir", nil)
+	q := req.URL.Query()
+	q.Add("startroom", startroomname)
+	q.Add("endroom", "differentroom")
+
+	req.URL.RawQuery = q.Encode()
+
+	provider := NewRoomMockService(startroomname, endroomname)
+	router := gin.Default()
+	roomRouter := router.Group("/navigation")
+	NewNavigationController(roomRouter, provider)
+
+	router.ServeHTTP(rec, req)
+
+	expected :=  http.StatusBadRequest
+	if  rec.Code != expected{
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
 }
