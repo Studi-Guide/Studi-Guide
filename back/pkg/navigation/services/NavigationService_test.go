@@ -7,11 +7,49 @@ import (
 	"testing"
 )
 
+type MockRouteCalculator struct {
+}
+
+func NewMockRoutecalCulator() (navigation.RouteCalculator, error) {
+	return &MockRouteCalculator{}, nil
+}
+
+func (l *MockRouteCalculator) GetRoute(start, end navigation.PathNode) ([]navigation.PathNode, error) {
+	// Create dummy route
+
+	distance := start.Coordinate.DistanceTo(end.Coordinate)
+	node2 := navigation.PathNode{
+		Id: 0,
+		Coordinate: navigation.Coordinate{
+			X: start.Coordinate.X + (distance / 3),
+			Y: start.Coordinate.Y + (distance / 3),
+			Z: start.Coordinate.Z,
+		},
+		Group:          nil,
+		ConnectedNodes: nil,
+	}
+
+	node3 := navigation.PathNode{
+		Id: 0,
+		Coordinate: navigation.Coordinate{
+			X: start.Coordinate.X + (2 * distance / 3),
+			Y: start.Coordinate.Y + (2 * distance / 3),
+			Z: start.Coordinate.Z,
+		},
+		Group:          nil,
+		ConnectedNodes: nil,
+	}
+
+	nodes := []navigation.PathNode{start, node2, node3, end}
+	return nodes, nil
+}
+
+
 func TestNavigationService_CalculateFromString(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
 	roomprovider := controllers.NewRoomMockService()
-	calculator, _ := navigation.NewMockRoutecalCulator()
+	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
 	nodes, err := navigationservice.CalculateFromString(startroomname, endroomname)
@@ -34,7 +72,7 @@ func TestNavigationService_CalculateFromString_Negative(t *testing.T) {
 	startroomname := "RoomN00"
 	endroomname := "RoomN02"
 	roomprovider := controllers.NewRoomMockService()
-	calculator, _ := navigation.NewMockRoutecalCulator()
+	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
 	_, err := navigationservice.CalculateFromString(startroomname, endroomname)
@@ -48,7 +86,7 @@ func TestNavigationService_Calculate(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
 	roomprovider := controllers.NewRoomMockService()
-	calculator, _ := navigation.NewMockRoutecalCulator()
+	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
 	startroom, _ := roomprovider.GetRoom(startroomname)
@@ -72,7 +110,7 @@ func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN0001"
 	roomprovider := controllers.NewRoomMockService()
-	calculator, _ := navigation.NewMockRoutecalCulator()
+	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
 	_, err := navigationservice.CalculateFromString(startroomname, endroomname)
@@ -85,7 +123,7 @@ func TestNavigationService_CalculateFromCoordinate(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
 	roomprovider := controllers.NewRoomMockService()
-	calculator, _ := navigation.NewMockRoutecalCulator()
+	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
 	startroom, _ := roomprovider.GetRoom(startroomname)
