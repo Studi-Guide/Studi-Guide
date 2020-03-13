@@ -30,6 +30,20 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 	}
 }
 
+func TestNavigationService_CalculateFromString_Negative(t *testing.T) {
+	startroomname := "RoomN00"
+	endroomname := "RoomN02"
+	roomprovider := controllers.NewRoomMockService()
+	calculator, _ := navigation.NewMockRoutecalCulator()
+	navigationservice, _ := NewNavigationService(calculator, roomprovider)
+
+	_, err := navigationservice.CalculateFromString(startroomname, endroomname)
+
+	if err == nil {
+		t.Error(err)
+	}
+}
+
 func TestNavigationService_Calculate(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
@@ -51,6 +65,19 @@ func TestNavigationService_Calculate(t *testing.T) {
 	resultAsString, _ := json.Marshal(nodes)
 	if string(expectedAsString) != string(resultAsString) {
 		t.Errorf("expected = %v; actual = %v", string(expectedAsString), string(resultAsString))
+	}
+}
+
+func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
+	startroomname := "RoomN01"
+	endroomname := "RoomN0001"
+	roomprovider := controllers.NewRoomMockService()
+	calculator, _ := navigation.NewMockRoutecalCulator()
+	navigationservice, _ := NewNavigationService(calculator, roomprovider)
+
+	_, err := navigationservice.CalculateFromString(startroomname, endroomname)
+	if err == nil {
+		t.Error(err)
 	}
 }
 
