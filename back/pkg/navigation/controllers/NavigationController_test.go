@@ -14,7 +14,7 @@ import (
 
 
 type MockNavigationService struct {
-	nodes *[]navigation.PathNode
+	nodes []navigation.PathNode
 	startroom string
 	endroom string
 }
@@ -49,7 +49,7 @@ func (m MockNavigationService) CalculateFromCoordinate(startCoordinate navigatio
 	return m.nodes, nil
 }
 
-func (m MockNavigationService) getDummyValues() *[]navigation.PathNode {
+func (m MockNavigationService) getDummyValues() []navigation.PathNode {
 	// return dummy value
 	node1 := navigation.PathNode{
 		Id: 0,
@@ -75,7 +75,7 @@ func (m MockNavigationService) getDummyValues() *[]navigation.PathNode {
 
 	node1.ConnectedNodes = []*navigation.PathNode{ &node2 }
 	nodes := []navigation.PathNode{node2, node1}
-	return &nodes
+	return nodes
 }
 
 func TestNavigationCalculatefromString(t *testing.T) {
