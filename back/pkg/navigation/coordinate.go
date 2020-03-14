@@ -18,3 +18,7 @@ func (c Coordinate) DistanceTo(other Coordinate) (int) {
 
 	return int(math.Round(distance))
 }
+
+func (c Coordinate) Equals(other Coordinate) (bool) {
+	return (c.X == other.X) && (c.Y == other.Y) && (c.Z == other.Z)
+}
