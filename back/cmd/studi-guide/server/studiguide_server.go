@@ -73,7 +73,10 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, 
 }
 
 func (server *StudiGuideServer) Start(port string) error {
-	http.ListenAndServe(port, server.router)
+	error := http.ListenAndServe(port, server.router)
+	if error != nil{
+		return error
+	}
 	return nil
 }
 
