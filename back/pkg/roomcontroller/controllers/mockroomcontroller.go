@@ -31,6 +31,9 @@ func NewRoomMockService() *RoomMockService {
 }
 
 func (r *RoomMockService) GetAllRooms() ([]models.Room, error) {
+	if r.RoomList == nil{
+		return nil, errors.New("no room list initialized")
+	}
 	return r.RoomList, nil
 }
 

@@ -26,6 +26,23 @@ func TestRoomlistIndex(t *testing.T) {
 	}
 }
 
+func TestRoomlistIndex_Negativ(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/roomlist/", nil)
+
+	provider := NewRoomMockService()
+	router := gin.Default()
+	roomRouter := router.Group("/roomlist")
+	NewRoomController(roomRouter, provider)
+
+	provider.RoomList = nil
+	router.ServeHTTP(rec, req)
+
+	if http.StatusBadRequest != rec.Code {
+		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
+	}
+}
+
 func TestGetRoom(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/RoomN01", nil)
@@ -60,3 +77,5 @@ func TestGetRoomNotExists(t *testing.T) {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
 }
+
+
