@@ -14,7 +14,10 @@ func NewMockRoutecalCulator() (navigation.RouteCalculator, error) {
 	return &MockRouteCalculator{}, nil
 }
 
-func (l *MockRouteCalculator) GetRoute(start, end navigation.PathNode) ([]navigation.PathNode, error) {
+func (l* MockRouteCalculator) Initialize(pathnodes []navigation.PathNode){
+}
+
+func (l *MockRouteCalculator) GetRoute(start, end navigation.PathNode) ([]navigation.PathNode, int64, error) {
 	// Create dummy route
 
 	distance := start.Coordinate.DistanceTo(end.Coordinate)
@@ -41,7 +44,7 @@ func (l *MockRouteCalculator) GetRoute(start, end navigation.PathNode) ([]naviga
 	}
 
 	nodes := []navigation.PathNode{start, node2, node3, end}
-	return nodes, nil
+	return nodes, int64(distance), nil
 }
 
 
@@ -60,7 +63,7 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 
 	startroom, _ := roomprovider.GetRoom(startroomname)
 	endroom, _ := roomprovider.GetRoom(endroomname)
-	expected, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
+	expected, _ , _:= calculator.GetRoute(startroom.PathNode, endroom.PathNode)
 	expectedAsString, _ := json.Marshal(expected)
 	resultAsString, _ := json.Marshal(nodes)
 	if string(expectedAsString) != string(resultAsString) {
@@ -98,7 +101,7 @@ func TestNavigationService_Calculate(t *testing.T) {
 		t.Error(err)
 	}
 
-	expected, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
+	expected, _ , _:= calculator.GetRoute(startroom.PathNode, endroom.PathNode)
 	expectedAsString, _ := json.Marshal(expected)
 	resultAsString, _ := json.Marshal(nodes)
 	if string(expectedAsString) != string(resultAsString) {

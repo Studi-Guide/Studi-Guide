@@ -19,4 +19,5 @@ type RoomServiceProvider interface {
 	GetRoom(name string) (Room, error)
 	AddRoom(room Room) error
 	AddRooms(rooms []Room) error
+	GetAllPathNodes() ([]navigation.PathNode, error)
 }

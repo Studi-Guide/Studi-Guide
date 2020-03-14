@@ -11,6 +11,13 @@ type NavigationService struct {
 }
 
 func NewNavigationService(routeCalculator navigation.RouteCalculator, roomProvider models.RoomServiceProvider) (NavigationServiceProvider, error) {
+
+	nodes, err := roomProvider.GetAllPathNodes()
+	if err != nil{
+		panic(err)
+	}
+
+	routeCalculator.Initialize(nodes)
 	return &NavigationService{routeCalc: routeCalculator, roomProvider: roomProvider}, nil
 }
 
@@ -30,7 +37,7 @@ func (n *NavigationService) CalculateFromString(startRoomName string, endRoomNam
 }
 
 func (n *NavigationService) Calculate(startRoom models.Room, endRoom models.Room) (*[]navigation.PathNode, error) {
-	nodes, err := n.routeCalc.GetRoute(startRoom.PathNode, endRoom.PathNode)
+	nodes, _, err := n.routeCalc.GetRoute(startRoom.PathNode, endRoom.PathNode)
 	return &nodes, err
 }
 

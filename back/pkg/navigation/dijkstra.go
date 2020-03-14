@@ -11,9 +11,13 @@ type DijkstraNavigation struct {
 	pathNodes map[int]PathNode
 }
 
-func NewDijkstraNavigation(pathNodes []PathNode) *DijkstraNavigation {
+func NewDijkstraNavigation() RouteCalculator {
 
 	d := DijkstraNavigation{pathNodes: make(map[int]PathNode), graph: dijkstra.NewGraph()}
+	return &d
+}
+
+func (d *DijkstraNavigation)Initialize(pathNodes []PathNode) {
 
 	// Add vertices and fill map
 	for _, node := range pathNodes {
@@ -27,8 +31,6 @@ func NewDijkstraNavigation(pathNodes []PathNode) *DijkstraNavigation {
 			d.graph.AddArc(source.Id, dest.Id, int64(source.Coordinate.DistanceTo(dest.Coordinate)))
 		}
 	}
-
-	return &d
 }
 
 func (d *DijkstraNavigation) GetRoute(start, end PathNode) (path []PathNode, distance int64, err error) {

@@ -70,10 +70,10 @@ func (m MockNavigationService) getDummyValues() *[]navigation.PathNode {
 			Z: 2,
 		},
 		Group:          nil,
-		ConnectedNodes: []navigation.PathNode{ node1 },
+		ConnectedNodes: []*navigation.PathNode{ &node1 },
 	}
 
-	node1.ConnectedNodes = []navigation.PathNode{ node2 }
+	node1.ConnectedNodes = []*navigation.PathNode{ &node2 }
 	nodes := []navigation.PathNode{node2, node1}
 	return &nodes
 }

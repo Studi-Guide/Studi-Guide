@@ -2,11 +2,21 @@ package controllers
 
 import (
 	"errors"
+	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
 type RoomMockService struct {
 	RoomList []models.Room
+}
+
+func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
+	var list []navigation.PathNode
+	for _, room := range r.RoomList{
+		list = append(list, room.PathNode)
+	}
+
+	return list, nil
 }
 
 func NewRoomMockService() *RoomMockService {

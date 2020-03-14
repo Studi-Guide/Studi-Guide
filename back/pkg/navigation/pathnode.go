@@ -4,5 +4,5 @@ type PathNode struct {
 	Id             int
 	Coordinate     Coordinate
 	Group          *PathNodeGroup
-	ConnectedNodes []*PathNode
+	ConnectedNodes []*PathNode 		`json:"-"` // Not needed in frontend => stackOverflow in JSON
 }

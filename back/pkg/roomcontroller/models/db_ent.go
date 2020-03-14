@@ -95,6 +95,21 @@ func (r *RoomEntityService) AddRooms(rooms []Room) error {
 	return nil
 }
 
+func (r *RoomEntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
+	nodesPrt, err := r.client.PathNode.Query().WithLinkedFrom().WithLinkedTo().All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+	var nodes []navigation.PathNode
+
+	for _, nodePtr := range nodesPrt {
+		nodes = append(nodes, *r.pathNodeMapper(nodePtr))
+	}
+
+	return nodes, nil
+}
+
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {
 	client, err := ent.Open(dbDriverName, "file:"+dbSourceName+"?cache=shared&_fk=1")
 	if err != nil {
