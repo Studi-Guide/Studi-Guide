@@ -1,6 +1,10 @@
 package navigation
 
-import "github.com/RyanCarrier/dijkstra"
+import (
+	"github.com/RyanCarrier/dijkstra"
+	"log"
+	"time"
+)
 
 type DijkstraNavigation struct {
 	graph *dijkstra.Graph
@@ -28,6 +32,9 @@ func NewDijkstraNavigation(pathNodes []PathNode) (*DijkstraNavigation) {
 }
 
 func (d *DijkstraNavigation) GetRoute(start, end PathNode) (path []PathNode, distance int64, err error) {
+
+	startTime := time.Now()
+	defer log.Println("Route calculation from", start, "to", end, "took", time.Since(startTime))
 
 	if start.Coordinate.Equals(end.Coordinate) {
 		return nil, 0, nil

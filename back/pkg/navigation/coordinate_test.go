@@ -31,10 +31,10 @@ func TestEquals(t *testing.T) {
 	}
 
 	if p2.Equals(p1) {
-		t.Error("expected p2 equals p1")
+		t.Error("expected p2 not equals p1")
 	}
 
 	if !p3.Equals(p1) {
-		t.Error("expected p3 not equals p2")
+		t.Error("expected p3 equals p2")
 	}
 }
