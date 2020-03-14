@@ -20,8 +20,7 @@ func (Color) Fields() []ent.Field {
 }
 
 func (Color) Edges() []ent.Edge {
-	return []ent.Edge{
-	}
+	return []ent.Edge{}
 }
 
 func (Color) Indexes() []ent.Index {

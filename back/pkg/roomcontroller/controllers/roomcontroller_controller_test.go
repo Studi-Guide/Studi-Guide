@@ -77,5 +77,3 @@ func TestGetRoomNotExists(t *testing.T) {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
 }
-
-

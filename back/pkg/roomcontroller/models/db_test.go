@@ -43,7 +43,6 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
-
 	for i := 1; i < 4; i++ {
 
 		sequence, err := client.Section.Create().Save(ctx)
@@ -75,15 +74,15 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			Name:        entRoom.Name,
 			Description: entRoom.Description,
 			Alias:       nil,
-			Doors:       []Door{{
+			Doors: []Door{{
 				Id:       door.ID,
 				Section:  Section{Id: sequence.ID},
 				PathNode: navigation.PathNode{},
 			}},
-			Color:       "",
-			Sections:    nil,
-			Floor:       0,
-			PathNode:    navigation.PathNode{Id: pathNode.ID},
+			Color:    "",
+			Sections: nil,
+			Floor:    0,
+			PathNode: navigation.PathNode{Id: pathNode.ID},
 		})
 	}
 
@@ -183,8 +182,6 @@ func TestGetRoom(t *testing.T) {
 
 func TestAddRoom(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
-
-
 
 	testRoom := Room{Id: 4, Name: "04", Description: "description"}
 	err := dbService.AddRoom(testRoom)

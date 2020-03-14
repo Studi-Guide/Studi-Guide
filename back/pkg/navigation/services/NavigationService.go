@@ -13,7 +13,7 @@ type NavigationService struct {
 func NewNavigationService(routeCalculator navigation.RouteCalculator, roomProvider models.RoomServiceProvider) (NavigationServiceProvider, error) {
 
 	nodes, err := roomProvider.GetAllPathNodes()
-	if err != nil{
+	if err != nil {
 		panic(err)
 	}
 

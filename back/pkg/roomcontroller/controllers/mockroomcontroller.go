@@ -12,7 +12,7 @@ type RoomMockService struct {
 
 func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	var list []navigation.PathNode
-	for _, room := range r.RoomList{
+	for _, room := range r.RoomList {
 		list = append(list, room.PathNode)
 	}
 
@@ -31,7 +31,7 @@ func NewRoomMockService() *RoomMockService {
 }
 
 func (r *RoomMockService) GetAllRooms() ([]models.Room, error) {
-	if r.RoomList == nil{
+	if r.RoomList == nil {
 		return nil, errors.New("no room list initialized")
 	}
 	return r.RoomList, nil

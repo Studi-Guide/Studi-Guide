@@ -12,11 +12,10 @@ import (
 	"testing"
 )
 
-
 type MockNavigationService struct {
-	nodes []navigation.PathNode
+	nodes     []navigation.PathNode
 	startroom string
-	endroom string
+	endroom   string
 }
 
 func NewRoomMockService(startroom, endrooom string) MockNavigationService {
@@ -27,10 +26,9 @@ func NewRoomMockService(startroom, endrooom string) MockNavigationService {
 	return rms
 }
 
-
 func (m MockNavigationService) CalculateFromString(startRoomName string, endRoomName string) ([]navigation.PathNode, error) {
 	log.Print("Calculating entered")
-	if !(startRoomName == m.startroom) || !(endRoomName == m.endroom){
+	if !(startRoomName == m.startroom) || !(endRoomName == m.endroom) {
 		return nil, errors.New("wrong rooms")
 	}
 
@@ -38,7 +36,7 @@ func (m MockNavigationService) CalculateFromString(startRoomName string, endRoom
 }
 
 func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.Room) ([]navigation.PathNode, error) {
-	if !(startRoom.Name == m.startroom) || !(endRoom.Name == m.endroom){
+	if !(startRoom.Name == m.startroom) || !(endRoom.Name == m.endroom) {
 		return nil, errors.New("wrong rooms")
 	}
 
@@ -70,10 +68,10 @@ func (m MockNavigationService) getDummyValues() []navigation.PathNode {
 			Z: 2,
 		},
 		Group:          nil,
-		ConnectedNodes: []*navigation.PathNode{ &node1 },
+		ConnectedNodes: []*navigation.PathNode{&node1},
 	}
 
-	node1.ConnectedNodes = []*navigation.PathNode{ &node2 }
+	node1.ConnectedNodes = []*navigation.PathNode{&node2}
 	nodes := []navigation.PathNode{node2, node1}
 	return nodes
 }
@@ -107,7 +105,6 @@ func TestNavigationCalculatefromString(t *testing.T) {
 	}
 }
 
-
 func TestNavigationCalculatefromString_Negativ(t *testing.T) {
 	startroomname := "dummystart"
 	endroomname := "dummyend"
@@ -126,8 +123,8 @@ func TestNavigationCalculatefromString_Negativ(t *testing.T) {
 
 	router.ServeHTTP(rec, req)
 
-	expected :=  http.StatusBadRequest
-	if  rec.Code != expected{
+	expected := http.StatusBadRequest
+	if rec.Code != expected {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
 }

@@ -61,7 +61,7 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, 
 	//	} else {
 	//		log.Print("Successfully initialized navigation controllers")
 	//	}
-		//a.Run(":8080")
+	//a.Run(":8080")
 	// }
 
 	router.NoRoute(func(c *gin.Context) {

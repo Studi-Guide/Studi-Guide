@@ -17,7 +17,7 @@ func NewDijkstraNavigation() RouteCalculator {
 	return &d
 }
 
-func (d *DijkstraNavigation)Initialize(pathNodes []PathNode) {
+func (d *DijkstraNavigation) Initialize(pathNodes []PathNode) {
 
 	// Add vertices and fill map
 	for _, node := range pathNodes {
