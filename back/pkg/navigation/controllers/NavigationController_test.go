@@ -28,7 +28,7 @@ func NewRoomMockService(startroom, endrooom string) MockNavigationService {
 }
 
 
-func (m MockNavigationService) CalculateFromString(startRoomName string, endRoomName string) (*[]navigation.PathNode, error) {
+func (m MockNavigationService) CalculateFromString(startRoomName string, endRoomName string) ([]navigation.PathNode, error) {
 	log.Print("Calculating entered")
 	if !(startRoomName == m.startroom) || !(endRoomName == m.endroom){
 		return nil, errors.New("wrong rooms")
@@ -37,7 +37,7 @@ func (m MockNavigationService) CalculateFromString(startRoomName string, endRoom
 	return m.nodes, nil
 }
 
-func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.Room) (*[]navigation.PathNode, error) {
+func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.Room) ([]navigation.PathNode, error) {
 	if !(startRoom.Name == m.startroom) || !(endRoom.Name == m.endroom){
 		return nil, errors.New("wrong rooms")
 	}
@@ -45,7 +45,7 @@ func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.R
 	return m.nodes, nil
 }
 
-func (m MockNavigationService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) (*[]navigation.PathNode, error) {
+func (m MockNavigationService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) ([]navigation.PathNode, error) {
 	return m.nodes, nil
 }
 
