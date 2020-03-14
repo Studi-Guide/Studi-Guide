@@ -10,7 +10,7 @@ type Coordinate struct {
 	Z int
 }
 
-func (c Coordinate) DistanceTo(other Coordinate) (int) {
+func (c Coordinate) DistanceTo(other Coordinate) int {
 
 	p := Coordinate{X: c.X - other.X, Y: c.Y - other.Y, Z: c.Z - other.Z}
 
@@ -19,6 +19,6 @@ func (c Coordinate) DistanceTo(other Coordinate) (int) {
 	return int(math.Round(distance))
 }
 
-func (c Coordinate) Equals(other Coordinate) (bool) {
+func (c Coordinate) Equals(other Coordinate) bool {
 	return (c.X == other.X) && (c.Y == other.Y) && (c.Z == other.Z)
 }

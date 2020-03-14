@@ -5,6 +5,46 @@
         "license": {}
     },
     "paths": {
+        "/navigation/dir": {
+            "get": {
+                "description": "Gets the navigation route for a start and end room",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "NavigationController"
+                ],
+                "summary": "Get Navigation Route",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "the start room name",
+                        "name": "startroom",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "the end room name",
+                        "name": "endroom",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/navigation.Coordinate"
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/roomlist/": {
             "get": {
                 "description": "Gets all available rooms",
@@ -31,33 +71,6 @@
                     }
                 }
             }
-        },
-        "/shoppinglist/list/": {
-            "get": {
-                "description": "Gets all shopping items",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ShoopingListController"
-                ],
-                "summary": "Get Shopping List",
-                "operationId": "get-shopping-list",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.ShoppingItem"
-                            }
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -71,9 +84,9 @@
                     "type": "object",
                     "$ref": "#/definitions/navigation.PathNode"
                 },
-                "sequence": {
+                "section": {
                     "type": "object",
-                    "$ref": "#/definitions/models.Sequence"
+                    "$ref": "#/definitions/models.Section"
                 }
             }
         },
@@ -107,15 +120,19 @@
                 "name": {
                     "type": "string"
                 },
+                "pathNode": {
+                    "type": "object",
+                    "$ref": "#/definitions/navigation.PathNode"
+                },
                 "sections": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/models.Sequence"
+                        "$ref": "#/definitions/models.Section"
                     }
                 }
             }
         },
-        "models.Sequence": {
+        "models.Section": {
             "type": "object",
             "properties": {
                 "end": {
@@ -128,20 +145,6 @@
                 "start": {
                     "type": "object",
                     "$ref": "#/definitions/navigation.Coordinate"
-                }
-            }
-        },
-        "models.ShoppingItem": {
-            "type": "object",
-            "properties": {
-                "description": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "name": {
-                    "type": "string"
                 }
             }
         },

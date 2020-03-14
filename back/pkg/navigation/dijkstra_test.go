@@ -14,10 +14,10 @@ func TestDijkstraNavigation_GetRoute1(t *testing.T) {
 
 	// P0(1,2,3) -> P1(3,2,3) -> P2(3,4,3)
 	//          `-> P3(1,4,3) -^
-	pathNodes = append(pathNodes, PathNode{Id: 0, Coordinate: Coordinate{X: 1, Y: 2, Z: 3,}, Group: nil, ConnectedNodes: nil })
-	pathNodes = append(pathNodes, PathNode{Id: 1, Coordinate: Coordinate{X: 3, Y: 2, Z: 3,}, Group: nil, ConnectedNodes: nil })
-	pathNodes = append(pathNodes, PathNode{Id: 2, Coordinate: Coordinate{X: 3, Y: 4, Z: 3,}, Group: nil, ConnectedNodes: nil })
-	pathNodes = append(pathNodes, PathNode{Id: 3, Coordinate: Coordinate{X: 1, Y: 4, Z: 3,}, Group: nil, ConnectedNodes: nil })
+	pathNodes = append(pathNodes, PathNode{Id: 0, Coordinate: Coordinate{X: 1, Y: 2, Z: 3}, Group: nil, ConnectedNodes: nil})
+	pathNodes = append(pathNodes, PathNode{Id: 1, Coordinate: Coordinate{X: 3, Y: 2, Z: 3}, Group: nil, ConnectedNodes: nil})
+	pathNodes = append(pathNodes, PathNode{Id: 2, Coordinate: Coordinate{X: 3, Y: 4, Z: 3}, Group: nil, ConnectedNodes: nil})
+	pathNodes = append(pathNodes, PathNode{Id: 3, Coordinate: Coordinate{X: 1, Y: 4, Z: 3}, Group: nil, ConnectedNodes: nil})
 
 	pathNodes[0].ConnectedNodes = []*PathNode{&pathNodes[1], &pathNodes[3]}
 	pathNodes[1].ConnectedNodes = []*PathNode{&pathNodes[0], &pathNodes[2]}
@@ -27,10 +27,11 @@ func TestDijkstraNavigation_GetRoute1(t *testing.T) {
 	expected1 := []PathNode{pathNodes[0], pathNodes[1], pathNodes[2]}
 	expected2 := []PathNode{pathNodes[0], pathNodes[3], pathNodes[2]}
 
-	navigation := NewDijkstraNavigation(pathNodes)
+	navigation := NewDijkstraNavigation()
+	navigation.Initialize(pathNodes)
 	route, distance, err := navigation.GetRoute(pathNodes[0], pathNodes[2])
 
-	if distance != 4  {
+	if distance != 4 {
 		t.Error("expected distance:", 0, "; got:", distance)
 	}
 
@@ -68,10 +69,12 @@ func TestDijkstraNavigation_GetRoute2(t *testing.T) {
 
 	expected := []PathNode{pathNodes[0], pathNodes[1], pathNodes[2], pathNodes[3]}
 
-	navigation := NewDijkstraNavigation(pathNodes)
+	navigation := NewDijkstraNavigation()
+	navigation.Initialize(pathNodes)
+
 	route, distance, err := navigation.GetRoute(pathNodes[0], pathNodes[3])
 
-	if distance != 18  {
+	if distance != 18 {
 		t.Error("expected distance:", 0, "; got:", distance)
 	}
 
@@ -102,11 +105,12 @@ func TestDijkstraNavigation_GetRoute3(t *testing.T) {
 	pathNodes[0].ConnectedNodes = []*PathNode{&pathNodes[1]}
 	pathNodes[1].ConnectedNodes = []*PathNode{&pathNodes[0]}
 
-	navigation := NewDijkstraNavigation(pathNodes)
+	navigation := NewDijkstraNavigation()
+	navigation.Initialize(pathNodes)
 
 	route, distance, err := navigation.GetRoute(pathNodes[0], pathNodes[1])
 
-	if distance != 0  {
+	if distance != 0 {
 		t.Error("expected distance:", 0, "; got:", distance)
 	}
 
@@ -132,7 +136,8 @@ func TestNewDijkstraNavigation_ReturnTypes(t *testing.T) {
 		t.Error("expected slice kind of", pathNodes)
 	}
 
-	navigation := NewDijkstraNavigation(pathNodes)
+	navigation := NewDijkstraNavigation()
+	navigation.Initialize(pathNodes)
 
 	route, _, err := navigation.GetRoute(pathNodes[0], pathNodes[1])
 
@@ -140,7 +145,7 @@ func TestNewDijkstraNavigation_ReturnTypes(t *testing.T) {
 		t.Error("expected nil; got:", err)
 	}
 
-	if v:= reflect.ValueOf(route); v.Kind() != reflect.Slice {
+	if v := reflect.ValueOf(route); v.Kind() != reflect.Slice {
 		t.Error("expected slice kind of route", route)
 	}
 

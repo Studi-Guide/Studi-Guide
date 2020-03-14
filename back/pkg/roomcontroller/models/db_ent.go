@@ -17,16 +17,16 @@ import (
 )
 
 type RoomEntityService struct {
-	client    *ent.Client
-	context   context.Context
-	table string
+	client  *ent.Client
+	context context.Context
+	table   string
 }
 
 func NewRoomEntityService(env *env.Env) (RoomServiceProvider, error) {
 	driverName := env.DbDriverName()
 	dataSourceName := env.DbDataSource()
 	table := "rooms"
-	client, ctx,  err := openDB(driverName, dataSourceName)
+	client, ctx, err := openDB(driverName, dataSourceName)
 
 	if err != nil {
 		return nil, err
@@ -58,16 +58,12 @@ func (r *RoomEntityService) GetRoom(name string) (Room, error) {
 		return Room{}, err
 	}
 
-
-
 	return *r.roomMapper(room), nil
 }
 
 func (r *RoomEntityService) AddRoom(room Room) error {
 
-
-
-	_, err :=r.client.Room.Create().
+	_, err := r.client.Room.Create().
 		SetFloor(room.Floor).
 		SetName(room.Name).
 		SetDescription(room.Description).
@@ -76,7 +72,7 @@ func (r *RoomEntityService) AddRoom(room Room) error {
 	// Add other stuff like sequence etc.
 
 	if err != nil {
-		return  err
+		return err
 	}
 
 	return nil
@@ -99,6 +95,21 @@ func (r *RoomEntityService) AddRooms(rooms []Room) error {
 	return nil
 }
 
+func (r *RoomEntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
+	nodesPrt, err := r.client.PathNode.Query().WithLinkedFrom().WithLinkedTo().All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+	var nodes []navigation.PathNode
+
+	for _, nodePtr := range nodesPrt {
+		nodes = append(nodes, *r.pathNodeMapper(nodePtr))
+	}
+
+	return nodes, nil
+}
+
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {
 	client, err := ent.Open(dbDriverName, "file:"+dbSourceName+"?cache=shared&_fk=1")
 	if err != nil {
@@ -117,11 +128,10 @@ func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Cont
 		}
 	}
 
-
 	return client, ctx, err
 }
 
-func (r *RoomEntityService) roomMapper(entRoom *ent.Room) (*Room) {
+func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 
 	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).WithPathNode().WithColor().WithDoors().WithSections().First(r.context)
 
@@ -160,8 +170,7 @@ func (r *RoomEntityService) roomMapper(entRoom *ent.Room) (*Room) {
 	return &rm
 }
 
-
-func (r *RoomEntityService) sectionArrayMapper(sections []*ent.Section) ([]Section) {
+func (r *RoomEntityService) sectionArrayMapper(sections []*ent.Section) []Section {
 	var s []Section
 	for _, seq := range sections {
 		s = append(s, Section{
@@ -173,7 +182,7 @@ func (r *RoomEntityService) sectionArrayMapper(sections []*ent.Section) ([]Secti
 	return s
 }
 
-func (r *RoomEntityService) sectionMapper(s *ent.Section) (*Section) {
+func (r *RoomEntityService) sectionMapper(s *ent.Section) *Section {
 	return &Section{
 		Id:    s.ID,
 		Start: navigation.Coordinate{X: s.XStart, Y: s.YStart, Z: 0},
@@ -181,8 +190,7 @@ func (r *RoomEntityService) sectionMapper(s *ent.Section) (*Section) {
 	}
 }
 
-
-func (r *RoomEntityService) doorArrayMapper(doors []*ent.Door) ([]Door) {
+func (r *RoomEntityService) doorArrayMapper(doors []*ent.Door) []Door {
 	var d []Door
 	for _, door := range doors {
 		d = append(d, *r.doorMapper(door))
@@ -190,7 +198,7 @@ func (r *RoomEntityService) doorArrayMapper(doors []*ent.Door) ([]Door) {
 	return d
 }
 
-func (r *RoomEntityService) doorMapper(entDoor *ent.Door) (*Door) {
+func (r *RoomEntityService) doorMapper(entDoor *ent.Door) *Door {
 
 	entDoor, err := r.client.Door.Query().WithPathNode().WithOwner().WithSection().Where(door.ID(entDoor.ID)).First(r.context)
 	if err != nil {
@@ -201,7 +209,7 @@ func (r *RoomEntityService) doorMapper(entDoor *ent.Door) (*Door) {
 		Id:       entDoor.ID,
 		Section:  Section{},
 		PathNode: navigation.PathNode{},
-		}
+	}
 
 	s, err := entDoor.Edges.SectionOrErr()
 	if err == nil {
@@ -216,7 +224,7 @@ func (r *RoomEntityService) doorMapper(entDoor *ent.Door) (*Door) {
 	return &d
 }
 
-func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode) ([]*navigation.PathNode) {
+func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode) []*navigation.PathNode {
 	var pathNodes []*navigation.PathNode
 	for _, node := range pathNodePtr {
 		pathNodes = append(pathNodes, r.pathNodeMapper(node))
@@ -224,7 +232,7 @@ func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode) ([]
 	return pathNodes
 }
 
-func (r *RoomEntityService) pathNodeMapper(entPathNode *ent.PathNode) (*navigation.PathNode) {
+func (r *RoomEntityService) pathNodeMapper(entPathNode *ent.PathNode) *navigation.PathNode {
 
 	entPathNode, err := r.client.PathNode.Query().WithPathGroups().WithLinkedTo().Where(pathnode.ID(entPathNode.ID)).First(r.context)
 	if err != nil {
