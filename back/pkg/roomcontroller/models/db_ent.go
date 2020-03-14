@@ -248,3 +248,31 @@ func (r *RoomEntityService) pathNodeMapper(entPathNode *ent.PathNode) *navigatio
 
 	return &p
 }
+
+func (r *RoomEntityService) mapRoom(room *Room) *ent.Room {
+	return nil
+}
+
+func (r *RoomEntityService) mapSectionArray(sections []Section) []*ent.Section {
+	return nil
+}
+
+func (r *RoomEntityService) mapSection(section *Section) *ent.Section {
+	return nil
+}
+
+func (r *RoomEntityService) mapDoorArray(doors []Door) []*ent.Door {
+	return nil
+}
+
+func (r *RoomEntityService) mapDoor(door *Door) *ent.Door {
+	return nil
+}
+
+func (r *RoomEntityService) mapPathNodeArray(pathNodePtr []*navigation.PathNode) []*ent.PathNode {
+	return nil
+}
+
+func (r *RoomEntityService) mapPathNode(pathNode *navigation.PathNode) *ent.PathNode {
+	return nil
+}
