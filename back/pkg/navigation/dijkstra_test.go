@@ -115,3 +115,33 @@ func TestDijkstraNavigation_GetRoute3(t *testing.T) {
 	}
 
 }
+
+func TestNewDijkstraNavigation_ReturnTypes(t *testing.T) {
+	// check that return type is a slice
+
+	var pathNodes []PathNode
+
+	pathNodes = append(pathNodes, PathNode{Id: 0, Coordinate: Coordinate{X: 3, Y: 3, Z: 3}, Group: nil, ConnectedNodes: nil})
+	pathNodes = append(pathNodes, PathNode{Id: 1, Coordinate: Coordinate{X: 3, Y: 3, Z: 4}, Group: nil, ConnectedNodes: nil})
+
+	// P1(3,3,3) -> P2(3,3,4)
+	pathNodes[0].ConnectedNodes = []*PathNode{&pathNodes[1]}
+	pathNodes[1].ConnectedNodes = []*PathNode{&pathNodes[0]}
+
+	if v := reflect.ValueOf(pathNodes); v.Kind() != reflect.Slice {
+		t.Error("expected slice kind of", pathNodes)
+	}
+
+	navigation := NewDijkstraNavigation(pathNodes)
+
+	route, _, err := navigation.GetRoute(pathNodes[0], pathNodes[1])
+
+	if err != nil {
+		t.Error("expected nil; got:", err)
+	}
+
+	if v:= reflect.ValueOf(route); v.Kind() != reflect.Slice {
+		t.Error("expected slice kind of route", route)
+	}
+
+}
