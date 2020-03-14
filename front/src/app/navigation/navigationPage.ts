@@ -18,7 +18,7 @@ export class NavigationPage {
   
   // TODO These values we have to determine: which size will have the scrollable map?
   public svgWidth:number = 500; // this.calcSvgWidth();
-  public svgHeight:number = 1000; // this.calcSvgHeight();
+  public svgHeight:number = 1200; // this.calcSvgHeight();
 
   // TODO adapt to the current UML model
 
