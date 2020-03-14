@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"database/sql"
+	"github.com/ahmetb/go-linq/v3"
 	fbsql "github.com/facebookincubator/ent/dialect/sql"
 	"log"
 	"os"
@@ -218,5 +219,34 @@ func TestAddRooms(t *testing.T) {
 	err = dbService.AddRooms(newRooms)
 	if err == nil {
 		t.Error("expected: error", "; got: ", err)
+	}
+}
+
+func TestRoomEntityService_GetAllPathNodes(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getNodes, err := dbService.GetAllPathNodes()
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	checkNodes := func(a []Room, b []navigation.PathNode) bool {
+		for i, _ := range a {
+			found := linq.From(b).
+				AnyWith(
+					func(p interface{}) bool {
+						return p.(navigation.PathNode).Id == a[i].PathNode.Id
+					},
+				)
+
+			if !found {
+				return false
+			}
+		}
+		return true
+	}
+
+	if !checkNodes(testRooms, getNodes) {
+		t.Error("expected: ", testRooms, "; got: ", getNodes)
 	}
 }
