@@ -20,3 +20,21 @@ func TestDistanceTo(t *testing.T) {
 	}
 
 }
+
+func TestEquals(t *testing.T) {
+	p1 := Coordinate{X: 1, Y: 2, Z: 3}
+	p2 := Coordinate{X: 3, Y: 2, Z: 3}
+	p3 := Coordinate{X: 1, Y: 2, Z: 3}
+
+	if !p1.Equals(p1) {
+		t.Error("expected p1 equals self")
+	}
+
+	if p2.Equals(p1) {
+		t.Error("expected p2 not equals p1")
+	}
+
+	if !p3.Equals(p1) {
+		t.Error("expected p3 equals p2")
+	}
+}
