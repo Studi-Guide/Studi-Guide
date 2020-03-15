@@ -1,9 +1,9 @@
-export interface floor {
+export class floor {
   rooms:room[];
   corridors:corridor[];
 }
 
-export interface corridor {
+export class corridor {
   name: string;
   fill: string;
   width: number;
@@ -12,13 +12,13 @@ export interface corridor {
   y: number;
 }
 
-export interface coordinate {
+export class coordinate {
   x: number;
   y: number;
   z: number;
 }
 
-export interface door {
+export class door implements section {
   start: coordinate;
   end: coordinate;
 }
@@ -28,7 +28,7 @@ export interface section {
   end: coordinate;
 }
 
-export interface room {
+export class room {
   name: string;
   sections: section[];
   alias: string;
@@ -36,7 +36,7 @@ export interface room {
   fill: string;
 }
 
-export interface svgPath {
+export class svgPath {
   d: string;
   fill: string;
 }

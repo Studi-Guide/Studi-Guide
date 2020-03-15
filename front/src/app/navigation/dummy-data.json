@@ -1,6 +1,4 @@
-import { room } from '../building-objects-if';
-
-export let testDataRooms:room[] = [
+[
   {
     "name": "KA.304",
     "sections": [
@@ -81,7 +79,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#AFAFAF" // #BEB6A3
+    "fill": "#AFAFAF"
   },
   {
     "name": "KA.306",
@@ -142,10 +140,10 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#BBB" // #AEA693
+    "fill": "#BBB"
   },
   {
-    "name": "Aufzug", // elevator
+    "name": "Aufzug",
     "sections": [
       {
         "start": { "x": 360, "y": 100, "z": 3 },
@@ -219,7 +217,7 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#AFAFAF" // #AEA693
+    "fill": "#AFAFAF"
   },
   {
     "name": "WC Herren",
@@ -374,10 +372,14 @@ export let testDataRooms:room[] = [
       }
     ],
     "alias": "",
+    "pathNodes": [
+      { "x": 335, "y": 250, "z": 3 }
+    ],
     "doors": [
       {
         "start": { "x": 325, "y": 241, "z": 3 },
-        "end": { "x": 345, "y": 239, "z": 3 }
+        "end": { "x": 345, "y": 239, "z": 3 },
+        "pathNode": { "x": 335, "y": 240, "z": 3 }
       }
     ],
     "fill": "#4b7989"
@@ -630,7 +632,6 @@ export let testDataRooms:room[] = [
     ],
     "fill": "#4b7989"
   },
-  // side: TOP RIGHT
   {
     "name": "KA.307",
     "sections": [
@@ -743,7 +744,7 @@ export let testDataRooms:room[] = [
     "fill": "#4b7989"
   },
   {
-    "name": "", // right above KA.313 - room without name
+    "name": "",
     "sections": [
       {
         "start": { "x": 290, "y": 520, "z": 3 },
@@ -772,7 +773,7 @@ export let testDataRooms:room[] = [
     "fill": "#949494"
   },
   {
-    "name": "Treppe", // left under KA.328
+    "name": "Treppe",
     "sections": [
       {
         "start": { "x": 130, "y": 550, "z": 3 },
@@ -860,7 +861,7 @@ export let testDataRooms:room[] = [
     "fill": "#AEA693"
   },
   {
-    "name": "Aufzug", // elevator
+    "name": "Aufzug",
     "sections": [
       {
         "start": { "x": 190, "y": 590, "z": 3 },
@@ -884,7 +885,7 @@ export let testDataRooms:room[] = [
     "fill": "#817464"
   },
   {
-    "name": "corridor", // Fachschaft: Maschinenbau & Versorgungstechnik
+    "name": "corridor",
     "sections": [
       {
         "start": { "x": 225, "y": 210, "z": 3 },
@@ -977,10 +978,10 @@ export let testDataRooms:room[] = [
     ],
     "alias": "",
     "doors": [],
-    "fill": "#BBB" // #AEA693
+    "fill": "#BBB"
   },
   {
-    "name": "", // left above KA.334 - room without name
+    "name": "",
     "sections": [
       {
         "start": { "x": 190, "y": 630, "z": 3 },
@@ -1262,4 +1263,4 @@ export let testDataRooms:room[] = [
     "doors": [],
     "fill": "#AFAFAF"
   }
-];
+]
