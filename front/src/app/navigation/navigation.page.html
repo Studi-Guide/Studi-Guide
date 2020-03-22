@@ -22,9 +22,9 @@
     </ion-button>
   </ion-item>
 
-  <div style="padding: 6px;">
+  <div id="building-map">
     <!-- *ngIf="mapIsVisible" -->
-    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}">
+    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}" class="center">
       <path *ngFor="let path of calculatedRoomPaths"
             attr.d="{{path.d}}"
             attr.fill="{{path.fill}}"
