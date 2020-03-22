@@ -24,7 +24,11 @@ RUN go mod download
 RUN go get -u github.com/swaggo/swag/cmd/swag
 RUN swag init -g ./cmd/studi-guide/main.go
 
-RUN go install ./cmd/studi-guide
+# generate database schema
+RUN go generate ./ent
+
+# build go binaries
+RUN go install ./cmd/...
 
 WORKDIR /go/bin/ionic
 COPY --from=ionicbuilder /www/app/www .
@@ -37,4 +41,5 @@ RUN ls
 EXPOSE 8080
 
 # Command to run the executable
-CMD ["/go/bin/studi-guide"]
+# Use shell form to import rooms and then start server
+CMD /go/bin/studi-guide-ctl migrate import rooms /go/src/studi-guide/internal/rooms.json; /go/bin/studi-guide

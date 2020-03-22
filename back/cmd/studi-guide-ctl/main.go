@@ -13,12 +13,12 @@ import (
 
 func main() {
 	container := BuildContainer()
-	log.Fatal(container.Invoke(func(cli *cli.App) {
+	container.Invoke(func(cli *cli.App) {
 		err := cli.Run(os.Args)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatal("cli.Run error", err)
 		}
-	}))
+	})
 }
 
 func BuildContainer() *dig.Container {
@@ -28,7 +28,7 @@ func BuildContainer() *dig.Container {
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
 	container.Provide(config.NewConfig)
-	container.Provide(models.NewRoomDbService)
+	container.Provide(models.NewRoomEntityService)
 	container.Provide(ctl.StudiGuideCtlCli)
 	return container
 }

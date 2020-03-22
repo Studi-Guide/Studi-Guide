@@ -9,16 +9,16 @@ import (
 	"net/http"
 	"os"
 	"studi-guide/pkg/env"
-	"studi-guide/pkg/roomcontroller"
+	"studi-guide/pkg/navigation/services"
+	"studi-guide/pkg/roomcontroller/controllers"
 	"studi-guide/pkg/roomcontroller/models"
-	"studi-guide/pkg/shoppinglist"
 )
 
 type StudiGuideServer struct {
 	router *gin.Engine
 }
 
-func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider) *StudiGuideServer {
+func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, navigationprovider services.NavigationServiceProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -40,31 +40,29 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider) 
 		router.Use(static.Serve("/", static.LocalFile(env.FrontendPath(), true)))
 	}
 
-	shoppingRouter := router.Group("/shoppinglist")
-	{
-		shoppingRouter.Use(auth())
-		log.Print("Creating shopping list")
-		a := shoppinglist.ShoppingListApp{}
-		a.Initialize(shoppingRouter,
-			"/shoppinglist",
-			"pkg/shoppinglist")
-
-		//v1.GET("/users/:id", apis.GetUser)
-	}
-
 	roomRouter := router.Group("/roomlist")
 	{
-		log.Print("Creating room controller")
-		roomController := roomcontroller.RoomControllerApp{}
-
-		err := roomController.Initialize(roomprovider, roomRouter)
+		log.Print("Creating room controllers")
+		err := controllers.NewRoomController(roomRouter, roomprovider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
-			log.Print("Successfully initialized room controller")
+			log.Print("Successfully initialized room controllers")
 		}
 		//a.Run(":8080")
 	}
+
+	//navigationRouter := router.Group("/navigation")
+	//{
+	//	log.Print("Creating navigation controllers")
+	//	err := navigation.NewNavigationController(navigationRouter, navigationprovider)
+	//	if err != nil {
+	//		log.Fatal(err)
+	//	} else {
+	//		log.Print("Successfully initialized navigation controllers")
+	//	}
+	//a.Run(":8080")
+	// }
 
 	router.NoRoute(func(c *gin.Context) {
 		c.Redirect(301, "/")
@@ -75,7 +73,10 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider) 
 }
 
 func (server *StudiGuideServer) Start(port string) error {
-	http.ListenAndServe(port, server.router)
+	error := http.ListenAndServe(port, server.router)
+	if error != nil{
+		return error
+	}
 	return nil
 }
 
@@ -89,13 +90,5 @@ func auth() gin.HandlerFunc {
 		}
 
 		c.Next()
-	}
-}
-
-// RedirectRootToAPI redirects all calls from root endpoint to current API documentation endpoint
-func RedirectRootToAPI(r *gin.Engine) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		c.Request.URL.Path = "/shoppinglist/index.html" // <- this line
-		r.HandleContext(c)
 	}
 }

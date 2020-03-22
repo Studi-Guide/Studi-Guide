@@ -3,7 +3,6 @@ package models
 import (
 	"os"
 	"testing"
-
 )
 
 func TestNewRoomImporter(t *testing.T) {
@@ -36,18 +35,17 @@ func TestNewRoomImporter(t *testing.T) {
 func TestRoomJsonImporter_RunImport(t *testing.T) {
 	var dbService RoomServiceProvider
 
-	jsonImporter := RoomJsonImporter{dbService:dbService, file: "some_file"}
+	jsonImporter := RoomJsonImporter{dbService: dbService, file: "some_file"}
 	err := jsonImporter.RunImport()
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
 
-	jsonImporter = RoomJsonImporter{dbService:dbService, file: "/random/file/which/does/not/exist.json"}
+	jsonImporter = RoomJsonImporter{dbService: dbService, file: "/random/file/which/does/not/exist.json"}
 	err = jsonImporter.RunImport()
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
-
 
 	tmpFile := "/tmp/test.json"
 	_, err = os.Create(tmpFile)
@@ -55,7 +53,7 @@ func TestRoomJsonImporter_RunImport(t *testing.T) {
 		t.Error(err)
 	}
 
-	jsonImporter = RoomJsonImporter{dbService:dbService, file:tmpFile}
+	jsonImporter = RoomJsonImporter{dbService: dbService, file: tmpFile}
 	err = jsonImporter.RunImport()
 	if err == nil {
 		t.Error("expected error; got: ", err)
@@ -69,14 +67,13 @@ func TestRoomXmlImporter_RunImport(t *testing.T) {
 
 	var dbService RoomServiceProvider
 
-
-	xmlImporter := RoomXmlImporter{dbService:dbService, file: "some_file"}
+	xmlImporter := RoomXmlImporter{dbService: dbService, file: "some_file"}
 	err := xmlImporter.RunImport()
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
 
-	xmlImporter = RoomXmlImporter{dbService:dbService, file: "/random/file/which/does/not/exist.xml"}
+	xmlImporter = RoomXmlImporter{dbService: dbService, file: "/random/file/which/does/not/exist.xml"}
 	err = xmlImporter.RunImport()
 	if err == nil {
 		t.Error("expected error; got: ", err)
@@ -88,7 +85,7 @@ func TestRoomXmlImporter_RunImport(t *testing.T) {
 		t.Error(err)
 	}
 
-	xmlImporter = RoomXmlImporter{dbService:dbService, file:tmpFile}
+	xmlImporter = RoomXmlImporter{dbService: dbService, file: tmpFile}
 	err = xmlImporter.RunImport()
 	if err == nil {
 		t.Error("expected error; got: ", err)

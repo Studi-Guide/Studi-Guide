@@ -1,3 +1,7 @@
+coverage:
+  status:
+    patch: off
+
 comment:
   layout: "reach, diff, flags, files"
   behavior: default
