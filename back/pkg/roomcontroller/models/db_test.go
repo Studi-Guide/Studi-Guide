@@ -101,7 +101,7 @@ func TestNewRoomDbService(t *testing.T) {
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
-	if dbService != nil {
+	if !reflect.ValueOf(dbService).IsNil() {
 		t.Error("expected: ", nil, "; got: ", dbService)
 	}
 
