@@ -1,5 +1,5 @@
-import {room, section, svgPath} from '../building-objects-if';
-import { testDataRooms } from './building-data';
+import {Room, Section, svgPath} from '../building-objects-if';
+import {testDataRooms} from './building-data';
 import {Component} from "@angular/core";
 import {RequestBuildingDataService} from "../services/requestBuildingData.service";
 
@@ -10,9 +10,9 @@ import {RequestBuildingDataService} from "../services/requestBuildingData.servic
 })
 export class NavigationPage {
   //  public mapIsVisible:boolean = true;
-  public startRoom:room;
-  public destinationRoom:room;
-  public testRooms:room[] = testDataRooms;
+  public startRoom:Room;
+  public destinationRoom:Room;
+  public testRooms:Room[] = testDataRooms;
   public calculatedRoomPaths:svgPath[];
   public calculatedDoorLines:svgPath[];
   
@@ -26,7 +26,7 @@ export class NavigationPage {
     for (const room of this.testRooms) {
       let roomShapePath:svgPath = {
         d : NavigationPage.buildRoomSvgPathFromSections(room.sections),
-        fill : room.fill
+        fill : room.Color
       };
       this.calculatedRoomPaths.push(roomShapePath);
       if (room.doors.length >= 1) {
@@ -41,19 +41,19 @@ export class NavigationPage {
     }
   }
 
-  private static buildDoorSvgLineFromSection(doorSection:section) : string {
-    let path:string = 'M' + doorSection.start.x + ' ' + doorSection.start.y;
-    path += ' L' + doorSection.end.x + ' ' + doorSection.end.y;
+  private static buildDoorSvgLineFromSection(doorSection:Section) : string {
+    let path:string = 'M' + doorSection.Start.X + ' ' + doorSection.Start.Y;
+    path += ' L' + doorSection.End.X + ' ' + doorSection.End.Y;
     return path;
   }
 
-  private static buildRoomSvgPathFromSections(roomSections:section[]) : string {
+  private static buildRoomSvgPathFromSections(roomSections:Section[]) : string {
     let path_d:string = 'M';
     for (const section of roomSections) {
       if (path_d !== 'M') {
         path_d += 'L';
       }
-      path_d += section.start.x + ' ' + section.start.y + ' ';
+      path_d += section.Start.X + ' ' + section.Start.Y + ' ';
     }
     path_d += 'Z';
     return path_d;
