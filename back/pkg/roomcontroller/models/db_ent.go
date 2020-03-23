@@ -401,7 +401,7 @@ func (r *RoomEntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, 
 
 func (r *RoomEntityService) mapColor(c string) (*ent.Color, error) {
 
-	format := "#[0-9a-f]{6}$"
+	format := "#[0-9a-fA-F]{3}$|#[0-9a-fA-F]{6}$"
 	reg := regexp.MustCompile(format)
 
 	if !reg.MatchString(c) {

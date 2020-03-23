@@ -404,8 +404,8 @@ func TestMapColor(t *testing.T) {
 	color2 := "#007BFF"
 
 	color, err = r.mapColor(color2)
-	if err == nil || color != nil {
-		t.Error("expected error, got: ", err, color)
+	if err != nil || color == nil {
+		t.Error("expected nil and color, got:", err, ", ", color)
 	}
 
 	color3 := "#zabx56"
@@ -418,6 +418,20 @@ func TestMapColor(t *testing.T) {
 	color4 := "#1234567"
 
 	color, err = r.mapColor(color4)
+	if err == nil || color != nil {
+		t.Error("expected error, got: ", err, color)
+	}
+
+	color5 := "#1aB"
+
+	color, err = r.mapColor(color5)
+	if err != nil || color == nil {
+		t.Error("expected nil and color, got:", err, ", ", color)
+	}
+
+	color6 := "#0aF9"
+
+	color, err = r.mapColor(color6)
 	if err == nil || color != nil {
 		t.Error("expected error, got: ", err, color)
 	}
