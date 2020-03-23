@@ -70,26 +70,9 @@ func (r *RoomEntityService) GetRoom(name string) (Room, error) {
 
 func (r *RoomEntityService) AddRoom(room Room) error {
 
-	//doors, err := r.mapDoorArray(room.Doors)
-	//c, err := r.mapColor(room.Color)
-	//sections, err := r.mapSectionArray(room.Sections)
-	//pathnode, err := r.mapPathNode(&room.PathNode)
+	_, err := r.mapRoom(&room)
 
-	_, err := r.client.Room.Create().
-		SetName(room.Name).
-		SetDescription(room.Description).
-		//AddDoors(doors...).
-		//SetColor(c).
-		//AddSections(sections...).
-		SetFloor(room.Floor).
-		//SetPathNode(pathnode).
-		Save(r.context)
-
-	if err != nil {
-		return err
-	}
-
-	return nil
+	return err
 }
 
 func (r *RoomEntityService) AddRooms(rooms []Room) error {
@@ -187,20 +170,26 @@ func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 func (r *RoomEntityService) sectionArrayMapper(sections []*ent.Section) []Section {
 	var s []Section
 	for _, seq := range sections {
-		s = append(s, Section{
-			Id:    seq.ID,
-			Start: navigation.Coordinate{},
-			End:   navigation.Coordinate{},
-		})
+		s = append(s, *r.sectionMapper(seq))
 	}
 	return s
 }
 
 func (r *RoomEntityService) sectionMapper(s *ent.Section) *Section {
+
+	if s == nil {
+		return nil
+	}
+
+	sec, err := r.client.Section.Query().Where(section.ID(s.ID)).First(r.context)
+	if err != nil {
+		return nil
+	}
+
 	return &Section{
 		Id:    s.ID,
-		Start: navigation.Coordinate{X: s.XStart, Y: s.YStart, Z: 0},
-		End:   navigation.Coordinate{X: s.XEnd, Y: s.YEnd, Z: 0},
+		Start: navigation.Coordinate{X: sec.XStart, Y: sec.YStart, Z: 0},
+		End:   navigation.Coordinate{X: sec.XEnd, Y: sec.YEnd, Z: 0},
 	}
 }
 
@@ -359,8 +348,8 @@ func (r *RoomEntityService) mapDoor(d *Door) (*ent.Door, error) {
 	}
 
 	return r.client.Door.Create().
-		SetPathNode(pNode).
-		SetSection(sec).
+		SetPathNodeID(pNode.ID).
+		SetSectionID(sec.ID).
 		Save(r.context)
 }
 

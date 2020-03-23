@@ -57,7 +57,7 @@ func TestMapRoom(t *testing.T) {
 				},
 			},
 		},
-		Color: "#007bff",
+		Color: "#5682a3",
 		Sections: []Section{
 			{
 				Id: 0,
