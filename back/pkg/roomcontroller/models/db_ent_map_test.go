@@ -308,13 +308,11 @@ func TestMapSection(t *testing.T) {
 		t.Error("expected section, got err:", err, ", section: ", entSection)
 	}
 
-
 	s.Id = 1
 	retSection := r.sectionMapper(entSection)
 	if !reflect.DeepEqual(s, *retSection) {
 		t.Error("expected equal sections: expected:", s, ", actual:", retSection)
 	}
-
 
 	entSection, err = r.mapSection(&s)
 	if err != nil || entSection == nil {
@@ -372,8 +370,8 @@ func TestMapDoor(t *testing.T) {
 	defer r.client.Close()
 
 	d := Door{
-		Id:       0,
-		Section:  Section{
+		Id: 0,
+		Section: Section{
 			Id:    0,
 			Start: navigation.Coordinate{X: 1, Y: 2, Z: 3},
 			End:   navigation.Coordinate{X: 4, Y: 5, Z: 6},
@@ -552,7 +550,7 @@ func TestMapColor(t *testing.T) {
 	color3 := "#zabx56"
 
 	color, err = r.mapColor(color3)
-	if err == nil || color != nil{
+	if err == nil || color != nil {
 		t.Error("expected error, got: ", err, color)
 	}
 
