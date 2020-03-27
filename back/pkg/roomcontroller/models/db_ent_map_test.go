@@ -1,7 +1,9 @@
 package models
 
 import (
+	"fmt"
 	"os"
+	"reflect"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
 	"testing"
@@ -35,22 +37,22 @@ func TestMapRoom(t *testing.T) {
 				Section: Section{
 					Id: 0,
 					Start: navigation.Coordinate{
-						X: 0,
-						Y: 0,
-						Z: 0,
+						X: 1,
+						Y: 2,
+						Z: 3,
 					},
 					End: navigation.Coordinate{
-						X: 0,
-						Y: 0,
-						Z: 0,
+						X: 4,
+						Y: 5,
+						Z: 6,
 					},
 				},
 				PathNode: navigation.PathNode{
 					Id: 0,
 					Coordinate: navigation.Coordinate{
-						X: 0,
-						Y: 0,
-						Z: 0,
+						X: 7,
+						Y: 8,
+						Z: 9,
 					},
 					Group:          nil,
 					ConnectedNodes: nil,
@@ -62,63 +64,63 @@ func TestMapRoom(t *testing.T) {
 			{
 				Id: 0,
 				Start: navigation.Coordinate{
-					X: 0,
-					Y: 0,
-					Z: 0,
+					X: 10,
+					Y: 11,
+					Z: 12,
 				},
 				End: navigation.Coordinate{
-					X: 0,
-					Y: 0,
-					Z: 0,
+					X: 13,
+					Y: 14,
+					Z: 15,
 				},
 			},
 			{
 				Id: 0,
 				Start: navigation.Coordinate{
-					X: 0,
-					Y: 0,
-					Z: 0,
+					X: 16,
+					Y: 17,
+					Z: 18,
 				},
 				End: navigation.Coordinate{
-					X: 0,
-					Y: 0,
-					Z: 0,
+					X: 19,
+					Y: 20,
+					Z: 21,
 				},
 			},
 			{
 				Id: 0,
 				Start: navigation.Coordinate{
-					X: 0,
-					Y: 0,
-					Z: 0,
+					X: 22,
+					Y: 23,
+					Z: 24,
 				},
 				End: navigation.Coordinate{
-					X: 0,
-					Y: 0,
-					Z: 0,
+					X: 25,
+					Y: 26,
+					Z: 27,
 				},
 			},
 			{
 				Id: 0,
 				Start: navigation.Coordinate{
-					X: 0,
-					Y: 0,
-					Z: 0,
+					X: 28,
+					Y: 29,
+					Z: 30,
 				},
 				End: navigation.Coordinate{
-					X: 0,
-					Y: 0,
-					Z: 0,
+					X: 31,
+					Y: 32,
+					Z: 33,
 				},
 			},
 		},
-		Floor: 0,
+		Floor: 1,
 		PathNode: navigation.PathNode{
 			Id: 0,
 			Coordinate: navigation.Coordinate{
-				X: 0,
-				Y: 0,
-				Z: 0,
+				X: 34,
+				Y: 35,
+				Z: 36,
 			},
 			Group:          nil,
 			ConnectedNodes: nil,
@@ -131,9 +133,118 @@ func TestMapRoom(t *testing.T) {
 	}
 
 	ro.Id = 1
+
 	entRoom, err = r.mapRoom(&ro)
 	if err != nil || entRoom == nil {
 		t.Error("expected no error, got:", err, entRoom)
+	}
+
+	checkRoom := Room{
+		Id:          1,
+		Name:        "RoomN01",
+		Description: "Room Number 1 Special Description",
+		Alias:       nil,
+		Doors: []Door{
+			{
+				Id: 1,
+				Section: Section{
+					Id: 5,
+					Start: navigation.Coordinate{
+						X: 1,
+						Y: 2,
+						Z: 3,
+					},
+					End: navigation.Coordinate{
+						X: 4,
+						Y: 5,
+						Z: 6,
+					},
+				},
+				PathNode: navigation.PathNode{
+					Id: 1,
+					Coordinate: navigation.Coordinate{
+						X: 7,
+						Y: 8,
+						Z: 9,
+					},
+					Group:          nil,
+					ConnectedNodes: nil,
+				},
+			},
+		},
+		Color: "#5682a3",
+		Sections: []Section{
+			{
+				Id: 1,
+				Start: navigation.Coordinate{
+					X: 10,
+					Y: 11,
+					Z: 12,
+				},
+				End: navigation.Coordinate{
+					X: 13,
+					Y: 14,
+					Z: 15,
+				},
+			},
+			{
+				Id: 2,
+				Start: navigation.Coordinate{
+					X: 16,
+					Y: 17,
+					Z: 18,
+				},
+				End: navigation.Coordinate{
+					X: 19,
+					Y: 20,
+					Z: 21,
+				},
+			},
+			{
+				Id: 3,
+				Start: navigation.Coordinate{
+					X: 22,
+					Y: 23,
+					Z: 24,
+				},
+				End: navigation.Coordinate{
+					X: 25,
+					Y: 26,
+					Z: 27,
+				},
+			},
+			{
+				Id: 4,
+				Start: navigation.Coordinate{
+					X: 28,
+					Y: 29,
+					Z: 30,
+				},
+				End: navigation.Coordinate{
+					X: 31,
+					Y: 32,
+					Z: 33,
+				},
+			},
+		},
+		Floor: 1,
+		PathNode: navigation.PathNode{
+			Id: 2,
+			Coordinate: navigation.Coordinate{
+				X: 34,
+				Y: 35,
+				Z: 36,
+			},
+			Group:          nil,
+			ConnectedNodes: nil,
+		},
+	}
+
+	retRoom := r.roomMapper(entRoom)
+	if !reflect.DeepEqual(checkRoom.PathNode, retRoom.PathNode) {
+		fmt.Println(checkRoom.Doors)
+		fmt.Println(retRoom.Doors)
+		t.Error("expected room equality. expected:", checkRoom, ", actual:", retRoom)
 	}
 
 	ro.Id = 2
@@ -188,8 +299,8 @@ func TestMapSection(t *testing.T) {
 
 	s := Section{
 		Id:    0,
-		Start: navigation.Coordinate{},
-		End:   navigation.Coordinate{},
+		Start: navigation.Coordinate{X: 1, Y: 2, Z: 3},
+		End:   navigation.Coordinate{X: 4, Y: 5, Z: 6},
 	}
 
 	entSection, err := r.mapSection(&s)
@@ -197,7 +308,13 @@ func TestMapSection(t *testing.T) {
 		t.Error("expected section, got err:", err, ", section: ", entSection)
 	}
 
+
 	s.Id = 1
+	retSection := r.sectionMapper(entSection)
+	if !reflect.DeepEqual(s, *retSection) {
+		t.Error("expected equal sections: expected:", s, ", actual:", retSection)
+	}
+
 
 	entSection, err = r.mapSection(&s)
 	if err != nil || entSection == nil {
@@ -256,8 +373,17 @@ func TestMapDoor(t *testing.T) {
 
 	d := Door{
 		Id:       0,
-		Section:  Section{},
-		PathNode: navigation.PathNode{},
+		Section:  Section{
+			Id:    0,
+			Start: navigation.Coordinate{X: 1, Y: 2, Z: 3},
+			End:   navigation.Coordinate{X: 4, Y: 5, Z: 6},
+		},
+		PathNode: navigation.PathNode{
+			Id:             0,
+			Coordinate:     navigation.Coordinate{X: 7, Y: 8, Z: 9},
+			Group:          nil,
+			ConnectedNodes: nil,
+		},
 	}
 
 	entDoor, err := r.mapDoor(&d)
@@ -266,6 +392,12 @@ func TestMapDoor(t *testing.T) {
 	}
 
 	d.Id = 1
+	d.Section.Id = 1
+	d.PathNode.Id = 1
+	retDoor := r.doorMapper(entDoor)
+	if !reflect.DeepEqual(d, *retDoor) {
+		t.Error("expected door equality. expected:", d, ", actual:", retDoor)
+	}
 
 	entDoor, err = r.mapDoor(&d)
 	if err != nil || entDoor == nil {
@@ -273,6 +405,8 @@ func TestMapDoor(t *testing.T) {
 	}
 
 	d.Id = 0
+	d.Section.Id = 0
+	d.PathNode.Id = 0
 
 	entDoor, err = r.mapDoor(&d)
 	if err != nil || entDoor == nil {
@@ -362,15 +496,22 @@ func TestMapPathNode(t *testing.T) {
 		t.Error("expected error and nil pathnode; got:", err, entPathNode)
 	}
 
-	entPathNode, err = r.mapPathNode(&navigation.PathNode{
+	pathNode1 := navigation.PathNode{
 		Id:             0,
-		Coordinate:     navigation.Coordinate{},
+		Coordinate:     navigation.Coordinate{X: 1, Y: 2, Z: 3},
 		Group:          nil,
 		ConnectedNodes: nil,
-	})
+	}
+	entPathNode, err = r.mapPathNode(&pathNode1)
 
 	if err != nil || entPathNode == nil {
 		t.Error("expected nil and pathnode, got error:", err, entPathNode)
+	}
+
+	pathNode1.Id = 1
+	retPathNode := r.pathNodeMapper(entPathNode)
+	if !reflect.DeepEqual(pathNode1, *retPathNode) {
+		t.Error("expected pathnode equality, expected:", pathNode1, ", actual: ", retPathNode)
 	}
 
 	entPathNode, err = r.mapPathNode(&navigation.PathNode{
@@ -397,21 +538,21 @@ func TestMapColor(t *testing.T) {
 	color1 := "#007bff"
 
 	color, err := r.mapColor(color1)
-	if err != nil || color == nil {
+	if err != nil || color == nil || color.Color != color1 {
 		t.Error("expected nil and color, got:", err, ", ", color)
 	}
 
 	color2 := "#007BFF"
 
 	color, err = r.mapColor(color2)
-	if err != nil || color == nil {
+	if err != nil || color == nil || color.Color != color2 {
 		t.Error("expected nil and color, got:", err, ", ", color)
 	}
 
 	color3 := "#zabx56"
 
 	color, err = r.mapColor(color3)
-	if err == nil || color != nil {
+	if err == nil || color != nil{
 		t.Error("expected error, got: ", err, color)
 	}
 
@@ -425,7 +566,7 @@ func TestMapColor(t *testing.T) {
 	color5 := "#1aB"
 
 	color, err = r.mapColor(color5)
-	if err != nil || color == nil {
+	if err != nil || color == nil || color.Color != color5 {
 		t.Error("expected nil and color, got:", err, ", ", color)
 	}
 

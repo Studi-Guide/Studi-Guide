@@ -1,6 +1,6 @@
 [
-	{"Id":1,"Name":"RoomN01","Description":"description","coordinates":{"Min":{"X":0,"Y":0},"Max":{"X":0,"Y":0}}},
-	{"Id":2,"Name":"RoomN02","Description":"description","coordinates":{"Min":{"X":0,"Y":0},"Max":{"X":0,"Y":0}}},
-	{"Id":3,"Name":"RoomN03","Description":"description","coordinates":{"Min":{"X":0,"Y":0},"Max":{"X":0,"Y":0}}}
+	{"Id":0,"Name":"RoomN01","Description":"description","Color":  "#5682a3","coordinates":{"Min":{"X":0,"Y":0},"Max":{"X":0,"Y":0}}},
+	{"Id":0,"Name":"RoomN02","Description":"description","Color":  "#5682a3","coordinates":{"Min":{"X":0,"Y":0},"Max":{"X":0,"Y":0}}},
+	{"Id":0,"Name":"RoomN03","Description":"description","Color":  "#5682a3","coordinates":{"Min":{"X":0,"Y":0},"Max":{"X":0,"Y":0}}}
 ]
 

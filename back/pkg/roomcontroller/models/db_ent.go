@@ -188,8 +188,8 @@ func (r *RoomEntityService) sectionMapper(s *ent.Section) *Section {
 
 	return &Section{
 		Id:    s.ID,
-		Start: navigation.Coordinate{X: sec.XStart, Y: sec.YStart, Z: 0},
-		End:   navigation.Coordinate{X: sec.XEnd, Y: sec.YEnd, Z: 0},
+		Start: navigation.Coordinate{X: sec.XStart, Y: sec.YStart, Z: sec.ZStart},
+		End:   navigation.Coordinate{X: sec.XEnd, Y: sec.YEnd, Z: sec.ZEnd},
 	}
 }
 
@@ -314,6 +314,7 @@ func (r *RoomEntityService) mapSection(s *Section) (*ent.Section, error) {
 	return r.client.Section.Create().
 		SetXStart(s.Start.X).SetXEnd(s.End.X).
 		SetYStart(s.Start.Y).SetYEnd(s.End.Y).
+		SetZStart(s.Start.Z).SetZEnd(s.End.Z).
 		Save(r.context)
 }
 
