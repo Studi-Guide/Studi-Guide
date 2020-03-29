@@ -1,5 +1,5 @@
-import {Room, Section, svgPath} from '../building-objects-if';
-import {testDataRooms} from './building-data';
+import {Coordinate, Room, Section, svgPath} from '../building-objects-if';
+import {testDataRooms} from './test-building-data';
 import {Component} from "@angular/core";
 import {RequestBuildingDataService} from "../services/requestBuildingData.service";
 
@@ -13,6 +13,7 @@ export class NavigationPage {
   public startRoom:Room;
   public destinationRoom:Room;
   public testRooms:Room[] = testDataRooms;
+  public testPathNodes:Coordinate[];
   public calculatedRoomPaths:svgPath[];
   public calculatedDoorLines:svgPath[];
   
@@ -59,10 +60,24 @@ export class NavigationPage {
     return path_d;
   }
 
+  private static testRenderPathNodes(){
+    let pathNodes:Coordinate[] = [];
+    for (const room of testDataRooms) {
+      for (const pathNode of room.pathNodes) {
+        pathNodes.push(pathNode);
+      }
+      for (const door of room.doors) {
+        pathNodes.push(door.pathNode);
+      }
+    }
+    return pathNodes;
+  }
+
   constructor() {
     this.calculatedRoomPaths = [];
     this.calculatedDoorLines = [];
     this.calculateSvgPaths();
+    this.testPathNodes = NavigationPage.testRenderPathNodes();
   }
 
   public discoverFloor() {

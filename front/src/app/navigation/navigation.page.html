@@ -1,11 +1,3 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Indoor Navigation
-    </ion-title>
-  </ion-toolbar>
-</ion-header> -->
-
 <ion-content fullscreen>
   <ion-item>
     <ion-label position="stacked"><ion-text color="primary">Start room</ion-text></ion-label>
@@ -38,6 +30,9 @@
         {{room.name}}
       </text>
       <path *ngFor="let doorLine of calculatedDoorLines" attr.d="{{doorLine.d}}" attr.stroke="{{doorLine.fill}}" />
+      <!-- TEST -->
+      <circle *ngFor="let pathNode of testPathNodes" attr.cx="{{pathNode.X}}" attr.cy="{{pathNode.Y}}" r="2" fill="red" />
+      <!-- TEST END -->
     </svg>
   </div>
 </ion-content>

@@ -22,7 +22,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 75, "Y": 50, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 135, "Y": 100, "Z": 3 },
@@ -53,7 +55,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 225, "Y": 50, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 180, "Y": 100, "Z": 3 },
@@ -109,7 +113,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 50, "Y": 115, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 100, "Y": 110, "Z": 3 },
@@ -140,6 +146,22 @@ export let testDataRooms: Room[] = [
       },
       {
         "Start": { "X": 360, "Y": 130, "Z": 3 },
+        "End": { "X": 290, "Y": 130, "Z": 3 }
+      },
+      {
+        "Start": { "X": 290, "Y": 130, "Z": 3 },
+        "End": { "X": 290, "Y": 155, "Z": 3 }
+      },
+      {
+        "Start": { "X": 290, "Y": 155, "Z": 3 },
+        "End": { "X": 225, "Y": 155, "Z": 3 }
+      },
+      {
+        "Start": { "X": 225, "Y": 155, "Z": 3 },
+        "End": { "X": 225, "Y": 130, "Z": 3 }
+      },
+      {
+        "Start": { "X": 225, "Y": 130, "Z": 3 },
         "End": { "X": 100, "Y": 130, "Z": 3 }
       },
       {
@@ -148,7 +170,11 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 128, "Y": 115, "Z": 3 },
+      { "X": 173, "Y": 115, "Z": 3 },
+      { "X": 257, "Y": 115, "Z": 3 }
+    ],
     "doors": [],
     "Color": "#BBB"
   },
@@ -198,7 +224,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 187, "Y": 170, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 225, "Y": 190, "Z": 3 },
@@ -212,24 +240,26 @@ export let testDataRooms: Room[] = [
     "name": "Treppe",
     "sections": [
       {
-        "Start": { "X": 225, "Y": 130, "Z": 3 },
-        "End": { "X": 290, "Y": 130, "Z": 3 }
+        "Start": { "X": 225, "Y": 155, "Z": 3 },
+        "End": { "X": 290, "Y": 155, "Z": 3 }
       },
       {
-        "Start": { "X": 290, "Y": 130, "Z": 3 },
-        "End": { "X": 290, "Y": 210, "Z": 3 }
+        "Start": { "X": 290, "Y": 155, "Z": 3 },
+        "End": { "X": 290, "Y": 185, "Z": 3 }
       },
       {
-        "Start": { "X": 290, "Y": 210, "Z": 3 },
-        "End": { "X": 225, "Y": 210, "Z": 3 }
+        "Start": { "X": 290, "Y": 185, "Z": 3 },
+        "End": { "X": 225, "Y": 185, "Z": 3 }
       },
       {
-        "Start": { "X": 225, "Y": 210, "Z": 3 },
-        "End": { "X": 225, "Y": 130, "Z": 3 }
+        "Start": { "X": 225, "Y": 185, "Z": 3 },
+        "End": { "X": 225, "Y": 155, "Z": 3 }
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 257, "Y": 170, "Z": 3 }
+    ],
     "doors": [],
     "Color": "#AFAFAF"
   },
@@ -242,32 +272,34 @@ export let testDataRooms: Room[] = [
       },
       {
         "Start": { "X": 380, "Y": 130, "Z": 3 },
-        "End": { "X": 380, "Y": 180, "Z": 3 }
+        "End": { "X": 380, "Y": 175, "Z": 3 }
       },
       {
-        "Start": { "X": 380, "Y": 180, "Z": 3 },
-        "End": { "X": 320, "Y": 180, "Z": 3 }
+        "Start": { "X": 380, "Y": 175, "Z": 3 },
+        "End": { "X": 320, "Y": 175, "Z": 3 }
       },
       {
-        "Start": { "X": 320, "Y": 180, "Z": 3 },
-        "End": { "X": 310, "Y": 200, "Z": 3 }
+        "Start": { "X": 320, "Y": 175, "Z": 3 },
+        "End": { "X": 310, "Y": 195, "Z": 3 }
       },
       {
-        "Start": { "X": 310, "Y": 200, "Z": 3 },
-        "End": { "X": 290, "Y": 200, "Z": 3 }
+        "Start": { "X": 310, "Y": 195, "Z": 3 },
+        "End": { "X": 290, "Y": 195, "Z": 3 }
       },
       {
-        "Start": { "X": 290, "Y": 200, "Z": 3 },
-        "End": { "X": 290, "Y": 200, "Z": 3 }
+        "Start": { "X": 290, "Y": 195, "Z": 3 },
+        "End": { "X": 290, "Y": 130, "Z": 3 }
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 335, "Y": 160, "Z": 3 }
+    ],
     "doors": [
       {
-        "Start": { "X": 325, "Y": 180, "Z": 3 },
-        "End": { "X": 340, "Y": 180, "Z": 3 },
-        "pathNode": { "X": 333, "Y": 180, "Z": 3 }
+        "Start": { "X": 325, "Y": 175, "Z": 3 },
+        "End": { "X": 340, "Y": 175, "Z": 3 },
+        "pathNode": { "X": 333, "Y": 175, "Z": 3 }
       }
     ],
     "Color": "#AEA693"
@@ -301,7 +333,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 335, "Y": 200, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 325, "Y": 180, "Z": 3 },
@@ -332,7 +366,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 187, "Y": 222, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 225, "Y": 215, "Z": 3 },
@@ -363,7 +399,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 187, "Y": 250, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 225, "Y": 240, "Z": 3 },
@@ -427,7 +465,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 195, "Y": 280, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 275, "Z": 3 },
@@ -463,7 +503,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 195, "Y": 310, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 305, "Z": 3 },
@@ -504,7 +546,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 195, "Y": 337, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 330, "Z": 3 },
@@ -540,7 +584,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 195, "Y": 365, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 360, "Z": 3 },
@@ -571,7 +617,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 195, "Y": 420, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 440, "Z": 3 },
@@ -602,7 +650,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 195, "Y": 475, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 465, "Z": 3 },
@@ -633,7 +683,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 195, "Y": 505, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 500, "Z": 3 },
@@ -664,7 +716,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 195, "Y": 535, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 530, "Z": 3 },
@@ -695,7 +749,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 335, "Y": 292, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 280, "Z": 3 },
@@ -731,7 +787,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 335, "Y": 370, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 330, "Z": 3 },
@@ -777,7 +835,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 335, "Y": 470, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 430, "Z": 3 },
@@ -818,7 +878,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 335, "Y": 535, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 530, "Z": 3 },
@@ -882,8 +944,16 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
-    "doors": [],
+    "pathNodes": [
+      { "X": 160, "Y": 605, "Z": 3 }
+    ],
+    "doors": [
+      {
+        "Start": { "X": 185, "Y": 610, "Z": 3 },
+        "End": { "X": 175, "Y": 610, "Z": 3 },
+        "pathNode": { "X": 180, "Y": 610, "Z": 3 }
+      }
+    ],
     "Color": "#AEA693"
   },
   {
@@ -915,8 +985,16 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
-    "doors": [],
+    "pathNodes": [
+      { "X": 160, "Y": 635, "Z": 3 }
+    ],
+    "doors": [
+      {
+        "Start": { "X": 185, "Y": 630, "Z": 3 },
+        "End": { "X": 175, "Y": 630, "Z": 3 },
+        "pathNode": { "X": 180, "Y": 630, "Z": 3 }
+      }
+    ],
     "Color": "#AEA693"
   },
   {
@@ -948,11 +1026,43 @@ export let testDataRooms: Room[] = [
     "name": "corridor",
     "sections": [
       {
-        "Start": { "X": 225, "Y": 210, "Z": 3 },
-        "End": { "X": 290, "Y": 210, "Z": 3 }
+        "Start": { "X": 225, "Y": 185, "Z": 3 },
+        "End": { "X": 290, "Y": 185, "Z": 3 }
       },
       {
-        "Start": { "X": 290, "Y": 210, "Z": 3 },
+        "Start": { "X": 290, "Y": 185, "Z": 3 },
+        "End": { "X": 290, "Y": 195, "Z": 3 }
+      },
+      {
+        "Start": { "X": 290, "Y": 195, "Z": 3 },
+        "End": { "X": 310, "Y": 195, "Z": 3 }
+      },
+      {
+        "Start": { "X": 310, "Y": 195, "Z": 3 },
+        "End": { "X": 320, "Y": 175, "Z": 3 }
+      },
+      {
+        "Start": { "X": 320, "Y": 175, "Z": 3 },
+        "End": { "X": 380, "Y": 175, "Z": 3 }
+      },
+      {
+        "Start": { "X": 380, "Y": 175, "Z": 3 },
+        "End": { "X": 380, "Y": 180, "Z": 3 }
+      },
+      {
+        "Start": { "X": 380, "Y": 180, "Z": 3 },
+        "End": { "X": 320, "Y": 180, "Z": 3 }
+      },
+      {
+        "Start": { "X": 320, "Y": 180, "Z": 3 },
+        "End": { "X": 310, "Y": 200, "Z": 3 }
+      },
+      {
+        "Start": { "X": 310, "Y": 200, "Z": 3 },
+        "End": { "X": 290, "Y": 200, "Z": 3 }
+      },
+      {
+        "Start": { "X": 290, "Y": 200, "Z": 3 },
         "End": { "X": 290, "Y": 220, "Z": 3 }
       },
       {
@@ -1033,11 +1143,42 @@ export let testDataRooms: Room[] = [
       },
       {
         "Start": { "X": 225, "Y": 265, "Z": 3 },
-        "End": { "X": 225, "Y": 210, "Z": 3 }
+        "End": { "X": 225, "Y": 185, "Z": 3 }
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 257, "Y": 198, "Z": 3 },
+      { "X": 257, "Y": 222, "Z": 3 },
+      { "X": 257, "Y": 245, "Z": 3 },
+      { "X": 265, "Y": 280, "Z": 3 },
+      { "X": 265, "Y": 288, "Z": 3 },
+      { "X": 265, "Y": 310, "Z": 3 },
+      { "X": 265, "Y": 335, "Z": 3 },
+      { "X": 265, "Y": 365, "Z": 3 },
+      { "X": 265, "Y": 403, "Z": 3 },
+      { "X": 265, "Y": 438, "Z": 3 },
+      { "X": 265, "Y": 445, "Z": 3 },
+      { "X": 265, "Y": 470, "Z": 3 },
+      { "X": 265, "Y": 503, "Z": 3 },
+      { "X": 265, "Y": 505, "Z": 3 },
+      { "X": 265, "Y": 535, "Z": 3 },
+      { "X": 180, "Y": 620, "Z": 3 },
+      { "X": 265, "Y": 620, "Z": 3 },
+      { "X": 265, "Y": 628, "Z": 3 },
+      { "X": 265, "Y": 673, "Z": 3 },
+      { "X": 265, "Y": 728, "Z": 3 },
+      { "X": 265, "Y": 773, "Z": 3 },
+      { "X": 265, "Y": 828, "Z": 3 },
+      { "X": 265, "Y": 870, "Z": 3 },
+      { "X": 265, "Y": 903, "Z": 3 },
+      { "X": 265, "Y": 910, "Z": 3 },
+      { "X": 310, "Y": 198, "Z": 3 },
+      { "X": 320, "Y": 178, "Z": 3 },
+      { "X": 333, "Y": 178, "Z": 3 },
+      { "X": 335, "Y": 230, "Z": 3 },
+      { "X": 257, "Y": 230, "Z": 3 }
+    ],
     "doors": [],
     "Color": "#BBB"
   },
@@ -1083,11 +1224,13 @@ export let testDataRooms: Room[] = [
       },
       {
         "Start": { "X": 150, "Y": 750, "Z": 3 },
-        "End": { "X": 150, "Y": 630, "Z": 3 }
+        "End": { "X": 150, "Y": 650, "Z": 3 }
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+        { "X": 195, "Y": 700, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 665, "Z": 3 },
@@ -1123,7 +1266,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 195, "Y": 790, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 765, "Z": 3 },
@@ -1154,7 +1299,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 195, "Y": 880, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 865, "Z": 3 },
@@ -1190,7 +1337,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 345, "Y": 600, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 620, "Z": 3 },
@@ -1221,7 +1370,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 335, "Y": 700, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 665, "Z": 3 },
@@ -1262,7 +1413,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 335, "Y": 800, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 765, "Z": 3 },
@@ -1308,7 +1461,9 @@ export let testDataRooms: Room[] = [
       }
     ],
     "alias": [],
-    "pathNodes": [],
+    "pathNodes": [
+      { "X": 335, "Y": 890, "Z": 3 }
+    ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 895, "Z": 3 },
