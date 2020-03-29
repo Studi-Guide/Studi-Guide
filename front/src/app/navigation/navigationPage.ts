@@ -8,8 +8,15 @@ import {RequestBuildingDataService} from "../services/requestBuildingData.servic
   templateUrl: 'navigation.page.html',
   styleUrls: ['navigation.page.scss']
 })
+
 export class NavigationPage {
-  //  public mapIsVisible:boolean = true;
+  public progressIsVisible:boolean = false;
+  public routeInputIsVisible:boolean = false;
+  public searchBtnIsVisible:boolean = true;
+  public routeBtnIsVisible:boolean = true;
+  public mapIsVisible:boolean = false;
+  public startInput:string;
+  public destinationInput:string;
   public startRoom:Room;
   public destinationRoom:Room;
   public testRooms:Room[] = testDataRooms;
@@ -18,29 +25,8 @@ export class NavigationPage {
   public calculatedDoorLines:svgPath[];
   
   // TODO These values we have to determine: which size will have the scrollable map?
-  public svgWidth:number = 500; // this.calcSvgWidth();
-  public svgHeight:number = 1200; // this.calcSvgHeight();
-
-  // TODO adapt to the current UML model
-
-  private calculateSvgPaths() {
-    for (const room of this.testRooms) {
-      let roomShapePath:svgPath = {
-        d : NavigationPage.buildRoomSvgPathFromSections(room.sections),
-        fill : room.Color
-      };
-      this.calculatedRoomPaths.push(roomShapePath);
-      if (room.doors.length >= 1) {
-        for (const door of room.doors) {
-          let doorLine:svgPath = {
-            d : NavigationPage.buildDoorSvgLineFromSection(door),
-            fill : roomShapePath.fill
-          };
-          this.calculatedDoorLines.push(doorLine);
-        }
-      }
-    }
-  }
+  public svgWidth:number = 0;
+  public svgHeight:number = 0;
 
   private static buildDoorSvgLineFromSection(doorSection:Section) : string {
     let path:string = 'M' + doorSection.Start.X + ' ' + doorSection.Start.Y;
@@ -60,7 +46,37 @@ export class NavigationPage {
     return path_d;
   }
 
-  private static testRenderPathNodes(){
+  private calculateSvgPathsAndSvgWidthHeight() {
+    for (const room of this.testRooms) {
+      let roomShapePath:svgPath = {
+        d : NavigationPage.buildRoomSvgPathFromSections(room.sections),
+        fill : room.Color
+      };
+      this.calculatedRoomPaths.push(roomShapePath);
+      if (room.doors.length >= 1) {
+        for (const door of room.doors) {
+          let doorLine:svgPath = {
+            d : NavigationPage.buildDoorSvgLineFromSection(door),
+            fill : roomShapePath.fill
+          };
+          this.calculatedDoorLines.push(doorLine);
+        }
+      }
+      for (const section of room.sections) {
+        if (section.End.X > this.svgWidth) {
+          this.svgWidth = section.End.X;
+        }
+        if (section.End.Y > this.svgHeight) {
+          this.svgHeight = section.End.Y;
+        }
+      }
+      // bottom navigation bar overlays svg
+      this.svgHeight += 1;
+      this.svgWidth += 0.15;
+    }
+  }
+
+  private static testRenderPathNodes() : Coordinate[] {
     let pathNodes:Coordinate[] = [];
     for (const room of testDataRooms) {
       for (const pathNode of room.pathNodes) {
@@ -76,8 +92,24 @@ export class NavigationPage {
   constructor() {
     this.calculatedRoomPaths = [];
     this.calculatedDoorLines = [];
-    this.calculateSvgPaths();
+    this.calculateSvgPathsAndSvgWidthHeight();
     this.testPathNodes = NavigationPage.testRenderPathNodes();
+  }
+
+  public showFloor() {
+    if (this.routeInputIsVisible) {
+      this.routeInputIsVisible = false;
+    } else if (this.startInput != undefined) {
+      this.mapIsVisible = true;
+    }
+  }
+
+  public showRoute() {
+    if (!this.routeInputIsVisible) {
+      this.routeInputIsVisible = true;
+    } else if (this.startInput != undefined && this.destinationInput != undefined) {
+      this.mapIsVisible = true;
+    }
   }
 
   public discoverFloor() {
