@@ -1,8 +1,7 @@
-import {room, svgPath} from '../building-objects-if';
-import { testDataRooms } from './building-data';
+import {Coordinate, Room, Section, svgPath} from '../building-objects-if';
+import {testDataRooms} from './test-building-data';
 import {Component} from "@angular/core";
 import {RequestBuildingDataService} from "../services/requestBuildingData.service";
-import {forEach} from "@angular-devkit/schematics";
 
 @Component({
   selector: 'app-navigation',
@@ -11,46 +10,74 @@ import {forEach} from "@angular-devkit/schematics";
 })
 export class NavigationPage {
   //  public mapIsVisible:boolean = true;
-  public startRoom:room;
-  public destinationRoom:room;
-  // TODO build strings from the building data to bind only the string on the attr.d
-  // e.g. "M100 100 L300 100 L300 0 L360 0 L360 130 L100 130 Z"
-  public testRooms:room[] = testDataRooms;
-  public calculatedPaths:svgPath[];
+  public startRoom:Room;
+  public destinationRoom:Room;
+  public testRooms:Room[] = testDataRooms;
+  public testPathNodes:Coordinate[];
+  public calculatedRoomPaths:svgPath[];
+  public calculatedDoorLines:svgPath[];
   
   // TODO These values we have to determine: which size will have the scrollable map?
   public svgWidth:number = 500; // this.calcSvgWidth();
-  public svgHeight:number = 1000; // this.calcSvgHeight();
+  public svgHeight:number = 1200; // this.calcSvgHeight();
 
   // TODO adapt to the current UML model
 
   private calculateSvgPaths() {
     for (const room of this.testRooms) {
       let roomShapePath:svgPath = {
-        d:'',
-        fill:''
+        d : NavigationPage.buildRoomSvgPathFromSections(room.sections),
+        fill : room.Color
       };
-      roomShapePath.d = NavigationPage.buildRoomSvgPathFromSections(room.sections);
-      roomShapePath.fill = room.fill;
-      this.calculatedPaths.push(roomShapePath);
-      // path = NavigationPage.buildDoorSvgPath(room.doors);
+      this.calculatedRoomPaths.push(roomShapePath);
+      if (room.doors.length >= 1) {
+        for (const door of room.doors) {
+          let doorLine:svgPath = {
+            d : NavigationPage.buildDoorSvgLineFromSection(door),
+            fill : roomShapePath.fill
+          };
+          this.calculatedDoorLines.push(doorLine);
+        }
+      }
     }
   }
 
-// TODO buildDoorSvgPathFromDoors is missing yet
+  private static buildDoorSvgLineFromSection(doorSection:Section) : string {
+    let path:string = 'M' + doorSection.Start.X + ' ' + doorSection.Start.Y;
+    path += ' L' + doorSection.End.X + ' ' + doorSection.End.Y;
+    return path;
+  }
 
-  private static buildRoomSvgPathFromSections(roomSections) : string {
+  private static buildRoomSvgPathFromSections(roomSections:Section[]) : string {
     let path_d:string = 'M';
     for (const section of roomSections) {
-      path_d += section.start.x+' '+section.start.y+' ';
+      if (path_d !== 'M') {
+        path_d += 'L';
+      }
+      path_d += section.Start.X + ' ' + section.Start.Y + ' ';
     }
     path_d += 'Z';
     return path_d;
   }
 
+  private static testRenderPathNodes(){
+    let pathNodes:Coordinate[] = [];
+    for (const room of testDataRooms) {
+      for (const pathNode of room.pathNodes) {
+        pathNodes.push(pathNode);
+      }
+      for (const door of room.doors) {
+        pathNodes.push(door.pathNode);
+      }
+    }
+    return pathNodes;
+  }
+
   constructor() {
-    this.calculatedPaths = [];
+    this.calculatedRoomPaths = [];
+    this.calculatedDoorLines = [];
     this.calculateSvgPaths();
+    this.testPathNodes = NavigationPage.testRenderPathNodes();
   }
 
   public discoverFloor() {

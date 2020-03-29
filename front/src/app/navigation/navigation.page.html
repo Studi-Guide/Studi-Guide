@@ -1,11 +1,3 @@
-<!-- <ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Indoor Navigation
-    </ion-title>
-  </ion-toolbar>
-</ion-header> -->
-
 <ion-content fullscreen>
   <ion-item>
     <ion-label position="stacked"><ion-text color="primary">Start room</ion-text></ion-label>
@@ -16,28 +8,31 @@
     <ion-input type="text" placeholder="Destination" [(ngModel)]="destinationInput"></ion-input>
   </ion-item>
   <ion-item>
-    <ion-button expand="block" color="dark"(click)="discoverFloor()">
+    <ion-button expand="block" color="dark" (click)="discoverFloor()">
       <ion-icon slot="end" name="star"></ion-icon>
       Go!
     </ion-button>
   </ion-item>
 
-  <div style="padding: 6px;">
+  <div id="building-map">
     <!-- *ngIf="mapIsVisible" -->
-    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}">
-      <!-- TODO adapt path attribute rendering for dynamic amount of sections instead of 4 -->
-      <path *ngFor="let path of calculatedPaths"
+    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}" class="center">
+      <path *ngFor="let path of calculatedRoomPaths"
             attr.d="{{path.d}}"
             attr.fill="{{path.fill}}"
             stroke="#FFF"
       />
       <text *ngFor="let room of testRooms"
-            attr.x="{{room.sections[0].start.x+6}}"
-            attr.y="{{room.sections[0].start.y+16}}"
+            attr.x="{{room.sections[0].Start.X+6}}"
+            attr.y="{{room.sections[0].Start.Y+16}}"
             font-size="9px"
             fill="#FFF">
         {{room.name}}
       </text>
+      <path *ngFor="let doorLine of calculatedDoorLines" attr.d="{{doorLine.d}}" attr.stroke="{{doorLine.fill}}" />
+      <!-- TEST -->
+      <circle *ngFor="let pathNode of testPathNodes" attr.cx="{{pathNode.X}}" attr.cy="{{pathNode.Y}}" r="2" fill="red" />
+      <!-- TEST END -->
     </svg>
   </div>
 </ion-content>
