@@ -10,7 +10,7 @@ type Room struct {
 	Doors       []Door
 	Color       string
 	Sections    []Section
-	Floor       int
+	Floor       int `json:"-"`
 	PathNode    navigation.PathNode
 }
 
