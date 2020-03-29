@@ -3,7 +3,6 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
 	"studi-guide/pkg/roomcontroller/models"
 )
@@ -30,8 +29,6 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Success 200 {array} models.Room
 // @Router /roomlist/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
-	log.Print("[RoomController] Request RoomList received")
-
 	rooms, err := l.provider.GetAllRooms()
 	if err != nil {
 		fmt.Println("GetAllRomms() failed with error", err)
@@ -55,6 +52,27 @@ func (l *RoomController) GetRoom(c *gin.Context) {
 		c.JSON(http.StatusOK, room)
 	}
 }
+
+/*func (l *RoomController) GetRoomsAndLinks(c *gin.Context) {
+	rooms, err := l.provider.GetAllRooms()
+	if err != nil {
+		fmt.Println("GetAllRomms() failed with error", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+	}
+
+	connectors, err := l.provider.GetAllConnectorSpaces()
+	if err != nil {
+		fmt.Println("GetAllRomms() failed with error", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+	}
+}
+*/
 
 //func (l *RoomController) AddItem(c *gin.Context) {
 //	reqBody, _ := ioutil.ReadAll(c.Request.Body)

@@ -22,6 +22,7 @@ type RoomEntityService struct {
 	table   string
 }
 
+
 func NewRoomEntityService(env *env.Env) (RoomServiceProvider, error) {
 	driverName := env.DbDriverName()
 	dataSourceName := env.DbDataSource()
@@ -110,6 +111,21 @@ func (r *RoomEntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	return nodes, nil
 }
 
+func (r *RoomEntityService) GetAllConnectorSpaces() ([]ConnectorSpace, error) {
+	connectorsPtr, err := r.client.ConnectorSpace.Query().WithConnectorSections().WithConnectorDoors().WithConnectorColor().WithConnectorPathNodes().All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+	var connectors []ConnectorSpace
+
+	for _, connectorPtr := range connectorsPtr {
+		connectors = append(connectors, *r.connectorMapper(connectorPtr))
+	}
+
+	return connectors, nil
+}
+
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {
 	client, err := ent.Open(dbDriverName, "file:"+dbSourceName+"?cache=shared&_fk=1")
 	if err != nil {
@@ -165,6 +181,50 @@ func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 	p, err := entRoom.Edges.PathNodeOrErr()
 	if err == nil {
 		rm.PathNode = *r.pathNodeMapper(p)
+	}
+
+	return &rm
+}
+
+func (r *RoomEntityService) connectorMapper(entConnector *ent.ConnectorSpace) *ConnectorSpace {
+
+	rm := ConnectorSpace{
+		Id:          entConnector.ID,
+		Name:        entConnector.Name,
+		Description: entConnector.Description,
+		Alias:       nil,
+		Doors:       nil,
+		Color:       "",
+		Sections:    nil,
+		Floor:       entConnector.Floor,
+		PathNodes:   nil,
+	}
+
+	c, err := entConnector.Edges.ConnectorColorOrErr()
+	if err == nil {
+		rm.Color = c.Color
+	}
+
+	d, err := entConnector.Edges.ConnectorDoorsOrErr()
+	if err == nil {
+		rm.Doors = r.doorArrayMapper(d)
+	}
+
+	s, err := entConnector.Edges.ConnectorSectionsOrErr()
+	if err == nil {
+		rm.Sections = r.sectionArrayMapper(s)
+	}
+
+	p, err := entConnector.Edges.ConnectorPathNodesOrErr()
+	if err == nil {
+
+		var pathnodes []navigation.PathNode
+
+		for _, nodePtr := range p {
+			pathnodes = append(pathnodes, *r.pathNodeMapper(nodePtr))
+		}
+
+		rm.PathNodes = pathnodes
 	}
 
 	return &rm

@@ -31,6 +31,9 @@ func (PathNode) Edges() []ent.Edge {
 			Ref("pathNode").
 			Unique(),
 
+		edge.From("connector", ConnectorSpace.Type).
+			Ref("connectorPathNodes"),
+
 		edge.To("linkedTo", PathNode.Type).
 			From("linkedFrom"),
 

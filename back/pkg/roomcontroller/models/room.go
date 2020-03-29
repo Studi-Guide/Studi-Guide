@@ -14,10 +14,23 @@ type Room struct {
 	PathNode    navigation.PathNode
 }
 
+type ConnectorSpace struct{
+	Id          int
+	Name        string
+	Description string
+	Alias       []string
+	Doors       []Door
+	Color       string
+	Sections    []Section
+	Floor       int
+	PathNodes   []navigation.PathNode
+}
+
 type RoomServiceProvider interface {
 	GetAllRooms() ([]Room, error)
 	GetRoom(name string) (Room, error)
 	AddRoom(room Room) error
 	AddRooms(rooms []Room) error
 	GetAllPathNodes() ([]navigation.PathNode, error)
+	GetAllConnectorSpaces() ([]ConnectorSpace, error)
 }
