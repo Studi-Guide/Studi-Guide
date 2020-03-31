@@ -88,7 +88,10 @@ func (r *RoomMockService) AddRooms(rooms []models.Room) error {
 }
 
 func (r *RoomMockService) GetAllConnectorSpaces() ([]models.ConnectorSpace, error) {
-	panic("implement me")
+	if r.ConnectorList == nil {
+		return nil, errors.New("no connector list initialized")
+	}
+	return r.ConnectorList, nil
 }
 
 func (r *RoomMockService) GetRoomsFromFloor(floor int) ([]models.Room, error) {

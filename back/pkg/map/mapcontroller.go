@@ -104,5 +104,5 @@ func (l MapController) CreateAndSendMapList(rooms []models.Room, connectors []mo
 		mapItems = append(mapItems, connector.MapItem)
 	}
 
-	c.JSON(http.StatusOK, rooms)
+	c.JSON(http.StatusOK, mapItems)
 }
