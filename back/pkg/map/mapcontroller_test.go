@@ -49,6 +49,53 @@ func TestMapController_GetMapItemsFromFloor(t *testing.T) {
 	}
 }
 
+func TestMapController_GetMapItemsFromFloor_BadInteger(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/map/floor?floor=test", nil)
+
+	provider :=  controllers.NewRoomMockService()
+	router := gin.Default()
+	mapRouter := router.Group("/map")
+	NewMapController(mapRouter, provider)
+	router.ServeHTTP(rec, req)
+
+	if http.StatusBadRequest != rec.Code {
+		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
+	}
+}
+
+func TestMapController_GetMapItemsFromFloor_EmptyRoomlist(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/map/floor?floor=test", nil)
+
+	provider :=  controllers.NewRoomMockService()
+	router := gin.Default()
+	mapRouter := router.Group("/map")
+	NewMapController(mapRouter, provider)
+	provider.RoomList = nil
+	router.ServeHTTP(rec, req)
+
+	if http.StatusBadRequest != rec.Code {
+		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
+	}
+}
+
+func TestMapController_GetMapItemsFromFloor_EmptyConnectorlist(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/map/floor?floor=test", nil)
+
+	provider :=  controllers.NewRoomMockService()
+	router := gin.Default()
+	mapRouter := router.Group("/map")
+	NewMapController(mapRouter, provider)
+	provider.ConnectorList = nil
+	router.ServeHTTP(rec, req)
+
+	if http.StatusBadRequest != rec.Code {
+		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
+	}
+}
+
 // Helper method
 func GetExpectedJson(rooms []models.Room, connectors []models.ConnectorSpace) ([]models.MapItem)	 {
 	var mapItems []models.MapItem
