@@ -6,6 +6,6 @@ type MapItem struct {
 	Alias       []string
 	Doors       []Door
 	Color       string
-	Floor 		int
+	Floor 		int 		`json:"-"`
 	Sections    []Section
 }

@@ -18,6 +18,8 @@ func (Section) Fields() []ent.Field {
 		field.Int("Y_Start").Default(0),
 		field.Int("X_End").Default(0),
 		field.Int("Y_End").Default(0),
+		field.Int("Z_Start").Default(0),
+		field.Int("Z_End").Default(0),
 	}
 }
 
