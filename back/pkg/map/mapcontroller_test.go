@@ -28,6 +28,38 @@ func TestMapController_GetMapItems(t *testing.T) {
 	}
 }
 
+func TestMapController_GetMapItems_RoomError(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/map/", nil)
+
+	provider :=  controllers.NewRoomMockService()
+	router := gin.Default()
+	mapRouter := router.Group("/map")
+	NewMapController(mapRouter, provider)
+	provider.RoomList = nil
+	router.ServeHTTP(rec, req)
+
+	if http.StatusBadRequest != rec.Code {
+		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
+	}
+}
+
+func TestMapController_GetMapItems_ConnectorError(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/map/", nil)
+
+	provider :=  controllers.NewRoomMockService()
+	router := gin.Default()
+	mapRouter := router.Group("/map")
+	NewMapController(mapRouter, provider)
+	provider.ConnectorList = nil
+	router.ServeHTTP(rec, req)
+
+	if http.StatusBadRequest != rec.Code {
+		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
+	}
+}
+
 func TestMapController_GetMapItemsFromFloor(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/map/floor?floor=1", nil)
