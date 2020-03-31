@@ -66,7 +66,7 @@ func TestMapController_GetMapItemsFromFloor_BadInteger(t *testing.T) {
 
 func TestMapController_GetMapItemsFromFloor_EmptyRoomlist(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/map/floor?floor=test", nil)
+	req, _ := http.NewRequest("GET", "/map/floor?floor=1", nil)
 
 	provider :=  controllers.NewRoomMockService()
 	router := gin.Default()
@@ -82,7 +82,7 @@ func TestMapController_GetMapItemsFromFloor_EmptyRoomlist(t *testing.T) {
 
 func TestMapController_GetMapItemsFromFloor_EmptyConnectorlist(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/map/floor?floor=test", nil)
+	req, _ := http.NewRequest("GET", "/map/floor?floor=1", nil)
 
 	provider :=  controllers.NewRoomMockService()
 	router := gin.Default()
