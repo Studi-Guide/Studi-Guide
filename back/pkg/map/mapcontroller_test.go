@@ -28,6 +28,27 @@ func TestMapController_GetMapItems(t *testing.T) {
 	}
 }
 
+func TestMapController_GetMapItemsFromFloor(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/map/floor?floor=1", nil)
+
+	provider :=  controllers.NewRoomMockService()
+	router := gin.Default()
+	mapRouter := router.Group("/map")
+	NewMapController(mapRouter, provider)
+	router.ServeHTTP(rec, req)
+
+	rooms,_ := provider.GetRoomsFromFloor(1)
+	connectors, _ := provider.GetConnectorsFromFloor(1)
+
+	expected, _ := json.Marshal(GetExpectedJson(rooms, connectors))
+	expected = append(expected, '\n')
+	actual := rec.Body.String()
+	if string(expected) != actual {
+		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
+
 // Helper method
 func GetExpectedJson(rooms []models.Room, connectors []models.ConnectorSpace) ([]models.MapItem)	 {
 	var mapItems []models.MapItem

@@ -17,6 +17,7 @@ func NewRoomMockService() *RoomMockService {
 	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
 		Name:        "RoomN01",
 		Description: "Dummy",
+		Floor: 1,
 	}})
 
 	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
@@ -32,11 +33,13 @@ func NewRoomMockService() *RoomMockService {
 	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
 		Name:        "RoomN04",
 		Description: "Dummy",
+		Floor: 1,
 	}})
 
 	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
 		Name:        "CorridorN01",
 		Description: "Dummy",
+		Floor: 1,
 	}})
 
 	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
@@ -52,6 +55,7 @@ func NewRoomMockService() *RoomMockService {
 	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
 		Name:        "CorridorN04",
 		Description: "Dummy",
+		Floor: 1,
 	}})
 
 	return &rms
@@ -106,7 +110,14 @@ func (r *RoomMockService) GetRoomsFromFloor(floor int) ([]models.Room, error) {
 }
 
 func (r *RoomMockService) GetConnectorsFromFloor(floor int) ([]models.ConnectorSpace, error) {
-	panic("implement me")
+	var list []models.ConnectorSpace
+	for _, connector := range r.ConnectorList {
+		if connector.MapItem.Floor == floor {
+			list = append(list, connector)
+		}
+	}
+
+	return list, nil
 }
 
 func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
