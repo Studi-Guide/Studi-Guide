@@ -10,7 +10,7 @@ definitions:
         $ref: '#/definitions/models.Section'
         type: object
     type: object
-  models.Room:
+  models.MapItem:
     properties:
       alias:
         items:
@@ -24,19 +24,23 @@ definitions:
         items:
           $ref: '#/definitions/models.Door'
         type: array
-      floor:
-        type: integer
-      id:
-        type: integer
       name:
         type: string
-      pathNode:
-        $ref: '#/definitions/navigation.PathNode'
-        type: object
       sections:
         items:
           $ref: '#/definitions/models.Section'
         type: array
+    type: object
+  models.Room:
+    properties:
+      id:
+        type: integer
+      mapItem:
+        $ref: '#/definitions/models.MapItem'
+        type: object
+      pathNode:
+        $ref: '#/definitions/navigation.PathNode'
+        type: object
     type: object
   models.Section:
     properties:
@@ -60,10 +64,6 @@ definitions:
     type: object
   navigation.PathNode:
     properties:
-      connectedNodes:
-        items:
-          $ref: '#/definitions/navigation.PathNode'
-        type: array
       coordinate:
         $ref: '#/definitions/navigation.Coordinate'
         type: object
@@ -88,6 +88,47 @@ info:
   contact: {}
   license: {}
 paths:
+  /map:
+    get:
+      consumes:
+      - application/json
+      description: Gets all map items of available rooms and connector spaces (corridor,
+        stairs, etc..)
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.MapItem'
+            type: array
+      summary: Get All Map Items
+      tags:
+      - MapController
+  /map/floor:
+    get:
+      consumes:
+      - application/json
+      description: Gets all map items of available rooms and connector spaces (corridor,
+        stairs, etc..)
+      parameters:
+      - description: filter map items by floor
+        in: query
+        name: floor
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.MapItem'
+            type: array
+      summary: Get All Map Items
+      tags:
+      - MapController
   /navigation/dir:
     get:
       consumes:
