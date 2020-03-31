@@ -32,5 +32,4 @@ type RoomServiceProvider interface {
 	AddRoom(room Room) error
 	AddRooms(rooms []Room) error
 	GetAllPathNodes() ([]navigation.PathNode, error)
-	GetAllConnectorSpaces() ([]ConnectorSpace, error)
 }
