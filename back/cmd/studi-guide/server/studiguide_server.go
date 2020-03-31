@@ -9,6 +9,8 @@ import (
 	"net/http"
 	"os"
 	"studi-guide/pkg/env"
+	maps "studi-guide/pkg/map"
+	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
 	"studi-guide/pkg/roomcontroller/controllers"
 	"studi-guide/pkg/roomcontroller/models"
@@ -52,17 +54,27 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, 
 		//a.Run(":8080")
 	}
 
-	//navigationRouter := router.Group("/navigation")
-	//{
-	//	log.Print("Creating navigation controllers")
-	//	err := navigation.NewNavigationController(navigationRouter, navigationprovider)
-	//	if err != nil {
-	//		log.Fatal(err)
-	//	} else {
-	//		log.Print("Successfully initialized navigation controllers")
-	//	}
-	//a.Run(":8080")
-	// }
+	navigationRouter := router.Group("/navigation")
+	{
+		log.Print("Creating navigation controllers")
+		err := navigation.NewNavigationController(navigationRouter, navigationprovider)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Print("Successfully initialized navigation controllers")
+		}
+	}
+
+	mapRouter := router.Group("/map")
+	{
+		log.Print("Creating map controllers")
+		err := maps.NewMapController(mapRouter, roomprovider)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Print("Successfully initialized map controllers")
+		}
+	}
 
 	router.NoRoute(func(c *gin.Context) {
 		c.Redirect(301, "/")

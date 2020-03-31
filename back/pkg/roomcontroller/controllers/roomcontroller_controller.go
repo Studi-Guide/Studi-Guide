@@ -53,26 +53,7 @@ func (l *RoomController) GetRoom(c *gin.Context) {
 	}
 }
 
-/*func (l *RoomController) GetRoomsAndLinks(c *gin.Context) {
-	rooms, err := l.provider.GetAllRooms()
-	if err != nil {
-		fmt.Println("GetAllRomms() failed with error", err)
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    http.StatusBadRequest,
-			"message": err.Error(),
-		})
-	}
 
-	connectors, err := l.provider.GetAllConnectorSpaces()
-	if err != nil {
-		fmt.Println("GetAllRomms() failed with error", err)
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    http.StatusBadRequest,
-			"message": err.Error(),
-		})
-	}
-}
-*/
 
 //func (l *RoomController) AddItem(c *gin.Context) {
 //	reqBody, _ := ioutil.ReadAll(c.Request.Body)

@@ -8,15 +8,7 @@ import (
 
 type RoomMockService struct {
 	RoomList []models.Room
-}
-
-func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
-	var list []navigation.PathNode
-	for _, room := range r.RoomList {
-		list = append(list, room.PathNode)
-	}
-
-	return list, nil
+	ConnectorList []models.ConnectorSpace
 }
 
 func NewRoomMockService() *RoomMockService {
@@ -39,6 +31,26 @@ func NewRoomMockService() *RoomMockService {
 
 	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
 		Name:        "RoomN04",
+		Description: "Dummy",
+	}})
+
+	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
+		Name:        "CorridorN01",
+		Description: "Dummy",
+	}})
+
+	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
+		Name:        "CorridorN02",
+		Description: "Dummy",
+	}})
+
+	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
+		Name:        "CorridorN03",
+		Description: "Dummy",
+	}})
+
+	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
+		Name:        "CorridorN04",
 		Description: "Dummy",
 	}})
 
@@ -74,3 +86,32 @@ func (r *RoomMockService) AddRooms(rooms []models.Room) error {
 	}
 	return nil
 }
+
+func (r *RoomMockService) GetAllConnectorSpaces() ([]models.ConnectorSpace, error) {
+	panic("implement me")
+}
+
+func (r *RoomMockService) GetRoomsFromFloor(floor int) ([]models.Room, error) {
+	var list []models.Room
+	for _, room := range r.RoomList {
+		if room.MapItem.Floor == floor {
+			list = append(list, room)
+		}
+	}
+
+	return list, nil
+}
+
+func (r *RoomMockService) GetConnectorsFromFloor(floor int) ([]models.ConnectorSpace, error) {
+	panic("implement me")
+}
+
+func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
+	var list []navigation.PathNode
+	for _, room := range r.RoomList {
+		list = append(list, room.PathNode)
+	}
+
+	return list, nil
+}
+

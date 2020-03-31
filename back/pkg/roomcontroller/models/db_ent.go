@@ -11,6 +11,7 @@ import (
 	"strings"
 	"studi-guide/ent"
 	"studi-guide/ent/color"
+	"studi-guide/ent/connectorspace"
 	"studi-guide/ent/door"
 	"studi-guide/ent/pathnode"
 	"studi-guide/ent/room"
@@ -66,6 +67,52 @@ func (r *RoomEntityService) GetRoom(name string) (Room, error) {
 	}
 
 	return *r.roomMapper(room), nil
+}
+
+func (r *RoomEntityService) GetAllConnectorSpaces() ([]ConnectorSpace, error) {
+	connectorsPtr, err := r.client.ConnectorSpace.Query().WithConnectorSections().WithConnectorColor().WithConnectorDoors().WithConnectorPathNodes().All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+	var connectors []ConnectorSpace
+
+	for _, connectorPtr := range connectorsPtr {
+		connectors = append(connectors, *r.connectorMapper(connectorPtr))
+	}
+
+	return connectors, nil
+}
+
+func (r *RoomEntityService) GetConnectorsFromFloor(floor int) ([]ConnectorSpace, error) {
+	connectorsPtr, err := r.client.ConnectorSpace.Query().Where(connectorspace.FloorEQ(floor)).WithConnectorSections().WithConnectorColor().WithConnectorDoors().WithConnectorPathNodes().All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+	var connectors []ConnectorSpace
+
+	for _, connectorPtr := range connectorsPtr {
+		connectors = append(connectors, *r.connectorMapper(connectorPtr))
+	}
+
+	return connectors, nil
+}
+
+func (r *RoomEntityService) GetRoomsFromFloor(floor int) ([]Room, error) {
+	roomsPtr, err := r.client.Room.Query().Where(room.FloorEQ(floor)).WithSections().WithDoors().WithColor().WithPathNode().All(r.context)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var rooms []Room
+
+	for _, roomPtr := range roomsPtr {
+		rooms = append(rooms, *r.roomMapper(roomPtr))
+	}
+
+	return rooms, nil
 }
 
 func (r *RoomEntityService) AddRoom(room Room) error {
@@ -410,4 +457,50 @@ func (r *RoomEntityService) mapColor(c string) (*ent.Color, error) {
 	}
 
 	return col, nil
+}
+
+func (r *RoomEntityService) connectorMapper(entConnector *ent.ConnectorSpace) *ConnectorSpace {
+
+	rm := ConnectorSpace{
+		Id:          entConnector.ID,
+		MapItem:MapItem{
+			Name:        entConnector.Name,
+			Description: entConnector.Description,
+			Alias:       nil,
+			Doors:       nil,
+			Color:       "",
+			Sections:    nil,
+			Floor:       entConnector.Floor,
+		},
+		PathNodes:   nil,
+	}
+
+	c, err := entConnector.Edges.ConnectorColorOrErr()
+	if err == nil {
+		rm.MapItem.Color = c.Color
+	}
+
+	d, err := entConnector.Edges.ConnectorDoorsOrErr()
+	if err == nil {
+		rm.MapItem.Doors = r.doorArrayMapper(d)
+	}
+
+	s, err := entConnector.Edges.ConnectorSectionsOrErr()
+	if err == nil {
+		rm.MapItem.Sections = r.sectionArrayMapper(s)
+	}
+
+	p, err := entConnector.Edges.ConnectorPathNodesOrErr()
+	if err == nil {
+
+		var pathNodes []navigation.PathNode
+
+		for _, nodePtr := range p {
+			pathNodes = append(pathNodes, *r.pathNodeMapper(nodePtr))
+		}
+
+		rm.PathNodes = pathNodes
+	}
+
+	return &rm
 }
