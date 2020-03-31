@@ -71,17 +71,20 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 
 		testRooms = append(testRooms, Room{
 			Id:          entRoom.ID,
-			Name:        entRoom.Name,
-			Description: entRoom.Description,
-			Alias:       nil,
-			Doors: []Door{{
-				Id:       door.ID,
-				Section:  Section{Id: sequence.ID},
-				PathNode: navigation.PathNode{},
-			}},
-			Color:    "",
-			Sections: nil,
-			Floor:    0,
+			MapItem:MapItem{
+				Name:        entRoom.Name,
+				Description: entRoom.Description,
+				Alias:       nil,
+				Doors: []Door{{
+					Id:       door.ID,
+					Section:  Section{Id: sequence.ID},
+					PathNode: navigation.PathNode{},
+				}},
+				Color:    "",
+				Sections: nil,
+				Floor:    0,
+			},
+
 			PathNode: navigation.PathNode{Id: pathNode.ID},
 		})
 	}
@@ -183,7 +186,14 @@ func TestGetRoom(t *testing.T) {
 func TestAddRoom(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	testRoom := Room{Id: 4, Name: "04", Description: "description"}
+	testRoom := Room{
+		Id: 4,
+		MapItem:MapItem{
+			Name:        "04",
+			Description: "description",
+		},
+	}
+	
 	err := dbService.AddRoom(testRoom)
 	if err == nil {
 		t.Error("expected: error", "; got: ", err)
@@ -199,9 +209,30 @@ func TestAddRooms(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
 	var newRooms []Room
-	newRooms = append(newRooms, Room{Id: 4, Name: "04", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 4, Name: "04", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 5, Name: "05", Description: "d"})
+	newRooms = append(newRooms, Room{
+		Id: 4,
+		MapItem:MapItem{
+			Name:        "04",
+			Description: "d",
+		},
+		
+	})
+	
+	newRooms = append(newRooms, Room{
+		Id: 4, 
+		MapItem:MapItem{
+			Name:        "04",
+			Description: "d",
+		},
+	})
+
+	newRooms = append(newRooms, Room{
+		Id: 5,
+		MapItem:MapItem{
+			Name:        "05",
+			Description: "d",
+		},
+	})
 
 	err := dbService.AddRooms(newRooms)
 	if err == nil {
@@ -209,9 +240,29 @@ func TestAddRooms(t *testing.T) {
 	}
 
 	newRooms = newRooms[:0]
-	newRooms = append(newRooms, Room{Id: 6, Name: "06", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 7, Name: "07", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 8, Name: "08", Description: "d"})
+	newRooms = append(newRooms, Room{
+		Id: 6,
+		MapItem:MapItem{
+			Name:        "06",
+			Description: "d",
+		},
+	})
+	
+	newRooms = append(newRooms, Room{
+		Id: 7, 
+		MapItem:MapItem{
+			Name:        "07",
+			Description: "d",
+		},
+	})
+	
+	newRooms = append(newRooms, Room{
+		Id: 8, 
+		MapItem:MapItem{
+			Name:        "08",
+			Description: "d",
+		},
+	})
 
 	err = dbService.AddRooms(newRooms)
 	if err == nil {

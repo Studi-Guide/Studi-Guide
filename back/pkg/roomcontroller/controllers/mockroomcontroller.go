@@ -22,10 +22,25 @@ func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
 func NewRoomMockService() *RoomMockService {
 	var rms RoomMockService
 
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN01", Description: "Dummy"})
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN02", Description: "Dummy"})
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN03", Description: "Dummy"})
-	rms.RoomList = append(rms.RoomList, models.Room{Name: "RoomN04", Description: "Dummy"})
+	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
+		Name:        "RoomN01",
+		Description: "Dummy",
+	}})
+
+	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
+		Name:        "RoomN02",
+		Description: "Dummy",
+	}})
+
+	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
+		Name:        "RoomN03",
+		Description: "Dummy",
+	}})
+
+	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
+		Name:        "RoomN04",
+		Description: "Dummy",
+	}})
 
 	return &rms
 }
@@ -40,7 +55,7 @@ func (r *RoomMockService) GetAllRooms() ([]models.Room, error) {
 func (r *RoomMockService) GetRoom(name string) (models.Room, error) {
 
 	for _, room := range r.RoomList {
-		if room.Name == name {
+		if room.MapItem.Name == name {
 			return room, nil
 		}
 	}

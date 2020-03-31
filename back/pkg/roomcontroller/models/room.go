@@ -4,25 +4,13 @@ import "studi-guide/pkg/navigation"
 
 type Room struct {
 	Id          int
-	Name        string
-	Description string
-	Alias       []string
-	Doors       []Door
-	Color       string
-	Sections    []Section
-	Floor       int
+	MapItem 	MapItem
 	PathNode    navigation.PathNode
 }
 
 type ConnectorSpace struct{
 	Id          int
-	Name        string
-	Description string
-	Alias       []string
-	Doors       []Door
-	Color       string
-	Sections    []Section
-	Floor       int
+	MapItem 	MapItem
 	PathNodes   []navigation.PathNode
 }
 
