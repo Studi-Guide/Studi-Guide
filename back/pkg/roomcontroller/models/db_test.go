@@ -67,6 +67,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			SetName(string(i)).
 			SetPathNodeID(pathNode.ID).
 			AddDoorIDs(door.ID).
+			SetFloor(i).
 			Save(ctx)
 		if err != nil {
 			log.Println("error creating room:", err)
@@ -85,7 +86,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 				}},
 				Color:    "",
 				Sections: nil,
-				Floor:    0,
+				Floor:    i,
 			},
 
 			PathNode: navigation.PathNode{Id: pathNode.ID},
@@ -411,5 +412,46 @@ func TestRoomEntityService_GetConnectorsFromFloor(t *testing.T) {
 	var compareConnectors []ConnectorSpace
 	if !compare(compareConnectors, getConnectors) {
 		t.Error("expected: ", compareConnectors, "; got: ", getConnectors)
+	}
+}
+
+
+func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
+	dbService, db := setupTestRoomDbService()
+
+	getConnectors, err := dbService.GetRoomsFromFloor(1)
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	compare := func(a []Room, b []Room) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for i, _ := range a {
+			if !reflect.DeepEqual(a[i], b[i]) {
+				return false
+			}
+		}
+		return true
+	}
+
+	var expected []Room
+	linq.From(testConnectors).Where(func(p interface{}) bool { return p.(Room).MapItem.Floor == 1}).ToSlice(&expected)
+
+	if !compare(expected, getConnectors) {
+		t.Error("expected: ", expected, "; got: ", getConnectors)
+	}
+
+	db.Exec("drop table rooms")
+
+	getConnectors, err = dbService.GetRoomsFromFloor(1)
+	if err == nil {
+		t.Error("expected error; got: ", err)
+	}
+
+	var compareRooms []Room
+	if !compare(compareRooms, getConnectors) {
+		t.Error("expected: ", compareRooms, "; got: ", getConnectors)
 	}
 }
