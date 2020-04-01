@@ -437,7 +437,7 @@ func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
 	}
 
 	var expected []Room
-	linq.From(testConnectors).Where(func(p interface{}) bool { return p.(Room).MapItem.Floor == 1}).ToSlice(&expected)
+	linq.From(testRooms).Where(func(p interface{}) bool { return p.(Room).MapItem.Floor == 1}).ToSlice(&expected)
 
 	if !compare(expected, getConnectors) {
 		t.Error("expected: ", expected, "; got: ", getConnectors)
