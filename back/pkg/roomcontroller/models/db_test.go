@@ -44,6 +44,8 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
+	testRooms = []Room{}
+	testConnectors = []ConnectorSpace{}
 	for i := 1; i < 4; i++ {
 
 		sequence, err := client.Section.Create().Save(ctx)
