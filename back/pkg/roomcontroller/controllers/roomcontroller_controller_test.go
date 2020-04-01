@@ -45,7 +45,7 @@ func TestRoomlistIndex_Negativ(t *testing.T) {
 
 func TestGetRoom(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/RoomN01", nil)
+	req, _ := http.NewRequest("GET", "/roomlist/name?name=RoomN01", nil)
 
 	provider := NewRoomMockService()
 	router := gin.Default()
@@ -63,7 +63,7 @@ func TestGetRoom(t *testing.T) {
 
 func TestGetRoomNotExists(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/abcdefg", nil)
+	req, _ := http.NewRequest("GET", "/roomlist/name?name=abcdefg", nil)
 
 	provider := NewRoomMockService()
 	router := gin.Default()
@@ -74,6 +74,26 @@ func TestGetRoomNotExists(t *testing.T) {
 
 	expected := "\"no such room\"\n"
 	if expected != rec.Body.String() {
+		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
+
+func TestMapController_GetRoomsFromFloor(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/roomlist/floor?floor=1", nil)
+
+	provider :=  NewRoomMockService()
+	router := gin.Default()
+	mapRouter := router.Group("/roomlist")
+	NewRoomController(mapRouter, provider)
+	router.ServeHTTP(rec, req)
+
+	rooms,_ := provider.GetRoomsFromFloor(1)
+
+	expected, _ := json.Marshal(rooms)
+	expected = append(expected, '\n')
+	actual := rec.Body.String()
+	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
 }
