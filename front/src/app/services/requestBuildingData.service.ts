@@ -7,7 +7,7 @@ export class RequestBuildingDataService {
 
   constructor() { }
 
-  private buildingDataUrl:string = "http://127.0.0.1:8080/roomlist/";
+  private buildingDataUrl:string = "http://127.0.0.1:8080/roomlist/"; // "https://example.com/"
 
   // TODO uncomment dataToSend when API is built
   public fetchDiscoverFloorData(method, /*dataToSend,*/ callback) {
