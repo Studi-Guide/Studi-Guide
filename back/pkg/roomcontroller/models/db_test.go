@@ -15,6 +15,7 @@ import (
 )
 
 var testRooms []Room
+var testConnectors []ConnectorSpace
 
 func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 	os.Setenv("DB_DRIVER_NAME", "sqlite3")
@@ -86,6 +87,40 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			},
 
 			PathNode: navigation.PathNode{Id: pathNode.ID},
+		})
+
+		pathNode2, err := client.PathNode.Create().Save(ctx)
+		if err != nil {
+			log.Println("error creating pathnode:", err)
+		}
+
+		sequence2, err := client.Section.Create().Save(ctx)
+		if err != nil {
+			log.Println("error creating sequence:", err)
+		}
+
+		entConnector, err := client.ConnectorSpace.Create().
+			SetName(string(i)).
+			AddConnectorPathNodeIDs(pathNode2.ID).
+			AddConnectorSectionIDs(sequence2.ID).
+			SetFloor(i).
+			Save(ctx)
+		if err != nil {
+			log.Println("error creating connector:", err)
+		}
+
+		testConnectors = append(testConnectors, ConnectorSpace{
+			Id:          entConnector.ID,
+			MapItem:MapItem{
+				Name:        entConnector.Name,
+				Description: entConnector.Description,
+				Alias:       nil,
+				Color:    "",
+				Sections: []Section {{Id:sequence2.ID}},
+				Floor:    i,
+			},
+
+			PathNodes: []navigation.PathNode {{Id: pathNode2.ID}},
 		})
 	}
 
@@ -296,5 +331,83 @@ func TestRoomEntityService_GetAllPathNodes(t *testing.T) {
 
 	if !checkNodes(testRooms, getNodes) {
 		t.Error("expected: ", testRooms, "; got: ", getNodes)
+	}
+}
+
+func TestRoomEntityService_GetAllConnectorSpaces(t *testing.T) {
+	dbService, db := setupTestRoomDbService()
+
+	getConnectors, err := dbService.GetAllConnectorSpaces()
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	compare := func(a []ConnectorSpace, b []ConnectorSpace) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for i, _ := range a {
+			if !reflect.DeepEqual(a[i], b[i]) {
+				return false
+			}
+		}
+		return true
+	}
+
+	expected := testConnectors
+	if !compare(expected, getConnectors) {
+		t.Error("expected: ", expected, "; got: ", getConnectors)
+	}
+
+	db.Exec("drop table connector_spaces")
+
+	getConnectors, err = dbService.GetAllConnectorSpaces()
+	if err == nil {
+		t.Error("expected error; got: ", err)
+	}
+
+	var compareConnectors []ConnectorSpace
+	if !compare(compareConnectors, getConnectors) {
+		t.Error("expected: ", compareConnectors, "; got: ", getConnectors)
+	}
+}
+
+func TestRoomEntityService_GetConnectorsFromFloor(t *testing.T) {
+	dbService, db := setupTestRoomDbService()
+
+	getConnectors, err := dbService.GetConnectorsFromFloor(1)
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	compare := func(a []ConnectorSpace, b []ConnectorSpace) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for i, _ := range a {
+			if !reflect.DeepEqual(a[i], b[i]) {
+				return false
+			}
+		}
+		return true
+	}
+
+	var expected []ConnectorSpace
+	linq.From(testConnectors).Where(func(p interface{}) bool { return p.(ConnectorSpace).MapItem.Floor == 1}).ToSlice(&expected)
+
+	if !compare(expected, getConnectors) {
+		t.Error("expected: ", expected, "; got: ", getConnectors)
+	}
+
+	db.Exec("drop table connector_spaces")
+
+	getConnectors, err = dbService.GetConnectorsFromFloor(1)
+	if err == nil {
+		t.Error("expected error; got: ", err)
+	}
+
+	var compareConnectors []ConnectorSpace
+	if !compare(compareConnectors, getConnectors) {
+		t.Error("expected: ", compareConnectors, "; got: ", getConnectors)
 	}
 }
