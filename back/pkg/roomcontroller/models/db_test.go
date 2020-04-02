@@ -15,6 +15,7 @@ import (
 )
 
 var testRooms []Room
+var testConnectors []ConnectorSpace
 
 func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 	os.Setenv("DB_DRIVER_NAME", "sqlite3")
@@ -43,6 +44,8 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
+	testRooms = []Room{}
+	testConnectors = []ConnectorSpace{}
 	for i := 1; i < 4; i++ {
 
 		sequence, err := client.Section.Create().Save(ctx)
@@ -64,6 +67,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			SetName(string(i)).
 			SetPathNodeID(pathNode.ID).
 			AddDoorIDs(door.ID).
+			SetFloor(i).
 			Save(ctx)
 		if err != nil {
 			log.Println("error creating room:", err)
@@ -71,18 +75,55 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 
 		testRooms = append(testRooms, Room{
 			Id:          entRoom.ID,
-			Name:        entRoom.Name,
-			Description: entRoom.Description,
-			Alias:       nil,
-			Doors: []Door{{
-				Id:       door.ID,
-				Section:  Section{Id: sequence.ID},
-				PathNode: navigation.PathNode{},
-			}},
-			Color:    "",
-			Sections: nil,
-			Floor:    0,
+			MapItem:MapItem{
+				Name:        entRoom.Name,
+				Description: entRoom.Description,
+				Alias:       nil,
+				Doors: []Door{{
+					Id:       door.ID,
+					Section:  Section{Id: sequence.ID},
+					PathNode: navigation.PathNode{},
+				}},
+				Color:    "",
+				Sections: nil,
+				Floor:    i,
+			},
+
 			PathNode: navigation.PathNode{Id: pathNode.ID},
+		})
+
+		pathNode2, err := client.PathNode.Create().Save(ctx)
+		if err != nil {
+			log.Println("error creating pathnode:", err)
+		}
+
+		sequence2, err := client.Section.Create().Save(ctx)
+		if err != nil {
+			log.Println("error creating sequence:", err)
+		}
+
+		entConnector, err := client.ConnectorSpace.Create().
+			SetName(string(i)).
+			AddConnectorPathNodeIDs(pathNode2.ID).
+			AddConnectorSectionIDs(sequence2.ID).
+			SetFloor(i).
+			Save(ctx)
+		if err != nil {
+			log.Println("error creating connector:", err)
+		}
+
+		testConnectors = append(testConnectors, ConnectorSpace{
+			Id:          entConnector.ID,
+			MapItem:MapItem{
+				Name:        entConnector.Name,
+				Description: entConnector.Description,
+				Alias:       nil,
+				Color:    "",
+				Sections: []Section {{Id:sequence2.ID}},
+				Floor:    i,
+			},
+
+			PathNodes: []navigation.PathNode {{Id: pathNode2.ID}},
 		})
 	}
 
@@ -183,7 +224,14 @@ func TestGetRoom(t *testing.T) {
 func TestAddRoom(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	testRoom := Room{Id: 4, Name: "04", Description: "description"}
+	testRoom := Room{
+		Id: 4,
+		MapItem:MapItem{
+			Name:        "04",
+			Description: "description",
+		},
+	}
+	
 	err := dbService.AddRoom(testRoom)
 	if err == nil {
 		t.Error("expected: error", "; got: ", err)
@@ -199,9 +247,30 @@ func TestAddRooms(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
 	var newRooms []Room
-	newRooms = append(newRooms, Room{Id: 4, Name: "04", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 4, Name: "04", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 5, Name: "05", Description: "d"})
+	newRooms = append(newRooms, Room{
+		Id: 4,
+		MapItem:MapItem{
+			Name:        "04",
+			Description: "d",
+		},
+		
+	})
+	
+	newRooms = append(newRooms, Room{
+		Id: 4, 
+		MapItem:MapItem{
+			Name:        "04",
+			Description: "d",
+		},
+	})
+
+	newRooms = append(newRooms, Room{
+		Id: 5,
+		MapItem:MapItem{
+			Name:        "05",
+			Description: "d",
+		},
+	})
 
 	err := dbService.AddRooms(newRooms)
 	if err == nil {
@@ -209,9 +278,29 @@ func TestAddRooms(t *testing.T) {
 	}
 
 	newRooms = newRooms[:0]
-	newRooms = append(newRooms, Room{Id: 6, Name: "06", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 7, Name: "07", Description: "d"})
-	newRooms = append(newRooms, Room{Id: 8, Name: "08", Description: "d"})
+	newRooms = append(newRooms, Room{
+		Id: 6,
+		MapItem:MapItem{
+			Name:        "06",
+			Description: "d",
+		},
+	})
+	
+	newRooms = append(newRooms, Room{
+		Id: 7, 
+		MapItem:MapItem{
+			Name:        "07",
+			Description: "d",
+		},
+	})
+	
+	newRooms = append(newRooms, Room{
+		Id: 8, 
+		MapItem:MapItem{
+			Name:        "08",
+			Description: "d",
+		},
+	})
 
 	err = dbService.AddRooms(newRooms)
 	if err == nil {
@@ -245,5 +334,124 @@ func TestRoomEntityService_GetAllPathNodes(t *testing.T) {
 
 	if !checkNodes(testRooms, getNodes) {
 		t.Error("expected: ", testRooms, "; got: ", getNodes)
+	}
+}
+
+func TestRoomEntityService_GetAllConnectorSpaces(t *testing.T) {
+	dbService, db := setupTestRoomDbService()
+
+	getConnectors, err := dbService.GetAllConnectorSpaces()
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	compare := func(a []ConnectorSpace, b []ConnectorSpace) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for i, _ := range a {
+			if !reflect.DeepEqual(a[i], b[i]) {
+				return false
+			}
+		}
+		return true
+	}
+
+	expected := testConnectors
+	if !compare(expected, getConnectors) {
+		t.Error("expected: ", expected, "; got: ", getConnectors)
+	}
+
+	db.Exec("drop table connector_spaces")
+
+	getConnectors, err = dbService.GetAllConnectorSpaces()
+	if err == nil {
+		t.Error("expected error; got: ", err)
+	}
+
+	var compareConnectors []ConnectorSpace
+	if !compare(compareConnectors, getConnectors) {
+		t.Error("expected: ", compareConnectors, "; got: ", getConnectors)
+	}
+}
+
+func TestRoomEntityService_GetConnectorsFromFloor(t *testing.T) {
+	dbService, db := setupTestRoomDbService()
+
+	getConnectors, err := dbService.GetConnectorsFromFloor(1)
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	compare := func(a []ConnectorSpace, b []ConnectorSpace) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for i, _ := range a {
+			if !reflect.DeepEqual(a[i], b[i]) {
+				return false
+			}
+		}
+		return true
+	}
+
+	var expected []ConnectorSpace
+	linq.From(testConnectors).Where(func(p interface{}) bool { return p.(ConnectorSpace).MapItem.Floor == 1}).ToSlice(&expected)
+
+	if !compare(expected, getConnectors) {
+		t.Error("expected: ", expected, "; got: ", getConnectors)
+	}
+
+	db.Exec("drop table connector_spaces")
+
+	getConnectors, err = dbService.GetConnectorsFromFloor(1)
+	if err == nil {
+		t.Error("expected error; got: ", err)
+	}
+
+	var compareConnectors []ConnectorSpace
+	if !compare(compareConnectors, getConnectors) {
+		t.Error("expected: ", compareConnectors, "; got: ", getConnectors)
+	}
+}
+
+
+func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
+	dbService, db := setupTestRoomDbService()
+
+	getConnectors, err := dbService.GetRoomsFromFloor(1)
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	compare := func(a []Room, b []Room) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for i, _ := range a {
+			if !reflect.DeepEqual(a[i], b[i]) {
+				return false
+			}
+		}
+		return true
+	}
+
+	var expected []Room
+	linq.From(testRooms).Where(func(p interface{}) bool { return p.(Room).MapItem.Floor == 1}).ToSlice(&expected)
+
+	if !compare(expected, getConnectors) {
+		t.Error("expected: ", expected, "; got: ", getConnectors)
+	}
+
+	db.Exec("drop table rooms")
+
+	getConnectors, err = dbService.GetRoomsFromFloor(1)
+	if err == nil {
+		t.Error("expected error; got: ", err)
+	}
+
+	var compareRooms []Room
+	if !compare(compareRooms, getConnectors) {
+		t.Error("expected: ", compareRooms, "; got: ", getConnectors)
 	}
 }

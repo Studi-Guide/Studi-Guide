@@ -3,8 +3,8 @@ package controllers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"log"
 	"net/http"
+	"strconv"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
@@ -16,7 +16,8 @@ type RoomController struct {
 func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvider) error {
 	r := RoomController{router: router, provider: provider}
 	r.router.GET("/", r.GetRoomList)
-	r.router.GET("/:name", r.GetRoom)
+	r.router.GET("/name", r.GetRoom)
+	r.router.GET("/floor", r.GetRoomListFromFloor)
 	return nil
 }
 
@@ -30,8 +31,6 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Success 200 {array} models.Room
 // @Router /roomlist/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
-	log.Print("[RoomController] Request RoomList received")
-
 	rooms, err := l.provider.GetAllRooms()
 	if err != nil {
 		fmt.Println("GetAllRomms() failed with error", err)
@@ -46,13 +45,49 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 }
 
 func (l *RoomController) GetRoom(c *gin.Context) {
-	name := c.Param("name") //mux.Vars(r)["name"]
+	name := c.Query("name") //mux.Vars(r)["name"]
 
 	room, err := l.provider.GetRoom(name)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 	} else {
 		c.JSON(http.StatusOK, room)
+	}
+}
+
+// GetRoomListFromFloor godoc
+// @Summary Get Room List From Floor
+// @Description Gets all available rooms for a certain floor
+// @ID get-room-list-floor
+// @Accept  json
+// @Tags RoomController
+// @Produce  json
+// @Param floor query int false "filter rooms by floor"
+// @Success 200 {array} models.Room
+// @Router /roomlist/floor [get]
+func (l *RoomController) GetRoomListFromFloor(c *gin.Context) {
+	floor := c.Query("floor")
+
+	floorInt, err := strconv.Atoi(floor)
+	if err != nil {
+		// handle error
+		fmt.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+	}
+
+	rooms, err := l.provider.GetRoomsFromFloor(floorInt)
+	if err != nil {
+		fmt.Println("GetRoomListFromFloor() failed with error", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+	} else {
+		fmt.Println(rooms)
+		c.JSON(http.StatusOK, rooms)
 	}
 }
 

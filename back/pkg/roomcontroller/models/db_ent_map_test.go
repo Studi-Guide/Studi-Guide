@@ -28,93 +28,96 @@ func TestMapRoom(t *testing.T) {
 
 	ro := Room{
 		Id:          0,
-		Name:        "RoomN01",
-		Description: "Room Number 1 Special Description",
-		Alias:       nil,
-		Doors: []Door{
-			{
-				Id: 0,
-				Section: Section{
+		MapItem:MapItem{
+			Name:        "RoomN01",
+			Description: "Room Number 1 Special Description",
+			Alias:       nil,
+			Doors: []Door{
+				{
+					Id: 0,
+					Section: Section{
+						Id: 0,
+						Start: navigation.Coordinate{
+							X: 1,
+							Y: 2,
+							Z: 3,
+						},
+						End: navigation.Coordinate{
+							X: 4,
+							Y: 5,
+							Z: 6,
+						},
+					},
+					PathNode: navigation.PathNode{
+						Id: 0,
+						Coordinate: navigation.Coordinate{
+							X: 7,
+							Y: 8,
+							Z: 9,
+						},
+						Group:          nil,
+						ConnectedNodes: nil,
+					},
+				},
+			},
+			Color: "#5682a3",
+			Sections: []Section{
+				{
 					Id: 0,
 					Start: navigation.Coordinate{
-						X: 1,
-						Y: 2,
-						Z: 3,
+						X: 10,
+						Y: 11,
+						Z: 12,
 					},
 					End: navigation.Coordinate{
-						X: 4,
-						Y: 5,
-						Z: 6,
+						X: 13,
+						Y: 14,
+						Z: 15,
 					},
 				},
-				PathNode: navigation.PathNode{
+				{
 					Id: 0,
-					Coordinate: navigation.Coordinate{
-						X: 7,
-						Y: 8,
-						Z: 9,
+					Start: navigation.Coordinate{
+						X: 16,
+						Y: 17,
+						Z: 18,
 					},
-					Group:          nil,
-					ConnectedNodes: nil,
+					End: navigation.Coordinate{
+						X: 19,
+						Y: 20,
+						Z: 21,
+					},
+				},
+				{
+					Id: 0,
+					Start: navigation.Coordinate{
+						X: 22,
+						Y: 23,
+						Z: 24,
+					},
+					End: navigation.Coordinate{
+						X: 25,
+						Y: 26,
+						Z: 27,
+					},
+				},
+				{
+					Id: 0,
+					Start: navigation.Coordinate{
+						X: 28,
+						Y: 29,
+						Z: 30,
+					},
+					End: navigation.Coordinate{
+						X: 31,
+						Y: 32,
+						Z: 33,
+					},
 				},
 			},
+			Floor: 1,
 		},
-		Color: "#5682a3",
-		Sections: []Section{
-			{
-				Id: 0,
-				Start: navigation.Coordinate{
-					X: 10,
-					Y: 11,
-					Z: 12,
-				},
-				End: navigation.Coordinate{
-					X: 13,
-					Y: 14,
-					Z: 15,
-				},
-			},
-			{
-				Id: 0,
-				Start: navigation.Coordinate{
-					X: 16,
-					Y: 17,
-					Z: 18,
-				},
-				End: navigation.Coordinate{
-					X: 19,
-					Y: 20,
-					Z: 21,
-				},
-			},
-			{
-				Id: 0,
-				Start: navigation.Coordinate{
-					X: 22,
-					Y: 23,
-					Z: 24,
-				},
-				End: navigation.Coordinate{
-					X: 25,
-					Y: 26,
-					Z: 27,
-				},
-			},
-			{
-				Id: 0,
-				Start: navigation.Coordinate{
-					X: 28,
-					Y: 29,
-					Z: 30,
-				},
-				End: navigation.Coordinate{
-					X: 31,
-					Y: 32,
-					Z: 33,
-				},
-			},
-		},
-		Floor: 1,
+
 		PathNode: navigation.PathNode{
 			Id: 0,
 			Coordinate: navigation.Coordinate{
@@ -141,93 +144,96 @@ func TestMapRoom(t *testing.T) {
 
 	checkRoom := Room{
 		Id:          1,
-		Name:        "RoomN01",
-		Description: "Room Number 1 Special Description",
-		Alias:       nil,
-		Doors: []Door{
-			{
-				Id: 1,
-				Section: Section{
-					Id: 5,
+		MapItem:MapItem{
+			Name:        "RoomN01",
+			Description: "Room Number 1 Special Description",
+			Alias:       nil,
+			Doors: []Door{
+				{
+					Id: 1,
+					Section: Section{
+						Id: 5,
+						Start: navigation.Coordinate{
+							X: 1,
+							Y: 2,
+							Z: 3,
+						},
+						End: navigation.Coordinate{
+							X: 4,
+							Y: 5,
+							Z: 6,
+						},
+					},
+					PathNode: navigation.PathNode{
+						Id: 1,
+						Coordinate: navigation.Coordinate{
+							X: 7,
+							Y: 8,
+							Z: 9,
+						},
+						Group:          nil,
+						ConnectedNodes: nil,
+					},
+				},
+			},
+			Color: "#5682a3",
+			Sections: []Section{
+				{
+					Id: 1,
 					Start: navigation.Coordinate{
-						X: 1,
-						Y: 2,
-						Z: 3,
+						X: 10,
+						Y: 11,
+						Z: 12,
 					},
 					End: navigation.Coordinate{
-						X: 4,
-						Y: 5,
-						Z: 6,
+						X: 13,
+						Y: 14,
+						Z: 15,
 					},
 				},
-				PathNode: navigation.PathNode{
-					Id: 1,
-					Coordinate: navigation.Coordinate{
-						X: 7,
-						Y: 8,
-						Z: 9,
+				{
+					Id: 2,
+					Start: navigation.Coordinate{
+						X: 16,
+						Y: 17,
+						Z: 18,
 					},
-					Group:          nil,
-					ConnectedNodes: nil,
+					End: navigation.Coordinate{
+						X: 19,
+						Y: 20,
+						Z: 21,
+					},
+				},
+				{
+					Id: 3,
+					Start: navigation.Coordinate{
+						X: 22,
+						Y: 23,
+						Z: 24,
+					},
+					End: navigation.Coordinate{
+						X: 25,
+						Y: 26,
+						Z: 27,
+					},
+				},
+				{
+					Id: 4,
+					Start: navigation.Coordinate{
+						X: 28,
+						Y: 29,
+						Z: 30,
+					},
+					End: navigation.Coordinate{
+						X: 31,
+						Y: 32,
+						Z: 33,
+					},
 				},
 			},
+			Floor: 1,
 		},
-		Color: "#5682a3",
-		Sections: []Section{
-			{
-				Id: 1,
-				Start: navigation.Coordinate{
-					X: 10,
-					Y: 11,
-					Z: 12,
-				},
-				End: navigation.Coordinate{
-					X: 13,
-					Y: 14,
-					Z: 15,
-				},
-			},
-			{
-				Id: 2,
-				Start: navigation.Coordinate{
-					X: 16,
-					Y: 17,
-					Z: 18,
-				},
-				End: navigation.Coordinate{
-					X: 19,
-					Y: 20,
-					Z: 21,
-				},
-			},
-			{
-				Id: 3,
-				Start: navigation.Coordinate{
-					X: 22,
-					Y: 23,
-					Z: 24,
-				},
-				End: navigation.Coordinate{
-					X: 25,
-					Y: 26,
-					Z: 27,
-				},
-			},
-			{
-				Id: 4,
-				Start: navigation.Coordinate{
-					X: 28,
-					Y: 29,
-					Z: 30,
-				},
-				End: navigation.Coordinate{
-					X: 31,
-					Y: 32,
-					Z: 33,
-				},
-			},
-		},
-		Floor: 1,
+
 		PathNode: navigation.PathNode{
 			Id: 2,
 			Coordinate: navigation.Coordinate{
@@ -242,8 +248,8 @@ func TestMapRoom(t *testing.T) {
 
 	retRoom := r.roomMapper(entRoom)
 	if !reflect.DeepEqual(checkRoom.PathNode, retRoom.PathNode) {
-		fmt.Println(checkRoom.Doors)
-		fmt.Println(retRoom.Doors)
+		fmt.Println(checkRoom.MapItem.Doors)
+		fmt.Println(retRoom.MapItem.Doors)
 		t.Error("expected room equality. expected:", checkRoom, ", actual:", retRoom)
 	}
 

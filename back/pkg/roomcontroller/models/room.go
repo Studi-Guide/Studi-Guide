@@ -4,14 +4,14 @@ import "studi-guide/pkg/navigation"
 
 type Room struct {
 	Id          int
-	Name        string
-	Description string
-	Alias       []string
-	Doors       []Door
-	Color       string
-	Sections    []Section
-	Floor       int `json:"-"`
+	MapItem 	MapItem
 	PathNode    navigation.PathNode
+}
+
+type ConnectorSpace struct{
+	Id          int
+	MapItem 	MapItem
+	PathNodes   []navigation.PathNode
 }
 
 type RoomServiceProvider interface {
@@ -20,4 +20,7 @@ type RoomServiceProvider interface {
 	AddRoom(room Room) error
 	AddRooms(rooms []Room) error
 	GetAllPathNodes() ([]navigation.PathNode, error)
+	GetAllConnectorSpaces() ([]ConnectorSpace, error)
+	GetRoomsFromFloor(floor int) ([]Room, error)
+	GetConnectorsFromFloor(floor int) ([]ConnectorSpace, error)
 }
