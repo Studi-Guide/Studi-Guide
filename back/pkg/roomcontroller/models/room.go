@@ -3,15 +3,15 @@ package models
 import "studi-guide/pkg/navigation"
 
 type Room struct {
-	Id          int
-	MapItem 	MapItem
-	PathNode    navigation.PathNode
+	MapItem
+	Id       int
+	PathNode navigation.PathNode
 }
 
-type ConnectorSpace struct{
-	Id          int
-	MapItem 	MapItem
-	PathNodes   []navigation.PathNode
+type ConnectorSpace struct {
+	MapItem
+	Id        int
+	PathNodes []navigation.PathNode
 }
 
 type RoomServiceProvider interface {
