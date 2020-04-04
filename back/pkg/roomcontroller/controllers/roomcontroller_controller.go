@@ -16,8 +16,8 @@ type RoomController struct {
 func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvider) error {
 	r := RoomController{router: router, provider: provider}
 	r.router.GET("/", r.GetRoomList)
-	r.router.GET("/name", r.GetRoom)
-	r.router.GET("/floor", r.GetRoomListFromFloor)
+	r.router.GET("/room/:name", r.GetRoom)
+	r.router.GET("/floor/:floor", r.GetRoomListFromFloor)
 	return nil
 }
 
@@ -32,6 +32,9 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Router /roomlist/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
 	rooms, err := l.provider.GetAllRooms()
+
+	fmt.Println(c.Keys)
+
 	if err != nil {
 		fmt.Println("GetAllRomms() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -44,8 +47,19 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 	}
 }
 
+// GetRoom godoc
+// @Summary Get Room by Name
+// @Description Gets a specify room by its unique name
+// @ID get-room
+// @Accept  json
+// @Tags RoomController
+// @Produce  json
+// @Param name path string true "get room by name"
+// @Success 200 {object} models.Room
+// @Router /roomlist/room/{name} [get]
 func (l *RoomController) GetRoom(c *gin.Context) {
-	name := c.Query("name") //mux.Vars(r)["name"]
+	//name := c.Query("name") //mux.Vars(r)["name"]
+	name := c.Param("name")
 
 	room, err := l.provider.GetRoom(name)
 	if err != nil {
@@ -62,11 +76,11 @@ func (l *RoomController) GetRoom(c *gin.Context) {
 // @Accept  json
 // @Tags RoomController
 // @Produce  json
-// @Param floor query int false "filter rooms by floor"
+// @Param floor path int true "filter rooms by floor"
 // @Success 200 {array} models.Room
-// @Router /roomlist/floor [get]
+// @Router /roomlist/floor/{floor} [get]
 func (l *RoomController) GetRoomListFromFloor(c *gin.Context) {
-	floor := c.Query("floor")
+	floor := c.Param("floor")
 
 	floorInt, err := strconv.Atoi(floor)
 	if err != nil {
@@ -90,20 +104,3 @@ func (l *RoomController) GetRoomListFromFloor(c *gin.Context) {
 		c.JSON(http.StatusOK, rooms)
 	}
 }
-
-//func (l *RoomController) AddItem(c *gin.Context) {
-//	reqBody, _ := ioutil.ReadAll(c.Request.Body)
-//	var item models.Room
-//	json.Unmarshal(reqBody, &item)
-//
-//	l.roomList = append(l.roomList, item)
-//}
-//
-//func (l *RoomController) RemoveItem(c *gin.Context) {
-//	name := c.Param("name") //mux.Vars(r)["name"]
-//	for index, item := range l.roomList {
-//		if item.Name == name {
-//			l.roomList = append(l.roomList[:index], l.roomList[index+1:]...)
-//		}
-//	}
-//}
