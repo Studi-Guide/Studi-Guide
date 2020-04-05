@@ -24,7 +24,7 @@ func NewMapController(router *gin.RouterGroup, provider models.RoomServiceProvid
 // @Description Gets map items of available rooms and connector spaces (corridor, stairs, etc..) with optional filter parameters
 // @Accept  json
 // @Produce  json
-// @Tags MapControllermap
+// @Tags MapController
 // @Success 200 {array} models.MapItem
 // @Router /map [get]
 func (l MapController) GetMapItems(c *gin.Context) {
