@@ -394,6 +394,34 @@ func TestRoomEntityService_GetAllConnectorSpaces(t *testing.T) {
 	}
 }
 
+func TestRoomEntityService_GetConnectorsFromFloor_NameParam(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getConnectors, err := dbService.FilterConnectorSpaces("", "1", "", "", "", nil, nil)
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	compare := func(a []ConnectorSpace, b []ConnectorSpace) bool {
+		if len(a) != len(b) {
+			return false
+		}
+		for i, _ := range a {
+			if !reflect.DeepEqual(a[i], b[i]) {
+				return false
+			}
+		}
+		return true
+	}
+
+	var expected []ConnectorSpace
+	linq.From(testConnectors).Where(func(p interface{}) bool { return p.(ConnectorSpace).MapItem.Name == "1" }).ToSlice(&expected)
+
+	if !compare(expected, getConnectors) {
+		t.Error("expected: ", expected, "; got: ", getConnectors)
+	}
+}
+
 func TestRoomEntityService_GetConnectorsFromFloor(t *testing.T) {
 	dbService, db := setupTestRoomDbService()
 
