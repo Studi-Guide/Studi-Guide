@@ -190,11 +190,30 @@ func (r *RoomEntityService) FilterConnectorSpaces(floorFilter, nameFilter, alias
 	var entConnectors []*ent.ConnectorSpace
 	var err error = nil
 
-	q:= r.client.ConnectorSpace.Query().Where(connectorspace.NameContains(nameFilter))
-	if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
-		return nil, err
-	} else {
-		q = q.Where(connectorspace.FloorEQ(floor))
+	q:= r.client.ConnectorSpace.Query()
+
+	if len(nameFilter) > 0 {
+		q = q.Where(connectorspace.NameContains(nameFilter))
+	}
+
+	if len(alias) > 0 {
+		q = q.Where(connectorspace.NameContains(alias))
+	}
+
+	if len(building) > 0 {
+		q = q.Where(connectorspace.NameContains(building))
+	}
+
+	if len(campus) > 0 {
+		q = q.Where(connectorspace.NameContains(campus))
+	}
+
+	if len(floorFilter) > 0 {
+		if floor, err := strconv.Atoi(floorFilter); err != nil {
+			return nil, err
+		} else {
+			q = q.Where(connectorspace.FloorEQ(floor))
+		}
 	}
 
 	if coordinate != nil && coordinateDelta != nil {

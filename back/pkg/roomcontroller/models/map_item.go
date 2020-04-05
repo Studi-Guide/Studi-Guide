@@ -8,4 +8,6 @@ type MapItem struct {
 	Color       string
 	Floor 		int 		`json:"-"`
 	Sections    []Section
+	Campus      string
+	Building 	string
 }

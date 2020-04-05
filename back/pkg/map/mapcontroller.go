@@ -32,12 +32,12 @@ func (l MapController) GetMapItems(c *gin.Context) {
 	floor := c.Query("floor")
 	name := c.Query("name") //mux.Vars(r)["name"]
 	alias := c.Query("alias")
+	campus := c.Query("campus")
+	building := c.Query("building")
 
 	//TODO include these filters
 	coordinate := c.Query("coordinate")
 	coordinateDelta := c.Query("coordinate-delta")
-	building := c.Query("building")
-	campus := c.Query("campus")
 	//----------------------------
 
 	var rooms []models.Room
@@ -54,7 +54,7 @@ func (l MapController) GetMapItems(c *gin.Context) {
 	}
 
 	if useFilterApi {
-		rooms, err = l.provider.FilterRooms(floor, name, "", "")
+		rooms, err = l.provider.FilterRooms(floor, name, alias, "")
 	} else {
 		rooms, err = l.provider.GetAllRooms()
 	}
