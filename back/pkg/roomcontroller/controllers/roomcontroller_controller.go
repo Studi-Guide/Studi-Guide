@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
@@ -16,6 +17,7 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 	r := RoomController{router: router, provider: provider}
 	r.router.GET("/", r.GetRoomList)
 	r.router.GET("/room/:name", r.GetRoom)
+	r.router.GET("/floor/:floor", r.GetRoomListFromFloor)
 	return nil
 }
 
@@ -86,5 +88,41 @@ func (l *RoomController) GetRoom(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, err.Error())
 	} else {
 		c.JSON(http.StatusOK, room)
+	}
+}
+
+// GetRoomListFromFloor godoc
+// @Summary Get Room List From Floor
+// @Description Gets all available rooms for a certain floor
+// @ID get-room-list-floor
+// @Accept  json
+// @Tags RoomController
+// @Produce  json
+// @Param floor path int true "filter rooms by floor"
+// @Success 200 {array} models.Room
+// @Router /roomlist/floor/{floor} [get]
+func (l *RoomController) GetRoomListFromFloor(c *gin.Context) {
+	floor := c.Param("floor")
+
+	_, err := strconv.Atoi(floor)
+	if err != nil {
+		// handle error
+		fmt.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+	}
+
+	rooms, err := l.provider.FilterRooms(floor, "", "", "")
+	if err != nil {
+		fmt.Println("GetRoomListFromFloor() failed with error", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+	} else {
+		fmt.Println(rooms)
+		c.JSON(http.StatusOK, rooms)
 	}
 }
