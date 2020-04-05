@@ -15,7 +15,7 @@ type MapController struct {
 func NewMapController(router *gin.RouterGroup, provider models.RoomServiceProvider) error {
 	r := MapController{router: router, provider: provider}
 	r.router.GET("/", r.GetMapItems)
-	r.router.GET("/floor", r.GetMapItemsFromFloor)
+	r.router.GET("/floor/:floor", r.GetMapItemsFromFloor)
 	return nil
 }
 
@@ -95,9 +95,9 @@ func (l MapController) GetMapItems(c *gin.Context) {
 // @Tags MapController
 // @Param floor query int false "filter map items by floor"
 // @Success 200 {array} models.MapItem
-// @Router /map/floor [get]
+// @Router /map/floor/{floor} [get]
 func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
-	floor := c.Query("floor") //mux.Vars(r)["name"]
+	floor := c.Param("floor") //mux.Vars(r)["name"]
 
 	rooms, err := l.provider.FilterRooms(floor, "", "", "")
 	if err != nil {
