@@ -129,7 +129,18 @@ func (r *RoomMockService) GetConnectorsFromFloor(floor int) ([]models.ConnectorS
 }
 
 func (r *RoomMockService) FilterConnectorSpaces(floor, name, alias, building, campus string, coordinate, coordinateDelta *navigation.Coordinate) ([]models.ConnectorSpace, error){
-	panic("")
+	if r.ConnectorList == nil {
+		return nil, errors.New("no connector list initialized")
+	}
+	var list []models.ConnectorSpace
+	for _, connector := range r.ConnectorList {
+		floorInt, _ := strconv.Atoi(floor)
+		if connector.MapItem.Floor ==  floorInt || connector.MapItem.Name == name {
+			list = append(list, connector)
+		}
+	}
+
+	return list, nil
 }
 
 
@@ -145,10 +156,19 @@ func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
 func (r *RoomMockService) FilterRooms(floor, name, alias, room string) ([]models.Room, error) {
 
 	if len(floor) > 0 {
-		_, err := strconv.Atoi(floor)
+		floorInt, err := strconv.Atoi(floor)
 		if err != nil {
 			return nil, err
 		}
+
+		var list []models.Room
+		for _, room := range r.RoomList {
+			if room.Floor == floorInt {
+				list = append(list, room)
+			}
+		}
+
+		return list, nil
 	}
 
 	return r.RoomList, nil

@@ -108,6 +108,8 @@ func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
 			"code":    http.StatusBadRequest,
 			"message": err.Error(),
 		})
+
+		return
 	}
 
 	rooms, err := l.provider.GetRoomsFromFloor(floorInt)
@@ -117,6 +119,8 @@ func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
 			"code":    http.StatusBadRequest,
 			"message": err.Error(),
 		})
+
+		return
 	}
 
 	connectors, err := l.provider.GetConnectorsFromFloor(floorInt)
@@ -126,6 +130,8 @@ func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
 			"code":    http.StatusBadRequest,
 			"message": err.Error(),
 		})
+
+		return
 	}
 
 	l.CreateAndSendMapList(rooms, connectors, c)
