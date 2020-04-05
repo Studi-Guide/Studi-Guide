@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
@@ -100,19 +99,7 @@ func (l MapController) GetMapItems(c *gin.Context) {
 func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
 	floor := c.Query("floor") //mux.Vars(r)["name"]
 
-	floorInt, err := strconv.Atoi(floor)
-	if err != nil {
-		// handle error
-		fmt.Println(err)
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    http.StatusBadRequest,
-			"message": err.Error(),
-		})
-
-		return
-	}
-
-	rooms, err := l.provider.GetRoomsFromFloor(floorInt)
+	rooms, err := l.provider.FilterRooms(floor, "", "", "")
 	if err != nil {
 		fmt.Println("GetMapItemsFromFloor() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -123,7 +110,7 @@ func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
 		return
 	}
 
-	connectors, err := l.provider.GetConnectorsFromFloor(floorInt)
+	connectors, err := l.provider.FilterConnectorSpaces(floor, "", "", "", "", nil, nil )
 	if err != nil {
 		fmt.Println("GetMapItemsFromFloor() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{

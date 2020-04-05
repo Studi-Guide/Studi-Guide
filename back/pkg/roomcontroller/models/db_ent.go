@@ -84,31 +84,6 @@ func (r *RoomEntityService) GetAllConnectorSpaces() ([]ConnectorSpace, error) {
 	return connectors, nil
 }
 
-func (r *RoomEntityService) GetConnectorsFromFloor(floor int) ([]ConnectorSpace, error) {
-	connectorsPtr, err := r.client.ConnectorSpace.Query().Where(connectorspace.FloorEQ(floor)).WithConnectorSections().WithConnectorColor().WithConnectorDoors().WithConnectorPathNodes().All(r.context)
-	if err != nil {
-		return nil, err
-	}
-
-	var connectors []ConnectorSpace
-
-	for _, connectorPtr := range connectorsPtr {
-		connectors = append(connectors, *r.connectorMapper(connectorPtr))
-	}
-
-	return connectors, nil
-}
-
-func (r *RoomEntityService) GetRoomsFromFloor(floor int) ([]Room, error) {
-	roomsPtr, err := r.client.Room.Query().Where(room.FloorEQ(floor)).WithSections().WithDoors().WithColor().WithPathNode().All(r.context)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return r.roomArrayMapper(roomsPtr), nil
-}
-
 func (r *RoomEntityService) AddRoom(room Room) error {
 
 	_, err := r.mapRoom(&room)

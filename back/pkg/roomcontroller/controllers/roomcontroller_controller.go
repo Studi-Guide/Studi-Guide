@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strconv"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
@@ -102,19 +101,9 @@ func (l *RoomController) GetRoom(c *gin.Context) {
 // @Success 200 {array} models.Room
 // @Router /roomlist/floor/{floor} [get]
 func (l *RoomController) GetRoomListFromFloor(c *gin.Context) {
-	floor := c.Param("floor")
+	floor := c.Query("floor")
 
-	floorInt, err := strconv.Atoi(floor)
-	if err != nil {
-		// handle error
-		fmt.Println(err)
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    http.StatusBadRequest,
-			"message": err.Error(),
-		})
-	}
-
-	rooms, err := l.provider.GetRoomsFromFloor(floorInt)
+	rooms, err := l.provider.FilterRooms(floor, "", "", "")
 	if err != nil {
 		fmt.Println("GetRoomListFromFloor() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{

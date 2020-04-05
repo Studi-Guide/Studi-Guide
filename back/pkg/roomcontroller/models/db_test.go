@@ -378,7 +378,7 @@ func TestRoomEntityService_GetAllConnectorSpaces(t *testing.T) {
 func TestRoomEntityService_GetConnectorsFromFloor(t *testing.T) {
 	dbService, db := setupTestRoomDbService()
 
-	getConnectors, err := dbService.GetConnectorsFromFloor(1)
+	getConnectors, err := dbService.FilterConnectorSpaces("1", "", "", "", "", nil, nil)
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
@@ -404,7 +404,7 @@ func TestRoomEntityService_GetConnectorsFromFloor(t *testing.T) {
 
 	db.Exec("drop table connector_spaces")
 
-	getConnectors, err = dbService.GetConnectorsFromFloor(1)
+	getConnectors, err = dbService.FilterConnectorSpaces("1", "", "", "", "", nil, nil)
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
@@ -418,7 +418,7 @@ func TestRoomEntityService_GetConnectorsFromFloor(t *testing.T) {
 func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
 	dbService, db := setupTestRoomDbService()
 
-	getConnectors, err := dbService.GetRoomsFromFloor(1)
+	getConnectors, err := dbService.FilterRooms("1", "", "", "")
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
@@ -444,7 +444,7 @@ func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
 
 	db.Exec("drop table rooms")
 
-	getConnectors, err = dbService.GetRoomsFromFloor(1)
+	getConnectors, err = dbService.FilterRooms("1", "", "", "")
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}

@@ -154,6 +154,9 @@ func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
 }
 
 func (r *RoomMockService) FilterRooms(floor, name, alias, room string) ([]models.Room, error) {
+	if r.RoomList == nil {
+		return nil, errors.New("no room list initialized")
+	}
 
 	if len(floor) > 0 {
 		floorInt, err := strconv.Atoi(floor)
