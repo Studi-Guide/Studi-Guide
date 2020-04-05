@@ -567,3 +567,24 @@ func TestRoomEntityService_FilterRooms_RoomFilterParam(t *testing.T) {
 		t.Error("expect nil room array, got: ", rooms)
 	}
 }
+
+func TestRoomEntityService_FilterRooms_RoomFilterParam_FloorFilterParam(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	rooms, err := dbService.FilterRooms("1", "", "", "1") // no floor 0 in test data
+
+	if err != nil {
+		t.Error("expect no error, got:", err)
+	}
+	if rooms == nil {
+		t.Error("expect room array but is nil")
+	}
+
+	rooms, err = dbService.FilterRooms("", "", "", "abcd")
+	if err != nil {
+		t.Error("expect no error", err, " got not nil")
+	}
+	if rooms != nil {
+		t.Error("expect nil room array, got: ", rooms)
+	}
+}
