@@ -415,7 +415,6 @@ func TestRoomEntityService_GetConnectorsFromFloor(t *testing.T) {
 	}
 }
 
-
 func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
 	dbService, db := setupTestRoomDbService()
 
@@ -453,5 +452,27 @@ func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
 	var compareRooms []Room
 	if !compare(compareRooms, getConnectors) {
 		t.Error("expected: ", compareRooms, "; got: ", getConnectors)
+	}
+}
+
+func TestRoomEntityService_FilterRooms(t *testing.T) {
+
+	dbService, _ := setupTestRoomDbService()
+
+	rooms, err := dbService.FilterRooms("1", "", "", "") // no floor 0 in test data
+
+	if err != nil {
+		t.Error("expect no error, got:", err)
+	}
+	if rooms == nil {
+		t.Error("expect room array but is nil")
+	}
+
+	rooms, err = dbService.FilterRooms("abcd", "", "", "")
+	if err == nil {
+		t.Error("expect error", err, " got nil")
+	}
+	if rooms != nil {
+		t.Error("expect nil room array, got: ", rooms)
 	}
 }
