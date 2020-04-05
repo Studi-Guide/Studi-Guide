@@ -3,6 +3,7 @@ package models
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"github.com/ahmetb/go-linq/v3"
 	fbsql "github.com/facebookincubator/ent/dialect/sql"
 	"log"
@@ -430,6 +431,21 @@ func TestRoomEntityService_GetConnectorsFromFloor(t *testing.T) {
 	var compareConnectors []ConnectorSpace
 	if !compare(compareConnectors, getConnectors) {
 		t.Error("expected: ", compareConnectors, "; got: ", getConnectors)
+	}
+}
+
+
+func TestRoomEntityService_GetConnectorsFromFloor_BadInputParams(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	_, err := dbService.FilterConnectorSpaces("1", "", "", "", "", nil, &navigation.Coordinate{
+		X: 0,
+		Y: 0,
+		Z: 0,
+	})
+
+	if err == nil {
+		t.Error("expected: ", errors.New("invalid operation! coordinate and coordinateDelta have to be either nil or both not nil"), "; got: ", nil)
 	}
 }
 
