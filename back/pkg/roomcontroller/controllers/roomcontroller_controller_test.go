@@ -128,3 +128,35 @@ func TestRoomController_GetRoomFromFloor_EmptyRoomlist(t *testing.T) {
 		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
 	}
 }
+
+func TestRoomController_GetRoomList_FilterFloor(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/roomlist/?floor=0", nil)
+
+	provider :=  NewRoomMockService()
+	router := gin.Default()
+	mapRouter := router.Group("/roomlist")
+	NewRoomController(mapRouter, provider)
+	provider.RoomList = nil
+	router.ServeHTTP(rec, req)
+
+	if http.StatusOK != rec.Code {
+		t.Errorf("expected = %v; actual = %v", http.StatusOK, rec.Code)
+	}
+}
+
+func TestRoomController_GetRoomList_BadFilterFloor(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/roomlist/?floor=first", nil)
+
+	provider :=  NewRoomMockService()
+	router := gin.Default()
+	mapRouter := router.Group("/roomlist")
+	NewRoomController(mapRouter, provider)
+	provider.RoomList = nil
+	router.ServeHTTP(rec, req)
+
+	if http.StatusBadRequest != rec.Code {
+		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
+	}
+}

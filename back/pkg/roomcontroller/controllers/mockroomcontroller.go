@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"strconv"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/roomcontroller/models"
 )
@@ -137,5 +138,13 @@ func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
 }
 
 func (r *RoomMockService) FilterRooms(floor, name, alias, room string) ([]models.Room, error) {
+
+	if len(floor) > 0 {
+		_, err := strconv.Atoi(floor)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return r.RoomList, nil
 }
