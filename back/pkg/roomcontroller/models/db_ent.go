@@ -174,7 +174,8 @@ func (r *RoomEntityService) FilterConnectorSpaces(floorFilter, nameFilter, alias
 		q = q.Where(connectorspace.NameContains(nameFilter))
 	}
 
-	if len(alias) > 0 {
+	//TODO not available within database
+	/*if len(alias) > 0 {
 		q = q.Where(connectorspace.NameContains(alias))
 	}
 
@@ -185,7 +186,7 @@ func (r *RoomEntityService) FilterConnectorSpaces(floorFilter, nameFilter, alias
 	if len(campus) > 0 {
 		q = q.Where(connectorspace.NameContains(campus))
 	}
-
+*/
 	if len(floorFilter) > 0 {
 		if floor, err := strconv.Atoi(floorFilter); err != nil {
 			return nil, err
