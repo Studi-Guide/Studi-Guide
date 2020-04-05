@@ -70,8 +70,8 @@ func TestMapController_GetMapItemsFromFloor(t *testing.T) {
 	NewMapController(mapRouter, provider)
 	router.ServeHTTP(rec, req)
 
-	rooms,_ := provider.GetRoomsFromFloor(1)
-	connectors, _ := provider.GetConnectorsFromFloor(1)
+	rooms,_ := provider.FilterRooms("1", "", "", "")
+	connectors, _ := provider.FilterConnectorSpaces("1", "", "", "", "", nil, nil)
 
 	expected, _ := json.Marshal(GetExpectedJson(rooms, connectors))
 	expected = append(expected, '\n')

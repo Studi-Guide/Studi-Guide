@@ -99,35 +99,6 @@ func (r *RoomMockService) GetAllConnectorSpaces() ([]models.ConnectorSpace, erro
 	return r.ConnectorList, nil
 }
 
-func (r *RoomMockService) GetRoomsFromFloor(floor int) ([]models.Room, error) {
-	if r.RoomList == nil {
-		return nil, errors.New("no room list initialized")
-	}
-
-	var list []models.Room
-	for _, room := range r.RoomList {
-		if room.MapItem.Floor == floor {
-			list = append(list, room)
-		}
-	}
-
-	return list, nil
-}
-
-func (r *RoomMockService) GetConnectorsFromFloor(floor int) ([]models.ConnectorSpace, error) {
-	if r.ConnectorList == nil {
-		return nil, errors.New("no connector list initialized")
-	}
-	var list []models.ConnectorSpace
-	for _, connector := range r.ConnectorList {
-		if connector.MapItem.Floor == floor {
-			list = append(list, connector)
-		}
-	}
-
-	return list, nil
-}
-
 func (r *RoomMockService) FilterConnectorSpaces(floor, name, alias, building, campus string, coordinate, coordinateDelta *navigation.Coordinate) ([]models.ConnectorSpace, error){
 	if r.ConnectorList == nil {
 		return nil, errors.New("no connector list initialized")

@@ -88,7 +88,7 @@ func TestRoomController_GetRoomsFromFloor(t *testing.T) {
 	NewRoomController(mapRouter, provider)
 	router.ServeHTTP(rec, req)
 
-	rooms,_ := provider.GetRoomsFromFloor(1)
+	rooms,_ := provider.FilterRooms("1", "", "", "")
 
 	expected, _ := json.Marshal(rooms)
 	expected = append(expected, '\n')
