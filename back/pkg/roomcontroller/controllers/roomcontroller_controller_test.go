@@ -137,10 +137,11 @@ func TestRoomController_GetRoomList_FilterFloor(t *testing.T) {
 	router := gin.Default()
 	mapRouter := router.Group("/roomlist")
 	NewRoomController(mapRouter, provider)
+	provider.RoomList = nil
 	router.ServeHTTP(rec, req)
 
-	if http.StatusOK != rec.Code {
-		t.Errorf("expected = %v; actual = %v", http.StatusOK, rec.Code)
+	if http.StatusBadRequest != rec.Code {
+		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
 	}
 }
 
