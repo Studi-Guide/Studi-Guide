@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"strconv"
 	"studi-guide/ent"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
@@ -64,7 +65,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 		}
 
 		entRoom, err := client.Room.Create().
-			SetName(string(i)).
+			SetName(strconv.Itoa(i)).
 			SetPathNodeID(pathNode.ID).
 			AddDoorIDs(door.ID).
 			SetFloor(i).
@@ -202,7 +203,7 @@ func TestGetRoomAllRooms(t *testing.T) {
 func TestGetRoom(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	room, err := dbService.GetRoom(string(2))
+	room, err := dbService.GetRoom(strconv.Itoa(2))
 	if err != nil {
 		t.Error(err)
 	}
@@ -471,6 +472,27 @@ func TestRoomEntityService_FilterRooms(t *testing.T) {
 	rooms, err = dbService.FilterRooms("abcd", "", "", "")
 	if err == nil {
 		t.Error("expect error", err, " got nil")
+	}
+	if rooms != nil {
+		t.Error("expect nil room array, got: ", rooms)
+	}
+}
+
+func TestRoomEntityService_FilterRooms_RoomFilterParam(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	rooms, err := dbService.FilterRooms("", "", "", "1") // no floor 0 in test data
+
+	if err != nil {
+		t.Error("expect no error, got:", err)
+	}
+	if rooms == nil {
+		t.Error("expect room array but is nil")
+	}
+
+	rooms, err = dbService.FilterRooms("", "", "", "abcd")
+	if err != nil {
+		t.Error("expect no error", err, " got not nil")
 	}
 	if rooms != nil {
 		t.Error("expect nil room array, got: ", rooms)

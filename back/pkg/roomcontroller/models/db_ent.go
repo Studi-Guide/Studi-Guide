@@ -133,7 +133,10 @@ func (r *RoomEntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, ro
 		if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
 			return nil, err
 		} else {
-			q = q.Where(room.FloorEQ(floor))
+			// Just use query when its available
+			if len(floorFilter) > 0 {
+				q = q.Where(room.FloorEQ(floor))
+			}
 		}
 
 		entRooms, err = q.WithSections().WithDoors().WithColor().WithPathNode().All(r.context)
