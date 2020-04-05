@@ -42,7 +42,7 @@ func (l MapController) GetMapItems(c *gin.Context) {
 	//TODO include these filters
 	coordinate := c.Query("coordinate")
 	coordinateDelta := c.Query("coordinate-delta")
-	//----------------------------
+	//-----------------------------
 
 	var rooms []models.Room
 	var connectors []models.ConnectorSpace
