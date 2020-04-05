@@ -25,6 +25,11 @@ func NewMapController(router *gin.RouterGroup, provider models.RoomServiceProvid
 // @Accept  json
 // @Produce  json
 // @Tags MapController
+// @Param name query string false "name of the map items"
+// @Param floor query int false "floor of the map items"
+// @Param alias query string false "potential alias of the room"
+// @Param campus query string false "map item is linked to a certain campus"
+// @Param building query string false "map item is linked to a building"
 // @Success 200 {array} models.MapItem
 // @Router /map [get]
 func (l MapController) GetMapItems(c *gin.Context) {
@@ -88,12 +93,13 @@ func (l MapController) GetMapItems(c *gin.Context) {
 }
 
 // GetMapItems godoc
-// @Summary Get All Map Items
-// @Description Gets all map items of available rooms and connector spaces (corridor, stairs, etc..)
+// @Summary Get All Map Items from a certain floor
+// @Description Gets all map items of available rooms and connector spaces (corridor, stairs, etc..) of a certain floor
+// @ID get-room-list-floor
 // @Accept  json
 // @Produce  json
 // @Tags MapController
-// @Param floor query int false "filter map items by floor"
+// @Param floor path int true "filter map items by floor"
 // @Success 200 {array} models.MapItem
 // @Router /map/floor/{floor} [get]
 func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
