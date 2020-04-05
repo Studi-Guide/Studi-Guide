@@ -136,3 +136,6 @@ func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	return list, nil
 }
 
+func (r *RoomMockService) FilterRooms(floor, name, alias, room string) ([]models.Room, error) {
+	return r.RoomList, nil
+}

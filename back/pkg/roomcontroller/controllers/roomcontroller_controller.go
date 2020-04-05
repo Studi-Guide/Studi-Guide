@@ -28,12 +28,27 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Accept  json
 // @Tags RoomController
 // @Produce  json
+// @Param name query string false "room name"
+// @Param floor query int false "floor of the room"
+// @Param alias query string false "potential alias of the room"
+// @Param room query string false "rooms that contain the query string in name, alias or description"
 // @Success 200 {array} models.Room
 // @Router /roomlist/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
-	rooms, err := l.provider.GetAllRooms()
 
-	fmt.Println(c.Keys)
+	nameFilter := c.Query("name")
+	floorFilter := c.Query("floor")
+	aliasFilter := c.Query("alias")
+	roomFilter := c.Query("room")
+
+	var rooms []models.Room
+	var err error
+
+	if len(nameFilter) == 0 && len(floorFilter) == 0 && len(aliasFilter) == 0 && len(roomFilter) == 0 {
+		rooms, err = l.provider.GetAllRooms()
+	} else {
+		rooms, err = l.provider.FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter)
+	}
 
 	if err != nil {
 		fmt.Println("GetAllRomms() failed with error", err)
@@ -42,9 +57,16 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 			"message": err.Error(),
 		})
 	} else {
-		fmt.Println(rooms)
+		//fmt.Println(rooms)
 		c.JSON(http.StatusOK, rooms)
 	}
+	return
+
+	fmt.Println(len(c.Request.URL.Query()))
+	fmt.Println(c.Request.URL.Query())
+	fmt.Println("c.Query(\"room\"): ", c.Query("room"))
+
+
 }
 
 // GetRoom godoc

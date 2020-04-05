@@ -106,13 +106,7 @@ func (r *RoomEntityService) GetRoomsFromFloor(floor int) ([]Room, error) {
 		return nil, err
 	}
 
-	var rooms []Room
-
-	for _, roomPtr := range roomsPtr {
-		rooms = append(rooms, *r.roomMapper(roomPtr))
-	}
-
-	return rooms, nil
+	return r.roomArrayMapper(roomsPtr), nil
 }
 
 func (r *RoomEntityService) AddRoom(room Room) error {
@@ -154,6 +148,43 @@ func (r *RoomEntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	return nodes, nil
 }
 
+func (r *RoomEntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter string) ([]Room, error) {
+
+	var entRooms []*ent.Room
+	var err error = nil
+
+	if len(roomFilter) > 0 {
+		q := r.client.Room.Query().Where(room.Or(room.NameContains(roomFilter), room.DescriptionContains(roomFilter)))
+		if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
+			return nil, err
+		} else {
+			q = q.Where(room.FloorEQ(floor))
+		}
+
+		entRooms, err = q.WithSections().WithDoors().WithColor().WithPathNode().All(r.context)
+		if err != nil {
+			return nil, err
+		}
+
+
+	} else {
+		q:= r.client.Room.Query().Where(room.NameContains(nameFilter))
+		if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
+			return nil, err
+		} else {
+			q = q.Where(room.FloorEQ(floor))
+		}
+
+		// alias is missing here ...
+		entRooms, err = q.WithSections().WithDoors().WithColor().WithPathNode().All(r.context)
+		if err != nil {
+			return nil, err
+		}
+
+	}
+	return r.roomArrayMapper(entRooms), nil
+}
+
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {
 	client, err := ent.Open(dbDriverName, "file:"+dbSourceName+"?cache=shared&_fk=1")
 	if err != nil {
@@ -173,6 +204,16 @@ func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Cont
 	}
 
 	return client, ctx, err
+}
+
+func (r *RoomEntityService) roomArrayMapper(entRooms []*ent.Room) []Room {
+	var rooms []Room
+
+	for _, roomPtr := range entRooms {
+		rooms = append(rooms, *r.roomMapper(roomPtr))
+	}
+
+	return rooms
 }
 
 func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
