@@ -24,4 +24,5 @@ type RoomServiceProvider interface {
 	GetRoomsFromFloor(floor int) ([]Room, error)
 	GetConnectorsFromFloor(floor int) ([]ConnectorSpace, error)
 	FilterRooms(floor, name, alias, room string) ([]Room, error)
+	FilterConnectorSpaces(floor, name, alias, building, campus string, coordinate, coordinateDelta *navigation.Coordinate) ([]ConnectorSpace, error)
 }

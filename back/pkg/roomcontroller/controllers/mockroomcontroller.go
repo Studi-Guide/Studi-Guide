@@ -127,6 +127,11 @@ func (r *RoomMockService) GetConnectorsFromFloor(floor int) ([]models.ConnectorS
 	return list, nil
 }
 
+func (r *RoomMockService) FilterConnectorSpaces(floor, name, alias, building, campus string, coordinate, coordinateDelta *navigation.Coordinate) ([]models.ConnectorSpace, error){
+	panic("")
+}
+
+
 func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	var list []navigation.PathNode
 	for _, room := range r.RoomList {

@@ -185,6 +185,42 @@ func (r *RoomEntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, ro
 	return r.roomArrayMapper(entRooms), nil
 }
 
+func (r *RoomEntityService) FilterConnectorSpaces(floorFilter, nameFilter, alias, building, campus string, coordinate, coordinateDelta *navigation.Coordinate) ([]ConnectorSpace, error) {
+
+	var entConnectors []*ent.ConnectorSpace
+	var err error = nil
+
+	q:= r.client.ConnectorSpace.Query().Where(connectorspace.NameContains(nameFilter))
+	if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
+		return nil, err
+	} else {
+		q = q.Where(connectorspace.FloorEQ(floor))
+	}
+
+	if coordinate != nil && coordinateDelta != nil {
+		q = q.Where(
+			connectorspace.And(
+				connectorspace.HasConnectorPathNodesWith(pathnode.XCoordinateLTE(coordinate.X + coordinateDelta.X)),
+				connectorspace.HasConnectorPathNodesWith(pathnode.XCoordinateGTE(coordinate.X - coordinateDelta.X)),
+				connectorspace.HasConnectorPathNodesWith(pathnode.YCoordinateLTE(coordinate.Y + coordinateDelta.Y)),
+				connectorspace.HasConnectorPathNodesWith(pathnode.YCoordinateGTE(coordinate.Y - coordinateDelta.Y)),
+			))
+	} else {
+		if (coordinate == nil || coordinateDelta == nil) && (coordinate != nil || coordinateDelta != nil) {
+			return nil, errors.New("invalid operation! coordinate and coordinateDelta have to be either nil or both not nil")
+		}
+	}
+
+	// alias, building, campus is missing here ...
+	entConnectors, err = q.WithConnectorSections().WithConnectorDoors().WithConnectorColor().WithConnectorPathNodes().All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+
+	return r.connectorArrayMapper(entConnectors), nil
+}
+
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {
 	client, err := ent.Open(dbDriverName, "file:"+dbSourceName+"?cache=shared&_fk=1")
 	if err != nil {
@@ -544,4 +580,14 @@ func (r *RoomEntityService) connectorMapper(entConnector *ent.ConnectorSpace) *C
 	}
 
 	return &rm
+}
+
+func (r *RoomEntityService) connectorArrayMapper(entConnectors []*ent.ConnectorSpace) []ConnectorSpace {
+	var connectors []ConnectorSpace
+
+	for _, connectorPtr := range entConnectors {
+		connectors = append(connectors, *r.connectorMapper(connectorPtr))
+	}
+
+	return connectors
 }
