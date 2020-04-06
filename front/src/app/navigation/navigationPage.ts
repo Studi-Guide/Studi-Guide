@@ -24,7 +24,6 @@ export class NavigationPage {
   public calculatedRoomPaths:svgPath[];
   public calculatedDoorLines:svgPath[];
   
-  // TODO These values we have to determine: which size will have the scrollable map?
   public svgWidth:number = 0;
   public svgHeight:number = 0;
 
@@ -114,11 +113,11 @@ export class NavigationPage {
 
   public discoverFloor() {
     // let floorToDisplay = this.startInput;
-    let handleReceivedFloor = function (Tab1page, data) {
-      Tab1page.testRooms = data; // JSON.parse()
+    let handleReceivedFloor = function (data) {
+      console.log(data); // JSON.parse()
     };
     let xhr = new RequestBuildingDataService();
-    // TODO exchange GET to POST and uncomment floorToDisplay when API is built
-    xhr.fetchDiscoverFloorData("GET", /*floorToDisplay,*/ handleReceivedFloor);
+    // TODO add input data fetching from UI
+    xhr.fetchDiscoverFloorData('GET', 'http://localhost:8090/api', 'KA.3', handleReceivedFloor);
   }
 }
