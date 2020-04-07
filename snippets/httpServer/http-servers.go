@@ -21,7 +21,7 @@ func hello(w http.ResponseWriter, req *http.Request) {
 	defer fmt.Println("server: hello handler ended")
 
 	select {
-	case <-time.After(1 * time.Second):
+	case <-time.After(3 * time.Second):
 		fmt.Fprintf(w, jsonSerialized) // "<head><title>STGD</title></head><body><h1>MAP</h1></body>"
 	case <-ctx.Done():
 
