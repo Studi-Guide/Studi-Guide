@@ -31,7 +31,10 @@ func TestMapRoom(t *testing.T) {
 		MapItem:MapItem{
 			Name:        "RoomN01",
 			Description: "Room Number 1 Special Description",
-			Tags:       nil,
+			Tags:       []string{
+				"Tag1",
+				"#Tag2",
+			},
 			Doors: []Door{
 				{
 					Id: 0,
@@ -147,7 +150,10 @@ func TestMapRoom(t *testing.T) {
 		MapItem:MapItem{
 			Name:        "RoomN01",
 			Description: "Room Number 1 Special Description",
-			Tags:       nil,
+			Tags:       []string{
+				"Tag1",
+				"#Tag2",
+			},
 			Doors: []Door{
 				{
 					Id: 1,
@@ -251,6 +257,18 @@ func TestMapRoom(t *testing.T) {
 		fmt.Println(checkRoom.MapItem.Doors)
 		fmt.Println(retRoom.MapItem.Doors)
 		t.Error("expected room equality. expected:", checkRoom, ", actual:", retRoom)
+	}
+
+	if !reflect.DeepEqual(checkRoom.Tags, retRoom.Tags) {
+		t.Error("expected tags equality. expected: ", checkRoom.Tags, ", actual: ", retRoom.Tags)
+	}
+
+	if !reflect.DeepEqual(checkRoom.MapItem, retRoom.MapItem) {
+		t.Error("expected map item equality. expected: ", checkRoom.MapItem, ", actual: ", retRoom.MapItem)
+	}
+
+	if !reflect.DeepEqual(checkRoom, *retRoom) {
+		t.Error("expected room equality. expected: ", checkRoom, ", actual: ", retRoom)
 	}
 
 	ro.Id = 2
