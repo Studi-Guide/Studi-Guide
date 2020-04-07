@@ -31,7 +31,7 @@ func TestMapRoom(t *testing.T) {
 		MapItem:MapItem{
 			Name:        "RoomN01",
 			Description: "Room Number 1 Special Description",
-			Alias:       nil,
+			Tags:       nil,
 			Doors: []Door{
 				{
 					Id: 0,
@@ -147,7 +147,7 @@ func TestMapRoom(t *testing.T) {
 		MapItem:MapItem{
 			Name:        "RoomN01",
 			Description: "Room Number 1 Special Description",
-			Alias:       nil,
+			Tags:       nil,
 			Doors: []Door{
 				{
 					Id: 1,

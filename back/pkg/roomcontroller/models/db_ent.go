@@ -262,7 +262,7 @@ func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 		MapItem:MapItem{
 			Name:        entRoom.Name,
 			Description: entRoom.Description,
-			Alias:       nil,
+			Tags:       nil,
 			Doors:       nil,
 			Color:       "",
 			Sections:    nil,
@@ -544,7 +544,7 @@ func (r *RoomEntityService) connectorMapper(entConnector *ent.ConnectorSpace) *C
 		MapItem:MapItem{
 			Name:        entConnector.Name,
 			Description: entConnector.Description,
-			Alias:       nil,
+			Tags:       nil,
 			Doors:       nil,
 			Color:       "",
 			Sections:    nil,

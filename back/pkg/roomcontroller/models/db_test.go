@@ -85,7 +85,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			MapItem:MapItem{
 				Name:        entRoom.Name,
 				Description: entRoom.Description,
-				Alias:       nil,
+				Tags:       nil,
 				Doors: []Door{{
 					Id:       door.ID,
 					Section:  Section{Id: sequence.ID},
@@ -132,7 +132,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			MapItem:MapItem{
 				Name:        entConnector.Name,
 				Description: entConnector.Description,
-				Alias:       nil,
+				Tags:       nil,
 				Color:    "",
 				Sections: []Section {{Id:sequence2.ID}},
 				Floor:    i,
