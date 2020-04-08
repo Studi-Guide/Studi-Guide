@@ -1,8 +1,6 @@
 import {Coordinate, PathNode, Room, Section, svgPath} from '../building-objects-if';
 import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component} from "@angular/core";
-import {RequestBuildingDataService} from "../services/requestBuildingData.service";
-import {Observable} from "rxjs";
 import {DataService} from "../services/data.service";
 
 @Component({
