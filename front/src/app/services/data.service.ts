@@ -15,4 +15,8 @@ export class DataService {
         return this.httpClient.get(this.baseUrl + '/' + floor);
     }
 
+    get_route(startRoom:string, destinationRoom:string){
+        return this.httpClient.get(this.baseUrl + '/' + startRoom + '-' + destinationRoom );
+    }
+
 }

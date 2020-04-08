@@ -24,6 +24,10 @@
           <ion-icon slot="end" name="cellular"></ion-icon>
           <span id="ajaxBtnText">test ajax</span>
         </ion-button>
+        <ion-button size="small" color="danger" (click)="fetchAndDisplayRoute()">
+          <ion-icon slot="end" name="cellular"></ion-icon>
+          <span id="ajaxBtnText">test route</span>
+        </ion-button>
         <!-- TEST AJAX END-->
       </ion-col>
     </ion-row>
@@ -45,8 +49,9 @@
       </text>
       <path *ngFor="let doorLine of calculatedDoorLines" attr.d="{{doorLine.d}}" attr.stroke="{{doorLine.fill}}" />
       <!-- TEST -->
-      <circle *ngFor="let pathNode of testPathNodes" attr.cx="{{pathNode.X}}" attr.cy="{{pathNode.Y}}" r="2" fill="red" />
+      <circle *ngFor="let pathNode of testRoute" attr.cx="{{pathNode.X}}" attr.cy="{{pathNode.Y}}" r="2" fill="red" />
       <!-- TEST END -->
+      <polyline attr.points="{{route}}" style="fill:none;stroke:#A00;stroke-width:3" />
     </svg>
   </div>
 </ion-content>

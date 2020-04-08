@@ -1,5 +1,5 @@
-import {Coordinate, Room, Section, svgPath} from '../building-objects-if';
-import {testDataRooms} from './test-building-data';
+import {Coordinate, PathNode, Room, Section, svgPath} from '../building-objects-if';
+import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component} from "@angular/core";
 import {RequestBuildingDataService} from "../services/requestBuildingData.service";
 import {Observable} from "rxjs";
@@ -17,12 +17,14 @@ export class NavigationPage {
   public searchBtnIsVisible:boolean = true;
   public routeBtnIsVisible:boolean = true;
   public mapIsVisible:boolean = false;
+  public routeIsVisible:boolean = false;
   public startInput:string;
   public destinationInput:string;
   public startRoom:Room;
   public destinationRoom:Room;
-  public testRooms:Room[] = [] /*= testDataRooms*/;
-  public testPathNodes:Coordinate[];
+  public testRooms:Room[] = [];
+  public testRoute:PathNode[];
+  public route:string;
   public calculatedRoomPaths:svgPath[];
   public calculatedDoorLines:svgPath[];
   
@@ -94,8 +96,10 @@ export class NavigationPage {
     this.dataService = dataService;
     this.calculatedRoomPaths = [];
     this.calculatedDoorLines = [];
+    this.testRooms = testDataRooms;
     this.calculateSvgPathsAndSvgWidthHeight();
-    this.testPathNodes = NavigationPage.testRenderPathNodes();
+    this.testRoute = testDataPathNodes;
+    // this.testRoute = NavigationPage.testRenderPathNodes();
   }
 
   public showFloor() {
@@ -116,12 +120,7 @@ export class NavigationPage {
 
   public discoverFloor() {
     // let floorToDisplay = this.startInput;
-    /*let handleReceivedFloor = function (data) {
-      console.log(data); // JSON.parse()
-    };
-    let xhr = new RequestBuildingDataService();
-    // TODO add input data fetching from UI
-    xhr.fetchDiscoverFloorData('GET', 'http://localhost:8090/api', 'KA.3', handleReceivedFloor);*/
+    // TODO fetch input data from UI
     this.progressIsVisible = true;
     this.dataService.get_floor('KA.3').subscribe((res : Room[])=>{
       this.testRooms = res;
@@ -130,5 +129,25 @@ export class NavigationPage {
       this.progressIsVisible = false;
       this.mapIsVisible = true;
     });
+  }
+
+  public fetchAndDisplayRoute() {
+    // TODO fetch input data from UI
+    this.progressIsVisible = true;
+    this.dataService.get_route('KA.308', 'KA.313').subscribe((res : PathNode[])=>{
+      this.testRoute = res;
+      console.log(this.testRoute);
+      this.calculateSvgPathForRoute();
+      this.progressIsVisible = false;
+      this.routeIsVisible = true;
+    });
+  }
+
+  private calculateSvgPathForRoute() {
+    let points:string = '';
+    for (const pathNode of this.testRoute) {
+      points += pathNode.X + ',' + pathNode.Y + ' ';
+    }
+    this.route = points;
   }
 }
