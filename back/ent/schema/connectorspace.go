@@ -7,13 +7,13 @@ import (
 	"github.com/facebookincubator/ent/schema/index"
 )
 
-// Room holds the schema definition for the Room entity.
-type Room struct {
+// ConnectorSpace holds the schema definition for the ConnectorSpace entity.
+type ConnectorSpace struct {
 	ent.Schema
 }
 
 // Fields of the Room.
-func (Room) Fields() []ent.Field {
+func (ConnectorSpace) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("Name").Unique(),
 		field.String("Description").Default(""),
@@ -22,17 +22,16 @@ func (Room) Fields() []ent.Field {
 }
 
 // Edges of the Room.
-func (Room) Edges() []ent.Edge {
+func (ConnectorSpace) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("doors", Door.Type).Required(),
-		edge.To("sections", Section.Type),
-		edge.To("pathNode", PathNode.Type).Required().Unique(),
-		edge.To("color", Color.Type).Unique(),
-		edge.From("tags", Tag.Type).Ref("rooms"),
+		edge.To("connectorDoors", Door.Type),
+		edge.To("connectorSections", Section.Type),
+		edge.To("connectorPathNodes", PathNode.Type).Required(),
+		edge.To("connectorColor", Color.Type).Unique(),
 	}
 }
 
-func (Room) Indexes() []ent.Index {
+func (ConnectorSpace) Indexes() []ent.Index {
 	return []ent.Index{
 		// unique index.
 		index.Fields("Name").Unique(),

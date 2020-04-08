@@ -3,15 +3,15 @@ package models
 import "studi-guide/pkg/navigation"
 
 type Room struct {
-	Id          int
-	Name        string
-	Description string
-	Alias       []string
-	Doors       []Door
-	Color       string
-	Sections    []Section
-	Floor       int `json:"-"`
-	PathNode    navigation.PathNode
+	MapItem
+	Id       int
+	PathNode navigation.PathNode
+}
+
+type ConnectorSpace struct {
+	MapItem
+	Id        int
+	PathNodes []navigation.PathNode
 }
 
 type RoomServiceProvider interface {
@@ -20,4 +20,7 @@ type RoomServiceProvider interface {
 	AddRoom(room Room) error
 	AddRooms(rooms []Room) error
 	GetAllPathNodes() ([]navigation.PathNode, error)
+	GetAllConnectorSpaces() ([]ConnectorSpace, error)
+	FilterRooms(floor, name, alias, room string) ([]Room, error)
+	FilterConnectorSpaces(floor, name, alias, building, campus string, coordinate, coordinateDelta *navigation.Coordinate) ([]ConnectorSpace, error)
 }
