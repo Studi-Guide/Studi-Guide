@@ -4,6 +4,7 @@ import (
 	"github.com/facebookincubator/ent"
 	"github.com/facebookincubator/ent/schema/edge"
 	"github.com/facebookincubator/ent/schema/field"
+	"github.com/facebookincubator/ent/schema/index"
 )
 
 // PathNodes holds the schema definition for the PathNodes entity.
@@ -14,6 +15,7 @@ type PathNode struct {
 // Fields of the PathNodes.
 func (PathNode) Fields() []ent.Field {
 	return []ent.Field{
+		field.Int("PathId").Unique(),
 		field.Int("X_Coordinate").Default(0),
 		field.Int("Y_Coordinate").Default(0),
 		field.Int("Z_Coordinate").Default(0),
@@ -37,5 +39,12 @@ func (PathNode) Edges() []ent.Edge {
 			From("linkedFrom"),
 
 		edge.From("pathGroups", PathNodeGroup.Type).Ref("pathNodes"),
+	}
+}
+
+func (PathNode) Indexes() []ent.Index {
+	return []ent.Index{
+		// unique index.
+		index.Fields("PathId").Unique(),
 	}
 }

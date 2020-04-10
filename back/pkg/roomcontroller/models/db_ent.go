@@ -304,7 +304,7 @@ func (r *RoomEntityService) pathNodeMapper(entPathNode *ent.PathNode) *navigatio
 	}
 
 	p := navigation.PathNode{
-		Id:             entPathNode.ID,
+		Id:             entPathNode.PathId,
 		Coordinate:     navigation.Coordinate{X: entPathNode.XCoordinate, Y: entPathNode.YCoordinate, Z: entPathNode.ZCoordinate},
 		Group:          nil,
 		ConnectedNodes: r.pathNodeArrayMapper(entPathNode.Edges.LinkedTo),
@@ -473,10 +473,22 @@ func (r *RoomEntityService) mapPathNodeArray(pathNodePtr []*navigation.PathNode)
 func (r *RoomEntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, error) {
 
 	if p.Id != 0 {
-		return r.client.PathNode.Query().Where(pathnode.ID(p.Id)).First(r.context)
+		node, err := r.client.PathNode.Query().Where(pathnode.PathId(p.Id)).First(r.context)
+		if node != nil {
+			return  node, nil
+		}
+
+		switch t := err.(type) {
+		default:
+			log.Fatal(t)
+			return nil, err
+		case *ent.NotFoundError:
+			log.Printf("Pathnode with ID '%v' not found. Creating new one", p.Id)
+		}
 	}
 
 	return r.client.PathNode.Create().
+		SetPathId(p.Id).
 		SetXCoordinate(p.Coordinate.X).
 		SetYCoordinate(p.Coordinate.Y).
 		SetZCoordinate(p.Coordinate.Z).

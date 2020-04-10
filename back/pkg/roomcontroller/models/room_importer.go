@@ -77,7 +77,20 @@ func NewRoomImporter(file string, dbService RoomServiceProvider) (RoomImporter, 
 
 func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Room, error) {
 	var rooms []Room
+
 	for _, item := range importItems {
+
+		var roomNodes []*navigation.PathNode
+		for _, node := range item.PathNodes {
+
+			roomNodes = append(roomNodes, &navigation.PathNode{
+				Id:             node.Id,
+				Coordinate:     navigation.Coordinate{X: node.X, Y: node.Y, Z: node.Z},
+				Group:          nil,
+				ConnectedNodes: nil,
+			})
+		}
+
 		room := Room{
 			MapItem: MapItem{
 				Name:        item.Name,
@@ -90,18 +103,10 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 				Building:    item.Building,
 			},
 			// Id should be set be DB
-			PathNodes: []*navigation.PathNode{
-				{
-					Id: item.PathNodes[0].Id,
-					Coordinate: navigation.Coordinate{
-						X: item.PathNodes[0].X,
-						Y: item.PathNodes[0].Y,
-						Z: item.PathNodes[0].Z,
-					},
-					Group: nil,
-				},
-			},
+
+			PathNodes: roomNodes,
 		}
+
 		rooms = append(rooms, room)
 	}
 

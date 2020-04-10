@@ -59,6 +59,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 
 		pathNode, err := client.PathNode.
 			Create().
+			SetPathId(i).
 			SetXCoordinate(i).
 			SetYCoordinate(i).
 			SetZCoordinate(i).Save(ctx)
@@ -94,7 +95,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			},
 
 			PathNodes: []*navigation.PathNode{ &navigation.PathNode{
-				Id:             pathNode.ID,
+				Id:             pathNode.PathId,
 				Coordinate:navigation.Coordinate{
 					X: pathNode.XCoordinate,
 					Y: pathNode.YCoordinate,
