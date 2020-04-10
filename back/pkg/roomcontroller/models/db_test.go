@@ -3,7 +3,6 @@ package models
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"github.com/ahmetb/go-linq/v3"
 	fbsql "github.com/facebookincubator/ent/dialect/sql"
 	"log"
@@ -17,7 +16,6 @@ import (
 )
 
 var testRooms []Room
-var testConnectors []ConnectorSpace
 
 func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 	os.Setenv("DB_DRIVER_NAME", "sqlite3")
@@ -47,7 +45,6 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 	}
 
 	testRooms = []Room{}
-	testConnectors = []ConnectorSpace{}
 	for i := 1; i < 4; i++ {
 
 		sequence, err := client.Section.Create().Save(ctx)
@@ -72,7 +69,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 
 		entRoom, err := client.Room.Create().
 			SetName(strconv.Itoa(i)).
-			SetPathNode(pathNode).
+			AddPathNodes(pathNode).
 			AddDoorIDs(door.ID).
 			SetFloor(i).
 			Save(ctx)
@@ -96,52 +93,12 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 				Floor:    i,
 			},
 
-			PathNodes: navigation.PathNode{Id: pathNode.ID, Coordinate:navigation.Coordinate{
-				X: pathNode.XCoordinate,
-				Y: pathNode.YCoordinate,
-				Z: pathNode.ZCoordinate,
-			}},
-		})
-
-		pathNode2, err := client.PathNode.Create().
-			SetXCoordinate(i).
-			SetYCoordinate(i).
-			SetZCoordinate(i).Save(ctx)
-
-		if err != nil {
-			log.Println("error creating pathnode:", err)
-		}
-
-		sequence2, err := client.Section.Create().Save(ctx)
-		if err != nil {
-			log.Println("error creating sequence:", err)
-		}
-
-		entConnector, err := client.ConnectorSpace.Create().
-			SetName(string(i)).
-			AddConnectorPathNodeIDs(pathNode2.ID).
-			AddConnectorSectionIDs(sequence2.ID).
-			SetFloor(i).
-			Save(ctx)
-		if err != nil {
-			log.Println("error creating connector:", err)
-		}
-
-		testConnectors = append(testConnectors, ConnectorSpace{
-			Id:          entConnector.ID,
-			MapItem:MapItem{
-				Name:        entConnector.Name,
-				Description: entConnector.Description,
-				Tags:       nil,
-				Color:    "",
-				Sections: []Section {{Id:sequence2.ID}},
-				Floor:    i,
-			},
-
-			PathNodes: []navigation.PathNode {{Id: pathNode2.ID, Coordinate:navigation.Coordinate{
-				X: pathNode2.XCoordinate,
-				Y: pathNode2.YCoordinate,
-				Z: pathNode2.ZCoordinate,
+			PathNodes: []*navigation.PathNode{ &navigation.PathNode{
+				Id:             pathNode.ID,
+				Coordinate:navigation.Coordinate{
+					X: pathNode.XCoordinate,
+					Y: pathNode.YCoordinate,
+					Z: pathNode.ZCoordinate,
 			}}},
 		})
 	}
@@ -340,7 +297,13 @@ func TestRoomEntityService_GetAllPathNodes(t *testing.T) {
 			found := linq.From(b).
 				AnyWith(
 					func(p interface{}) bool {
-						return p.(navigation.PathNode).Id == a[i].PathNodes.Id
+						for _, node := range a[i].PathNodes {
+							if p.(navigation.PathNode).Id == node.Id {
+								return true
+							}
+						}
+
+						return false
 					},
 				)
 
@@ -353,179 +316,6 @@ func TestRoomEntityService_GetAllPathNodes(t *testing.T) {
 
 	if !checkNodes(testRooms, getNodes) {
 		t.Error("expected: ", testRooms, "; got: ", getNodes)
-	}
-}
-
-func TestRoomEntityService_GetAllConnectorSpaces(t *testing.T) {
-	dbService, db := setupTestRoomDbService()
-
-	getConnectors, err := dbService.GetAllConnectorSpaces()
-	if err != nil {
-		t.Error("expected: ", nil, "; got: ", err)
-	}
-
-	compare := func(a []ConnectorSpace, b []ConnectorSpace) bool {
-		if len(a) != len(b) {
-			return false
-		}
-		for i, _ := range a {
-			if !reflect.DeepEqual(a[i], b[i]) {
-				return false
-			}
-		}
-		return true
-	}
-
-	expected := testConnectors
-	if !compare(expected, getConnectors) {
-		t.Error("expected: ", expected, "; got: ", getConnectors)
-	}
-
-	db.Exec("drop table connector_spaces")
-
-	getConnectors, err = dbService.GetAllConnectorSpaces()
-	if err == nil {
-		t.Error("expected error; got: ", err)
-	}
-
-	var compareConnectors []ConnectorSpace
-	if !compare(compareConnectors, getConnectors) {
-		t.Error("expected: ", compareConnectors, "; got: ", getConnectors)
-	}
-}
-
-func TestRoomEntityService_GetConnectorsFromFloor_NameParam(t *testing.T) {
-	dbService, _ := setupTestRoomDbService()
-
-	getConnectors, err := dbService.FilterConnectorSpaces("", "1", "", "", "", nil, nil)
-	if err != nil {
-		t.Error("expected: ", nil, "; got: ", err)
-	}
-
-	compare := func(a []ConnectorSpace, b []ConnectorSpace) bool {
-		if len(a) != len(b) {
-			return false
-		}
-		for i, _ := range a {
-			if !reflect.DeepEqual(a[i], b[i]) {
-				return false
-			}
-		}
-		return true
-	}
-
-	var expected []ConnectorSpace
-	linq.From(testConnectors).Where(func(p interface{}) bool { return p.(ConnectorSpace).MapItem.Name == "1" }).ToSlice(&expected)
-
-	if !compare(expected, getConnectors) {
-		t.Error("expected: ", expected, "; got: ", getConnectors)
-	}
-}
-
-func TestRoomEntityService_GetConnectorsFromFloor(t *testing.T) {
-	dbService, db := setupTestRoomDbService()
-
-	getConnectors, err := dbService.FilterConnectorSpaces("1", "", "", "", "", nil, nil)
-	if err != nil {
-		t.Error("expected: ", nil, "; got: ", err)
-	}
-
-	compare := func(a []ConnectorSpace, b []ConnectorSpace) bool {
-		if len(a) != len(b) {
-			return false
-		}
-		for i, _ := range a {
-			if !reflect.DeepEqual(a[i], b[i]) {
-				return false
-			}
-		}
-		return true
-	}
-
-	var expected []ConnectorSpace
-	linq.From(testConnectors).Where(func(p interface{}) bool { return p.(ConnectorSpace).MapItem.Floor == 1}).ToSlice(&expected)
-
-	if !compare(expected, getConnectors) {
-		t.Error("expected: ", expected, "; got: ", getConnectors)
-	}
-
-	db.Exec("drop table connector_spaces")
-
-	getConnectors, err = dbService.FilterConnectorSpaces("1", "", "", "", "", nil, nil)
-	if err == nil {
-		t.Error("expected error; got: ", err)
-	}
-
-	var compareConnectors []ConnectorSpace
-	if !compare(compareConnectors, getConnectors) {
-		t.Error("expected: ", compareConnectors, "; got: ", getConnectors)
-	}
-}
-
-
-func TestRoomEntityService_GetConnectorsFromFloor_BadInputParams(t *testing.T) {
-	dbService, _ := setupTestRoomDbService()
-
-	_, err := dbService.FilterConnectorSpaces("1", "", "", "", "", nil, &navigation.Coordinate{
-		X: 0,
-		Y: 0,
-		Z: 0,
-	})
-
-	if err == nil {
-		t.Error("expected: ", errors.New("invalid operation! coordinate and coordinateDelta have to be either nil or both not nil"), "; got: ", nil)
-	}
-}
-
-func TestRoomEntityService_GetConnectorsFromFloor_FilterCoordinate(t *testing.T) {
-	dbService, db := setupTestRoomDbService()
-
-	getConnectors, err := dbService.FilterConnectorSpaces("", "", "", "", "", &navigation.Coordinate{
-		X: 1,
-		Y: 1,
-		Z: 1,
-	}, &navigation.Coordinate{
-		X: 0,
-		Y: 0,
-		Z: 0,
-	})
-
-	if err != nil {
-		t.Error("expected: ", nil, "; got: ", err)
-	}
-
-	compare := func(a []ConnectorSpace, b []ConnectorSpace) bool {
-		if len(a) != len(b) {
-			return false
-		}
-		for i, _ := range a {
-			if !reflect.DeepEqual(a[i], b[i]) {
-				return false
-			}
-		}
-		return true
-	}
-
-	var expected []ConnectorSpace
-	linq.From(testConnectors).Where(func(p interface{}) bool {
-		return p.(ConnectorSpace).PathNodes[0].Coordinate.X == 1 &&
-		p.(ConnectorSpace).PathNodes[0].Coordinate.Y == 1 &&
-			p.(ConnectorSpace).PathNodes[0].Coordinate.Z == 1 }).ToSlice(&expected)
-
-	if !compare(expected, getConnectors) {
-		t.Error("expected: ", expected, "; got: ", getConnectors)
-	}
-
-	db.Exec("drop table connector_spaces")
-
-	getConnectors, err = dbService.FilterConnectorSpaces("1", "", "", "", "", nil, nil)
-	if err == nil {
-		t.Error("expected error; got: ", err)
-	}
-
-	var compareConnectors []ConnectorSpace
-	if !compare(compareConnectors, getConnectors) {
-		t.Error("expected: ", compareConnectors, "; got: ", getConnectors)
 	}
 }
 

@@ -18,23 +18,48 @@ func NewRoomMockService() *RoomMockService {
 		Name:        "RoomN01",
 		Description: "Dummy",
 		Floor: 1,
-	}})
+		},
+		PathNodes: []*navigation.PathNode{&navigation.PathNode{
+			Id:             0,
+			Coordinate:     navigation.Coordinate{},
+			Group:          nil,
+			ConnectedNodes: nil,
+	}}})
 
 	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
 		Name:        "RoomN02",
 		Description: "Dummy",
-	}})
+	},
+	PathNodes: []*navigation.PathNode{&navigation.PathNode{
+		Id:             3,
+		Coordinate:     navigation.Coordinate{},
+		Group:          nil,
+		ConnectedNodes: nil,
+	}}})
 
 	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
 		Name:        "RoomN03",
 		Description: "Dummy",
-	}})
+	},
+		PathNodes: []*navigation.PathNode{&navigation.PathNode{
+		Id:             2,
+		Coordinate:     navigation.Coordinate{},
+		Group:          nil,
+		ConnectedNodes: nil,
+	}}})
 
-	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
+
+rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
 		Name:        "RoomN04",
 		Description: "Dummy",
 		Floor: 1,
-	}})
+	},
+	PathNodes: []*navigation.PathNode{&navigation.PathNode{
+		Id:             1,
+		Coordinate:     navigation.Coordinate{},
+		Group:          nil,
+		ConnectedNodes: nil,
+	}}})
 
 	return &rms
 }
@@ -69,11 +94,11 @@ func (r *RoomMockService) AddRooms(rooms []models.Room) error {
 	return nil
 }
 
-func (r *RoomMockService) GetAllPathNodes() ([]*navigation.PathNode, error) {
-	var list []*navigation.PathNode
+func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
+	var list []navigation.PathNode
 	for _, room := range r.RoomList {
 		for _, node := range room.PathNodes {
-			list = append(list, node)
+			list = append(list, *node)
 		}
 	}
 

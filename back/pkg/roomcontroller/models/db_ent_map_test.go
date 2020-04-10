@@ -120,7 +120,7 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNodes: navigation.PathNode{
+		PathNodes: []*navigation.PathNode{&navigation.PathNode{
 			Id: 0,
 			Coordinate: navigation.Coordinate{
 				X: 34,
@@ -129,6 +129,7 @@ func TestMapRoom(t *testing.T) {
 			},
 			Group:          nil,
 			ConnectedNodes: nil,
+		},
 		},
 	}
 
@@ -239,7 +240,7 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNodes: navigation.PathNode{
+		PathNodes: []*navigation.PathNode{&navigation.PathNode{
 			Id: 2,
 			Coordinate: navigation.Coordinate{
 				X: 34,
@@ -248,6 +249,7 @@ func TestMapRoom(t *testing.T) {
 			},
 			Group:          nil,
 			ConnectedNodes: nil,
+		},
 		},
 	}
 
@@ -360,15 +362,17 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNodes: navigation.PathNode{
-			Id: 4,
-			Coordinate: navigation.Coordinate{
-				X: 34,
-				Y: 35,
-				Z: 36,
+		PathNodes: []*navigation.PathNode{
+			&navigation.PathNode{
+				Id: 4,
+				Coordinate: navigation.Coordinate{
+					X: 34,
+					Y: 35,
+					Z: 36,
+				},
+				Group:          nil,
+				ConnectedNodes: nil,
 			},
-			Group:          nil,
-			ConnectedNodes: nil,
 		},
 	}
 	entRoom, err = r.mapRoom(&ro)
