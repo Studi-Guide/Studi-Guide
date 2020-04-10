@@ -163,7 +163,7 @@ var doc = `{
                 },
                 "pathNode": {
                     "type": "object",
-                    "$ref": "#/definitions/navigation.PathNode"
+                    "$ref": "#/definitions/navigation.PathNodes"
                 },
                 "section": {
                     "type": "object",
@@ -215,7 +215,7 @@ var doc = `{
                 },
                 "pathNode": {
                     "type": "object",
-                    "$ref": "#/definitions/navigation.PathNode"
+                    "$ref": "#/definitions/navigation.PathNodes"
                 }
             }
         },
@@ -249,7 +249,7 @@ var doc = `{
                 }
             }
         },
-        "navigation.PathNode": {
+        "navigation.PathNodes": {
             "type": "object",
             "properties": {
                 "coordinate": {
@@ -277,7 +277,7 @@ var doc = `{
                 "nodes": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/navigation.PathNode"
+                        "$ref": "#/definitions/navigation.PathNodes"
                     }
                 }
             }

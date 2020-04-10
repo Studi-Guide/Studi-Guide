@@ -6,12 +6,12 @@ import (
 	"github.com/facebookincubator/ent/schema/field"
 )
 
-// PathNode holds the schema definition for the PathNode entity.
+// PathNodes holds the schema definition for the PathNodes entity.
 type PathNode struct {
 	ent.Schema
 }
 
-// Fields of the PathNode.
+// Fields of the PathNodes.
 func (PathNode) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("X_Coordinate").Default(0),
@@ -20,7 +20,7 @@ func (PathNode) Fields() []ent.Field {
 	}
 }
 
-// Edges of the PathNode.
+// Edges of the PathNodes.
 func (PathNode) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("door", Door.Type).
@@ -28,8 +28,7 @@ func (PathNode) Edges() []ent.Edge {
 			Unique(),
 
 		edge.From("room", Room.Type).
-			Ref("pathNode").
-			Unique(),
+			Ref("pathNodes"),
 
 		edge.From("connector", ConnectorSpace.Type).
 			Ref("connectorPathNodes"),

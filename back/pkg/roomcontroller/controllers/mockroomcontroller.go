@@ -9,7 +9,6 @@ import (
 
 type RoomMockService struct {
 	RoomList []models.Room
-	ConnectorList []models.ConnectorSpace
 }
 
 func NewRoomMockService() *RoomMockService {
@@ -33,28 +32,6 @@ func NewRoomMockService() *RoomMockService {
 
 	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
 		Name:        "RoomN04",
-		Description: "Dummy",
-		Floor: 1,
-	}})
-
-	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
-		Name:        "CorridorN01",
-		Description: "Dummy",
-		Floor: 1,
-	}})
-
-	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
-		Name:        "CorridorN02",
-		Description: "Dummy",
-	}})
-
-	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
-		Name:        "CorridorN03",
-		Description: "Dummy",
-	}})
-
-	rms.ConnectorList = append(rms.ConnectorList, models.ConnectorSpace{MapItem:models.MapItem{
-		Name:        "CorridorN04",
 		Description: "Dummy",
 		Floor: 1,
 	}})
@@ -92,33 +69,12 @@ func (r *RoomMockService) AddRooms(rooms []models.Room) error {
 	return nil
 }
 
-func (r *RoomMockService) GetAllConnectorSpaces() ([]models.ConnectorSpace, error) {
-	if r.ConnectorList == nil {
-		return nil, errors.New("no connector list initialized")
-	}
-	return r.ConnectorList, nil
-}
-
-func (r *RoomMockService) FilterConnectorSpaces(floor, name, alias, building, campus string, coordinate, coordinateDelta *navigation.Coordinate) ([]models.ConnectorSpace, error){
-	if r.ConnectorList == nil {
-		return nil, errors.New("no connector list initialized")
-	}
-	var list []models.ConnectorSpace
-	for _, connector := range r.ConnectorList {
-		floorInt, _ := strconv.Atoi(floor)
-		if connector.MapItem.Floor ==  floorInt || connector.MapItem.Name == name {
-			list = append(list, connector)
-		}
-	}
-
-	return list, nil
-}
-
-
-func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
-	var list []navigation.PathNode
+func (r *RoomMockService) GetAllPathNodes() ([]*navigation.PathNode, error) {
+	var list []*navigation.PathNode
 	for _, room := range r.RoomList {
-		list = append(list, room.PathNode)
+		for _, node := range room.PathNodes {
+			list = append(list, node)
+		}
 	}
 
 	return list, nil

@@ -6,7 +6,6 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
-	"studi-guide/ent"
 	"studi-guide/pkg/navigation"
 )
 
@@ -31,7 +30,7 @@ func (r *RoomJsonImporter) RunImport() error {
 		return err
 	}
 
-	rooms, connectors, err2 :=  r.CreateMapItems(items);
+	rooms, err2 :=  r.CreateMapItems(items)
 	if err2 != nil {
 		return err2
 	}
@@ -79,20 +78,20 @@ func NewRoomImporter(file string, dbService RoomServiceProvider) (RoomImporter, 
 func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Room, error) {
 	var rooms []Room
 	for _, item := range importItems {
-			room := Room{
-				MapItem: MapItem{
-					Name:        item.Name,
-					Description: item.Description,
-					Tags:        item.Tags,
-					Color:       item.Color,
-					Floor:       item.Floor,
-					Sections:    item.Sections,
-					Campus:      item.Campus,
-					Building:    item.Building,
-				},
-				// Id should be set be DB
-				PathNodes: []*navigation.PathNode{
-					{
+		room := Room{
+			MapItem: MapItem{
+				Name:        item.Name,
+				Description: item.Description,
+				Tags:        item.Tags,
+				Color:       item.Color,
+				Floor:       item.Floor,
+				Sections:    item.Sections,
+				Campus:      item.Campus,
+				Building:    item.Building,
+			},
+			// Id should be set be DB
+			PathNodes: []*navigation.PathNode{
+				{
 					Id: item.PathNodes[0].Id,
 					Coordinate: navigation.Coordinate{
 						X: item.PathNodes[0].X,
@@ -101,9 +100,9 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 					},
 					Group: nil,
 				},
-				},
-			}
-			rooms = append(rooms, room)
+			},
+		}
+		rooms = append(rooms, room)
 	}
 
 	return rooms, nil

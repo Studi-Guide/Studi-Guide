@@ -45,7 +45,6 @@ func (l MapController) GetMapItems(c *gin.Context) {
 	//-----------------------------
 
 	var rooms []models.Room
-	var connectors []models.ConnectorSpace
 	var err error
 
 	var useFilterApi bool
@@ -73,12 +72,6 @@ func (l MapController) GetMapItems(c *gin.Context) {
 		return
 	}
 
-	if useFilterApi {
-		connectors, err = l.provider.FilterConnectorSpaces(floor, name, alias, building, campus, nil, nil)
-	} else {
-		connectors, err = l.provider.GetAllConnectorSpaces()
-	}
-
 	if err != nil {
 		fmt.Println("GetMapItems() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -89,7 +82,7 @@ func (l MapController) GetMapItems(c *gin.Context) {
 		return
 	}
 
-	l.CreateAndSendMapList(rooms, connectors, c)
+	l.CreateAndSendMapList(rooms, c)
 }
 
 // GetMapItems godoc
@@ -116,29 +109,14 @@ func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
 		return
 	}
 
-	connectors, err := l.provider.FilterConnectorSpaces(floor, "", "", "", "", nil, nil )
-	if err != nil {
-		fmt.Println("GetMapItemsFromFloor() failed with error", err)
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    http.StatusBadRequest,
-			"message": err.Error(),
-		})
-
-		return
-	}
-
-	l.CreateAndSendMapList(rooms, connectors, c)
+	l.CreateAndSendMapList(rooms, c)
 }
 
 // Helper method
-func (l MapController) CreateAndSendMapList(rooms []models.Room, connectors []models.ConnectorSpace, c *gin.Context) {
+func (l MapController) CreateAndSendMapList(rooms []models.Room, c *gin.Context) {
 	var mapItems []models.MapItem
 	for _, room := range rooms {
 		mapItems = append(mapItems, room.MapItem)
-	}
-
-	for _, connector := range connectors {
-		mapItems = append(mapItems, connector.MapItem)
 	}
 
 	c.JSON(http.StatusOK, mapItems)

@@ -26,7 +26,7 @@ func (Room) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("doors", Door.Type).Required(),
 		edge.To("sections", Section.Type),
-		edge.To("pathNode", PathNode.Type).Required().Unique(),
+		edge.To("pathNodes", PathNode.Type).Required(),
 		edge.To("color", Color.Type).Unique(),
 		edge.From("tags", Tag.Type).Ref("rooms"),
 	}

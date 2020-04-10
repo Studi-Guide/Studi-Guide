@@ -62,7 +62,7 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 
 	startroom, _ := roomprovider.GetRoom(startroomname)
 	endroom, _ := roomprovider.GetRoom(endroomname)
-	expected, _, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
+	expected, _, _ := calculator.GetRoute(startroom.PathNodes, endroom.PathNodes)
 	expectedAsString, _ := json.Marshal(expected)
 	resultAsString, _ := json.Marshal(nodes)
 	if string(expectedAsString) != string(resultAsString) {
@@ -100,7 +100,7 @@ func TestNavigationService_Calculate(t *testing.T) {
 		t.Error(err)
 	}
 
-	expected, _, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
+	expected, _, _ := calculator.GetRoute(startroom.PathNodes, endroom.PathNodes)
 	expectedAsString, _ := json.Marshal(expected)
 	resultAsString, _ := json.Marshal(nodes)
 	if string(expectedAsString) != string(resultAsString) {
@@ -131,7 +131,7 @@ func TestNavigationService_CalculateFromCoordinate(t *testing.T) {
 	startroom, _ := roomprovider.GetRoom(startroomname)
 	endroom, _ := roomprovider.GetRoom(endroomname)
 
-	nodes, err := navigationservice.CalculateFromCoordinate(startroom.PathNode.Coordinate, endroom.PathNode.Coordinate)
+	nodes, err := navigationservice.CalculateFromCoordinate(startroom.PathNodes.Coordinate, endroom.PathNodes.Coordinate)
 
 	if err != nil {
 		t.Error(err)
@@ -143,7 +143,7 @@ func TestNavigationService_CalculateFromCoordinate(t *testing.T) {
 
 	//TODO implement unit test for feature
 
-	//expected, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
+	//expected, _ := calculator.GetRoute(startroom.PathNodes, endroom.PathNodes)
 	//expectedAsString, _ := json.Marshal(expected)
 	//resultAsString, _ := json.Marshal(nodes)
 	//if string(expectedAsString) != string(resultAsString) {

@@ -11,7 +11,6 @@ import (
 	"strings"
 	"studi-guide/ent"
 	"studi-guide/ent/color"
-	"studi-guide/ent/connectorspace"
 	"studi-guide/ent/door"
 	"studi-guide/ent/pathnode"
 	"studi-guide/ent/room"
@@ -46,7 +45,7 @@ func NewRoomEntityService(env *env.Env) (RoomServiceProvider, error) {
 
 func (r *RoomEntityService) GetAllRooms() ([]Room, error) {
 
-	roomsPtr, err := r.client.Room.Query().WithSections().WithDoors().WithColor().WithPathNode().WithTags().All(r.context)
+	roomsPtr, err := r.client.Room.Query().WithSections().WithDoors().WithColor().WithPathNodes().WithTags().All(r.context)
 	if err != nil {
 		return nil, err
 	}
@@ -62,27 +61,12 @@ func (r *RoomEntityService) GetAllRooms() ([]Room, error) {
 
 func (r *RoomEntityService) GetRoom(name string) (Room, error) {
 
-	room, err := r.client.Room.Query().Where(room.Name(name)).WithSections().WithDoors().WithColor().WithPathNode().WithTags().First(r.context)
+	room, err := r.client.Room.Query().Where(room.Name(name)).WithSections().WithDoors().WithColor().WithPathNodes().WithTags().First(r.context)
 	if err != nil {
 		return Room{}, err
 	}
 
 	return *r.roomMapper(room), nil
-}
-
-func (r *RoomEntityService) GetAllConnectorSpaces() ([]ConnectorSpace, error) {
-	connectorsPtr, err := r.client.ConnectorSpace.Query().WithConnectorSections().WithConnectorColor().WithConnectorDoors().WithConnectorPathNodes().All(r.context)
-	if err != nil {
-		return nil, err
-	}
-
-	var connectors []ConnectorSpace
-
-	for _, connectorPtr := range connectorsPtr {
-		connectors = append(connectors, *r.connectorMapper(connectorPtr))
-	}
-
-	return connectors, nil
 }
 
 func (r *RoomEntityService) AddRoom(room Room) error {
@@ -140,7 +124,7 @@ func (r *RoomEntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, ro
 			}
 		}
 
-		entRooms, err = q.WithSections().WithDoors().WithColor().WithPathNode().All(r.context)
+		entRooms, err = q.WithSections().WithDoors().WithColor().WithPathNodes().All(r.context)
 		if err != nil {
 			return nil, err
 		}
@@ -158,69 +142,13 @@ func (r *RoomEntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, ro
 		}
 
 		// alias is missing here ...
-		entRooms, err = q.WithSections().WithDoors().WithColor().WithPathNode().All(r.context)
+		entRooms, err = q.WithSections().WithDoors().WithColor().WithPathNodes().All(r.context)
 		if err != nil {
 			return nil, err
 		}
 
 	}
 	return r.roomArrayMapper(entRooms), nil
-}
-
-func (r *RoomEntityService) FilterConnectorSpaces(floorFilter, nameFilter, alias, building, campus string, coordinate, coordinateDelta *navigation.Coordinate) ([]ConnectorSpace, error) {
-
-	var entConnectors []*ent.ConnectorSpace
-	var err error = nil
-
-	q:= r.client.ConnectorSpace.Query()
-
-	if len(nameFilter) > 0 {
-		q = q.Where(connectorspace.NameContains(nameFilter))
-	}
-
-	//TODO not available within database
-	/*if len(alias) > 0 {
-		q = q.Where(connectorspace.NameContains(alias))
-	}
-
-	if len(building) > 0 {
-		q = q.Where(connectorspace.NameContains(building))
-	}
-
-	if len(campus) > 0 {
-		q = q.Where(connectorspace.NameContains(campus))
-	}
-*/
-	if len(floorFilter) > 0 {
-		if floor, err := strconv.Atoi(floorFilter); err != nil {
-			return nil, err
-		} else {
-			q = q.Where(connectorspace.FloorEQ(floor))
-		}
-	}
-
-	if coordinate != nil && coordinateDelta != nil {
-		q = q.Where(
-			connectorspace.And(
-				connectorspace.HasConnectorPathNodesWith(pathnode.XCoordinateLTE(coordinate.X + coordinateDelta.X)),
-				connectorspace.HasConnectorPathNodesWith(pathnode.XCoordinateGTE(coordinate.X - coordinateDelta.X)),
-				connectorspace.HasConnectorPathNodesWith(pathnode.YCoordinateLTE(coordinate.Y + coordinateDelta.Y)),
-				connectorspace.HasConnectorPathNodesWith(pathnode.YCoordinateGTE(coordinate.Y - coordinateDelta.Y)),
-			))
-	} else {
-		if (coordinate == nil || coordinateDelta == nil) && (coordinate != nil || coordinateDelta != nil) {
-			return nil, errors.New("invalid operation! coordinate and coordinateDelta have to be either nil or both not nil")
-		}
-	}
-
-	// alias, building, campus is missing here ...
-	entConnectors, err = q.WithConnectorSections().WithConnectorDoors().WithConnectorColor().WithConnectorPathNodes().All(r.context)
-	if err != nil {
-		return nil, err
-	}
-
-
-	return r.connectorArrayMapper(entConnectors), nil
 }
 
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {
@@ -256,7 +184,7 @@ func (r *RoomEntityService) roomArrayMapper(entRooms []*ent.Room) []Room {
 
 func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 
-	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).WithPathNode().WithColor().WithDoors().WithSections().WithTags().First(r.context)
+	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).WithPathNodes().WithColor().WithDoors().WithSections().WithTags().First(r.context)
 
 	rm := Room{
 		Id:          entRoom.ID,
@@ -269,7 +197,7 @@ func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 			Sections:    nil,
 			Floor:       entRoom.Floor,
 		},
-		PathNode:    navigation.PathNode{},
+		PathNodes:  []*navigation.PathNode{} ,
 	}
 
 	c, err := entRoom.Edges.ColorOrErr()
@@ -287,9 +215,9 @@ func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 		rm.MapItem.Sections = r.sectionArrayMapper(s)
 	}
 
-	p, err := entRoom.Edges.PathNodeOrErr()
+	p, err := entRoom.Edges.PathNodesOrErr()
 	if err == nil {
-		rm.PathNode = *r.pathNodeMapper(p)
+		rm.PathNodes = r.pathNodeArrayMapper(p)
 	}
 
 	t, err := entRoom.Edges.TagsOrErr()
@@ -414,9 +342,14 @@ func (r *RoomEntityService) mapRoom(rm *Room) (*ent.Room, error) {
 		return nil, err
 	}
 
-	entPathNode, err := r.mapPathNode(&rm.PathNode)
-	if err != nil {
-		return nil, err
+	var entNodes []*ent.PathNode
+	for _, node := range rm.PathNodes {
+
+		entPathNode, err := r.mapPathNode(node)
+		if err != nil {
+			return nil, err
+		}
+		entNodes = append(entNodes, entPathNode)
 	}
 
 	entColor, err := r.mapColor(rm.MapItem.Color)
@@ -430,9 +363,11 @@ func (r *RoomEntityService) mapRoom(rm *Room) (*ent.Room, error) {
 		AddDoors(entDoors...).
 		SetColor(entColor).
 		AddSections(entSections...).
+		AddPathNodes(entNodes...).
 		SetFloor(rm.MapItem.Floor).
-		SetPathNode(entPathNode).
 		Save(r.context)
+
+
 
 	if err != nil || entRoom == nil {
 		return entRoom, err
@@ -567,62 +502,6 @@ func (r *RoomEntityService) mapColor(c string) (*ent.Color, error) {
 	}
 
 	return col, nil
-}
-
-func (r *RoomEntityService) connectorMapper(entConnector *ent.ConnectorSpace) *ConnectorSpace {
-
-	rm := ConnectorSpace{
-		Id:          entConnector.ID,
-		MapItem:MapItem{
-			Name:        entConnector.Name,
-			Description: entConnector.Description,
-			Tags:       nil,
-			Doors:       nil,
-			Color:       "",
-			Sections:    nil,
-			Floor:       entConnector.Floor,
-		},
-		PathNodes:   nil,
-	}
-
-	c, err := entConnector.Edges.ConnectorColorOrErr()
-	if err == nil {
-		rm.MapItem.Color = c.Color
-	}
-
-	d, err := entConnector.Edges.ConnectorDoorsOrErr()
-	if err == nil {
-		rm.MapItem.Doors = r.doorArrayMapper(d)
-	}
-
-	s, err := entConnector.Edges.ConnectorSectionsOrErr()
-	if err == nil {
-		rm.MapItem.Sections = r.sectionArrayMapper(s)
-	}
-
-	p, err := entConnector.Edges.ConnectorPathNodesOrErr()
-	if err == nil {
-
-		var pathNodes []navigation.PathNode
-
-		for _, nodePtr := range p {
-			pathNodes = append(pathNodes, *r.pathNodeMapper(nodePtr))
-		}
-
-		rm.PathNodes = pathNodes
-	}
-
-	return &rm
-}
-
-func (r *RoomEntityService) connectorArrayMapper(entConnectors []*ent.ConnectorSpace) []ConnectorSpace {
-	var connectors []ConnectorSpace
-
-	for _, connectorPtr := range entConnectors {
-		connectors = append(connectors, *r.connectorMapper(connectorPtr))
-	}
-
-	return connectors
 }
 
 func (r *RoomEntityService) mapTag(t string, entRoom *ent.Room) (*ent.Tag, error) {

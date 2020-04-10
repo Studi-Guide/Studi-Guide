@@ -96,7 +96,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 				Floor:    i,
 			},
 
-			PathNode: navigation.PathNode{Id: pathNode.ID, Coordinate:navigation.Coordinate{
+			PathNodes: navigation.PathNode{Id: pathNode.ID, Coordinate:navigation.Coordinate{
 				X: pathNode.XCoordinate,
 				Y: pathNode.YCoordinate,
 				Z: pathNode.ZCoordinate,
@@ -340,7 +340,7 @@ func TestRoomEntityService_GetAllPathNodes(t *testing.T) {
 			found := linq.From(b).
 				AnyWith(
 					func(p interface{}) bool {
-						return p.(navigation.PathNode).Id == a[i].PathNode.Id
+						return p.(navigation.PathNode).Id == a[i].PathNodes.Id
 					},
 				)
 

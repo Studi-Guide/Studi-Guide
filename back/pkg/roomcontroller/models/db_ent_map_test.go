@@ -120,7 +120,7 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNode: navigation.PathNode{
+		PathNodes: navigation.PathNode{
 			Id: 0,
 			Coordinate: navigation.Coordinate{
 				X: 34,
@@ -239,7 +239,7 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNode: navigation.PathNode{
+		PathNodes: navigation.PathNode{
 			Id: 2,
 			Coordinate: navigation.Coordinate{
 				X: 34,
@@ -360,7 +360,7 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNode: navigation.PathNode{
+		PathNodes: navigation.PathNode{
 			Id: 4,
 			Coordinate: navigation.Coordinate{
 				X: 34,
