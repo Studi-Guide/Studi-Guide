@@ -83,6 +83,19 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 		var roomNodes []*navigation.PathNode
 		for _, node := range item.PathNodes {
 
+			// extract connected nodes
+			var connectedNodes []*navigation.PathNode
+			for _,connectedNodeId := range node.ConnectedPathNodes {
+
+				// create empty pothnode with ID
+				connectedNodes = append(connectedNodes, &navigation.PathNode{
+					Id:             connectedNodeId,
+					Coordinate:     navigation.Coordinate{},
+					Group:          nil,
+					ConnectedNodes: nil,
+				})
+			}
+
 			roomNodes = append(roomNodes, &navigation.PathNode{
 				Id:             node.Id,
 				Coordinate:     navigation.Coordinate{X: node.X, Y: node.Y, Z: node.Z},

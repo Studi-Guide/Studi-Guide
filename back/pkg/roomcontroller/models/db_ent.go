@@ -487,9 +487,15 @@ func (r *RoomEntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, 
 		}
 	}
 
+	var connectedIDs []int
+	for _, connectedNode := range p.ConnectedNodes{
+		connectedIDs = append(connectedIDs, connectedNode.Id)
+	}
+
 	log.Println("add path node:", p)
 	return r.client.PathNode.Create().
 		SetPathId(p.Id).
+		AddConnectorIDs(connectedIDs...).
 		SetXCoordinate(p.Coordinate.X).
 		SetYCoordinate(p.Coordinate.Y).
 		SetZCoordinate(p.Coordinate.Z).

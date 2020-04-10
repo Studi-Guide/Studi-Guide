@@ -11,7 +11,7 @@ type ImportPathNode struct {
 	X 				int
 	Y 				int
 	Z 				int
-	ConnectedNodes 	[]int
+	ConnectedPathNodes 	[]int
 }
 
 type ImportMapItems struct {
