@@ -87,7 +87,7 @@
     "Color": "#5682a3"
   },
   {
-    "name": "Treppe",
+    "name": "Treppe 1 3.OG",
     "sections": [
       {
         "Start": { "X": 360, "Y": 0, "Z": 3 },
@@ -145,7 +145,7 @@
     "Color": "#4b7989"
   },
   {
-    "name": "corridor",
+    "name": "corridor 2",
     "sections": [
       {
         "Start": { "X": 100, "Y": 100, "Z": 3 },
@@ -198,7 +198,7 @@
     "Color": "#BBB"
   },
   {
-    "name": "Aufzug",
+    "name": "Aufzug 2",
     "sections": [
       {
         "Start": { "X": 360, "Y": 100, "Z": 3 },
@@ -256,7 +256,7 @@
     "Color": "#4b7989"
   },
   {
-    "name": "Treppe",
+    "name": "Treppe 2 3.OG",
     "sections": [
       {
         "Start": { "X": 225, "Y": 155, "Z": 3 },
@@ -283,7 +283,7 @@
     "Color": "#AFAFAF"
   },
   {
-    "name": "WC Herren",
+    "name": "WC Herren 2",
     "sections": [
       {
         "Start": { "X": 290, "Y": 130, "Z": 3 },
@@ -324,7 +324,7 @@
     "Color": "#AEA693"
   },
   {
-    "name": "WC Damen",
+    "name": "WC Damen 1",
     "sections": [
       {
         "Start": { "X": 290, "Y": 200, "Z": 3 },
@@ -910,7 +910,7 @@
     "Color": "#949494"
   },
   {
-    "name": "Treppe",
+    "name": "Treppe 3 3.OG",
     "sections": [
       {
         "Start": { "X": 130, "Y": 550, "Z": 3 },
@@ -935,7 +935,7 @@
     "Color": "#AFAFAF"
   },
   {
-    "name": "WC Damen",
+    "name": "WC Damen 2",
     "sections": [
       {
         "Start": { "X": 130, "Y": 590, "Z": 3 },
@@ -976,7 +976,7 @@
     "Color": "#AEA693"
   },
   {
-    "name": "WC Herren",
+    "name": "WC Herren 1",
     "sections": [
       {
         "Start": { "X": 130, "Y": 620, "Z": 3 },
@@ -1017,7 +1017,7 @@
     "Color": "#AEA693"
   },
   {
-    "name": "Aufzug",
+    "name": "Aufzug 1",
     "sections": [
       {
         "Start": { "X": 190, "Y": 590, "Z": 3 },
@@ -1042,7 +1042,7 @@
     "Color": "#817464"
   },
   {
-    "name": "corridor",
+    "name": "corridor 1",
     "sections": [
       {
         "Start": { "X": 225, "Y": 185, "Z": 3 },
@@ -1498,7 +1498,7 @@
     "Color": "#4b7989"
   },
   {
-    "name": "Treppe",
+    "name": "Treppe 4 3.OG",
     "sections": [
       {
         "Start": { "X": 220, "Y": 960, "Z": 3 },
