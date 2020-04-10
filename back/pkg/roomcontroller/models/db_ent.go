@@ -483,10 +483,11 @@ func (r *RoomEntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, 
 			log.Fatal(t)
 			return nil, err
 		case *ent.NotFoundError:
-			log.Printf("Pathnode with ID '%v' not found. Creating new one", p.Id)
+			// do nothing
 		}
 	}
 
+	log.Println("add path node:", p)
 	return r.client.PathNode.Create().
 		SetPathId(p.Id).
 		SetXCoordinate(p.Coordinate.X).
