@@ -48,3 +48,9 @@ export class svgPath {
   d: string;
   fill: string;
 }
+
+export class RoomName {
+  name: string;
+  x: number;
+  y: number;
+}

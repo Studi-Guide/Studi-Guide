@@ -20,12 +20,12 @@
           <span id="routeBtnText">route</span>
         </ion-button>
         <!-- TEST AJAX -->
-        <ion-button size="small" color="success" (click)="discoverFloor()">
+        <ion-button size="small" color="success" (click)="fetchFloorToDisplay()">
           <ion-icon slot="end" name="cellular"></ion-icon>
           <span id="ajaxBtnText">test ajax</span>
         </ion-button>
-        <ion-button size="small" color="danger" (click)="fetchAndDisplayRoute()">
-          <ion-icon slot="end" name="cellular"></ion-icon>
+        <ion-button size="small" color="danger" (click)="fetchRouteToDisplay()">
+          <ion-icon slot="end" azu></ion-icon>
           <span id="ajaxBtnText">test route</span>
         </ion-button>
         <!-- TEST AJAX END-->
@@ -34,24 +34,24 @@
   </ion-grid>
 
   <div id="building-map" *ngIf="mapIsVisible">
-    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}" class="center">
+    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{mapSvgWidth}}" attr.height="{{mapSvgHeight}}" class="center">
       <path *ngFor="let path of calculatedRoomPaths"
             attr.d="{{path.d}}"
             attr.fill="{{path.fill}}"
             stroke="#FFF"
       />
-      <text *ngFor="let room of testRooms"
-            attr.x="{{room.sections[0].Start.X+6}}"
-            attr.y="{{room.sections[0].Start.Y+16}}"
+      <text *ngFor="let roomName of roomNames"
+            attr.x="{{roomName.x}}"
+            attr.y="{{roomName.y}}"
             font-size="9px"
             fill="#FFF">
-        {{room.name}}
+        {{roomName.name}}
       </text>
       <path *ngFor="let doorLine of calculatedDoorLines" attr.d="{{doorLine.d}}" attr.stroke="{{doorLine.fill}}" />
       <!-- TEST -->
       <circle *ngFor="let pathNode of testRoute" attr.cx="{{pathNode.X}}" attr.cy="{{pathNode.Y}}" r="2" fill="red" />
       <!-- TEST END -->
-      <polyline attr.points="{{route}}" style="fill:none;stroke:#A00;stroke-width:3" />
+      <polyline attr.points="{{calculatedRoute}}" style="fill:none;stroke:#A00;stroke-width:3" />
     </svg>
   </div>
 </ion-content>

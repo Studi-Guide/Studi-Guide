@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Room, Section, svgPath} from "../building-objects-if";
+import {Room, Section, svgPath, RoomName} from "../building-objects-if";
 
 @Injectable({
     providedIn: 'root'
@@ -13,6 +13,7 @@ export class FloorMap {
 
     public svgWidth: number;
     public svgHeight: number;
+    public allRoomNames: RoomName[];
 
     constructor(objectsToBeVisualized: Room[]) {
         this.objectsToBeVisualized = objectsToBeVisualized;
@@ -20,6 +21,7 @@ export class FloorMap {
         this.calculatedDoorLines = [];
         this.svgWidth = 0;
         this.svgHeight = 0;
+        this.allRoomNames = [];
     }
 
     private static buildDoorSvgLineFromSection(doorSection:Section) : string {
@@ -67,6 +69,19 @@ export class FloorMap {
             // bottom navigation bar overlays svg
             this.svgHeight += 1;
             this.svgWidth += 0.15;
+        }
+    }
+
+    public collectAllRoomNames() {
+        this.allRoomNames = []; // why is this initialization necessary?
+        for (const room of this.objectsToBeVisualized) {
+            this.allRoomNames.push(
+                {
+                    name: room.name,
+                    x: room.sections[0].Start.X+6,
+                    y: room.sections[0].Start.Y+16
+                }
+            );
         }
     }
 }
