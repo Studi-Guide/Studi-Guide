@@ -338,6 +338,7 @@
       { "Id": 4,
         "ConnectedPathNodes" : [
           3,
+          14,
           3081
         ],
         "X": 257, "Y": 170, "Z": 3 }
@@ -377,6 +378,9 @@
     "pathNodes": [
       {
         "Id": 5 ,
+        "ConnectedPathNodes" : [
+          6
+        ],
         "X": 335, "Y": 160, "Z": 3 }
     ],
     "doors": [
@@ -384,6 +388,9 @@
         "Start": { "X": 325, "Y": 175, "Z": 3 },
         "End": { "X": 340, "Y": 175, "Z": 3 },
         "pathNode": { "Id": 6 ,
+          "ConnectedPathNodes" : [
+            5
+          ],
           "X": 333, "Y": 175, "Z": 3 }
       }
     ],
@@ -419,13 +426,21 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 6 ,"X": 335, "Y": 200, "Z": 3 }
+      { "Id": 61 ,
+        "ConnectedPathNodes" : [
+          7
+        ],
+        "X": 335, "Y": 200, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 325, "Y": 180, "Z": 3 },
         "End": { "X": 340, "Y": 180, "Z": 3 },
-        "pathNode": { "Id": 7 ,"X": 333, "Y": 180, "Z": 3 }
+        "pathNode": { "Id": 7 ,
+          "ConnectedPathNodes" : [
+            61
+          ],
+          "X": 333, "Y": 180, "Z": 3 }
       }
     ],
     "Color": "#AEA693"
@@ -464,7 +479,8 @@
         "End": { "X": 225, "Y": 225, "Z": 3 },
         "pathNode": { "Id": 3101,
           "ConnectedPathNodes" : [
-            310
+            310,
+            15
           ],
           "X": 225, "Y": 220, "Z": 3 }
       }
@@ -493,13 +509,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 312 ,"X": 187, "Y": 250, "Z": 3 }
+      { "Id": 312 ,
+        "ConnectedPathNodes" : [
+          3121
+        ],
+        "X": 187, "Y": 250, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 225, "Y": 240, "Z": 3 },
         "End": { "X": 225, "Y": 250, "Z": 3 },
-        "pathNode": { "Id": 312, "X": 225, "Y": 245, "Z": 3 }
+        "pathNode": { "Id": 3121,
+          "ConnectedPathNodes" : [
+            312,
+            16
+          ],
+          "X": 225, "Y": 245, "Z": 3 }
       }
     ],
     "Color": "#4b7989"
@@ -526,13 +551,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      {"Id": 305, "X": 335, "Y": 250, "Z": 3 }
+      {"Id": 305,
+        "ConnectedPathNodes" : [
+          3051
+        ],
+        "X": 335, "Y": 250, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 325, "Y": 241, "Z": 3 },
         "End": { "X": 345, "Y": 239, "Z": 3 },
-        "pathNode": { "Id": 3051 ,"X": 335, "Y": 240, "Z": 3 }
+        "pathNode": { "Id": 3051 ,
+          "ConnectedPathNodes" : [
+            305,
+            42
+          ],
+          "X": 335, "Y": 240, "Z": 3 }
       }
     ],
     "Color": "#4b7989"
@@ -559,18 +593,27 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 314, "X": 195, "Y": 280, "Z": 3 }
+      { "Id": 314,
+        "ConnectedPathNodes" : [
+          3141
+        ],
+        "X": 195, "Y": 280, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 275, "Z": 3 },
         "End": { "X": 240, "Y": 285, "Z": 3 },
-        "pathNode": { "Id": 3141 ,"X": 240, "Y": 280, "Z": 3 }
+        "pathNode": { "Id": 3141 ,
+          "ConnectedPathNodes" : [
+            314,
+            17
+          ],
+          "X": 240, "Y": 280, "Z": 3 }
       },
       {
         "Start": { "X": 205, "Y": 295, "Z": 3 },
         "End": { "X": 220, "Y": 295, "Z": 3 },
-        "pathNode": { "Id": 3141 ,"X": 213, "Y": 295, "Z": 3 }
+        "pathNode": { "Id": 3142 ,"X": 213, "Y": 295, "Z": 3 }
       }
     ],
     "Color": "#4b7989"
@@ -597,13 +640,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 316 ,"X": 195, "Y": 310, "Z": 3 }
+      { "Id": 316 ,
+        "ConnectedPathNodes" : [
+          3161
+        ],
+        "X": 195, "Y": 310, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 305, "Z": 3 },
         "End": { "X": 240, "Y": 315, "Z": 3 },
-        "pathNode": {"Id": 3161, "X": 240, "Y": 310, "Z": 3 }
+        "pathNode": {"Id": 3161,
+          "ConnectedPathNodes" : [
+            316,
+            19
+          ],
+          "X": 240, "Y": 310, "Z": 3 }
       },
       {
         "Start": { "X": 205, "Y": 295, "Z": 3 },
@@ -640,13 +692,23 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 318,"X": 195, "Y": 337, "Z": 3  }
+      { "Id": 318,
+        "ConnectedPathNodes" : [
+          3181,
+          3182
+        ],
+        "X": 195, "Y": 337, "Z": 3  }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 330, "Z": 3 },
         "End": { "X": 240, "Y": 340, "Z": 3 },
-        "pathNode": { "Id": 3181 ,"X": 240, "Y": 335, "Z": 3 }
+        "pathNode": { "Id": 3181 ,
+          "ConnectedPathNodes" : [
+            318,
+            20
+          ],
+          "X": 240, "Y": 335, "Z": 3 }
       },
       {
         "Start": { "X": 210, "Y": 325, "Z": 3 },
@@ -678,13 +740,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 320 ,"X": 195, "Y": 365, "Z": 3 }
+      { "Id": 320 ,
+        "ConnectedPathNodes" : [
+          3201
+        ],
+        "X": 195, "Y": 365, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 360, "Z": 3 },
         "End": { "X": 240, "Y": 370, "Z": 3 },
-        "pathNode": { "Id": 3201 ,"X": 240, "Y": 365, "Z": 3 }
+        "pathNode": { "Id": 3201 ,
+          "ConnectedPathNodes" : [
+            320,
+            21
+          ],
+          "X": 240, "Y": 365, "Z": 3 }
       }
     ],
     "Color": "#4b7989"
@@ -711,13 +782,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 322, "X": 195, "Y": 420, "Z": 3 }
+      { "Id": 322,
+        "ConnectedPathNodes" : [
+          3221
+        ],
+        "X": 195, "Y": 420, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 440, "Z": 3 },
         "End": { "X": 240, "Y": 450, "Z": 3 },
-        "pathNode": { "Id": 3221, "X": 240, "Y": 445, "Z": 3 }
+        "pathNode": { "Id": 3221,
+          "ConnectedPathNodes" : [
+            322,
+            24
+          ],
+          "X": 240, "Y": 445, "Z": 3 }
       }
     ],
     "Color": "#4b7989"
@@ -744,13 +824,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 324, "X": 195, "Y": 475, "Z": 3 }
+      { "Id": 324,
+        "ConnectedPathNodes" : [
+          3241
+        ],
+        "X": 195, "Y": 475, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 465, "Z": 3 },
         "End": { "X": 240, "Y": 475, "Z": 3 },
-        "pathNode": { "Id": 3241, "X": 240, "Y": 470, "Z": 3 }
+        "pathNode": { "Id": 3241,
+          "ConnectedPathNodes" : [
+            324,
+            25
+          ],
+          "X": 240, "Y": 470, "Z": 3 }
       }
     ],
     "Color": "#4b7989"
@@ -777,13 +866,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 326 ,"X": 195, "Y": 505, "Z": 3 }
+      { "Id": 326 ,
+        "ConnectedPathNodes" : [
+          3261
+        ],
+        "X": 195, "Y": 505, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 500, "Z": 3 },
         "End": { "X": 240, "Y": 510, "Z": 3 },
-        "pathNode": { "Id": 3261 ,"X": 240, "Y": 505, "Z": 3 }
+        "pathNode": { "Id": 3261 ,
+          "ConnectedPathNodes" : [
+            326,
+            27
+          ],
+          "X": 240, "Y": 505, "Z": 3 }
       }
     ],
     "Color": "#4b7989"
@@ -810,13 +908,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 328, "X": 195, "Y": 535, "Z": 3 }
+      { "Id": 328,
+        "ConnectedPathNodes" : [
+          3281
+        ],
+        "X": 195, "Y": 535, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 530, "Z": 3 },
         "End": { "X": 240, "Y": 540, "Z": 3 },
-        "pathNode": { "Id": 3281 ,"X": 240, "Y": 535, "Z": 3 }
+        "pathNode": { "Id": 3281 ,
+          "ConnectedPathNodes" : [
+            328,
+            28
+          ],
+          "X": 240, "Y": 535, "Z": 3 }
       }
     ],
     "Color": "#4b7989"
@@ -843,13 +950,23 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 307,"X": 335, "Y": 292, "Z": 3 }
+      { "Id": 307,
+        "ConnectedPathNodes" : [
+          3071,
+          3072
+        ],
+        "X": 335, "Y": 292, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 280, "Z": 3 },
         "End": { "X": 290, "Y": 295, "Z": 3 },
-        "pathNode": { "Id": 3071, "X": 290, "Y": 288, "Z": 3 }
+        "pathNode": { "Id": 3071,
+          "ConnectedPathNodes" : [
+            307,
+            28
+          ],
+          "X": 290, "Y": 288, "Z": 3 }
       },
       {
         "Start": { "X": 305, "Y": 320, "Z": 3 },
@@ -881,18 +998,33 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 309, "X": 335, "Y": 370, "Z": 3 }
+      { "Id": 309,
+        "ConnectedPathNodes" : [
+          3091,
+          3092
+        ],
+        "X": 335, "Y": 370, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 330, "Z": 3 },
         "End": { "X": 290, "Y": 345, "Z": 3 },
-        "pathNode": { "Id": 3091,"X": 290, "Y": 338, "Z": 3 }
+        "pathNode": { "Id": 3091,
+          "ConnectedPathNodes" : [
+            309,
+            20
+          ],
+          "X": 290, "Y": 338, "Z": 3 }
       },
       {
         "Start": { "X": 290, "Y": 395, "Z": 3 },
         "End": { "X": 290, "Y": 410, "Z": 3 },
-        "pathNode": { "Id": 3092,"X": 290, "Y": 403, "Z": 3 }
+        "pathNode": { "Id": 3092,
+          "ConnectedPathNodes" : [
+            309,
+            22
+          ],
+          "X": 290, "Y": 403, "Z": 3 }
       },
       {
         "Start": { "X": 305, "Y": 320, "Z": 3 },
@@ -929,18 +1061,33 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 311, "X": 335, "Y": 470, "Z": 3 }
+      { "Id": 311,
+        "ConnectedPathNodes" : [
+          3111,
+          3112
+        ],
+        "X": 335, "Y": 470, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 430, "Z": 3 },
         "End": { "X": 290, "Y": 445, "Z": 3 },
-        "pathNode": { "Id": 3111, "X": 290, "Y": 438, "Z": 3 }
+        "pathNode": { "Id": 3111,
+          "ConnectedPathNodes" : [
+            311,
+            23
+          ],
+          "X": 290, "Y": 438, "Z": 3 }
       },
       {
         "Start": { "X": 290, "Y": 495, "Z": 3 },
         "End": { "X": 290, "Y": 510, "Z": 3 },
-        "pathNode": { "Id": 3112,"X": 290, "Y": 503, "Z": 3 }
+        "pathNode": { "Id": 3112,
+          "ConnectedPathNodes" : [
+            311,
+            26
+          ],
+          "X": 290, "Y": 503, "Z": 3 }
       },
       {
         "Start": { "X": 305, "Y": 420, "Z": 3 },
@@ -972,13 +1119,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 8,"X": 335, "Y": 535, "Z": 3 }
+      { "Id": 8,
+        "ConnectedPathNodes" : [
+          9
+        ],
+        "X": 335, "Y": 535, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 530, "Z": 3 },
         "End": { "X": 290, "Y": 540, "Z": 3 },
-        "pathNode": { "Id": 9 ,"X": 290, "Y": 535, "Z": 3 }
+        "pathNode": { "Id": 9 ,
+          "ConnectedPathNodes" : [
+            8
+
+          ],
+          "X": 290, "Y": 535, "Z": 3 }
       }
     ],
     "Color": "#949494"
@@ -1038,13 +1194,21 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 10,"X": 160, "Y": 605, "Z": 3 }
+      { "Id": 10,
+        "ConnectedPathNodes" : [
+          11
+        ],
+        "X": 160, "Y": 605, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 185, "Y": 610, "Z": 3 },
         "End": { "X": 175, "Y": 610, "Z": 3 },
-        "pathNode": { "Id": 11, "X": 180, "Y": 610, "Z": 3 }
+        "pathNode": { "Id": 11,
+          "ConnectedPathNodes" : [
+            10
+          ],
+          "X": 180, "Y": 610, "Z": 3 }
       }
     ],
     "Color": "#AEA693"
@@ -1079,13 +1243,21 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 12,"X": 160, "Y": 635, "Z": 3 }
+      { "Id": 12,
+        "ConnectedPathNodes" : [
+          13
+        ],
+        "X": 160, "Y": 635, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 185, "Y": 630, "Z": 3 },
         "End": { "X": 175, "Y": 630, "Z": 3 },
-        "pathNode": { "Id": 13,"X": 180, "Y": 630, "Z": 3 }
+        "pathNode": { "Id": 13,
+          "ConnectedPathNodes" : [
+            12
+          ],
+          "X": 180, "Y": 630, "Z": 3 }
       }
     ],
     "Color": "#AEA693"
@@ -1504,18 +1676,33 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 334,"X": 195, "Y": 700, "Z": 3 }
+      { "Id": 334,
+        "ConnectedPathNodes" : [
+          3341,
+          3342
+        ],
+        "X": 195, "Y": 700, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 665, "Z": 3 },
         "End": { "X": 240, "Y": 680, "Z": 3 },
-        "pathNode": { "Id": 3341,"X": 240, "Y": 673, "Z": 3 }
+        "pathNode": { "Id": 3341,
+          "ConnectedPathNodes" : [
+            334,
+            32
+          ],
+          "X": 240, "Y": 673, "Z": 3 }
       },
       {
         "Start": { "X": 240, "Y": 720, "Z": 3 },
         "End": { "X": 240, "Y": 735, "Z": 3 },
-        "pathNode": { "Id": 3342,"X": 240, "Y": 728, "Z": 3 }
+        "pathNode": { "Id": 3342,
+          "ConnectedPathNodes" : [
+            334,
+            33
+          ],
+          "X": 240, "Y": 728, "Z": 3 }
       }
     ],
     "Color": "#5682a3"
@@ -1542,13 +1729,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 336, "X": 195, "Y": 790, "Z": 3 }
+      { "Id": 336,
+        "ConnectedPathNodes" : [
+          3361
+        ],
+        "X": 195, "Y": 790, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 765, "Z": 3 },
         "End": { "X": 240, "Y": 780, "Z": 3 },
-        "pathNode": { "Id": 3361, "X": 240, "Y": 773, "Z": 3 }
+        "pathNode": { "Id": 3361,
+          "ConnectedPathNodes" : [
+            336,
+            34
+          ],
+          "X": 240, "Y": 773, "Z": 3 }
       }
     ],
     "Color": "#5682a3"
@@ -1575,18 +1771,33 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id":338, "X": 195, "Y": 880, "Z": 3 }
+      { "Id":338,
+        "ConnectedPathNodes" : [
+          3381,
+          3382
+        ],
+        "X": 195, "Y": 880, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 240, "Y": 865, "Z": 3 },
         "End": { "X": 240, "Y": 875, "Z": 3 },
-        "pathNode": { "Id": 3381, "X": 240, "Y": 870, "Z": 3 }
+        "pathNode": { "Id": 3381,
+          "ConnectedPathNodes" : [
+            338,
+            37
+          ],
+          "X": 240, "Y": 870, "Z": 3 }
       },
       {
         "Start": { "X": 240, "Y": 905, "Z": 3 },
         "End": { "X": 240, "Y": 915, "Z": 3 },
-        "pathNode": { "Id": 3382, "X": 240, "Y": 910, "Z": 3 }
+        "pathNode": { "Id": 3382,
+          "ConnectedPathNodes" : [
+            338,
+            38
+          ],
+          "X": 240, "Y": 910, "Z": 3 }
       }
     ],
     "Color": "#5682a3"
@@ -1613,13 +1824,22 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id":313, "X": 345, "Y": 600, "Z": 3 }
+      { "Id":313,
+        "ConnectedPathNodes" : [
+          3131
+        ],
+        "X": 345, "Y": 600, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 620, "Z": 3 },
         "End": { "X": 290, "Y": 635, "Z": 3 },
-        "pathNode": {"Id": 3131, "X": 290, "Y": 628, "Z": 3 }
+        "pathNode": {"Id": 3131,
+          "ConnectedPathNodes" : [
+            313,
+            31
+          ],
+          "X": 290, "Y": 628, "Z": 3 }
       }
     ],
     "Color": "#5682a3"
@@ -1646,18 +1866,33 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id":315, "X": 335, "Y": 700, "Z": 3 }
+      { "Id":315,
+        "ConnectedPathNodes" : [
+          3151,
+          3152
+        ],
+        "X": 335, "Y": 700, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 665, "Z": 3 },
         "End": { "X": 290, "Y": 680, "Z": 3 },
-        "pathNode": { "Id":3151, "X": 290, "Y": 673, "Z": 3 }
+        "pathNode": { "Id":3151,
+          "ConnectedPathNodes" : [
+            315,
+            32
+          ],
+          "X": 290, "Y": 673, "Z": 3 }
       },
       {
         "Start": { "X": 290, "Y": 720, "Z": 3 },
         "End": { "X": 290, "Y": 735, "Z": 3 },
-        "pathNode": { "Id":3152, "X": 290, "Y": 728, "Z": 3 }
+        "pathNode": { "Id":3152,
+          "ConnectedPathNodes" : [
+            315,
+            33
+          ],
+          "X": 290, "Y": 728, "Z": 3 }
       },
       {
         "Start": { "X": 300, "Y": 750, "Z": 3 },
@@ -1689,18 +1924,33 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 317, "X": 335, "Y": 800, "Z": 3 }
+      { "Id": 317,
+        "ConnectedPathNodes" : [
+          3171,
+          3172
+        ],
+        "X": 335, "Y": 800, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 765, "Z": 3 },
         "End": { "X": 290, "Y": 780, "Z": 3 },
-        "pathNode": { "Id": 3171, "X": 290, "Y": 773, "Z": 3 }
+        "pathNode": { "Id": 3171,
+          "ConnectedPathNodes" : [
+            317,
+            34
+          ],
+          "X": 290, "Y": 773, "Z": 3 }
       },
       {
         "Start": { "X": 290, "Y": 820, "Z": 3 },
         "End": { "X": 290, "Y": 835, "Z": 3 },
-        "pathNode": { "Id":3172, "X": 290, "Y": 828, "Z": 3 }
+        "pathNode": { "Id":3172,
+          "ConnectedPathNodes" : [
+            317,
+            35
+          ],
+          "X": 290, "Y": 828, "Z": 3 }
       },
       {
         "Start": { "X": 300, "Y": 750, "Z": 3 },
@@ -1737,13 +1987,23 @@
     ],
     "tags": [],
     "pathNodes": [
-      { "Id": 319, "X": 335, "Y": 890, "Z": 3 }
+      { "Id": 319,
+        "ConnectedPathNodes" : [
+          3191,
+          3192
+        ],
+        "X": 335, "Y": 890, "Z": 3 }
     ],
     "doors": [
       {
         "Start": { "X": 290, "Y": 895, "Z": 3 },
         "End": { "X": 290, "Y": 910, "Z": 3 },
-        "pathNode": { "Id": 3191, "X": 290, "Y": 903, "Z": 3 }
+        "pathNode": { "Id": 3191,
+          "ConnectedPathNodes" : [
+            319,
+            37
+          ],
+          "X": 290, "Y": 903, "Z": 3 }
       },
       {
         "Start": { "X": 300, "Y": 850, "Z": 3 },
