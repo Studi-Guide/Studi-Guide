@@ -76,6 +76,35 @@ func (m MockNavigationService) getDummyValues() []navigation.PathNode {
 	return nodes
 }
 
+func TestNavigationCalculatefromString_NoRooms(t *testing.T) {
+	startroomname := "dummystart"
+	endroomname := "dummyend"
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/navigation/dir", nil)
+	q := req.URL.Query()
+	q.Add("startroom", startroomname)
+	q.Add("endroom", endroomname)
+
+	req.URL.RawQuery = q.Encode()
+
+	provider := NewRoomMockService(startroomname, endroomname)
+	router := gin.Default()
+	roomRouter := router.Group("/navigation")
+	NewNavigationController(roomRouter, provider)
+
+	router.ServeHTTP(rec, req)
+
+	expected, err := json.Marshal(provider.nodes)
+	if err != nil {
+		t.Error(err)
+	}
+
+	expected = append(expected, '\n')
+	if string(expected) != rec.Body.String() {
+		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
+
 func TestNavigationCalculatefromString(t *testing.T) {
 	startroomname := "dummystart"
 	endroomname := "dummyend"

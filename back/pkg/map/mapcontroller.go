@@ -72,16 +72,6 @@ func (l MapController) GetMapItems(c *gin.Context) {
 		return
 	}
 
-	if err != nil {
-		fmt.Println("GetMapItems() failed with error", err)
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    http.StatusBadRequest,
-			"message": err.Error(),
-		})
-
-		return
-	}
-
 	l.CreateAndSendMapList(rooms, c)
 }
 
