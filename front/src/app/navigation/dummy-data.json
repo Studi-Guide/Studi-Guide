@@ -96,8 +96,8 @@
         "pathNode": {
           "Id": 3021,
           "ConnectedPathNodes" : [
-            302,
-            2
+            2,
+            302
           ],
           "X": 173, "Y": 100, "Z": 3 }
       }

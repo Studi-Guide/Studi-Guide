@@ -81,6 +81,36 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 	for _, item := range importItems {
 
 		var roomNodes []*navigation.PathNode
+		var doors []Door
+		for _, importDoor := range item.Doors {
+
+			// extract connected nodes
+			var connectedNodes []*navigation.PathNode
+			for _,connectedNodeId := range importDoor.PathNode.ConnectedPathNodes {
+
+				// create empty pothnode with ID
+				connectedNodes = append(connectedNodes, &navigation.PathNode{
+					Id:             connectedNodeId,
+					Coordinate:     navigation.Coordinate{},
+					Group:          nil,
+					ConnectedNodes: nil,
+				})
+			}
+
+			doors = append(doors,Door{
+				Section:  importDoor.Section,
+				PathNode: navigation.PathNode{
+					Id:             importDoor.PathNode.Id,
+					Coordinate:     navigation.Coordinate{
+						X: importDoor.PathNode.X,
+						Y: importDoor.PathNode.Y,
+						Z: importDoor.PathNode.Z,
+					},
+					Group:          nil,
+					ConnectedNodes: connectedNodes,
+				},
+			})
+		}
 		for _, node := range item.PathNodes {
 
 			// extract connected nodes
@@ -114,6 +144,7 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 				Sections:    item.Sections,
 				Campus:      item.Campus,
 				Building:    item.Building,
+				Doors: 		 doors,
 			},
 			// Id should be set be DB
 
