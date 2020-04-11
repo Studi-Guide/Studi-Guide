@@ -619,6 +619,29 @@ func TestMapPathNodeArray(t *testing.T) {
 
 }
 
+func TestMapPathNode_Exception(t *testing.T) {
+	r, err := setupRoomEntityService()
+	if err != nil || r == nil {
+		t.Error("error setting up room entity service:", err, r)
+		return
+	}
+	defer r.client.Close()
+
+	entPathNode, err := r.mapPathNode(&navigation.PathNode{
+		Id:             1,
+		Coordinate:     navigation.Coordinate{},
+		Group:          nil,
+		ConnectedNodes: nil,
+	})
+
+	r.client.PathNode.DeleteOneID(entPathNode.ID).Exec(r.context)
+	result := r.pathNodeMapper(entPathNode, []*navigation.PathNode{}, true)
+
+	if  !reflect.DeepEqual(*result, navigation.PathNode{}) {
+		t.Error("expected no error and  pathnode; got:", err, entPathNode)
+	}
+}
+
 func TestMapPathNode(t *testing.T) {
 	r, err := setupRoomEntityService()
 	if err != nil || r == nil {
