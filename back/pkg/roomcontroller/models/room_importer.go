@@ -156,22 +156,3 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 
 	return rooms, nil
 }
-
-func getPathNodesFromImport(importModes []ImportPathNode) []navigation.PathNode {
-	var nodes []navigation.PathNode
-	for _, item := range importModes {
-
-		nodes = append(nodes, navigation.PathNode{
-			Id:             item.Id,
-			Coordinate:    	navigation.Coordinate{
-				X: item.X,
-				Y: item.Y,
-				Z: item.Z,
-			},
-			Group:          nil,
-			ConnectedNodes: nil,
-		})
-	}
-
-	return nodes
-}
