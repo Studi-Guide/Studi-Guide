@@ -513,8 +513,9 @@ func (r *RoomEntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, 
 			return  node, nil
 		}
 
-		switch _ := err.(type) {
+		switch t := err.(type) {
 		default:
+			log.Fatal(t)
 			return nil, err
 		case *ent.NotFoundError:
 			// do nothing
