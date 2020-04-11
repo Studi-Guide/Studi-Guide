@@ -100,7 +100,7 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 				Id:             node.Id,
 				Coordinate:     navigation.Coordinate{X: node.X, Y: node.Y, Z: node.Z},
 				Group:          nil,
-				ConnectedNodes: nil,
+				ConnectedNodes: connectedNodes,
 			})
 		}
 

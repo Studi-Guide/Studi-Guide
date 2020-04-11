@@ -32,9 +32,6 @@ func (PathNode) Edges() []ent.Edge {
 		edge.From("room", Room.Type).
 			Ref("pathNodes"),
 
-		edge.From("connector", ConnectorSpace.Type).
-			Ref("connectorPathNodes"),
-
 		edge.To("linkedTo", PathNode.Type).
 			From("linkedFrom"),
 

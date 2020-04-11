@@ -36,6 +36,14 @@ func newRoomEntityService(env *env.Env) (*RoomEntityService, error) {
 		return nil, err
 	}
 
+	roomCount, err2 :=	client.Room.Query().Count(ctx)
+	log.Println("Found number of rooms:", roomCount)
+
+	if err2 != nil {
+		return nil, err2
+	}
+
+
 	return &RoomEntityService{client: client, table: table, context: ctx}, nil
 }
 

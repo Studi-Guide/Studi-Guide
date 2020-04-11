@@ -21,6 +21,5 @@ func (Door) Edges() []ent.Edge {
 		edge.To("section", Section.Type).Unique().Required(),
 		edge.To("pathNode", PathNode.Type).Unique(),
 		edge.From("owner", Room.Type).Ref("doors"),
-		edge.From("connectorOwner", ConnectorSpace.Type).Ref("connectorDoors"),
 	}
 }

@@ -33,8 +33,5 @@ func (Section) Edges() []ent.Edge {
 		edge.From("room", Room.Type).
 			Ref("sections").
 			Unique(),
-		edge.From("connector", ConnectorSpace.Type).
-			Ref("connectorSections").
-			Unique(),
 	}
 }
