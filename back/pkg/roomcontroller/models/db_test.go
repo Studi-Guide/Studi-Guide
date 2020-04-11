@@ -444,3 +444,15 @@ func TestRoomEntityService_FilterRooms_RoomFilterParam_FloorFilterParam_BadInteg
 		t.Error("expect nil room array, got: ", rooms)
 	}
 }
+
+func TestRoomEntityService_FilterRooms_DbCrash(t *testing.T) {
+	dbService, db := setupTestRoomDbService()
+
+	db.Exec("drop table rooms")
+
+	_, err := dbService.FilterRooms("1", "", "", "1") // no floor 0 in test data
+
+	if err == nil {
+		t.Error("expect no error, got:", err)
+	}
+}
