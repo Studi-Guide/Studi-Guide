@@ -133,14 +133,14 @@ func TestMapRoom(t *testing.T) {
 		},
 	}
 
-	entRoom, err := r.mapRoom(&ro)
+	entRoom, err := r.storeRooms([]Room{ro})
 	if err != nil || entRoom == nil {
 		t.Error("expected no error, got:", err, entRoom)
 	}
 
 	ro.Id = 1
 
-	entRoom, err = r.mapRoom(&ro)
+	entRoom, err = r.storeRooms([]Room{ro})
 	if err != nil || entRoom == nil {
 		t.Error("expected no error, got:", err, entRoom)
 	}
@@ -253,13 +253,13 @@ func TestMapRoom(t *testing.T) {
 		},
 	}
 
-	retRoom := r.roomMapper(entRoom)
+	retRoom := r.roomMapper(entRoom[0])
 	if !reflect.DeepEqual(checkRoom, *retRoom) {
 		t.Error("expected room equality. expected: ", checkRoom, ", actual: ", retRoom)
 	}
 
 	ro.Id = 2
-	entRoom, err = r.mapRoom(&ro)
+	entRoom, err = r.storeRooms([]Room{ro})
 	if err == nil || entRoom != nil {
 		t.Error("expected error, got:", err, entRoom)
 	}
@@ -392,13 +392,13 @@ func TestMapRoom(t *testing.T) {
 	}
 
 	ro.Doors = doors
-	entRoom, err = r.mapRoom(&ro)
+	entRoom, err = r.storeRooms([]Room{ro})
 	if err != nil || entRoom == nil {
 		t.Error("expected no error, got:", err, entRoom)
 	}
 
 
-	retRoom = r.roomMapper(entRoom)
+	retRoom = r.roomMapper(entRoom[0])
 	if !reflect.DeepEqual(checkRoom, *retRoom) {
 		t.Error("expected room equality. expected: ", checkRoom, ", actual: ", retRoom)
 	}
@@ -655,7 +655,7 @@ func TestMapPathNode(t *testing.T) {
 		t.Error("expected nil and pathnode, got error:", err, entPathNode)
 	}
 
-	retPathNode := r.pathNodeMapper(entPathNode)
+	retPathNode := r.pathNodeMapper(entPathNode, []*navigation.PathNode{},true)
 	if !reflect.DeepEqual(pathNode1, *retPathNode) {
 		t.Error("expected pathnode equality, expected:", pathNode1, ", actual: ", retPathNode)
 	}

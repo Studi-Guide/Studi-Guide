@@ -296,19 +296,19 @@ func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode, ava
 
 func (r *RoomEntityService) pathNodeMapper(entPathNode *ent.PathNode, availableNodes []*navigation.PathNode, resolveConnectedNodes bool) *navigation.PathNode {
 
-	entPathNode, err := r.client.PathNode.Query().Where(pathnode.PathId(entPathNode.PathId)).WithLinkedTo().First(r.context)
+	entPathNode, err := r.client.PathNode.Query().Where(pathnode.IDEQ(entPathNode.ID)).WithLinkedTo().First(r.context)
 	if err != nil {
 		return &navigation.PathNode{}
 	}
 
 	for _, node := range availableNodes {
-		if node.Id == entPathNode.PathId {
+		if node.Id == entPathNode.ID {
 			return node
 		}
 	}
 
 	p := navigation.PathNode{
-		Id:             entPathNode.PathId,
+		Id:             entPathNode.ID,
 		Coordinate:     navigation.Coordinate{X: entPathNode.XCoordinate, Y: entPathNode.YCoordinate, Z: entPathNode.ZCoordinate},
 		Group:          nil,
 		ConnectedNodes: nil,
@@ -517,7 +517,7 @@ func (r *RoomEntityService) mapPathNodeArray(pathNodePtr []*navigation.PathNode)
 func (r *RoomEntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, error) {
 
 	if p.Id != 0 {
-		node, err := r.client.PathNode.Query().Where(pathnode.PathId(p.Id)).First(r.context)
+		node, err := r.client.PathNode.Get(r.context, p.Id)
 		if node != nil {
 			return  node, nil
 		}
@@ -534,7 +534,7 @@ func (r *RoomEntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, 
 
 	log.Println("add path node:", p)
 	return r.client.PathNode.Create().
-		SetPathId(p.Id).
+		SetID(p.Id).
 		SetXCoordinate(p.Coordinate.X).
 		SetYCoordinate(p.Coordinate.Y).
 		SetZCoordinate(p.Coordinate.Z).
@@ -548,7 +548,7 @@ func (r *RoomEntityService) linkPathNode(pathNode *navigation.PathNode) error {
 	//Get database IDs
 	for _, connectedNode := range pathNode.ConnectedNodes {
 
-		entityConnectedNode, err := r.client.PathNode.Query().Where(pathnode.PathIdEQ(connectedNode.Id)).First(r.context)
+		entityConnectedNode, err := r.client.PathNode.Get(r.context, connectedNode.Id)
 		if err != nil {
 			return err
 		}
@@ -556,7 +556,7 @@ func (r *RoomEntityService) linkPathNode(pathNode *navigation.PathNode) error {
 		connectedIDs = append(connectedIDs, entityConnectedNode.ID)
 	}
 
-	entityNode, err := r.client.PathNode.Query().Where(pathnode.PathIdEQ(pathNode.Id)).First(r.context)
+	entityNode, err := r.client.PathNode.Get(r.context, pathNode.Id)
 	if err != nil {
 		return err
 	}
