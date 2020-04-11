@@ -79,13 +79,11 @@ func (r *RoomEntityService) GetRoom(name string) (Room, error) {
 
 func (r *RoomEntityService) AddRoom(room Room) error {
 
-	_, err := r.storeRooms([]Room {room})
-	return err
+	return r.storeRooms([]Room {room})
 }
 
 func (r *RoomEntityService) AddRooms(rooms []Room) error {
-	_, err := r.storeRooms(rooms)
-	return err
+	return r.storeRooms(rooms)
 }
 
 func (r *RoomEntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
@@ -335,17 +333,14 @@ func (r *RoomEntityService) tagsArrayMapper(entTags []*ent.Tag) []string {
 }
 
 
-func (r *RoomEntityService) storeRooms(rooms []Room) ([]*ent.Room, error) {
-	var entRooms []*ent.Room
+func (r *RoomEntityService) storeRooms(rooms []Room) error {
 	var errorStr []string
 
 	for _, rm := range rooms {
 		if rm.Id != 0 {
-			entRoom, err:= r.client.Room.Get(r.context, rm.Id)
+			_, err:= r.client.Room.Get(r.context, rm.Id)
 			if err != nil {
 				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
-			} else {
-				entRooms = append(entRooms, entRoom)
 			}
 
 			continue
@@ -402,8 +397,6 @@ func (r *RoomEntityService) storeRooms(rooms []Room) ([]*ent.Room, error) {
 
 		if err != nil {
 			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
-		} else {
-			entRooms = append(entRooms, entRoom)
 		}
 	}
 
@@ -428,7 +421,7 @@ func (r *RoomEntityService) storeRooms(rooms []Room) ([]*ent.Room, error) {
 		err = errors.New(strings.Join(errorStr, "; "))
 	}
 
-	return entRooms, err
+	return err
 }
 
 func (r *RoomEntityService) mapSectionArray(sections []Section) ([]*ent.Section, error) {
@@ -569,9 +562,6 @@ func (r *RoomEntityService) linkPathNode(pathNode *navigation.PathNode) error {
 	update.AddLinkedToIDs(connectedIDs...)
 	entityNode, err = update.Save(r.context)
 
-	if err != nil {
-
-	}
 	return err
 }
 
