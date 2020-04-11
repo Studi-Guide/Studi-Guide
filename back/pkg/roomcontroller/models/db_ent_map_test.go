@@ -678,6 +678,11 @@ func TestMapPathNode(t *testing.T) {
 		t.Error("expected pathnode equality, expected:", pathNode1, ", actual: ", retPathNode)
 	}
 
+	retPathNode2 := r.pathNodeMapper(entPathNode, []*navigation.PathNode{},true)
+	if !reflect.DeepEqual(*retPathNode2, *retPathNode) {
+		t.Error("expected pathnode equality, expected:", pathNode1, ", actual: ", retPathNode)
+	}
+
 	entPathNode, err = r.mapPathNode(&navigation.PathNode{
 		Id:             1,
 		Coordinate:     navigation.Coordinate{},
