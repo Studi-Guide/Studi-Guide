@@ -1,20 +1,19 @@
-package controllers
+package models
 
 import (
 	"errors"
 	"strconv"
 	"studi-guide/pkg/navigation"
-	"studi-guide/pkg/roomcontroller/models"
 )
 
 type RoomMockService struct {
-	RoomList []models.Room
+	RoomList []Room
 }
 
 func NewRoomMockService() *RoomMockService {
 	var rms RoomMockService
 
-	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
+	rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
 		Name:        "RoomN01",
 		Description: "Dummy",
 		Floor: 1,
@@ -26,7 +25,7 @@ func NewRoomMockService() *RoomMockService {
 			ConnectedNodes: nil,
 	}}})
 
-	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
+	rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
 		Name:        "RoomN02",
 		Description: "Dummy",
 	},
@@ -37,7 +36,7 @@ func NewRoomMockService() *RoomMockService {
 		ConnectedNodes: nil,
 	}}})
 
-	rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
+	rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
 		Name:        "RoomN03",
 		Description: "Dummy",
 	},
@@ -49,7 +48,7 @@ func NewRoomMockService() *RoomMockService {
 	}}})
 
 
-rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
+rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
 		Name:        "RoomN04",
 		Description: "Dummy",
 		Floor: 1,
@@ -64,14 +63,14 @@ rms.RoomList = append(rms.RoomList, models.Room{MapItem:models.MapItem{
 	return &rms
 }
 
-func (r *RoomMockService) GetAllRooms() ([]models.Room, error) {
+func (r *RoomMockService) GetAllRooms() ([]Room, error) {
 	if r.RoomList == nil {
 		return nil, errors.New("no room list initialized")
 	}
 	return r.RoomList, nil
 }
 
-func (r *RoomMockService) GetRoom(name string) (models.Room, error) {
+func (r *RoomMockService) GetRoom(name string) (Room, error) {
 
 	for _, room := range r.RoomList {
 		if room.MapItem.Name == name {
@@ -79,15 +78,15 @@ func (r *RoomMockService) GetRoom(name string) (models.Room, error) {
 		}
 	}
 
-	return models.Room{}, errors.New("no such room")
+	return Room{}, errors.New("no such room")
 }
 
-func (r *RoomMockService) AddRoom(room models.Room) error {
+func (r *RoomMockService) AddRoom(room Room) error {
 	r.RoomList = append(r.RoomList, room)
 	return nil
 }
 
-func (r *RoomMockService) AddRooms(rooms []models.Room) error {
+func (r *RoomMockService) AddRooms(rooms []Room) error {
 	for _, room := range rooms {
 		_ = r.AddRoom(room)
 	}
@@ -105,7 +104,7 @@ func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	return list, nil
 }
 
-func (r *RoomMockService) FilterRooms(floor, name, alias, room string) ([]models.Room, error) {
+func (r *RoomMockService) FilterRooms(floor, name, alias, room string) ([]Room, error) {
 	if r.RoomList == nil {
 		return nil, errors.New("no room list initialized")
 	}
@@ -116,7 +115,7 @@ func (r *RoomMockService) FilterRooms(floor, name, alias, room string) ([]models
 			return nil, err
 		}
 
-		var list []models.Room
+		var list []Room
 		for _, room := range r.RoomList {
 			if room.Floor == floorInt {
 				list = append(list, room)

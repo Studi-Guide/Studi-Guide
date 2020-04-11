@@ -80,7 +80,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 
 		testRooms = append(testRooms, Room{
 			Id:          entRoom.ID,
-			MapItem:MapItem{
+			MapItem: MapItem{
 				Name:        entRoom.Name,
 				Description: entRoom.Description,
 				Tags:       nil,
@@ -203,7 +203,7 @@ func TestAddRoom(t *testing.T) {
 
 	testRoom := Room{
 		Id: 4,
-		MapItem:MapItem{
+		MapItem: MapItem{
 			Name:        "04",
 			Description: "description",
 		},
@@ -226,7 +226,7 @@ func TestAddRooms(t *testing.T) {
 	var newRooms []Room
 	newRooms = append(newRooms, Room{
 		Id: 4,
-		MapItem:MapItem{
+		MapItem: MapItem{
 			Name:        "04",
 			Description: "d",
 		},
@@ -235,7 +235,7 @@ func TestAddRooms(t *testing.T) {
 	
 	newRooms = append(newRooms, Room{
 		Id: 4, 
-		MapItem:MapItem{
+		MapItem: MapItem{
 			Name:        "04",
 			Description: "d",
 		},
@@ -243,7 +243,7 @@ func TestAddRooms(t *testing.T) {
 
 	newRooms = append(newRooms, Room{
 		Id: 5,
-		MapItem:MapItem{
+		MapItem: MapItem{
 			Name:        "05",
 			Description: "d",
 		},
@@ -257,7 +257,7 @@ func TestAddRooms(t *testing.T) {
 	newRooms = newRooms[:0]
 	newRooms = append(newRooms, Room{
 		Id: 6,
-		MapItem:MapItem{
+		MapItem: MapItem{
 			Name:        "06",
 			Description: "d",
 		},
@@ -265,7 +265,7 @@ func TestAddRooms(t *testing.T) {
 	
 	newRooms = append(newRooms, Room{
 		Id: 7, 
-		MapItem:MapItem{
+		MapItem: MapItem{
 			Name:        "07",
 			Description: "d",
 		},
@@ -273,7 +273,7 @@ func TestAddRooms(t *testing.T) {
 	
 	newRooms = append(newRooms, Room{
 		Id: 8, 
-		MapItem:MapItem{
+		MapItem: MapItem{
 			Name:        "08",
 			Description: "d",
 		},

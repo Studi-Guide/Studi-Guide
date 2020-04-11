@@ -5,7 +5,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
-	"studi-guide/pkg/roomcontroller/controllers"
 	"studi-guide/pkg/roomcontroller/models"
 	"testing"
 )
@@ -14,7 +13,7 @@ func TestMapController_GetMapItems(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/map/", nil)
 
-	provider :=  controllers.NewRoomMockService()
+	provider :=  models.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/map")
 	NewMapController(mapRouter, provider)
@@ -32,7 +31,7 @@ func TestMapController_GetMapItems_RoomError(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/map/", nil)
 
-	provider :=  controllers.NewRoomMockService()
+	provider :=  models.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/map")
 	NewMapController(mapRouter, provider)
@@ -48,7 +47,7 @@ func TestMapController_GetMapItems_ConnectorError(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/map/", nil)
 
-	provider :=  controllers.NewRoomMockService()
+	provider :=  models.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/map")
 	NewMapController(mapRouter, provider)
@@ -64,7 +63,7 @@ func TestMapController_GetMapItemsFromFloor_Filter(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/map/?floor=1", nil)
 
-	provider :=  controllers.NewRoomMockService()
+	provider :=  models.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/map")
 	NewMapController(mapRouter, provider)
@@ -84,7 +83,7 @@ func TestMapController_GetMapItemsFromFloor(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/map/floor/1", nil)
 
-	provider :=  controllers.NewRoomMockService()
+	provider :=  models.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/map")
 	NewMapController(mapRouter, provider)
@@ -104,7 +103,7 @@ func TestMapController_GetMapItemsFromFloor_BadInteger(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/map/floor/test", nil)
 
-	provider :=  controllers.NewRoomMockService()
+	provider :=  models.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/map")
 	NewMapController(mapRouter, provider)
@@ -119,7 +118,7 @@ func TestMapController_GetMapItemsFromFloor_EmptyRoomlist(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/map/floor/1", nil)
 
-	provider :=  controllers.NewRoomMockService()
+	provider :=  models.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/map")
 	NewMapController(mapRouter, provider)
@@ -135,7 +134,7 @@ func TestMapController_GetMapItemsFromFloor_EmptyConnectorlist(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/map/floor/1", nil)
 
-	provider :=  controllers.NewRoomMockService()
+	provider :=  models.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/map")
 	NewMapController(mapRouter, provider)

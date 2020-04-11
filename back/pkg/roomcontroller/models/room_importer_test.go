@@ -94,3 +94,13 @@ func TestRoomXmlImporter_RunImport(t *testing.T) {
 	os.Remove(tmpFile)
 
 }
+
+func TestRoomJsonImporter_ImportRealFile(t *testing.T) {
+	var dbService = NewRoomMockService()
+
+	jsonImporter := RoomJsonImporter{dbService: dbService, file: "room_importer_test_json.json"}
+	err := jsonImporter.RunImport()
+	if err != nil {
+		t.Error("expected error; got: ", err)
+	}
+}

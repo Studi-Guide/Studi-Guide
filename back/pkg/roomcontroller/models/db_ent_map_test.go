@@ -27,7 +27,7 @@ func TestMapRoom(t *testing.T) {
 
 	ro := Room{
 		Id:          0,
-		MapItem:MapItem{
+		MapItem: MapItem{
 			Name:        "RoomN01",
 			Description: "Room Number 1 Special Description",
 			Tags:       []string{
@@ -147,7 +147,7 @@ func TestMapRoom(t *testing.T) {
 
 	checkRoom := Room{
 		Id:          1,
-		MapItem:MapItem{
+		MapItem: MapItem{
 			Name:        "RoomN01",
 			Description: "Room Number 1 Special Description",
 			Tags:       []string{
@@ -267,7 +267,7 @@ func TestMapRoom(t *testing.T) {
 
 	checkRoom = Room{
 		Id:          2,
-		MapItem:MapItem{
+		MapItem: MapItem{
 			Name:        "Fancy Room",
 			Description: "Room Number 1 Special Description",
 			Tags:       []string{
