@@ -546,15 +546,11 @@ func (r *RoomEntityService) linkPathNode(pathNode *navigation.PathNode) error {
 		connectedIDs = append(connectedIDs, entityConnectedNode.ID)
 	}
 
-	entityNode, err := r.client.PathNode.Get(r.context, pathNode.Id)
-	if err != nil {
-		return err
-	}
+	entityNode, _ := r.client.PathNode.Get(r.context, pathNode.Id)
 
 	update := entityNode.Update()
 	update.AddLinkedToIDs(connectedIDs...)
-	entityNode, err = update.Save(r.context)
-
+	entityNode, err := update.Save(r.context)
 	return err
 }
 
