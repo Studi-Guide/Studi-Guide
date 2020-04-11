@@ -527,7 +527,7 @@ func TestMapDoor(t *testing.T) {
 			End:   navigation.Coordinate{X: 4, Y: 5, Z: 6},
 		},
 		PathNode: navigation.PathNode{
-			Id:             0,
+			Id:             1,
 			Coordinate:     navigation.Coordinate{X: 7, Y: 8, Z: 9},
 			Group:          nil,
 			ConnectedNodes: nil,
@@ -553,7 +553,7 @@ func TestMapDoor(t *testing.T) {
 
 	d.Id = 0
 	d.Section.Id = 0
-	d.PathNode.Id = 1
+	d.PathNode.Id = 3
 
 	entDoor, err = r.mapDoor(&d)
 	if err != nil || entDoor == nil {
@@ -618,8 +618,8 @@ func TestMapPathNodeArray(t *testing.T) {
 		t.Error("expected 2 pathNode, got: ", len(entPathNodes), entPathNodes)
 	}
 
-	if entPathNodes[0].PathId != 1 {
-		t.Error("expected pathnode id ", pathNodes[1].Id, "got: ", entPathNodes[0].PathId)
+	if entPathNodes[0].ID != 1 {
+		t.Error("expected pathnode id ", pathNodes[1].Id, "got: ", entPathNodes[0].ID)
 	}
 
 }
@@ -644,7 +644,7 @@ func TestMapPathNode(t *testing.T) {
 	}
 
 	pathNode1 := navigation.PathNode{
-		Id:             0,
+		Id:             2,
 		Coordinate:     navigation.Coordinate{X: 1, Y: 2, Z: 3},
 		Group:          nil,
 		ConnectedNodes: nil,

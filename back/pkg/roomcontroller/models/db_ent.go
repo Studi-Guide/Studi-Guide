@@ -344,8 +344,10 @@ func (r *RoomEntityService) storeRooms(rooms []Room) ([]*ent.Room, error) {
 			entRoom, err:= r.client.Room.Get(r.context, rm.Id)
 			if err != nil {
 				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+			} else {
+				entRooms = append(entRooms, entRoom)
 			}
-			entRooms = append(entRooms, entRoom)
+
 			continue
 		}
 
@@ -400,6 +402,8 @@ func (r *RoomEntityService) storeRooms(rooms []Room) ([]*ent.Room, error) {
 
 		if err != nil {
 			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+		} else {
+			entRooms = append(entRooms, entRoom)
 		}
 	}
 
