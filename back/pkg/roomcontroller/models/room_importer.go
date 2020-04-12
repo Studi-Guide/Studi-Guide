@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"encoding/xml"
 	"errors"
+	"log"
 	"os"
 	"path/filepath"
 	"studi-guide/pkg/navigation"
@@ -134,6 +135,15 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 			})
 		}
 
+		var locationNode navigation.PathNode
+		if len(item.PathNodes) < 1{
+			locationNode = navigation.PathNode{}
+			log.Printf("No pathnode found for room room %s!", item.Name)
+		} else {
+			locationNode =  *roomNodes[0]
+		}
+
+
 		room := Room{
 			MapItem: MapItem{
 				Color:       item.Color,
@@ -144,10 +154,16 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 				Doors: 		 doors,
 				PathNodes:   roomNodes,
 			},
-			// Id should be set be DB
 
-			Location:Location{PathNode: *roomNodes[0],
-		}}
+			// Id should be set be DB
+			Location: Location{
+				Name:			item.Name,
+				Description:	item.Description,
+				Tags: 			item.Tags,
+
+				PathNode:		locationNode,
+			},
+		}
 
 		rooms = append(rooms, room)
 	}

@@ -370,6 +370,8 @@ func (r *RoomEntityService) storeRooms(rooms []Room) error {
 	var errorStr []string
 
 	for _, rm := range rooms {
+
+		log.Printf("Adding room %s",rm.Name)
 		if rm.Id != 0 {
 			_, err:= r.client.Room.Get(r.context, rm.Id)
 			if err != nil {
@@ -437,7 +439,7 @@ func (r *RoomEntityService) storeRooms(rooms []Room) error {
 			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
 		} else
 		{
-			log.Println("add room:", rm, " as:", entRoom)
+			log.Println("Added room:", rm, " as:", entRoom)
 		}
 
 		if len(rm.Tags) > 0 {
