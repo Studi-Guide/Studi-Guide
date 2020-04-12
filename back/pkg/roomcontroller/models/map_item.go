@@ -1,5 +1,7 @@
 package models
 
+import "studi-guide/pkg/navigation"
+
 type MapItem struct {
 	Name        string
 	Description string
@@ -10,4 +12,5 @@ type MapItem struct {
 	Sections    []Section
 	Campus      string
 	Building 	string
+	PathNodes   []*navigation.PathNode
 }

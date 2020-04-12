@@ -18,34 +18,34 @@ func NewRoomMockService() *RoomMockService {
 		Description: "Dummy",
 		Floor: 1,
 		},
-		PathNodes: []*navigation.PathNode{&navigation.PathNode{
+		PathNode: navigation.PathNode{
 			Id:             0,
 			Coordinate:     navigation.Coordinate{},
 			Group:          nil,
 			ConnectedNodes: nil,
-	}}})
+	}})
 
 	rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
 		Name:        "RoomN02",
 		Description: "Dummy",
 	},
-	PathNodes: []*navigation.PathNode{&navigation.PathNode{
+	PathNode: navigation.PathNode{
 		Id:             3,
 		Coordinate:     navigation.Coordinate{},
 		Group:          nil,
 		ConnectedNodes: nil,
-	}}})
+	}})
 
 	rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
 		Name:        "RoomN03",
 		Description: "Dummy",
 	},
-		PathNodes: []*navigation.PathNode{&navigation.PathNode{
+		PathNode: navigation.PathNode{
 		Id:             2,
 		Coordinate:     navigation.Coordinate{},
 		Group:          nil,
 		ConnectedNodes: nil,
-	}}})
+	}})
 
 
 rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
@@ -53,12 +53,12 @@ rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
 		Description: "Dummy",
 		Floor: 1,
 	},
-	PathNodes: []*navigation.PathNode{&navigation.PathNode{
+	PathNode: navigation.PathNode{
 		Id:             1,
 		Coordinate:     navigation.Coordinate{},
 		Group:          nil,
 		ConnectedNodes: nil,
-	}}})
+	}})
 
 	return &rms
 }

@@ -16,19 +16,14 @@ type Room struct {
 func (Room) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("Name").Unique(),
-		field.String("Description").Default(""),
-		field.Int("Floor").Default(0),
 	}
 }
 
 // Edges of the Room.
 func (Room) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("doors", Door.Type).Required(),
-		edge.To("sections", Section.Type),
-		edge.To("pathNodes", PathNode.Type).Required(),
-		edge.To("color", Color.Type).Unique(),
-		edge.From("tags", Tag.Type).Ref("rooms"),
+		edge.To("mapitem", MapItem.Type).Unique().Required(),
+		edge.To("pathnode", PathNode.Type).Unique().Required(),
 	}
 }
 

@@ -68,11 +68,20 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			log.Println("error creating pathnode:", err)
 		}
 
-		entRoom, err := client.Room.Create().
+		entMapItem, err := client.MapItem.Create().
 			SetName(strconv.Itoa(i)).
 			AddPathNodes(pathNode).
 			AddDoorIDs(door.ID).
 			SetFloor(i).
+			Save(ctx)
+
+		if err != nil {
+			log.Println("error creating map item:", err)
+		}
+
+		entRoom, err := client.Room.Create().
+			SetName(strconv.Itoa(i)).
+			SetMapitem(entMapItem).
 			Save(ctx)
 		if err != nil {
 			log.Println("error creating room:", err)
@@ -82,7 +91,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			Id:          entRoom.ID,
 			MapItem: MapItem{
 				Name:        entRoom.Name,
-				Description: entRoom.Description,
+				Description: entMapItem.Description,
 				Tags:       nil,
 				Doors: []Door{{
 					Id:       door.ID,
@@ -94,13 +103,13 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 				Floor:    i,
 			},
 
-			PathNodes: []*navigation.PathNode{ &navigation.PathNode{
+			PathNode: navigation.PathNode{
 				Id:             pathNode.ID,
 				Coordinate:navigation.Coordinate{
 					X: pathNode.XCoordinate,
 					Y: pathNode.YCoordinate,
 					Z: pathNode.ZCoordinate,
-			}}},
+			}},
 		})
 	}
 

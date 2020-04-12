@@ -134,7 +134,7 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNodes: []*navigation.PathNode{&node1},
+		PathNode: node1,
 	}
 
 	err = r.storeRooms([]Room{ro})
@@ -240,7 +240,7 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNodes: nil,
+		PathNode: navigation.PathNode{},
 	}
 
 	entRoom, _ := r.client.Room.Query().Where(room.NameEQ(ro.Name)).First(r.context)
@@ -355,17 +355,15 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNodes: []*navigation.PathNode{
-			&navigation.PathNode{
-				Id: 499,
-				Coordinate: navigation.Coordinate{
-					X: 34,
-					Y: 35,
-					Z: 36,
-				},
-				Group:          nil,
-				ConnectedNodes: nil,
+		PathNode: navigation.PathNode{
+			Id: 499,
+			Coordinate: navigation.Coordinate{
+				X: 34,
+				Y: 35,
+				Z: 36,
 			},
+			Group:          nil,
+			ConnectedNodes: nil,
 		},
 	}
 	ro = checkRoom
