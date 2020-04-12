@@ -69,7 +69,6 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 		}
 
 		entMapItem, err := client.MapItem.Create().
-			SetName(strconv.Itoa(i)).
 			AddPathNodes(pathNode).
 			AddDoorIDs(door.ID).
 			SetFloor(i).
@@ -79,8 +78,16 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			log.Println("error creating map item:", err)
 		}
 
-		entRoom, err := client.Room.Create().
+		entLocation, err := client.Location.Create().
 			SetName(strconv.Itoa(i)).
+			Save(ctx)
+
+		if err != nil {
+			log.Println("error creating location:", err)
+		}
+
+		entRoom, err := client.Room.Create().
+			SetLocation(entLocation).
 			SetMapitem(entMapItem).
 			Save(ctx)
 		if err != nil {
@@ -90,9 +97,6 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 		testRooms = append(testRooms, Room{
 			Id:          entRoom.ID,
 			MapItem: MapItem{
-				Name:        entRoom.Name,
-				Description: entMapItem.Description,
-				Tags:       nil,
 				Doors: []Door{{
 					Id:       door.ID,
 					Section:  Section{Id: sequence.ID},
@@ -102,14 +106,18 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 				Sections: nil,
 				Floor:    i,
 			},
-
-			PathNode: navigation.PathNode{
-				Id:             pathNode.ID,
-				Coordinate:navigation.Coordinate{
-					X: pathNode.XCoordinate,
-					Y: pathNode.YCoordinate,
-					Z: pathNode.ZCoordinate,
-			}},
+			Location: Location{
+				Name:        entLocation.Name,
+				Description: entLocation.Description,
+				Tags:       nil,
+				PathNode: navigation.PathNode{
+					Id:             pathNode.ID,
+					Coordinate:navigation.Coordinate{
+						X: pathNode.XCoordinate,
+						Y: pathNode.YCoordinate,
+						Z: pathNode.ZCoordinate,
+					}},
+			},
 		})
 	}
 
@@ -213,6 +221,8 @@ func TestAddRoom(t *testing.T) {
 	testRoom := Room{
 		Id: 4,
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "04",
 			Description: "description",
 		},
@@ -236,6 +246,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 4,
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "04",
 			Description: "d",
 		},
@@ -245,6 +257,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 4, 
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "04",
 			Description: "d",
 		},
@@ -253,6 +267,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 5,
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "05",
 			Description: "d",
 		},
@@ -267,6 +283,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 6,
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "06",
 			Description: "d",
 		},
@@ -275,6 +293,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 7, 
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "07",
 			Description: "d",
 		},
@@ -283,6 +303,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 8, 
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "08",
 			Description: "d",
 		},

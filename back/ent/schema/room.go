@@ -3,8 +3,6 @@ package schema
 import (
 	"github.com/facebookincubator/ent"
 	"github.com/facebookincubator/ent/schema/edge"
-	"github.com/facebookincubator/ent/schema/field"
-	"github.com/facebookincubator/ent/schema/index"
 )
 
 // Room holds the schema definition for the Room entity.
@@ -15,7 +13,6 @@ type Room struct {
 // Fields of the Room.
 func (Room) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("Name").Unique(),
 	}
 }
 
@@ -23,13 +20,12 @@ func (Room) Fields() []ent.Field {
 func (Room) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("mapitem", MapItem.Type).Unique().Required(),
-		edge.To("pathnode", PathNode.Type).Unique().Required(),
+		edge.To("location", Location.Type).Unique().Required(),
 	}
 }
 
 func (Room) Indexes() []ent.Index {
 	return []ent.Index{
 		// unique index.
-		index.Fields("Name").Unique(),
 	}
 }

@@ -136,9 +136,6 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 
 		room := Room{
 			MapItem: MapItem{
-				Name:        item.Name,
-				Description: item.Description,
-				Tags:        item.Tags,
 				Color:       item.Color,
 				Floor:       item.Floor,
 				Sections:    item.Sections,
@@ -149,8 +146,8 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 			},
 			// Id should be set be DB
 
-			PathNode: *roomNodes[0],
-		}
+			Location:Location{PathNode: *roomNodes[0],
+		}}
 
 		rooms = append(rooms, room)
 	}

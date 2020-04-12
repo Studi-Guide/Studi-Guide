@@ -8,25 +8,27 @@ import (
 )
 
 // Room holds the schema definition for the Room entity.
-type Tag struct {
+type Location struct {
 	ent.Schema
 }
 
 // Fields of the Room.
-func (Tag) Fields() []ent.Field {
+func (Location) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("Name").Unique(),
+		field.String("Description"),
 	}
 }
 
 // Edges of the Room.
-func (Tag) Edges() []ent.Edge {
+func (Location) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("locations", Location.Type).Required(),
+		edge.To("pathnode", PathNode.Type).Unique().Required(),
+		edge.From("tags", Tag.Type).Ref("locations"),
 	}
 }
 
-func (Tag) Indexes() []ent.Index {
+func (Location) Indexes() []ent.Index {
 	return []ent.Index{
 		// unique index.
 		index.Fields("Name").Unique(),
