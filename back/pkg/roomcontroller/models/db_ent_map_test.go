@@ -243,7 +243,14 @@ func TestMapRoom(t *testing.T) {
 				"Tag1",
 				"#Tag2",
 			},
-			PathNode:navigation.PathNode{},
+			PathNode:navigation.PathNode{
+				Id: 2,
+				Coordinate: navigation.Coordinate{
+					X: 34,
+					Y: 35,
+					Z: 36,
+				},
+			},
 	}}
 
 	entRoom, _ := r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(ro.Location.Name))).First(r.context)
