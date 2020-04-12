@@ -37,7 +37,9 @@ func (n *NavigationService) CalculateFromString(startRoomName string, endRoomNam
 }
 
 func (n *NavigationService) Calculate(startRoom models.Room, endRoom models.Room) ([]navigation.PathNode, error) {
-	nodes, _, err := n.routeCalc.GetRoute(startRoom.PathNode, endRoom.PathNode)
+	startNode := startRoom.PathNode
+	endNode := endRoom.PathNode
+	nodes, _, err := n.routeCalc.GetRoute(startNode, endNode)
 	return nodes, err
 }
 

@@ -11,8 +11,9 @@ import (
 	"strings"
 	"studi-guide/ent"
 	"studi-guide/ent/color"
-	"studi-guide/ent/connectorspace"
 	"studi-guide/ent/door"
+	"studi-guide/ent/location"
+	"studi-guide/ent/mapitem"
 	"studi-guide/ent/pathnode"
 	"studi-guide/ent/room"
 	"studi-guide/ent/section"
@@ -37,6 +38,8 @@ func newRoomEntityService(env *env.Env) (*RoomEntityService, error) {
 		return nil, err
 	}
 
+	roomCount, _ :=	client.Room.Query().Count(ctx)
+	log.Println("Found number of rooms:", roomCount)
 	return &RoomEntityService{client: client, table: table, context: ctx}, nil
 }
 
@@ -46,7 +49,7 @@ func NewRoomEntityService(env *env.Env) (RoomServiceProvider, error) {
 
 func (r *RoomEntityService) GetAllRooms() ([]Room, error) {
 
-	roomsPtr, err := r.client.Room.Query().WithSections().WithDoors().WithColor().WithPathNode().WithTags().All(r.context)
+	roomsPtr, err := r.client.Room.Query().WithMapitem().All(r.context)
 	if err != nil {
 		return nil, err
 	}
@@ -62,51 +65,23 @@ func (r *RoomEntityService) GetAllRooms() ([]Room, error) {
 
 func (r *RoomEntityService) GetRoom(name string) (Room, error) {
 
-	room, err := r.client.Room.Query().Where(room.Name(name)).WithSections().WithDoors().WithColor().WithPathNode().WithTags().First(r.context)
+	entRoom, err := r.client.Room.Query().Where(room.HasLocationWith(location.Name(name))).
+		First(r.context)
+
 	if err != nil {
 		return Room{}, err
 	}
 
-	return *r.roomMapper(room), nil
-}
-
-func (r *RoomEntityService) GetAllConnectorSpaces() ([]ConnectorSpace, error) {
-	connectorsPtr, err := r.client.ConnectorSpace.Query().WithConnectorSections().WithConnectorColor().WithConnectorDoors().WithConnectorPathNodes().All(r.context)
-	if err != nil {
-		return nil, err
-	}
-
-	var connectors []ConnectorSpace
-
-	for _, connectorPtr := range connectorsPtr {
-		connectors = append(connectors, *r.connectorMapper(connectorPtr))
-	}
-
-	return connectors, nil
+	return *r.roomMapper(entRoom), nil
 }
 
 func (r *RoomEntityService) AddRoom(room Room) error {
 
-	_, err := r.mapRoom(&room)
-
-	return err
+	return r.storeRooms([]Room {room})
 }
 
 func (r *RoomEntityService) AddRooms(rooms []Room) error {
-	var errorStr []string
-	for _, room := range rooms {
-		if err := r.AddRoom(room); err != nil {
-			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(room.Id))
-			log.Println(err, "room:", room)
-		} else {
-			log.Println("add room:", room)
-		}
-	}
-
-	if len(errorStr) > 0 {
-		return errors.New(strings.Join(errorStr, "; "))
-	}
-	return nil
+	return r.storeRooms(rooms)
 }
 
 func (r *RoomEntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
@@ -116,9 +91,12 @@ func (r *RoomEntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	}
 
 	var nodes []navigation.PathNode
-
+	var nodesCache []*navigation.PathNode
 	for _, nodePtr := range nodesPrt {
-		nodes = append(nodes, *r.pathNodeMapper(nodePtr))
+
+		node := *r.pathNodeMapper(nodePtr, nodesCache, true)
+		nodes = append(nodes, node)
+		nodesCache = append(nodesCache, &node)
 	}
 
 	return nodes, nil
@@ -130,97 +108,45 @@ func (r *RoomEntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, ro
 	var err error = nil
 
 	if len(roomFilter) > 0 {
-		q := r.client.Room.Query().Where(room.Or(room.NameContains(roomFilter), room.DescriptionContains(roomFilter)))
+		q := r.client.Room.Query().Where(
+				room.Or(
+					room.HasLocationWith(location.NameContains(roomFilter)),
+					room.HasLocationWith(location.DescriptionContains(roomFilter))))
+
 		if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
 			return nil, err
 		} else {
 			// Just use query when its available
 			if len(floorFilter) > 0 {
-				q = q.Where(room.FloorEQ(floor))
+				q = q.Where(room.HasMapitemWith(mapitem.FloorEQ(floor)))
 			}
 		}
 
-		entRooms, err = q.WithSections().WithDoors().WithColor().WithPathNode().All(r.context)
+		entRooms, err = q.WithMapitem().All(r.context)
 		if err != nil {
 			return nil, err
 		}
 
 
 	} else {
-		q:= r.client.Room.Query().Where(room.NameContains(nameFilter))
+		q:= r.client.Room.Query().Where(room.HasLocationWith(location.NameContains(nameFilter)))
 		if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
 			return nil, err
 		} else {
 			// Just use query when its available
 			if len(floorFilter) > 0 {
-				q = q.Where(room.FloorEQ(floor))
+				q = q.Where(room.HasMapitemWith(mapitem.FloorEQ(floor)))
 			}
 		}
 
 		// alias is missing here ...
-		entRooms, err = q.WithSections().WithDoors().WithColor().WithPathNode().All(r.context)
+		entRooms, err = q.WithMapitem().All(r.context)
 		if err != nil {
 			return nil, err
 		}
 
 	}
 	return r.roomArrayMapper(entRooms), nil
-}
-
-func (r *RoomEntityService) FilterConnectorSpaces(floorFilter, nameFilter, alias, building, campus string, coordinate, coordinateDelta *navigation.Coordinate) ([]ConnectorSpace, error) {
-
-	var entConnectors []*ent.ConnectorSpace
-	var err error = nil
-
-	q:= r.client.ConnectorSpace.Query()
-
-	if len(nameFilter) > 0 {
-		q = q.Where(connectorspace.NameContains(nameFilter))
-	}
-
-	//TODO not available within database
-	/*if len(alias) > 0 {
-		q = q.Where(connectorspace.NameContains(alias))
-	}
-
-	if len(building) > 0 {
-		q = q.Where(connectorspace.NameContains(building))
-	}
-
-	if len(campus) > 0 {
-		q = q.Where(connectorspace.NameContains(campus))
-	}
-*/
-	if len(floorFilter) > 0 {
-		if floor, err := strconv.Atoi(floorFilter); err != nil {
-			return nil, err
-		} else {
-			q = q.Where(connectorspace.FloorEQ(floor))
-		}
-	}
-
-	if coordinate != nil && coordinateDelta != nil {
-		q = q.Where(
-			connectorspace.And(
-				connectorspace.HasConnectorPathNodesWith(pathnode.XCoordinateLTE(coordinate.X + coordinateDelta.X)),
-				connectorspace.HasConnectorPathNodesWith(pathnode.XCoordinateGTE(coordinate.X - coordinateDelta.X)),
-				connectorspace.HasConnectorPathNodesWith(pathnode.YCoordinateLTE(coordinate.Y + coordinateDelta.Y)),
-				connectorspace.HasConnectorPathNodesWith(pathnode.YCoordinateGTE(coordinate.Y - coordinateDelta.Y)),
-			))
-	} else {
-		if (coordinate == nil || coordinateDelta == nil) && (coordinate != nil || coordinateDelta != nil) {
-			return nil, errors.New("invalid operation! coordinate and coordinateDelta have to be either nil or both not nil")
-		}
-	}
-
-	// alias, building, campus is missing here ...
-	entConnectors, err = q.WithConnectorSections().WithConnectorDoors().WithConnectorColor().WithConnectorPathNodes().All(r.context)
-	if err != nil {
-		return nil, err
-	}
-
-
-	return r.connectorArrayMapper(entConnectors), nil
 }
 
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {
@@ -256,45 +182,76 @@ func (r *RoomEntityService) roomArrayMapper(entRooms []*ent.Room) []Room {
 
 func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 
-	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).WithPathNode().WithColor().WithDoors().WithSections().WithTags().First(r.context)
+	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).
+		WithMapitem(func (q *ent.MapItemQuery) {
+			q.WithPathNodes().WithColor().WithDoors(func (p *ent.DoorQuery) {p.WithPathNode().WithSection()}).WithSections()
+		}).
+		WithLocation(func (q *ent.LocationQuery) {
+			q.WithPathnode().WithTags()
+		}).
+		First(r.context)
+	if err != nil || entRoom == nil {
+		return nil
+	}
+
+	entMapItem, err := r.client.Room.QueryMapitem(entRoom).WithPathNodes().
+		WithColor().
+		WithDoors().
+		WithSections().
+		First(r.context)
+	if err != nil || entMapItem == nil {
+		return nil
+	}
+
+	entLocation, err := r.client.Room.QueryLocation(entRoom).WithTags().WithPathnode().First(r.context)
+	if err != nil || entLocation == nil {
+		return nil
+	}
 
 	rm := Room{
 		Id:          entRoom.ID,
 		MapItem:MapItem{
-			Name:        entRoom.Name,
-			Description: entRoom.Description,
-			Tags:       nil,
 			Doors:       nil,
 			Color:       "",
 			Sections:    nil,
-			Floor:       entRoom.Floor,
+			Floor:       entMapItem.Floor,
+			PathNodes: []*navigation.PathNode{},
 		},
-		PathNode:    navigation.PathNode{},
+		Location:Location{
+			PathNode: navigation.PathNode{},
+			Name: entLocation.Name,
+			Description: entLocation.Description,
+		},
 	}
 
-	c, err := entRoom.Edges.ColorOrErr()
+	c, err := entMapItem.Edges.ColorOrErr()
 	if err == nil {
 		rm.MapItem.Color = c.Color
 	}
 
-	d, err := entRoom.Edges.DoorsOrErr()
+	d, err := entMapItem.Edges.DoorsOrErr()
 	if err == nil {
 		rm.MapItem.Doors = r.doorArrayMapper(d)
 	}
 
-	s, err := entRoom.Edges.SectionsOrErr()
+	s, err := entMapItem.Edges.SectionsOrErr()
 	if err == nil {
 		rm.MapItem.Sections = r.sectionArrayMapper(s)
 	}
 
-	p, err := entRoom.Edges.PathNodeOrErr()
+	p, err := entMapItem.Edges.PathNodesOrErr()
 	if err == nil {
-		rm.PathNode = *r.pathNodeMapper(p)
+		rm.PathNodes = r.pathNodeArrayMapper(p, []*navigation.PathNode{})
 	}
 
-	t, err := entRoom.Edges.TagsOrErr()
+	t, err := entLocation.Edges.TagsOrErr()
 	if err == nil {
 		rm.Tags = r.tagsArrayMapper(t)
+	}
+
+	pn, err := entLocation.Edges.PathnodeOrErr()
+	if err == nil {
+		rm.Location.PathNode = *r.pathNodeMapper(pn, []*navigation.PathNode{}, false)
 	}
 
 	return &rm
@@ -354,32 +311,43 @@ func (r *RoomEntityService) doorMapper(entDoor *ent.Door) *Door {
 
 	p, err := entDoor.Edges.PathNodeOrErr()
 	if err == nil {
-		d.PathNode = *r.pathNodeMapper(p)
+		d.PathNode = *r.pathNodeMapper(p, []*navigation.PathNode{}, true)
 	}
 
 	return &d
 }
 
-func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode) []*navigation.PathNode {
+func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode, availableNodes []*navigation.PathNode) []*navigation.PathNode {
 	var pathNodes []*navigation.PathNode
 	for _, node := range pathNodePtr {
-		pathNodes = append(pathNodes, r.pathNodeMapper(node))
+		pathNodes = append(pathNodes, r.pathNodeMapper(node, availableNodes, false))
 	}
 	return pathNodes
 }
 
-func (r *RoomEntityService) pathNodeMapper(entPathNode *ent.PathNode) *navigation.PathNode {
+func (r *RoomEntityService) pathNodeMapper(entPathNode *ent.PathNode, availableNodes []*navigation.PathNode, resolveConnectedNodes bool) *navigation.PathNode {
 
-	entPathNode, err := r.client.PathNode.Query().WithPathGroups().WithLinkedTo().Where(pathnode.ID(entPathNode.ID)).First(r.context)
+	entPathNode, err := r.client.PathNode.Query().Where(pathnode.IDEQ(entPathNode.ID)).WithLinkedTo().First(r.context)
 	if err != nil {
 		return &navigation.PathNode{}
+	}
+
+	for _, node := range availableNodes {
+		if node.Id == entPathNode.ID {
+			return node
+		}
 	}
 
 	p := navigation.PathNode{
 		Id:             entPathNode.ID,
 		Coordinate:     navigation.Coordinate{X: entPathNode.XCoordinate, Y: entPathNode.YCoordinate, Z: entPathNode.ZCoordinate},
 		Group:          nil,
-		ConnectedNodes: r.pathNodeArrayMapper(entPathNode.Edges.LinkedTo),
+		ConnectedNodes: nil,
+	}
+
+	availableNodes = append(availableNodes, &p)
+	if resolveConnectedNodes {
+		p.ConnectedNodes = r.pathNodeArrayMapper(entPathNode.Edges.LinkedTo, availableNodes)
 	}
 
 	return &p
@@ -398,54 +366,116 @@ func (r *RoomEntityService) tagsArrayMapper(entTags []*ent.Tag) []string {
 }
 
 
-func (r *RoomEntityService) mapRoom(rm *Room) (*ent.Room, error) {
+func (r *RoomEntityService) storeRooms(rooms []Room) error {
+	var errorStr []string
 
-	if rm.Id != 0 {
-		return r.client.Room.Query().Where(room.ID(rm.Id)).First(r.context)
-	}
+	for _, rm := range rooms {
 
-	entSections, err := r.mapSectionArray(rm.MapItem.Sections)
-	if err != nil {
-		return nil, err
-	}
+		log.Printf("Adding room %s",rm.Name)
+		if rm.Id != 0 {
+			_, err:= r.client.Room.Get(r.context, rm.Id)
+			if err != nil {
+				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+			}
 
-	entDoors, err := r.mapDoorArray(rm.MapItem.Doors)
-	if err != nil {
-		return nil, err
-	}
+			continue
+		}
 
-	entPathNode, err := r.mapPathNode(&rm.PathNode)
-	if err != nil {
-		return nil, err
-	}
+		var entNodes []*ent.PathNode
+		for _, node := range rm.PathNodes {
 
-	entColor, err := r.mapColor(rm.MapItem.Color)
-	if err != nil {
-		return nil, err
-	}
+			entPathNode, err := r.mapPathNode(node)
+			if err != nil {
+				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+			}
+			entNodes = append(entNodes, entPathNode)
+		}
 
-	entRoom, err := r.client.Room.Create().
-		SetName(rm.MapItem.Name).
-		SetDescription(rm.MapItem.Description).
-		AddDoors(entDoors...).
-		SetColor(entColor).
-		AddSections(entSections...).
-		SetFloor(rm.MapItem.Floor).
-		SetPathNode(entPathNode).
-		Save(r.context)
+		entNode, err := r.mapPathNode(&rm.Location.PathNode)
+		if err != nil {
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.PathNode.Id))
+		}
 
-	if err != nil || entRoom == nil {
-		return entRoom, err
-	}
+		entSections, err := r.mapSectionArray(rm.MapItem.Sections)
+		if err != nil {
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+		}
 
-	if len(rm.Tags) > 0 {
-		entTags, err := r.mapTagArray(rm.Tags, entRoom)
-		if err == nil && entTags != nil {
-			_, err = entRoom.Update().AddTags(entTags...).Save(r.context)
+		entDoors, err := r.mapDoorArray(rm.MapItem.Doors)
+		if err != nil {
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+		}
+
+		entColor, err := r.mapColor(rm.MapItem.Color)
+		if err != nil {
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+		}
+
+		entMapItem, err := r.client.MapItem.Create().
+			AddDoors(entDoors...).
+			SetColor(entColor).
+			AddSections(entSections...).
+			AddPathNodes(entNodes...).
+			SetFloor(rm.MapItem.Floor).
+			Save(r.context)
+
+		if err != nil {
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+			continue
+		}
+
+		entLocation, err := r.client.Location.Create().
+			SetName(rm.Location.Name).
+			SetDescription(rm.Location.Description).
+			SetPathnode(entNode).
+			Save(r.context)
+
+		entRoom, err := r.client.Room.Create().
+			SetMapitem(entMapItem).
+			SetLocation(entLocation).
+			Save(r.context)
+
+		if err != nil {
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+		} else
+		{
+			log.Println("Added room:", rm, " as:", entRoom)
+		}
+
+		if len(rm.Tags) > 0 {
+			entTags, err := r.mapTagArray(rm.Tags, entLocation)
+			if err == nil && entTags != nil {
+				_, err = entLocation.Update().AddTags(entTags...).Save(r.context)
+			}
+		}
+
+		if err != nil {
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
 		}
 	}
 
-	return entRoom, err
+	// link pathnodes
+	for _, rm := range rooms {
+		for _, node := range rm.PathNodes {
+			err := r.linkPathNode(node)
+			if err != nil {
+				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+			}
+		}
+		for _, door := range rm.MapItem.Doors{
+			err := r.linkPathNode(&door.PathNode)
+			if err != nil {
+				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+			}
+		}
+	}
+
+	var err error
+	if len(errorStr) > 0 {
+		err = errors.New(strings.Join(errorStr, "; "))
+	}
+
+	return err
 }
 
 func (r *RoomEntityService) mapSectionArray(sections []Section) ([]*ent.Section, error) {
@@ -538,14 +568,51 @@ func (r *RoomEntityService) mapPathNodeArray(pathNodePtr []*navigation.PathNode)
 func (r *RoomEntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, error) {
 
 	if p.Id != 0 {
-		return r.client.PathNode.Query().Where(pathnode.ID(p.Id)).First(r.context)
+		node, err := r.client.PathNode.Get(r.context, p.Id)
+		if node != nil {
+			return  node, nil
+		}
+
+		switch t := err.(type) {
+		default:
+			log.Fatal(t)
+			return nil, err
+		case *ent.NotFoundError:
+			// do nothing
+		}
 	}
 
+
+	log.Println("add path node:", p)
 	return r.client.PathNode.Create().
+		SetID(p.Id).
 		SetXCoordinate(p.Coordinate.X).
 		SetYCoordinate(p.Coordinate.Y).
 		SetZCoordinate(p.Coordinate.Z).
 		Save(r.context)
+}
+
+func (r *RoomEntityService) linkPathNode(pathNode *navigation.PathNode) error {
+
+	var connectedIDs []int
+
+	//Get database IDs
+	for _, connectedNode := range pathNode.ConnectedNodes {
+
+		entityConnectedNode, err := r.client.PathNode.Get(r.context, connectedNode.Id)
+		if err != nil {
+			return err
+		}
+
+		connectedIDs = append(connectedIDs, entityConnectedNode.ID)
+	}
+
+	entityNode, _ := r.client.PathNode.Get(r.context, pathNode.Id)
+
+	update := entityNode.Update()
+	update.AddLinkedToIDs(connectedIDs...)
+	entityNode, err := update.Save(r.context)
+	return err
 }
 
 func (r *RoomEntityService) mapColor(c string) (*ent.Color, error) {
@@ -569,79 +636,23 @@ func (r *RoomEntityService) mapColor(c string) (*ent.Color, error) {
 	return col, nil
 }
 
-func (r *RoomEntityService) connectorMapper(entConnector *ent.ConnectorSpace) *ConnectorSpace {
-
-	rm := ConnectorSpace{
-		Id:          entConnector.ID,
-		MapItem:MapItem{
-			Name:        entConnector.Name,
-			Description: entConnector.Description,
-			Tags:       nil,
-			Doors:       nil,
-			Color:       "",
-			Sections:    nil,
-			Floor:       entConnector.Floor,
-		},
-		PathNodes:   nil,
-	}
-
-	c, err := entConnector.Edges.ConnectorColorOrErr()
-	if err == nil {
-		rm.MapItem.Color = c.Color
-	}
-
-	d, err := entConnector.Edges.ConnectorDoorsOrErr()
-	if err == nil {
-		rm.MapItem.Doors = r.doorArrayMapper(d)
-	}
-
-	s, err := entConnector.Edges.ConnectorSectionsOrErr()
-	if err == nil {
-		rm.MapItem.Sections = r.sectionArrayMapper(s)
-	}
-
-	p, err := entConnector.Edges.ConnectorPathNodesOrErr()
-	if err == nil {
-
-		var pathNodes []navigation.PathNode
-
-		for _, nodePtr := range p {
-			pathNodes = append(pathNodes, *r.pathNodeMapper(nodePtr))
-		}
-
-		rm.PathNodes = pathNodes
-	}
-
-	return &rm
-}
-
-func (r *RoomEntityService) connectorArrayMapper(entConnectors []*ent.ConnectorSpace) []ConnectorSpace {
-	var connectors []ConnectorSpace
-
-	for _, connectorPtr := range entConnectors {
-		connectors = append(connectors, *r.connectorMapper(connectorPtr))
-	}
-
-	return connectors
-}
-
-func (r *RoomEntityService) mapTag(t string, entRoom *ent.Room) (*ent.Tag, error) {
+func (r *RoomEntityService) mapTag(t string, entLocation *ent.Location) (*ent.Tag, error) {
 	entTag, err := r.client.Tag.Query().Where(tag.Name(t)).First(r.context)
 	if err != nil && entTag == nil {
-		entTag, err = r.client.Tag.Create().SetName(t).AddRooms(entRoom).Save(r.context)
+		entTag, err = r.client.Tag.Create().SetName(t).AddLocations(entLocation).Save(r.context)
 		if err != nil {
 			return nil, err
 		}
 	} else {
-		entTag, err = entTag.Update().AddRooms(entRoom).Save(r.context)
+		entTag, err = entTag.Update().AddLocations(entLocation).Save(r.context)
 	}
 	return entTag, err
 }
 
-func (r *RoomEntityService) mapTagArray(ts []string, entRoom *ent.Room) ([]*ent.Tag, error) {
+func (r *RoomEntityService) mapTagArray(ts []string, entLocation *ent.Location) ([]*ent.Tag, error) {
 	var entTags []*ent.Tag
 	for _, t := range ts {
-		entTag, err := r.mapTag(t, entRoom)
+		entTag, err := r.mapTag(t, entLocation)
 		if err != nil {
 			return nil, err
 		}

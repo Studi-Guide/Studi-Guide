@@ -36,7 +36,7 @@ func (m MockNavigationService) CalculateFromString(startRoomName string, endRoom
 }
 
 func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.Room) ([]navigation.PathNode, error) {
-	if !(startRoom.MapItem.Name == m.startroom) || !(endRoom.MapItem.Name == m.endroom) {
+	if !(startRoom.Name == m.startroom) || !(endRoom.Name == m.endroom) {
 		return nil, errors.New("wrong rooms")
 	}
 
@@ -74,6 +74,35 @@ func (m MockNavigationService) getDummyValues() []navigation.PathNode {
 	node1.ConnectedNodes = []*navigation.PathNode{&node2}
 	nodes := []navigation.PathNode{node2, node1}
 	return nodes
+}
+
+func TestNavigationCalculatefromString_NoRooms(t *testing.T) {
+	startroomname := "dummystart"
+	endroomname := "dummyend"
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/navigation/dir", nil)
+	q := req.URL.Query()
+	q.Add("startroom", startroomname)
+	q.Add("endroom", endroomname)
+
+	req.URL.RawQuery = q.Encode()
+
+	provider := NewRoomMockService(startroomname, endroomname)
+	router := gin.Default()
+	roomRouter := router.Group("/navigation")
+	NewNavigationController(roomRouter, provider)
+
+	router.ServeHTTP(rec, req)
+
+	expected, err := json.Marshal(provider.nodes)
+	if err != nil {
+		t.Error(err)
+	}
+
+	expected = append(expected, '\n')
+	if string(expected) != rec.Body.String() {
+		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
 }
 
 func TestNavigationCalculatefromString(t *testing.T) {
