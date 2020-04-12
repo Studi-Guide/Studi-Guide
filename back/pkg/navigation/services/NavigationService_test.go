@@ -3,7 +3,7 @@ package services
 import (
 	"encoding/json"
 	"studi-guide/pkg/navigation"
-	"studi-guide/pkg/roomcontroller/controllers"
+	"studi-guide/pkg/roomcontroller/models"
 	"testing"
 )
 
@@ -50,7 +50,7 @@ func (l *MockRouteCalculator) GetRoute(start, end navigation.PathNode) ([]naviga
 func TestNavigationService_CalculateFromString(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
-	roomprovider := controllers.NewRoomMockService()
+	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
@@ -73,7 +73,7 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 func TestNavigationService_CalculateFromString_Negative(t *testing.T) {
 	startroomname := "RoomN00"
 	endroomname := "RoomN02"
-	roomprovider := controllers.NewRoomMockService()
+	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
@@ -87,7 +87,7 @@ func TestNavigationService_CalculateFromString_Negative(t *testing.T) {
 func TestNavigationService_Calculate(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
-	roomprovider := controllers.NewRoomMockService()
+	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
@@ -111,7 +111,7 @@ func TestNavigationService_Calculate(t *testing.T) {
 func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN0001"
-	roomprovider := controllers.NewRoomMockService()
+	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
@@ -124,7 +124,7 @@ func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
 func TestNavigationService_CalculateFromCoordinate(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
-	roomprovider := controllers.NewRoomMockService()
+	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
@@ -143,7 +143,7 @@ func TestNavigationService_CalculateFromCoordinate(t *testing.T) {
 
 	//TODO implement unit test for feature
 
-	//expected, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
+	//expected, _ := calculator.GetRoute(startroom.PathNodes, endroom.PathNodes)
 	//expectedAsString, _ := json.Marshal(expected)
 	//resultAsString, _ := json.Marshal(nodes)
 	//if string(expectedAsString) != string(resultAsString) {

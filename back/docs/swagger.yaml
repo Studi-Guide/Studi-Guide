@@ -12,10 +12,31 @@ definitions:
     type: object
   models.MapItem:
     properties:
-      alias:
+      building:
+        type: string
+      campus:
+        type: string
+      color:
+        type: string
+      doors:
         items:
-          type: string
+          $ref: '#/definitions/models.Door'
         type: array
+      pathNodes:
+        items:
+          $ref: '#/definitions/navigation.PathNode'
+        type: array
+      sections:
+        items:
+          $ref: '#/definitions/models.Section'
+        type: array
+    type: object
+  models.Room:
+    properties:
+      building:
+        type: string
+      campus:
+        type: string
       color:
         type: string
       description:
@@ -24,23 +45,25 @@ definitions:
         items:
           $ref: '#/definitions/models.Door'
         type: array
+      id:
+        type: integer
       name:
         type: string
+      pathNode:
+        $ref: '#/definitions/navigation.PathNode'
+        type: object
+      pathNodes:
+        items:
+          $ref: '#/definitions/navigation.PathNode'
+        type: array
       sections:
         items:
           $ref: '#/definitions/models.Section'
         type: array
-    type: object
-  models.Room:
-    properties:
-      id:
-        type: integer
-      mapItem:
-        $ref: '#/definitions/models.MapItem'
-        type: object
-      pathNode:
-        $ref: '#/definitions/navigation.PathNode'
-        type: object
+      tags:
+        items:
+          type: string
+        type: array
     type: object
   models.Section:
     properties:
@@ -92,8 +115,29 @@ paths:
     get:
       consumes:
       - application/json
-      description: Gets all map items of available rooms and connector spaces (corridor,
-        stairs, etc..)
+      description: Gets map items of available rooms and connector spaces (corridor,
+        stairs, etc..) with optional filter parameters
+      parameters:
+      - description: name of the map items
+        in: query
+        name: name
+        type: string
+      - description: floor of the map items
+        in: query
+        name: floor
+        type: integer
+      - description: potential alias of the room
+        in: query
+        name: alias
+        type: string
+      - description: map item is linked to a certain campus
+        in: query
+        name: campus
+        type: string
+      - description: map item is linked to a building
+        in: query
+        name: building
+        type: string
       produces:
       - application/json
       responses:
@@ -106,16 +150,18 @@ paths:
       summary: Get All Map Items
       tags:
       - MapController
-  /map/floor:
+  /map/floor/{floor}:
     get:
       consumes:
       - application/json
       description: Gets all map items of available rooms and connector spaces (corridor,
-        stairs, etc..)
+        stairs, etc..) of a certain floor
+      operationId: get-room-list-floor
       parameters:
       - description: filter map items by floor
-        in: query
+        in: path
         name: floor
+        required: true
         type: integer
       produces:
       - application/json
@@ -126,7 +172,7 @@ paths:
             items:
               $ref: '#/definitions/models.MapItem'
             type: array
-      summary: Get All Map Items
+      summary: Get All Map Items from a certain floor
       tags:
       - MapController
   /navigation/dir:
@@ -161,6 +207,23 @@ paths:
       - application/json
       description: Gets all available rooms
       operationId: get-room-list
+      parameters:
+      - description: room name
+        in: query
+        name: name
+        type: string
+      - description: floor of the room
+        in: query
+        name: floor
+        type: integer
+      - description: potential alias of the room
+        in: query
+        name: alias
+        type: string
+      - description: rooms that contain the query string in name, alias or description
+        in: query
+        name: room
+        type: string
       produces:
       - application/json
       responses:
@@ -171,6 +234,52 @@ paths:
               $ref: '#/definitions/models.Room'
             type: array
       summary: Get Room List
+      tags:
+      - RoomController
+  /roomlist/floor/{floor}:
+    get:
+      consumes:
+      - application/json
+      description: Gets all available rooms for a certain floor
+      operationId: get-room-list-floor
+      parameters:
+      - description: filter rooms by floor
+        in: path
+        name: floor
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Room'
+            type: array
+      summary: Get Room List From Floor
+      tags:
+      - RoomController
+  /roomlist/room/{name}:
+    get:
+      consumes:
+      - application/json
+      description: Gets a specify room by its unique name
+      operationId: get-room
+      parameters:
+      - description: get room by name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Room'
+      summary: Get Room by Name
       tags:
       - RoomController
 swagger: "2.0"

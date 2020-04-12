@@ -22,7 +22,7 @@ func (Tag) Fields() []ent.Field {
 // Edges of the Room.
 func (Tag) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.To("rooms", Room.Type).Required(),
+		edge.To("locations", Location.Type).Required(),
 	}
 }
 

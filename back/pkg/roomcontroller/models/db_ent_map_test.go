@@ -3,6 +3,8 @@ package models
 import (
 	"os"
 	"reflect"
+	"studi-guide/ent/location"
+	"studi-guide/ent/room"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
 	"testing"
@@ -25,15 +27,31 @@ func TestMapRoom(t *testing.T) {
 	}
 	defer r.client.Close()
 
+	node1 :=navigation.PathNode{
+		Id: 2,
+		Coordinate: navigation.Coordinate{
+			X: 34,
+			Y: 35,
+			Z: 36,
+		},
+	}
+
+	node2 := navigation.PathNode{
+		Id: 1,
+		Coordinate: navigation.Coordinate{
+			X: 7,
+			Y: 8,
+			Z: 9,
+		},
+		Group:          nil,
+		ConnectedNodes: []*navigation.PathNode{&node1},
+	}
+
+	node1.ConnectedNodes = []*navigation.PathNode{&node2}
+
 	ro := Room{
 		Id:          0,
-		MapItem:MapItem{
-			Name:        "RoomN01",
-			Description: "Room Number 1 Special Description",
-			Tags:       []string{
-				"Tag1",
-				"#Tag2",
-			},
+		MapItem: MapItem{
 			Doors: []Door{
 				{
 					Id: 0,
@@ -50,16 +68,7 @@ func TestMapRoom(t *testing.T) {
 							Z: 6,
 						},
 					},
-					PathNode: navigation.PathNode{
-						Id: 0,
-						Coordinate: navigation.Coordinate{
-							X: 7,
-							Y: 8,
-							Z: 9,
-						},
-						Group:          nil,
-						ConnectedNodes: nil,
-					},
+					PathNode: node2,
 				},
 			},
 			Color: "#5682a3",
@@ -120,39 +129,31 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNode: navigation.PathNode{
-			Id: 0,
-			Coordinate: navigation.Coordinate{
-				X: 34,
-				Y: 35,
-				Z: 36,
-			},
-			Group:          nil,
-			ConnectedNodes: nil,
-		},
-	}
-
-	entRoom, err := r.mapRoom(&ro)
-	if err != nil || entRoom == nil {
-		t.Error("expected no error, got:", err, entRoom)
-	}
-
-	ro.Id = 1
-
-	entRoom, err = r.mapRoom(&ro)
-	if err != nil || entRoom == nil {
-		t.Error("expected no error, got:", err, entRoom)
-	}
-
-	checkRoom := Room{
-		Id:          1,
-		MapItem:MapItem{
+		Location:Location{
 			Name:        "RoomN01",
 			Description: "Room Number 1 Special Description",
 			Tags:       []string{
 				"Tag1",
 				"#Tag2",
 			},
+			PathNode: node1,
+	}}
+
+	err = r.storeRooms([]Room{ro})
+	if err != nil {
+		t.Error("expected no error, got:", err)
+	}
+
+	ro.Id = 1
+
+	err = r.storeRooms([]Room{ro})
+	if err == nil {
+		t.Error("expected error, got:", err)
+	}
+
+	checkRoom := Room{
+		Id:          1,
+		MapItem: MapItem{
 			Doors: []Door{
 				{
 					Id: 1,
@@ -170,12 +171,8 @@ func TestMapRoom(t *testing.T) {
 						},
 					},
 					PathNode: navigation.PathNode{
-						Id: 1,
-						Coordinate: navigation.Coordinate{
-							X: 7,
-							Y: 8,
-							Z: 9,
-						},
+						Id:             0,
+						Coordinate:     navigation.Coordinate{},
 						Group:          nil,
 						ConnectedNodes: nil,
 					},
@@ -239,41 +236,43 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNode: navigation.PathNode{
-			Id: 2,
-			Coordinate: navigation.Coordinate{
-				X: 34,
-				Y: 35,
-				Z: 36,
+		Location:Location{
+			Name:        "RoomN01",
+			Description: "Room Number 1 Special Description",
+			Tags:       []string{
+				"Tag1",
+				"#Tag2",
 			},
-			Group:          nil,
-			ConnectedNodes: nil,
-		},
-	}
+			PathNode:navigation.PathNode{
+				Id: 2,
+				Coordinate: navigation.Coordinate{
+					X: 34,
+					Y: 35,
+					Z: 36,
+				},
+			},
+	}}
 
+	entRoom, _ := r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(ro.Location.Name))).First(r.context)
 	retRoom := r.roomMapper(entRoom)
+
+	// exclude pathnodes since they are reference types
+	retRoom.PathNodes = nil
+	retRoom.Doors[0].PathNode = navigation.PathNode{}
 	if !reflect.DeepEqual(checkRoom, *retRoom) {
 		t.Error("expected room equality. expected: ", checkRoom, ", actual: ", retRoom)
 	}
 
 	ro.Id = 2
-	entRoom, err = r.mapRoom(&ro)
-	if err == nil || entRoom != nil {
-		t.Error("expected error, got:", err, entRoom)
+	err = r.storeRooms([]Room{ro})
+	if err == nil {
+		t.Error("expected error, got:", err)
 	}
 
-	ro.Id = 0
-	ro.Name = "Fancy Room"
-	ro.Tags = []string{"Tag1", "Tag3"}
+
 	checkRoom = Room{
 		Id:          2,
-		MapItem:MapItem{
-			Name:        "Fancy Room",
-			Description: "Room Number 1 Special Description",
-			Tags:       []string{
-				"Tag1",
-				"Tag3",
-			},
+		MapItem: MapItem{
 			Doors: []Door{
 				{
 					Id: 2,
@@ -291,7 +290,7 @@ func TestMapRoom(t *testing.T) {
 						},
 					},
 					PathNode: navigation.PathNode{
-						Id: 3,
+						Id: 20,
 						Coordinate: navigation.Coordinate{
 							X: 7,
 							Y: 8,
@@ -359,24 +358,50 @@ func TestMapRoom(t *testing.T) {
 			},
 			Floor: 1,
 		},
-
-		PathNode: navigation.PathNode{
-			Id: 4,
-			Coordinate: navigation.Coordinate{
-				X: 34,
-				Y: 35,
-				Z: 36,
+		Location: Location{
+			Name:        "Fancy Room",
+			Description: "Room Number 1 Special Description",
+			Tags:       []string{
+				"Tag1",
+				"Tag3",
 			},
-			Group:          nil,
-			ConnectedNodes: nil,
+			PathNode: navigation.PathNode{
+				Id: 499,
+				Coordinate: navigation.Coordinate{
+					X: 34,
+					Y: 35,
+					Z: 36,
+				},
+				Group:          nil,
+				ConnectedNodes: nil,
+			},
 		},
 	}
-	entRoom, err = r.mapRoom(&ro)
-	if err != nil || entRoom == nil {
-		t.Error("expected no error, got:", err, entRoom)
+	ro = checkRoom
+	ro.Id = 0
+	ro.Name = "Fancy Room"
+	ro.Tags = []string{"Tag1", "Tag3"}
+	var sections []Section
+	for _, section := range ro.Sections {
+		section.Id = 0
+		sections = append(sections, section)
+	}
+	ro.Sections = sections
+
+	var doors []Door
+	for _, door := range ro.Doors {
+		door.Id = 0
+		door.Section.Id = 0
+		doors = append(doors, door)
 	}
 
+	ro.Doors = doors
+	err = r.storeRooms([]Room{ro})
+	if err != nil {
+		t.Error("expected no error, got:", err)
+	}
 
+	entRoom, _ = r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(ro.Name))).First(r.context)
 	retRoom = r.roomMapper(entRoom)
 	if !reflect.DeepEqual(checkRoom, *retRoom) {
 		t.Error("expected room equality. expected: ", checkRoom, ", actual: ", retRoom)
@@ -467,12 +492,12 @@ func TestMapDoorArray(t *testing.T) {
 		{
 			Id:       0,
 			Section:  Section{},
-			PathNode: navigation.PathNode{},
+			PathNode: navigation.PathNode{Id: 1},
 		},
 		{
 			Id:       0,
 			Section:  Section{},
-			PathNode: navigation.PathNode{},
+			PathNode: navigation.PathNode{Id: 2},
 		},
 	}
 
@@ -506,7 +531,7 @@ func TestMapDoor(t *testing.T) {
 			End:   navigation.Coordinate{X: 4, Y: 5, Z: 6},
 		},
 		PathNode: navigation.PathNode{
-			Id:             0,
+			Id:             1,
 			Coordinate:     navigation.Coordinate{X: 7, Y: 8, Z: 9},
 			Group:          nil,
 			ConnectedNodes: nil,
@@ -520,7 +545,6 @@ func TestMapDoor(t *testing.T) {
 
 	d.Id = 1
 	d.Section.Id = 1
-	d.PathNode.Id = 1
 	retDoor := r.doorMapper(entDoor)
 	if !reflect.DeepEqual(d, *retDoor) {
 		t.Error("expected door equality. expected:", d, ", actual:", retDoor)
@@ -533,7 +557,7 @@ func TestMapDoor(t *testing.T) {
 
 	d.Id = 0
 	d.Section.Id = 0
-	d.PathNode.Id = 0
+	d.PathNode.Id = 3
 
 	entDoor, err = r.mapDoor(&d)
 	if err != nil || entDoor == nil {
@@ -560,13 +584,13 @@ func TestMapPathNodeArray(t *testing.T) {
 
 	pathNodes := []*navigation.PathNode{
 		&navigation.PathNode{
-			Id:             0,
+			Id:             1,
 			Coordinate:     navigation.Coordinate{},
 			Group:          nil,
 			ConnectedNodes: nil,
 		},
 		&navigation.PathNode{
-			Id:             0,
+			Id:             2,
 			Coordinate:     navigation.Coordinate{},
 			Group:          nil,
 			ConnectedNodes: nil,
@@ -586,22 +610,45 @@ func TestMapPathNodeArray(t *testing.T) {
 		t.Error("expected no error, got: ", err, entPathNodes)
 	}
 
-	pathNodes[0].Id = 3
-	pathNodes[1].Id = 0
+	//pathNodes[0].Id = 3
+	//pathNodes[1].Id = 0
 
-	entPathNodes, err = r.mapPathNodeArray(pathNodes)
-	if err == nil {
-		t.Error("expected error, got: ", err, entPathNodes)
+	//entPathNodes, err = r.mapPathNodeArray(pathNodes)
+	//if err == nil {
+	//	t.Error("expected error, got: ", err, entPathNodes)
+	//}
+
+	if len(entPathNodes) != 2 {
+		t.Error("expected 2 pathNode, got: ", len(entPathNodes), entPathNodes)
 	}
 
-	if len(entPathNodes) != 1 {
-		t.Error("expected 1 pathNode, got: ", len(entPathNodes), entPathNodes)
-	}
-
-	if entPathNodes[0].ID != 3 {
+	if entPathNodes[0].ID != 1 {
 		t.Error("expected pathnode id ", pathNodes[1].Id, "got: ", entPathNodes[0].ID)
 	}
 
+}
+
+func TestMapPathNode_Exception(t *testing.T) {
+	r, err := setupRoomEntityService()
+	if err != nil || r == nil {
+		t.Error("error setting up room entity service:", err, r)
+		return
+	}
+	defer r.client.Close()
+
+	entPathNode, err := r.mapPathNode(&navigation.PathNode{
+		Id:             1,
+		Coordinate:     navigation.Coordinate{},
+		Group:          nil,
+		ConnectedNodes: nil,
+	})
+
+	r.client.PathNode.DeleteOneID(entPathNode.ID).Exec(r.context)
+	result := r.pathNodeMapper(entPathNode, []*navigation.PathNode{}, true)
+
+	if  !reflect.DeepEqual(*result, navigation.PathNode{}) {
+		t.Error("expected no error and  pathnode; got:", err, entPathNode)
+	}
 }
 
 func TestMapPathNode(t *testing.T) {
@@ -619,12 +666,12 @@ func TestMapPathNode(t *testing.T) {
 		ConnectedNodes: nil,
 	})
 
-	if err == nil || entPathNode != nil {
-		t.Error("expected error and nil pathnode; got:", err, entPathNode)
+	if err != nil || entPathNode == nil {
+		t.Error("expected no error and  pathnode; got:", err, entPathNode)
 	}
 
 	pathNode1 := navigation.PathNode{
-		Id:             0,
+		Id:             2,
 		Coordinate:     navigation.Coordinate{X: 1, Y: 2, Z: 3},
 		Group:          nil,
 		ConnectedNodes: nil,
@@ -635,9 +682,13 @@ func TestMapPathNode(t *testing.T) {
 		t.Error("expected nil and pathnode, got error:", err, entPathNode)
 	}
 
-	pathNode1.Id = 1
-	retPathNode := r.pathNodeMapper(entPathNode)
+	retPathNode := r.pathNodeMapper(entPathNode, []*navigation.PathNode{},true)
 	if !reflect.DeepEqual(pathNode1, *retPathNode) {
+		t.Error("expected pathnode equality, expected:", pathNode1, ", actual: ", retPathNode)
+	}
+
+	retPathNode2 := r.pathNodeMapper(entPathNode, []*navigation.PathNode{},true)
+	if !reflect.DeepEqual(*retPathNode2, *retPathNode) {
 		t.Error("expected pathnode equality, expected:", pathNode1, ", actual: ", retPathNode)
 	}
 
