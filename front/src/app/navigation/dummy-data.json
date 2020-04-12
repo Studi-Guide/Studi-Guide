@@ -125,7 +125,13 @@
       }
     ],
     "tags": [],
-    "pathNodes": [],
+    "pathNodes": [
+      {
+        "Id": 120490,
+        "ConnectedPathNodes" : [
+        ],
+        "X": 380, "Y": 50, "Z": 3 }
+    ],
     "doors": [],
     "Color": "#AFAFAF"
   },
@@ -266,7 +272,14 @@
       }
     ],
     "tags": [],
-    "pathNodes": [],
+    "pathNodes": [
+      {
+        "Id": 120491,
+        "ConnectedPathNodes" : [
+        ],
+        "X": 380, "Y": 115, "Z": 3 }
+    ],
+
     "doors": [],
     "Color": "#817464"
   },
@@ -1160,7 +1173,13 @@
       }
     ],
     "tags": [],
-    "pathNodes": [],
+    "pathNodes": [
+      {
+        "Id": 120492,
+        "ConnectedPathNodes" : [
+        ],
+        "X": 180, "Y": 570, "Z": 3 }],
+
     "doors": [],
     "Color": "#AFAFAF"
   },
@@ -1283,7 +1302,13 @@
       }
     ],
     "tags": [],
-    "pathNodes": [],
+    "pathNodes": [
+      {
+        "Id": 120491,
+        "ConnectedPathNodes" : [
+        ],
+        "X": 215, "Y": 600, "Z": 3 }],
+
     "doors": [],
     "Color": "#817464"
   },
@@ -1650,7 +1675,14 @@
       }
     ],
     "tags": [],
-    "pathNodes": [],
+
+    "pathNodes": [
+      {
+        "Id": 120491,
+        "ConnectedPathNodes" : [
+        ],
+        "X": 215, "Y": 640, "Z": 3 }],
+
     "doors": [],
     "Color": "#949494"
   },
@@ -2034,7 +2066,14 @@
       }
     ],
     "tags": [],
-    "pathNodes": [],
+
+    "pathNodes": [
+      {
+        "Id": 120491,
+        "ConnectedPathNodes" : [
+        ],
+        "X": 230, "Y": 1000, "Z": 3 }],
+
     "doors": [],
     "Color": "#AFAFAF"
   }

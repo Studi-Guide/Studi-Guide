@@ -28,7 +28,7 @@ func (PathNode) Edges() []ent.Edge {
 			Ref("pathNode").
 			Unique(),
 
-		edge.From("room", Room.Type).
+		edge.From("mapitem", MapItem.Type).
 			Ref("pathNodes"),
 
 		edge.To("linkedTo", PathNode.Type).

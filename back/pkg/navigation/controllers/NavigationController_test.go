@@ -36,7 +36,7 @@ func (m MockNavigationService) CalculateFromString(startRoomName string, endRoom
 }
 
 func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.Room) ([]navigation.PathNode, error) {
-	if !(startRoom.MapItem.Name == m.startroom) || !(endRoom.MapItem.Name == m.endroom) {
+	if !(startRoom.Name == m.startroom) || !(endRoom.Name == m.endroom) {
 		return nil, errors.New("wrong rooms")
 	}
 

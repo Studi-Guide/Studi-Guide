@@ -20,6 +20,6 @@ func (Door) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("section", Section.Type).Unique().Required(),
 		edge.To("pathNode", PathNode.Type).Unique(),
-		edge.From("owner", Room.Type).Ref("doors"),
+		edge.From("owner", MapItem.Type).Ref("doors"),
 	}
 }

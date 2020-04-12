@@ -4,8 +4,8 @@ import "studi-guide/pkg/navigation"
 
 type Room struct {
 	MapItem
-	Id        int
-	PathNodes []*navigation.PathNode
+	Location
+	Id int
 }
 
 type RoomServiceProvider interface {

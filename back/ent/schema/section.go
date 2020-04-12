@@ -30,7 +30,7 @@ func (Section) Edges() []ent.Edge {
 			Ref("section").
 			Unique(),
 
-		edge.From("room", Room.Type).
+		edge.From("mapitem", MapItem.Type).
 			Ref("sections").
 			Unique(),
 	}

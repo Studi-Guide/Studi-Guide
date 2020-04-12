@@ -14,51 +14,55 @@ func NewRoomMockService() *RoomMockService {
 	var rms RoomMockService
 
 	rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
-		Name:        "RoomN01",
-		Description: "Dummy",
 		Floor: 1,
 		},
-		PathNodes: []*navigation.PathNode{&navigation.PathNode{
+		Location:Location{PathNode: navigation.PathNode{
 			Id:             0,
 			Coordinate:     navigation.Coordinate{},
 			Group:          nil,
 			ConnectedNodes: nil,
-	}}})
+		},
+			Name:        "RoomN01",
+			Description: "Dummy",
+		}})
 
 	rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
-		Name:        "RoomN02",
-		Description: "Dummy",
 	},
-	PathNodes: []*navigation.PathNode{&navigation.PathNode{
+	Location:Location{PathNode:navigation.PathNode{
 		Id:             3,
 		Coordinate:     navigation.Coordinate{},
 		Group:          nil,
 		ConnectedNodes: nil,
-	}}})
+		},
+		Name:        "RoomN02",
+		Description: "Dummy",
+	}})
 
 	rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
-		Name:        "RoomN03",
-		Description: "Dummy",
 	},
-		PathNodes: []*navigation.PathNode{&navigation.PathNode{
+		Location:Location{PathNode:navigation.PathNode{
 		Id:             2,
 		Coordinate:     navigation.Coordinate{},
 		Group:          nil,
 		ConnectedNodes: nil,
-	}}})
+		},
+		Name:        "RoomN03",
+		Description: "Dummy",
+		}})
 
 
 rms.RoomList = append(rms.RoomList, Room{MapItem: MapItem{
-		Name:        "RoomN04",
-		Description: "Dummy",
 		Floor: 1,
 	},
-	PathNodes: []*navigation.PathNode{&navigation.PathNode{
+	Location:Location{PathNode:navigation.PathNode{
 		Id:             1,
 		Coordinate:     navigation.Coordinate{},
 		Group:          nil,
 		ConnectedNodes: nil,
-	}}})
+		},
+		Name:        "RoomN04",
+		Description: "Dummy",
+	}})
 
 	return &rms
 }
@@ -73,7 +77,7 @@ func (r *RoomMockService) GetAllRooms() ([]Room, error) {
 func (r *RoomMockService) GetRoom(name string) (Room, error) {
 
 	for _, room := range r.RoomList {
-		if room.MapItem.Name == name {
+		if room.Name == name {
 			return room, nil
 		}
 	}

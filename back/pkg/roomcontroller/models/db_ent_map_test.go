@@ -3,6 +3,7 @@ package models
 import (
 	"os"
 	"reflect"
+	"studi-guide/ent/location"
 	"studi-guide/ent/room"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
@@ -51,12 +52,6 @@ func TestMapRoom(t *testing.T) {
 	ro := Room{
 		Id:          0,
 		MapItem: MapItem{
-			Name:        "RoomN01",
-			Description: "Room Number 1 Special Description",
-			Tags:       []string{
-				"Tag1",
-				"#Tag2",
-			},
 			Doors: []Door{
 				{
 					Id: 0,
@@ -134,8 +129,15 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNodes: []*navigation.PathNode{&node1},
-	}
+		Location:Location{
+			Name:        "RoomN01",
+			Description: "Room Number 1 Special Description",
+			Tags:       []string{
+				"Tag1",
+				"#Tag2",
+			},
+			PathNode: node1,
+	}}
 
 	err = r.storeRooms([]Room{ro})
 	if err != nil {
@@ -152,12 +154,6 @@ func TestMapRoom(t *testing.T) {
 	checkRoom := Room{
 		Id:          1,
 		MapItem: MapItem{
-			Name:        "RoomN01",
-			Description: "Room Number 1 Special Description",
-			Tags:       []string{
-				"Tag1",
-				"#Tag2",
-			},
 			Doors: []Door{
 				{
 					Id: 1,
@@ -240,10 +236,24 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		PathNodes: nil,
-	}
+		Location:Location{
+			Name:        "RoomN01",
+			Description: "Room Number 1 Special Description",
+			Tags:       []string{
+				"Tag1",
+				"#Tag2",
+			},
+			PathNode:navigation.PathNode{
+				Id: 2,
+				Coordinate: navigation.Coordinate{
+					X: 34,
+					Y: 35,
+					Z: 36,
+				},
+			},
+	}}
 
-	entRoom, _ := r.client.Room.Query().Where(room.NameEQ(ro.Name)).First(r.context)
+	entRoom, _ := r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(ro.Location.Name))).First(r.context)
 	retRoom := r.roomMapper(entRoom)
 
 	// exclude pathnodes since they are reference types
@@ -263,12 +273,6 @@ func TestMapRoom(t *testing.T) {
 	checkRoom = Room{
 		Id:          2,
 		MapItem: MapItem{
-			Name:        "Fancy Room",
-			Description: "Room Number 1 Special Description",
-			Tags:       []string{
-				"Tag1",
-				"Tag3",
-			},
 			Doors: []Door{
 				{
 					Id: 2,
@@ -354,9 +358,14 @@ func TestMapRoom(t *testing.T) {
 			},
 			Floor: 1,
 		},
-
-		PathNodes: []*navigation.PathNode{
-			&navigation.PathNode{
+		Location: Location{
+			Name:        "Fancy Room",
+			Description: "Room Number 1 Special Description",
+			Tags:       []string{
+				"Tag1",
+				"Tag3",
+			},
+			PathNode: navigation.PathNode{
 				Id: 499,
 				Coordinate: navigation.Coordinate{
 					X: 34,
@@ -392,7 +401,7 @@ func TestMapRoom(t *testing.T) {
 		t.Error("expected no error, got:", err)
 	}
 
-	entRoom, _ = r.client.Room.Query().Where(room.NameEQ(ro.Name)).First(r.context)
+	entRoom, _ = r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(ro.Name))).First(r.context)
 	retRoom = r.roomMapper(entRoom)
 	if !reflect.DeepEqual(checkRoom, *retRoom) {
 		t.Error("expected room equality. expected: ", checkRoom, ", actual: ", retRoom)

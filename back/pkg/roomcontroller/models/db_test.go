@@ -52,11 +52,6 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			log.Println("error creating sequence:", err)
 		}
 
-		door, err := client.Door.Create().SetSectionID(sequence.ID).Save(ctx)
-		if err != nil {
-			log.Println("error creating door: ", err)
-		}
-
 		pathNode, err := client.PathNode.
 			Create().
 			SetID(i).
@@ -68,39 +63,65 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			log.Println("error creating pathnode:", err)
 		}
 
-		entRoom, err := client.Room.Create().
-			SetName(strconv.Itoa(i)).
+		door, err := client.Door.Create().SetSectionID(sequence.ID).SetPathNode(pathNode).Save(ctx)
+		if err != nil {
+			log.Println("error creating door: ", err)
+		}
+
+		entMapItem, err := client.MapItem.Create().
 			AddPathNodes(pathNode).
 			AddDoorIDs(door.ID).
 			SetFloor(i).
+			Save(ctx)
+
+		if err != nil {
+			log.Println("error creating map item:", err)
+		}
+
+		entLocation, err := client.Location.Create().
+			SetName(strconv.Itoa(i)).
+			SetPathnode(pathNode).
+			Save(ctx)
+
+		if err != nil {
+			log.Println("error creating location:", err)
+		}
+
+		entRoom, err := client.Room.Create().
+			SetLocation(entLocation).
+			SetMapitem(entMapItem).
 			Save(ctx)
 		if err != nil {
 			log.Println("error creating room:", err)
 		}
 
+		patnode := navigation.PathNode{
+			Id:             pathNode.ID,
+			Coordinate:navigation.Coordinate{
+				X: pathNode.XCoordinate,
+				Y: pathNode.YCoordinate,
+				Z: pathNode.ZCoordinate,
+			}}
+
 		testRooms = append(testRooms, Room{
 			Id:          entRoom.ID,
 			MapItem: MapItem{
-				Name:        entRoom.Name,
-				Description: entRoom.Description,
-				Tags:       nil,
 				Doors: []Door{{
 					Id:       door.ID,
 					Section:  Section{Id: sequence.ID},
-					PathNode: navigation.PathNode{},
+					PathNode: patnode,
 				}},
 				Color:    "",
 				Sections: nil,
 				Floor:    i,
+				PathNodes: []*navigation.PathNode{&patnode},
 			},
-
-			PathNodes: []*navigation.PathNode{ &navigation.PathNode{
-				Id:             pathNode.ID,
-				Coordinate:navigation.Coordinate{
-					X: pathNode.XCoordinate,
-					Y: pathNode.YCoordinate,
-					Z: pathNode.ZCoordinate,
-			}}},
+			Location: Location{
+				Name:        entLocation.Name,
+				Description: entLocation.Description,
+				Tags:       nil,
+				PathNode: patnode,
+			},
 		})
 	}
 
@@ -184,7 +205,8 @@ func TestGetRoom(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !reflect.DeepEqual(testRooms[1], room) {
+	expected := testRooms[1]
+	if !reflect.DeepEqual(expected, room) {
 		t.Error("expected: ", testRooms[1], "; got: ", room)
 	}
 
@@ -204,6 +226,8 @@ func TestAddRoom(t *testing.T) {
 	testRoom := Room{
 		Id: 4,
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "04",
 			Description: "description",
 		},
@@ -227,6 +251,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 4,
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "04",
 			Description: "d",
 		},
@@ -236,6 +262,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 4, 
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "04",
 			Description: "d",
 		},
@@ -244,6 +272,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 5,
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "05",
 			Description: "d",
 		},
@@ -258,6 +288,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 6,
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "06",
 			Description: "d",
 		},
@@ -266,6 +298,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 7, 
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "07",
 			Description: "d",
 		},
@@ -274,6 +308,8 @@ func TestAddRooms(t *testing.T) {
 	newRooms = append(newRooms, Room{
 		Id: 8, 
 		MapItem: MapItem{
+		},
+		Location: Location{
 			Name:        "08",
 			Description: "d",
 		},
