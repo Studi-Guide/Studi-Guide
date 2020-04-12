@@ -80,6 +80,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 
 		entLocation, err := client.Location.Create().
 			SetName(strconv.Itoa(i)).
+			SetPathnode(pathNode).
 			Save(ctx)
 
 		if err != nil {
