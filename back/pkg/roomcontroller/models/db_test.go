@@ -52,11 +52,6 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			log.Println("error creating sequence:", err)
 		}
 
-		door, err := client.Door.Create().SetSectionID(sequence.ID).Save(ctx)
-		if err != nil {
-			log.Println("error creating door: ", err)
-		}
-
 		pathNode, err := client.PathNode.
 			Create().
 			SetID(i).
@@ -66,6 +61,11 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 
 		if err != nil {
 			log.Println("error creating pathnode:", err)
+		}
+
+		door, err := client.Door.Create().SetSectionID(sequence.ID).SetPathNode(pathNode).Save(ctx)
+		if err != nil {
+			log.Println("error creating door: ", err)
 		}
 
 		entMapItem, err := client.MapItem.Create().
@@ -95,29 +95,32 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 			log.Println("error creating room:", err)
 		}
 
+		patnode := navigation.PathNode{
+			Id:             pathNode.ID,
+			Coordinate:navigation.Coordinate{
+				X: pathNode.XCoordinate,
+				Y: pathNode.YCoordinate,
+				Z: pathNode.ZCoordinate,
+			}}
+
 		testRooms = append(testRooms, Room{
 			Id:          entRoom.ID,
 			MapItem: MapItem{
 				Doors: []Door{{
 					Id:       door.ID,
 					Section:  Section{Id: sequence.ID},
-					PathNode: navigation.PathNode{},
+					PathNode: patnode,
 				}},
 				Color:    "",
 				Sections: nil,
 				Floor:    i,
+				PathNodes: []*navigation.PathNode{&patnode},
 			},
 			Location: Location{
 				Name:        entLocation.Name,
 				Description: entLocation.Description,
 				Tags:       nil,
-				PathNode: navigation.PathNode{
-					Id:             pathNode.ID,
-					Coordinate:navigation.Coordinate{
-						X: pathNode.XCoordinate,
-						Y: pathNode.YCoordinate,
-						Z: pathNode.ZCoordinate,
-					}},
+				PathNode: patnode,
 			},
 		})
 	}
@@ -202,7 +205,8 @@ func TestGetRoom(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !reflect.DeepEqual(testRooms[1], room) {
+	expected := testRooms[1]
+	if !reflect.DeepEqual(expected, room) {
 		t.Error("expected: ", testRooms[1], "; got: ", room)
 	}
 

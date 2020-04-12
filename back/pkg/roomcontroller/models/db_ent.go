@@ -65,7 +65,9 @@ func (r *RoomEntityService) GetAllRooms() ([]Room, error) {
 
 func (r *RoomEntityService) GetRoom(name string) (Room, error) {
 
-	entRoom, err := r.client.Room.Query().Where(room.HasLocationWith(location.Name(name))).WithMapitem().First(r.context)
+	entRoom, err := r.client.Room.Query().Where(room.HasLocationWith(location.Name(name))).
+		First(r.context)
+
 	if err != nil {
 		return Room{}, err
 	}
@@ -106,8 +108,11 @@ func (r *RoomEntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, ro
 	var err error = nil
 
 	if len(roomFilter) > 0 {
-		q := r.client.Room.Query().Where(room.HasLocationWith(location.NameContains(nameFilter)),
-			room.HasLocationWith(location.DescriptionContains(roomFilter)))
+		q := r.client.Room.Query().Where(
+				room.Or(
+					room.HasLocationWith(location.NameContains(roomFilter)),
+					room.HasLocationWith(location.DescriptionContains(roomFilter))))
+
 		if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
 			return nil, err
 		} else {
@@ -177,7 +182,14 @@ func (r *RoomEntityService) roomArrayMapper(entRooms []*ent.Room) []Room {
 
 func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 
-	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).First(r.context)
+	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).
+		WithMapitem(func (q *ent.MapItemQuery) {
+			q.WithPathNodes().WithColor().WithDoors(func (p *ent.DoorQuery) {p.WithPathNode().WithSection()}).WithSections()
+		}).
+		WithLocation(func (q *ent.LocationQuery) {
+			q.WithPathnode().WithTags()
+		}).
+		First(r.context)
 	if err != nil || entRoom == nil {
 		return nil
 	}
@@ -235,6 +247,11 @@ func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 	t, err := entLocation.Edges.TagsOrErr()
 	if err == nil {
 		rm.Tags = r.tagsArrayMapper(t)
+	}
+
+	pn, err := entLocation.Edges.PathnodeOrErr()
+	if err == nil {
+		rm.Location.PathNode = *r.pathNodeMapper(pn, []*navigation.PathNode{}, false)
 	}
 
 	return &rm
