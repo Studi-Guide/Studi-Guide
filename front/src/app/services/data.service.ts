@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
     providedIn: 'root'
 })
 export class DataService {
-    baseUrl:string = "http://localhost:8090"; // https://studi-guide.azurewebsites.net/roomlist/floor/0
+    baseUrl:string = "https://studi-guide.azurewebsites.net"; // for development: http://localhost:8090
 
     constructor(private httpClient : HttpClient) {
 
@@ -16,8 +16,7 @@ export class DataService {
     }
 
     get_route(start:string, end:string){
-        // /navigation/dir/startroom/KA.308/endroom/KA.313
-        return this.httpClient.get(this.baseUrl + '/navigation/dir/startroom/' + start + '/endroom/' + end );
+        return this.httpClient.get(this.baseUrl + '/navigation/dir?startroom=' + start + '&endroom=' + end );
     }
 
 }

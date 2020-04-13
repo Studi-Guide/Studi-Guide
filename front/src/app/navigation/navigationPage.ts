@@ -1,4 +1,4 @@
-import {Coordinate, PathNode, Room, Section, svgPath, RoomName} from '../building-objects-if';
+import {PathNode, Room, svgPath, RoomName} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component} from "@angular/core";
 import {DataService} from "../services/data.service";
@@ -21,8 +21,6 @@ export class NavigationPage {
 
   public startInput: string;
   public destinationInput: string;
-  public startRoom: Room;
-  public destinationRoom: Room;
 
   private routeToDisplay: NaviRoute;
   public calculatedRoute: string;
@@ -55,12 +53,9 @@ export class NavigationPage {
     // this.testRoute = NavigationPage.testRenderPathNodes();
   }
 
-  public fetchFloorToDisplay() {
-    // let floorToDisplay = this.startInput;
-    // TODO fetch input data from UI
+  private fetchFloorToDisplay(floor:string) {
     this.progressIsVisible = true;
-    // floor 0 for test data
-    this.dataService.get_floor('0').subscribe((res : Room[])=>{
+    this.dataService.get_floor(floor).subscribe((res : Room[])=>{
       this.floorToDisplay = new FloorMap(res);
 
       this.floorToDisplay.calculateSvgPathsAndSvgWidthHeight();
@@ -76,10 +71,9 @@ export class NavigationPage {
     });
   }
 
-  public fetchRouteToDisplay() {
-    // TODO fetch input data from UI
+  private fetchRouteToDisplay(start:string, end:string) {
     this.progressIsVisible = true;
-    this.dataService.get_route('KA.308', 'KA.313').subscribe((res : PathNode[])=>{
+    this.dataService.get_route(start, end).subscribe((res : PathNode[])=>{
       this.routeToDisplay = new NaviRoute(res);
       console.log(res);
 
@@ -92,32 +86,39 @@ export class NavigationPage {
     });
   }
 
-  private static testRenderPathNodes() : Coordinate[] {
-    let pathNodes:Coordinate[] = [];
-/*    for (const room of testDataRooms) {
-      for (const pathNode of room.PathNodes) {
-        pathNodes.push(pathNode.Coordinate);
-      }
-      for (const door of room.Doors) {
-        pathNodes.push(door.pathNode.Coordinate);
-      }
-    }*/
-    return pathNodes;
-  }
-
   public showFloor() {
     if (this.routeInputIsVisible) {
       this.routeInputIsVisible = false;
-    } else if (this.startInput != undefined) {
+    } else if (this.startInput != undefined && this.startInput != '' && this.startInput != null) {
       this.mapIsVisible = true;
+      this.fetchFloorToDisplay(this.startInput);
     }
   }
 
   public showRoute() {
     if (!this.routeInputIsVisible) {
       this.routeInputIsVisible = true;
-    } else if (this.startInput != undefined && this.destinationInput != undefined) {
+    } else if (this.startInput != undefined && this.destinationInput != undefined
+        && this.startInput != '' && this.destinationInput != ''
+        && this.startInput != null && this.destinationInput != null
+    ) {
       this.mapIsVisible = true;
+      // TODO only in KA.304 is the 4. character always the floor
+      this.fetchFloorToDisplay(this.startInput[3]);
+      this.fetchRouteToDisplay(this.startInput, this.destinationInput); // 'KA.308','KA.313'
     }
   }
+
+/*  private static testRenderPathNodes() : Coordinate[] {
+    let pathNodes:Coordinate[] = [];
+        for (const room of testDataRooms) {
+          for (const pathNode of room.PathNodes) {
+            pathNodes.push(pathNode.Coordinate);
+          }
+          for (const door of room.Doors) {
+            pathNodes.push(door.pathNode.Coordinate);
+          }
+        }
+    return pathNodes;
+  }*/
 }
