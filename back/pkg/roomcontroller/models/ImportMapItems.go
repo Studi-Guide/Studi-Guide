@@ -1,7 +1,10 @@
 package models
 
+import "studi-guide/pkg/navigation"
+
 type ImportDoor struct {
-	Section 	Section
+	Start	 	navigation.Coordinate
+	End 		navigation.Coordinate
 	PathNode 	ImportPathNode
 }
 
@@ -20,7 +23,7 @@ type ImportMapItems struct {
 	Tags        []string
 	Doors       []ImportDoor
 	Color       string
-	Floor 		int 		`json:"-"`
+	Floor 		int
 	Sections    []Section
 	Campus      string
 	Building 	string
