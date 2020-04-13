@@ -67,7 +67,6 @@ export class NavigationPage {
     this.progressIsVisible = true;
     this.dataService.get_room_search(room).subscribe((res : Room)=>{
       this.fetchFloorByItsNumber(res.Floor);
-      this.displayFloor();
     });
   }
 
