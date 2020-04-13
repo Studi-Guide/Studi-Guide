@@ -94,14 +94,14 @@ export class NavigationPage {
 
   private static testRenderPathNodes() : Coordinate[] {
     let pathNodes:Coordinate[] = [];
-    for (const room of testDataRooms) {
+/*    for (const room of testDataRooms) {
       for (const pathNode of room.PathNodes) {
         pathNodes.push(pathNode.Coordinate);
       }
       for (const door of room.Doors) {
         pathNodes.push(door.pathNode.Coordinate);
       }
-    }
+    }*/
     return pathNodes;
   }
 
