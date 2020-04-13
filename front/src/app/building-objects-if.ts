@@ -35,6 +35,7 @@ export interface Section {
 
 export interface Room {
   Name: string;
+  Floor: number;
   Sections: Section[];
   PathNodes: PathNode[];
   Doors: Door[];

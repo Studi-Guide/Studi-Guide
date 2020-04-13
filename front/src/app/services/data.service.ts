@@ -11,7 +11,7 @@ export class DataService {
 
     }
 
-    get_floor(floor:string){
+    get_floor(floor:any){
         return this.httpClient.get(this.baseUrl + '/roomlist/floor/' + floor);
     }
 
