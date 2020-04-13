@@ -12,21 +12,19 @@ export class Corridor {
   Y: number;
 }
 
-export interface Coordinate {
+export class Coordinate {
   X: number;
   Y: number;
   Z: number;
 }
 
-export class PathNode {
-  X: number;
-  Y: number;
-  Z: number;
+export interface PathNode {
+  Coordinate: Coordinate;
 }
 
-export class Door implements Section {
-  Start: Coordinate;
-  End: Coordinate;
+export class Door {
+  Id: number;
+  Section: Section;
   pathNode: PathNode;
 }
 
@@ -35,12 +33,11 @@ export interface Section {
   End: Coordinate;
 }
 
-export class Room {
-  name: string;
-  sections: Section[];
-  alias: string[];
-  pathNodes: PathNode[];
-  doors: Door[];
+export interface Room {
+  Name: string;
+  Sections: Section[];
+  PathNodes: PathNode[];
+  Doors: Door[];
   Color: string;
 }
 

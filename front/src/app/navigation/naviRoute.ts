@@ -16,7 +16,7 @@ export class NaviRoute {
     public calculateSvgPathForRoute() {
         let points:string = '';
         for (const pathNode of this.pathNodesToGo) {
-            points += pathNode.X + ',' + pathNode.Y + ' ';
+            points += pathNode.Coordinate.X + ',' + pathNode.Coordinate.Y + ' ';
         }
         this.svgRoute = points;
     }

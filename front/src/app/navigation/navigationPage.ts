@@ -37,6 +37,8 @@ export class NavigationPage {
 //  public testRooms:Room[] = [];
 //  public testRoute:PathNode[];
 
+  // public sourceSvg: string;
+
   constructor(private dataService: DataService) {
     this.dataService = dataService;
 
@@ -57,9 +59,9 @@ export class NavigationPage {
     // let floorToDisplay = this.startInput;
     // TODO fetch input data from UI
     this.progressIsVisible = true;
-    this.dataService.get_floor('KA.3').subscribe((res : Room[])=>{
+    // floor 0 for test data
+    this.dataService.get_floor('0').subscribe((res : Room[])=>{
       this.floorToDisplay = new FloorMap(res);
-      console.log(this.floorToDisplay.objectsToBeVisualized);
 
       this.floorToDisplay.calculateSvgPathsAndSvgWidthHeight();
       this.mapSvgHeight = this.floorToDisplay.svgHeight;
@@ -82,6 +84,7 @@ export class NavigationPage {
       console.log(res);
 
       this.routeToDisplay.calculateSvgPathForRoute();
+      // this.sourceSvg = '<image x="100" y="200" width="20" height="20" xlink:href="../../assets/navigation-svgs/race-flag.svg" />';
       this.calculatedRoute = this.routeToDisplay.svgRoute;
 
       this.progressIsVisible = false;
@@ -92,29 +95,13 @@ export class NavigationPage {
   private static testRenderPathNodes() : Coordinate[] {
     let pathNodes:Coordinate[] = [];
     for (const room of testDataRooms) {
-      for (const pathNode of room.pathNodes) {
-        pathNodes.push(pathNode);
+      for (const pathNode of room.PathNodes) {
+        pathNodes.push(pathNode.Coordinate);
       }
-      for (const door of room.doors) {
-        pathNodes.push(door.pathNode);
+      for (const door of room.Doors) {
+        pathNodes.push(door.pathNode.Coordinate);
       }
     }
     return pathNodes;
-  }
-
-  public showFloor() {
-    if (this.routeInputIsVisible) {
-      this.routeInputIsVisible = false;
-    } else if (this.startInput != undefined) {
-      this.mapIsVisible = true;
-    }
-  }
-
-  public showRoute() {
-    if (!this.routeInputIsVisible) {
-      this.routeInputIsVisible = true;
-    } else if (this.startInput != undefined && this.destinationInput != undefined) {
-      this.mapIsVisible = true;
-    }
   }
 }

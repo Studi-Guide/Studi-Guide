@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Room, Section, svgPath, RoomName} from "../building-objects-if";
+import {Room, Door, Section, svgPath, RoomName} from "../building-objects-if";
 
 @Injectable({
     providedIn: 'root'
@@ -24,9 +24,9 @@ export class FloorMap {
         this.allRoomNames = [];
     }
 
-    private static buildDoorSvgLineFromSection(doorSection:Section) : string {
-        let path:string = 'M' + doorSection.Start.X + ' ' + doorSection.Start.Y;
-        path += ' L' + doorSection.End.X + ' ' + doorSection.End.Y;
+    private static buildDoorSvgLineFromSection(door:Door) : string {
+        let path:string = 'M' + door.Section.Start.X + ' ' + door.Section.Start.Y;
+        path += ' L' + door.Section.End.X + ' ' + door.Section.End.Y;
         return path;
     }
 
@@ -45,12 +45,13 @@ export class FloorMap {
     public calculateSvgPathsAndSvgWidthHeight() {
         for (const room of this.objectsToBeVisualized) {
             let roomShapePath:svgPath = {
-                d : FloorMap.buildRoomSvgPathFromSections(room.sections),
+                d : FloorMap.buildRoomSvgPathFromSections(room.Sections),
                 fill : room.Color
             };
             this.calculatedRoomPaths.push(roomShapePath);
-            if (room.doors.length >= 1) {
-                for (const door of room.doors) {
+            // TODO remove check if null
+            if (room.Doors != null && room.Doors.length >= 1) {
+                for (const door of room.Doors) {
                     let doorLine:svgPath = {
                         d : FloorMap.buildDoorSvgLineFromSection(door),
                         fill : roomShapePath.fill
@@ -58,7 +59,7 @@ export class FloorMap {
                     this.calculatedDoorLines.push(doorLine);
                 }
             }
-            for (const section of room.sections) {
+            for (const section of room.Sections) {
                 if (section.End.X > this.svgWidth) {
                     this.svgWidth = section.End.X;
                 }
@@ -77,9 +78,9 @@ export class FloorMap {
         for (const room of this.objectsToBeVisualized) {
             this.allRoomNames.push(
                 {
-                    name: room.name,
-                    x: room.sections[0].Start.X+6,
-                    y: room.sections[0].Start.Y+16
+                    name: room.Name,
+                    x: room.Sections[0].Start.X+6,
+                    y: room.Sections[0].Start.Y+16
                 }
             );
         }

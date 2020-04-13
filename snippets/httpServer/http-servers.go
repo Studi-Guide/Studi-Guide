@@ -63,7 +63,7 @@ func getJson(fileName string) (string, error) {
 }
 
 func main() {
-	http.HandleFunc("/api/KA.3", handleFloorReq)
-	http.HandleFunc("/api/KA.308-KA.313", handleRouteReq)
+	http.HandleFunc("/roomlist/floor/0", handleFloorReq)
+	http.HandleFunc("/navigation/dir?startroom=KA.308&endroom=KA.313", handleRouteReq)
 	http.ListenAndServe(":8090", nil)
 }
