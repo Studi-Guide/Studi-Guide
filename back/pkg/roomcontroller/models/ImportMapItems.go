@@ -1,7 +1,10 @@
 package models
 
+import "studi-guide/pkg/navigation"
+
 type ImportDoor struct {
-	Section 	Section
+	Start	 	navigation.Coordinate
+	End 		navigation.Coordinate
 	PathNode 	ImportPathNode
 }
 

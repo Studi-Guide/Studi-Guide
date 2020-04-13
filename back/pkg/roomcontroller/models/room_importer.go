@@ -99,7 +99,12 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 			}
 
 			doors = append(doors,Door{
-				Section:  importDoor.Section,
+				Section:  Section{
+					Id:    0,
+					Start: importDoor.Start,
+					End:   importDoor.End,
+				},
+
 				PathNode: navigation.PathNode{
 					Id:             importDoor.PathNode.Id,
 					Coordinate:     navigation.Coordinate{
