@@ -1679,7 +1679,8 @@
         "X": 265, "Y": 910, "Z": 3 }
     ],
     "doors": [],
-    "Color": "#BBB"
+    "Color": "#BBB",
+    "floor": 3
   },
   {
     "name": "WASISTDAS2",
