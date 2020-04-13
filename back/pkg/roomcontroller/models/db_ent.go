@@ -107,45 +107,34 @@ func (r *RoomEntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, ro
 	var entRooms []*ent.Room
 	var err error = nil
 
+	q := r.client.Room.Query()
 	if len(roomFilter) > 0 {
-		q := r.client.Room.Query().Where(
+		q = q.Where(
 				room.Or(
 					room.HasLocationWith(location.NameContains(roomFilter)),
 					room.HasLocationWith(location.DescriptionContains(roomFilter))))
-
-		if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
-			return nil, err
-		} else {
-			// Just use query when its available
-			if len(floorFilter) > 0 {
-				q = q.Where(room.HasMapitemWith(mapitem.FloorEQ(floor)))
-			}
-		}
-
-		entRooms, err = q.WithMapitem().All(r.context)
-		if err != nil {
-			return nil, err
-		}
-
-
 	} else {
-		q:= r.client.Room.Query().Where(room.HasLocationWith(location.NameContains(nameFilter)))
-		if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
-			return nil, err
-		} else {
-			// Just use query when its available
-			if len(floorFilter) > 0 {
-				q = q.Where(room.HasMapitemWith(mapitem.FloorEQ(floor)))
-			}
-		}
 
-		// alias is missing here ...
-		entRooms, err = q.WithMapitem().All(r.context)
-		if err != nil {
-			return nil, err
+		if len(nameFilter) > 0 {
+			q = q.Where(room.HasLocationWith(location.NameContains(nameFilter)))
 		}
-
 	}
+
+	if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
+		return nil, err
+	} else {
+		// Just use query when its available
+		if len(floorFilter) > 0 {
+			q = q.Where(room.HasMapitemWith(mapitem.FloorEQ(floor)))
+		}
+	}
+
+	// alias is missing here ...
+	entRooms, err = q.WithMapitem().All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
 	return r.roomArrayMapper(entRooms), nil
 }
 

@@ -20,7 +20,7 @@ type ImportMapItems struct {
 	Tags        []string
 	Doors       []ImportDoor
 	Color       string
-	Floor 		int 		`json:"-"`
+	Floor 		int
 	Sections    []Section
 	Campus      string
 	Building 	string
