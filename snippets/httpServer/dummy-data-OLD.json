@@ -1,6 +1,4 @@
-import { Room } from '../building-objects-if';
-
-export let testDataRooms: Room[] = [
+[
   {
     "name": "KA.304",
     "sections": [
@@ -1229,7 +1227,7 @@ export let testDataRooms: Room[] = [
     ],
     "alias": [],
     "pathNodes": [
-        { "X": 195, "Y": 700, "Z": 3 }
+      { "X": 195, "Y": 700, "Z": 3 }
     ],
     "doors": [
       {
@@ -1503,4 +1501,4 @@ export let testDataRooms: Room[] = [
     "doors": [],
     "Color": "#AFAFAF"
   }
-];
+]

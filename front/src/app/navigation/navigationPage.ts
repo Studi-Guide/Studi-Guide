@@ -1,92 +1,124 @@
-import {Coordinate, Room, Section, svgPath} from '../building-objects-if';
-import {testDataRooms} from './test-building-data';
+import {PathNode, Room, svgPath, RoomName} from '../building-objects-if';
+// import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component} from "@angular/core";
-import {RequestBuildingDataService} from "../services/requestBuildingData.service";
+import {DataService} from "../services/data.service";
+import {FloorMap} from "./floorMap";
+import {NaviRoute} from "./naviRoute";
 
 @Component({
   selector: 'app-navigation',
   templateUrl: 'navigation.page.html',
   styleUrls: ['navigation.page.scss']
 })
+
 export class NavigationPage {
-  //  public mapIsVisible:boolean = true;
-  public startRoom:Room;
-  public destinationRoom:Room;
-  public testRooms:Room[] = testDataRooms;
-  public testPathNodes:Coordinate[];
-  public calculatedRoomPaths:svgPath[];
-  public calculatedDoorLines:svgPath[];
-  
-  // TODO These values we have to determine: which size will have the scrollable map?
-  public svgWidth:number = 500; // this.calcSvgWidth();
-  public svgHeight:number = 1200; // this.calcSvgHeight();
+  public progressIsVisible: boolean = false;
+  public routeInputIsVisible: boolean = false;
+  public searchBtnIsVisible: boolean = true;
+  public routeBtnIsVisible: boolean = true;
+  public mapIsVisible: boolean = false;
+  public routeIsVisible: boolean = false;
 
-  // TODO adapt to the current UML model
+  public startInput: string;
+  public destinationInput: string;
 
-  private calculateSvgPaths() {
-    for (const room of this.testRooms) {
-      let roomShapePath:svgPath = {
-        d : NavigationPage.buildRoomSvgPathFromSections(room.sections),
-        fill : room.Color
-      };
-      this.calculatedRoomPaths.push(roomShapePath);
-      if (room.doors.length >= 1) {
-        for (const door of room.doors) {
-          let doorLine:svgPath = {
-            d : NavigationPage.buildDoorSvgLineFromSection(door),
-            fill : roomShapePath.fill
-          };
-          this.calculatedDoorLines.push(doorLine);
-        }
-      }
-    }
-  }
+  private routeToDisplay: NaviRoute;
+  public calculatedRoute: string;
 
-  private static buildDoorSvgLineFromSection(doorSection:Section) : string {
-    let path:string = 'M' + doorSection.Start.X + ' ' + doorSection.Start.Y;
-    path += ' L' + doorSection.End.X + ' ' + doorSection.End.Y;
-    return path;
-  }
+  private floorToDisplay: FloorMap;
+  public calculatedRoomPaths: svgPath[];
+  public calculatedDoorLines: svgPath[];
+  public mapSvgWidth: number;
+  public mapSvgHeight: number;
+  public roomNames: RoomName[];
 
-  private static buildRoomSvgPathFromSections(roomSections:Section[]) : string {
-    let path_d:string = 'M';
-    for (const section of roomSections) {
-      if (path_d !== 'M') {
-        path_d += 'L';
-      }
-      path_d += section.Start.X + ' ' + section.Start.Y + ' ';
-    }
-    path_d += 'Z';
-    return path_d;
-  }
+//  public testRooms:Room[] = [];
+//  public testRoute:PathNode[];
 
-  private static testRenderPathNodes(){
-    let pathNodes:Coordinate[] = [];
-    for (const room of testDataRooms) {
-      for (const pathNode of room.pathNodes) {
-        pathNodes.push(pathNode);
-      }
-      for (const door of room.doors) {
-        pathNodes.push(door.pathNode);
-      }
-    }
-    return pathNodes;
-  }
+  // public sourceSvg: string;
 
-  constructor() {
+  constructor(private dataService: DataService) {
+    this.dataService = dataService;
+
+    this.calculatedRoute = '';
+
     this.calculatedRoomPaths = [];
     this.calculatedDoorLines = [];
-    this.calculateSvgPaths();
-    this.testPathNodes = NavigationPage.testRenderPathNodes();
+    this.mapSvgWidth = 0;
+    this.mapSvgHeight = 0;
+    this.roomNames = [];
+
+    // this.testRooms = testDataRooms;
+    // this.testRoute = testDataPathNodes;
+    // this.testRoute = NavigationPage.testRenderPathNodes();
   }
 
-  public discoverFloor() {
-    // let floorToDisplay = this.startInput;
-    let handleReceivedFloor = function (Tab1page, data) {
-      Tab1page.testRooms = data; // JSON.parse()
-    };
-    let xhr = new RequestBuildingDataService();
-    // TODO exchange GET to POST and uncomment floorToDisplay when API is built
-    xhr.fetchDiscoverFloorData("GET", /*floorToDisplay,*/ handleReceivedFloor);
+  private fetchFloorToDisplay(floor:string) {
+    this.progressIsVisible = true;
+    this.dataService.get_floor(floor).subscribe((res : Room[])=>{
+      this.floorToDisplay = new FloorMap(res);
+
+      this.floorToDisplay.calculateSvgPathsAndSvgWidthHeight();
+      this.mapSvgHeight = this.floorToDisplay.svgHeight;
+      this.mapSvgWidth = this.floorToDisplay.svgWidth;
+      this.calculatedRoomPaths = this.floorToDisplay.calculatedRoomPaths;
+      this.calculatedDoorLines = this.floorToDisplay.calculatedDoorLines;
+      this.floorToDisplay.collectAllRoomNames();
+      this.roomNames = this.floorToDisplay.allRoomNames;
+
+      this.progressIsVisible = false;
+      this.mapIsVisible = true;
+    });
   }
+
+  private fetchRouteToDisplay(start:string, end:string) {
+    this.progressIsVisible = true;
+    this.dataService.get_route(start, end).subscribe((res : PathNode[])=>{
+      this.routeToDisplay = new NaviRoute(res);
+      console.log(res);
+
+      this.routeToDisplay.calculateSvgPathForRoute();
+      // this.sourceSvg = '<image x="100" y="200" width="20" height="20" xlink:href="../../assets/navigation-svgs/race-flag.svg" />';
+      this.calculatedRoute = this.routeToDisplay.svgRoute;
+
+      this.progressIsVisible = false;
+      this.routeIsVisible = true;
+    });
+  }
+
+  public showFloor() {
+    if (this.routeInputIsVisible) {
+      this.routeInputIsVisible = false;
+    } else if (this.startInput != undefined && this.startInput != '' && this.startInput != null) {
+      this.mapIsVisible = true;
+      this.fetchFloorToDisplay(this.startInput);
+    }
+  }
+
+  public showRoute() {
+    if (!this.routeInputIsVisible) {
+      this.routeInputIsVisible = true;
+    } else if (this.startInput != undefined && this.destinationInput != undefined
+        && this.startInput != '' && this.destinationInput != ''
+        && this.startInput != null && this.destinationInput != null
+    ) {
+      this.mapIsVisible = true;
+      // TODO only in KA.304 is the 4. character always the floor
+      this.fetchFloorToDisplay(this.startInput[3]);
+      this.fetchRouteToDisplay(this.startInput, this.destinationInput); // 'KA.308','KA.313'
+    }
+  }
+
+/*  private static testRenderPathNodes() : Coordinate[] {
+    let pathNodes:Coordinate[] = [];
+        for (const room of testDataRooms) {
+          for (const pathNode of room.PathNodes) {
+            pathNodes.push(pathNode.Coordinate);
+          }
+          for (const door of room.Doors) {
+            pathNodes.push(door.pathNode.Coordinate);
+          }
+        }
+    return pathNodes;
+  }*/
 }

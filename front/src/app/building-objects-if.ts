@@ -18,10 +18,14 @@ export class Coordinate {
   Z: number;
 }
 
-export class Door implements Section {
-  Start: Coordinate;
-  End: Coordinate;
-  pathNode: Coordinate;
+export interface PathNode {
+  Coordinate: Coordinate;
+}
+
+export class Door {
+  Id: number;
+  Section: Section;
+  pathNode: PathNode;
 }
 
 export interface Section {
@@ -29,16 +33,21 @@ export interface Section {
   End: Coordinate;
 }
 
-export class Room {
-  name: string;
-  sections: Section[];
-  alias: string[];
-  pathNodes: Coordinate[];
-  doors: Door[];
+export interface Room {
+  Name: string;
+  Sections: Section[];
+  PathNodes: PathNode[];
+  Doors: Door[];
   Color: string;
 }
 
 export class svgPath {
   d: string;
   fill: string;
+}
+
+export class RoomName {
+  name: string;
+  x: number;
+  y: number;
 }

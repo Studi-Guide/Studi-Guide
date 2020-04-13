@@ -1,38 +1,47 @@
-<ion-content fullscreen>
+<ion-content scroll-y="false">
+  <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
   <ion-item>
-    <ion-label position="stacked"><ion-text color="primary">Start room</ion-text></ion-label>
-    <ion-input type="text" placeholder="Start room" [(ngModel)]="startInput"></ion-input>
+    <ion-label position="stacked"><ion-text color="primary">room / floor</ion-text></ion-label>
+    <ion-input type="text" placeholder="KA.3xx" [(ngModel)]="startInput"></ion-input>
   </ion-item>
-  <ion-item>
-    <ion-label position="stacked"><ion-text color="primary">Destination</ion-text></ion-label>
-    <ion-input type="text" placeholder="Destination" [(ngModel)]="destinationInput"></ion-input>
+  <ion-item *ngIf="routeInputIsVisible">
+    <ion-label position="stacked"><ion-text color="primary">destination</ion-text></ion-label>
+    <ion-input type="text" placeholder="KA.3yy" [(ngModel)]="destinationInput"></ion-input>
   </ion-item>
-  <ion-item>
-    <ion-button expand="block" color="dark" (click)="discoverFloor()">
-      <ion-icon slot="end" name="star"></ion-icon>
-      Go!
-    </ion-button>
-  </ion-item>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="8">
+        <ion-button size="small" color="primary" (click)="showFloor()" *ngIf="searchBtnIsVisible">
+          <ion-icon slot="end" name="search"></ion-icon>
+          search
+        </ion-button>
+        <ion-button size="small" color="primary" (click)="showRoute()" *ngIf="routeBtnIsVisible">
+          <ion-icon slot="end" name="map"></ion-icon>
+          <span id="routeBtnText">route</span>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
-  <div id="building-map">
-    <!-- *ngIf="mapIsVisible" -->
-    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{svgWidth}}" attr.height="{{svgHeight}}" class="center">
+  <div id="building-map" *ngIf="mapIsVisible">
+    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{mapSvgWidth}}" attr.height="{{mapSvgHeight}}" class="center">
       <path *ngFor="let path of calculatedRoomPaths"
             attr.d="{{path.d}}"
             attr.fill="{{path.fill}}"
             stroke="#FFF"
       />
-      <text *ngFor="let room of testRooms"
-            attr.x="{{room.sections[0].Start.X+6}}"
-            attr.y="{{room.sections[0].Start.Y+16}}"
+      <text *ngFor="let roomName of roomNames"
+            attr.x="{{roomName.x}}"
+            attr.y="{{roomName.y}}"
             font-size="9px"
             fill="#FFF">
-        {{room.name}}
+        {{roomName.name}}
       </text>
       <path *ngFor="let doorLine of calculatedDoorLines" attr.d="{{doorLine.d}}" attr.stroke="{{doorLine.fill}}" />
       <!-- TEST -->
-      <circle *ngFor="let pathNode of testPathNodes" attr.cx="{{pathNode.X}}" attr.cy="{{pathNode.Y}}" r="2" fill="red" />
+      <circle *ngFor="let pathNode of testRoute" attr.cx="{{pathNode.X}}" attr.cy="{{pathNode.Y}}" r="2" fill="red" />
       <!-- TEST END -->
+      <polyline attr.points="{{calculatedRoute}}" style="fill:none;stroke:#A00;stroke-width:3" />
     </svg>
   </div>
 </ion-content>
