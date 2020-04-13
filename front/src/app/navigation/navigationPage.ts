@@ -53,21 +53,42 @@ export class NavigationPage {
     // this.testRoute = NavigationPage.testRenderPathNodes();
   }
 
-  private fetchFloorToDisplay(floor:string) {
+  public showFloorForSearch() {
+    if (this.routeInputIsVisible) {
+      this.routeInputIsVisible = false;
+    } else if (this.startInput != undefined && this.startInput != '' && this.startInput != null) {
+      this.mapIsVisible = true;
+      this.fetchFloorForSearch(this.startInput);
+    }
+  }
+
+  private fetchFloorForSearch(room: string) {
+    this.progressIsVisible = true;
+    this.dataService.get_room_search(room).subscribe((res : Room[])=>{
+      this.floorToDisplay = new FloorMap(res);
+      this.displayFloor();
+    });
+  }
+
+  public showRoute() {
+    if (!this.routeInputIsVisible) {
+      this.routeInputIsVisible = true;
+    } else if (this.startInput != undefined && this.destinationInput != undefined
+        && this.startInput != '' && this.destinationInput != ''
+        && this.startInput != null && this.destinationInput != null
+    ) {
+      this.mapIsVisible = true;
+      // TODO only in KA.304 is the 4. character always the floor
+      this.fetchFloorForNavi(this.startInput[3]);
+      this.fetchRouteToDisplay(this.startInput, this.destinationInput); // 'KA.308','KA.313'
+    }
+  }
+
+  private fetchFloorForNavi(floor:string) {
     this.progressIsVisible = true;
     this.dataService.get_floor(floor).subscribe((res : Room[])=>{
       this.floorToDisplay = new FloorMap(res);
-
-      this.floorToDisplay.calculateSvgPathsAndSvgWidthHeight();
-      this.mapSvgHeight = this.floorToDisplay.svgHeight;
-      this.mapSvgWidth = this.floorToDisplay.svgWidth;
-      this.calculatedRoomPaths = this.floorToDisplay.calculatedRoomPaths;
-      this.calculatedDoorLines = this.floorToDisplay.calculatedDoorLines;
-      this.floorToDisplay.collectAllRoomNames();
-      this.roomNames = this.floorToDisplay.allRoomNames;
-
-      this.progressIsVisible = false;
-      this.mapIsVisible = true;
+      this.displayFloor();
     });
   }
 
@@ -86,27 +107,17 @@ export class NavigationPage {
     });
   }
 
-  public showFloor() {
-    if (this.routeInputIsVisible) {
-      this.routeInputIsVisible = false;
-    } else if (this.startInput != undefined && this.startInput != '' && this.startInput != null) {
-      this.mapIsVisible = true;
-      this.fetchFloorToDisplay(this.startInput);
-    }
-  }
+  private displayFloor() {
+    this.floorToDisplay.calculateSvgPathsAndSvgWidthHeight();
+    this.mapSvgHeight = this.floorToDisplay.svgHeight;
+    this.mapSvgWidth = this.floorToDisplay.svgWidth;
+    this.calculatedRoomPaths = this.floorToDisplay.calculatedRoomPaths;
+    this.calculatedDoorLines = this.floorToDisplay.calculatedDoorLines;
+    this.floorToDisplay.collectAllRoomNames();
+    this.roomNames = this.floorToDisplay.allRoomNames;
 
-  public showRoute() {
-    if (!this.routeInputIsVisible) {
-      this.routeInputIsVisible = true;
-    } else if (this.startInput != undefined && this.destinationInput != undefined
-        && this.startInput != '' && this.destinationInput != ''
-        && this.startInput != null && this.destinationInput != null
-    ) {
-      this.mapIsVisible = true;
-      // TODO only in KA.304 is the 4. character always the floor
-      this.fetchFloorToDisplay(this.startInput[3]);
-      this.fetchRouteToDisplay(this.startInput, this.destinationInput); // 'KA.308','KA.313'
-    }
+    this.progressIsVisible = false;
+    this.mapIsVisible = true;
   }
 
 /*  private static testRenderPathNodes() : Coordinate[] {

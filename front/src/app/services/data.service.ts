@@ -19,4 +19,7 @@ export class DataService {
         return this.httpClient.get(this.baseUrl + '/navigation/dir?startroom=' + start + '&endroom=' + end );
     }
 
+    get_room_search(room:string) {
+        return this.httpClient.get(this.baseUrl + '/roomlist/room/' + room );
+    }
 }
