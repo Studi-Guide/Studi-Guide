@@ -1,5 +1,5 @@
 import {Coordinate, PathNode, Room, Section, svgPath, RoomName} from '../building-objects-if';
-import {testDataRooms, testDataPathNodes} from './test-building-data';
+// import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component} from "@angular/core";
 import {DataService} from "../services/data.service";
 import {FloorMap} from "./floorMap";
@@ -103,5 +103,21 @@ export class NavigationPage {
       }
     }
     return pathNodes;
+  }
+
+  public showFloor() {
+    if (this.routeInputIsVisible) {
+      this.routeInputIsVisible = false;
+    } else if (this.startInput != undefined) {
+      this.mapIsVisible = true;
+    }
+  }
+
+  public showRoute() {
+    if (!this.routeInputIsVisible) {
+      this.routeInputIsVisible = true;
+    } else if (this.startInput != undefined && this.destinationInput != undefined) {
+      this.mapIsVisible = true;
+    }
   }
 }

@@ -12,11 +12,12 @@ export class DataService {
     }
 
     get_floor(floor:string){
-        return this.httpClient.get(this.baseUrl + '/roomlist/floor' + floor);
+        return this.httpClient.get(this.baseUrl + '/roomlist/floor/' + floor);
     }
 
     get_route(start:string, end:string){
-        return this.httpClient.get(this.baseUrl + '/navigation/dir/?startroom=' + start + '&endroom=' + end );
+        // /navigation/dir/startroom/KA.308/endroom/KA.313
+        return this.httpClient.get(this.baseUrl + '/navigation/dir/startroom/' + start + '/endroom/' + end );
     }
 
 }

@@ -1,10 +1,11 @@
-[
+import { Room, PathNode } from '../front/src/app/building-objects-if';
+
+export let testDataRooms: Room[] = [
   {
     "Doors": [
       {
         "Id": 1,
         "Section": {
-          "Id": 5,
           "Start": {
             "X": 135,
             "Y": 100,
@@ -16,21 +17,18 @@
             "Z": 3
           }
         },
-        "PathNode": {
-          "Id": 3041,
+        "pathNode": {
           "Coordinate": {
             "X": 128,
             "Y": 100,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
     "Color": "#5682a3",
     "Sections": [
       {
-        "Id": 1,
         "Start": {
           "X": 0,
           "Y": 0,
@@ -43,7 +41,6 @@
         }
       },
       {
-        "Id": 2,
         "Start": {
           "X": 150,
           "Y": 0,
@@ -56,7 +53,6 @@
         }
       },
       {
-        "Id": 3,
         "Start": {
           "X": 150,
           "Y": 100,
@@ -69,7 +65,6 @@
         }
       },
       {
-        "Id": 4,
         "Start": {
           "X": 0,
           "Y": 100,
@@ -82,39 +77,30 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
-        "Id": 304,
         "Coordinate": {
           "X": 75,
           "Y": 50,
           "Z": 3
         },
-        "Group": null
       }
     ],
     "Name": "KA.304",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 304,
       "Coordinate": {
         "X": 75,
         "Y": 50,
         "Z": 3
-      },
-      "Group": null
-    },
-    "Id": 1
+      }
+    }
   },
   {
     "Doors": [
       {
         "Id": 2,
         "Section": {
-          "Id": 10,
           "Start": {
             "X": 180,
             "Y": 100,
@@ -126,21 +112,18 @@
             "Z": 3
           }
         },
-        "PathNode": {
-          "Id": 3021,
+        "pathNode": {
           "Coordinate": {
             "X": 173,
             "Y": 100,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
     "Color": "#5682a3",
     "Sections": [
       {
-        "Id": 6,
         "Start": {
           "X": 150,
           "Y": 0,
@@ -153,7 +136,6 @@
         }
       },
       {
-        "Id": 7,
         "Start": {
           "X": 300,
           "Y": 0,
@@ -166,7 +148,6 @@
         }
       },
       {
-        "Id": 8,
         "Start": {
           "X": 300,
           "Y": 100,
@@ -179,7 +160,6 @@
         }
       },
       {
-        "Id": 9,
         "Start": {
           "X": 150,
           "Y": 100,
@@ -192,30 +172,23 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
-        "Id": 302,
         "Coordinate": {
           "X": 225,
           "Y": 50,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.302",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 302,
       "Coordinate": {
         "X": 225,
         "Y": 50,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 2
   },
@@ -224,7 +197,6 @@
     "Color": "#AFAFAF",
     "Sections": [
       {
-        "Id": 11,
         "Start": {
           "X": 360,
           "Y": 0,
@@ -237,7 +209,6 @@
         }
       },
       {
-        "Id": 12,
         "Start": {
           "X": 400,
           "Y": 0,
@@ -250,7 +221,6 @@
         }
       },
       {
-        "Id": 13,
         "Start": {
           "X": 400,
           "Y": 100,
@@ -263,7 +233,6 @@
         }
       },
       {
-        "Id": 14,
         "Start": {
           "X": 360,
           "Y": 100,
@@ -276,30 +245,22 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
-        "Id": 120490,
         "Coordinate": {
           "X": 380,
           "Y": 50,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "Treppe 1 3.OG",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
-      "Id": 120490,
+    "pathNode": {
       "Coordinate": {
         "X": 380,
         "Y": 50,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 3
   },
@@ -320,14 +281,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3061,
           "Coordinate": {
             "X": 100,
             "Y": 118,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -386,8 +346,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 306,
@@ -395,21 +353,17 @@
           "X": 50,
           "Y": 115,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.306",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 306,
       "Coordinate": {
         "X": 50,
         "Y": 115,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 4
   },
@@ -548,8 +502,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 1,
@@ -557,8 +509,7 @@
           "X": 128,
           "Y": 115,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 2,
@@ -566,8 +517,7 @@
           "X": 173,
           "Y": 115,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 3,
@@ -575,21 +525,17 @@
           "X": 257,
           "Y": 115,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "corridor 2",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 1,
       "Coordinate": {
         "X": 128,
         "Y": 115,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 5
   },
@@ -650,8 +596,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 120491,
@@ -659,21 +603,17 @@
           "X": 380,
           "Y": 115,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "Aufzug 2",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 120491,
       "Coordinate": {
         "X": 380,
         "Y": 115,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 6
   },
@@ -694,14 +634,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3081,
           "Coordinate": {
             "X": 225,
             "Y": 198,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -760,8 +699,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 308,
@@ -769,21 +706,17 @@
           "X": 187,
           "Y": 170,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.308",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 308,
       "Coordinate": {
         "X": 187,
         "Y": 170,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 7
   },
@@ -844,8 +777,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 4,
@@ -853,21 +784,17 @@
           "X": 257,
           "Y": 170,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "Treppe 2 3.OG",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 4,
       "Coordinate": {
         "X": 257,
         "Y": 170,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 8
   },
@@ -888,14 +815,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 6,
           "Coordinate": {
             "X": 333,
             "Y": 175,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -980,8 +906,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 5,
@@ -989,21 +913,17 @@
           "X": 335,
           "Y": 160,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "WC Herren 2",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 5,
       "Coordinate": {
         "X": 335,
         "Y": 160,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 9
   },
@@ -1024,14 +944,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 7,
           "Coordinate": {
             "X": 333,
             "Y": 180,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -1116,8 +1035,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 61,
@@ -1125,21 +1042,17 @@
           "X": 335,
           "Y": 200,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "WC Damen 1",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 61,
       "Coordinate": {
         "X": 335,
         "Y": 200,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 10
   },
@@ -1160,14 +1073,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3101,
           "Coordinate": {
             "X": 225,
             "Y": 220,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -1226,8 +1138,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 310,
@@ -1235,21 +1145,17 @@
           "X": 187,
           "Y": 222,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.310",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 310,
       "Coordinate": {
         "X": 187,
         "Y": 222,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 11
   },
@@ -1270,14 +1176,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3121,
           "Coordinate": {
             "X": 225,
             "Y": 245,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -1336,8 +1241,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 312,
@@ -1345,21 +1248,17 @@
           "X": 187,
           "Y": 250,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.312",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 312,
       "Coordinate": {
         "X": 187,
         "Y": 250,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 12
   },
@@ -1380,14 +1279,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3051,
           "Coordinate": {
             "X": 335,
             "Y": 240,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -1446,8 +1344,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 305,
@@ -1455,21 +1351,17 @@
           "X": 335,
           "Y": 250,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.305",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 305,
       "Coordinate": {
         "X": 335,
         "Y": 250,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 13
   },
@@ -1490,14 +1382,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3141,
           "Coordinate": {
             "X": 240,
             "Y": 280,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -1515,14 +1406,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3142,
           "Coordinate": {
             "X": 213,
             "Y": 295,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -1581,8 +1471,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 314,
@@ -1590,21 +1478,17 @@
           "X": 195,
           "Y": 280,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.314",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 314,
       "Coordinate": {
         "X": 195,
         "Y": 280,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 14
   },
@@ -1625,14 +1509,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3161,
           "Coordinate": {
             "X": 240,
             "Y": 310,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -1650,14 +1533,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3162,
           "Coordinate": {
             "X": 213,
             "Y": 295,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -1675,14 +1557,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3163,
           "Coordinate": {
             "X": 218,
             "Y": 325,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -1741,8 +1622,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 316,
@@ -1750,21 +1629,17 @@
           "X": 195,
           "Y": 310,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.316",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 316,
       "Coordinate": {
         "X": 195,
         "Y": 310,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 15
   },
@@ -1785,14 +1660,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3181,
           "Coordinate": {
             "X": 240,
             "Y": 335,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -1810,14 +1684,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3182,
           "Coordinate": {
             "X": 218,
             "Y": 325,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -1876,8 +1749,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 318,
@@ -1885,21 +1756,17 @@
           "X": 195,
           "Y": 337,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.318",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 318,
       "Coordinate": {
         "X": 195,
         "Y": 337,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 16
   },
@@ -1920,14 +1787,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3201,
           "Coordinate": {
             "X": 240,
             "Y": 365,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -1986,8 +1852,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 320,
@@ -1995,21 +1859,17 @@
           "X": 195,
           "Y": 365,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.320",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 320,
       "Coordinate": {
         "X": 195,
         "Y": 365,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 17
   },
@@ -2030,14 +1890,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3221,
           "Coordinate": {
             "X": 240,
             "Y": 445,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -2096,8 +1955,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 322,
@@ -2105,21 +1962,17 @@
           "X": 195,
           "Y": 420,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.322",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 322,
       "Coordinate": {
         "X": 195,
         "Y": 420,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 18
   },
@@ -2140,14 +1993,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3241,
           "Coordinate": {
             "X": 240,
             "Y": 470,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -2206,8 +2058,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 324,
@@ -2215,21 +2065,17 @@
           "X": 195,
           "Y": 475,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.324",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 324,
       "Coordinate": {
         "X": 195,
         "Y": 475,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 19
   },
@@ -2250,14 +2096,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3261,
           "Coordinate": {
             "X": 240,
             "Y": 505,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -2316,8 +2161,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 326,
@@ -2325,21 +2168,17 @@
           "X": 195,
           "Y": 505,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.326",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 326,
       "Coordinate": {
         "X": 195,
         "Y": 505,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 20
   },
@@ -2360,14 +2199,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3281,
           "Coordinate": {
             "X": 240,
             "Y": 535,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -2426,8 +2264,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 328,
@@ -2435,21 +2271,17 @@
           "X": 195,
           "Y": 535,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.328",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 328,
       "Coordinate": {
         "X": 195,
         "Y": 535,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 21
   },
@@ -2470,14 +2302,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3071,
           "Coordinate": {
             "X": 290,
             "Y": 288,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -2495,14 +2326,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3072,
           "Coordinate": {
             "X": 310,
             "Y": 320,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -2561,8 +2391,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 307,
@@ -2570,21 +2398,17 @@
           "X": 335,
           "Y": 292,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.307",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 307,
       "Coordinate": {
         "X": 335,
         "Y": 292,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 22
   },
@@ -2605,14 +2429,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3091,
           "Coordinate": {
             "X": 290,
             "Y": 338,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -2630,14 +2453,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3092,
           "Coordinate": {
             "X": 290,
             "Y": 403,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -2655,14 +2477,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3093,
           "Coordinate": {
             "X": 310,
             "Y": 320,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -2680,14 +2501,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3094,
           "Coordinate": {
             "X": 310,
             "Y": 420,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -2746,8 +2566,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 309,
@@ -2755,21 +2573,17 @@
           "X": 335,
           "Y": 370,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.309",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 309,
       "Coordinate": {
         "X": 335,
         "Y": 370,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 23
   },
@@ -2790,14 +2604,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3111,
           "Coordinate": {
             "X": 290,
             "Y": 438,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -2815,14 +2628,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3112,
           "Coordinate": {
             "X": 290,
             "Y": 503,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -2840,14 +2652,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3113,
           "Coordinate": {
             "X": 310,
             "Y": 420,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -2906,8 +2717,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 311,
@@ -2915,21 +2724,17 @@
           "X": 335,
           "Y": 470,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.311",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 311,
       "Coordinate": {
         "X": 335,
         "Y": 470,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 24
   },
@@ -2950,14 +2755,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 9,
           "Coordinate": {
             "X": 290,
             "Y": 535,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -3016,8 +2820,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 8,
@@ -3025,21 +2827,17 @@
           "X": 335,
           "Y": 535,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "WASISTDAS",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 8,
       "Coordinate": {
         "X": 335,
         "Y": 535,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 25
   },
@@ -3100,8 +2898,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 120492,
@@ -3109,21 +2905,17 @@
           "X": 180,
           "Y": 570,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "Treppe 3 3.OG",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 120492,
       "Coordinate": {
         "X": 180,
         "Y": 570,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 26
   },
@@ -3144,14 +2936,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 11,
           "Coordinate": {
             "X": 180,
             "Y": 610,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -3236,8 +3027,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 10,
@@ -3245,21 +3034,17 @@
           "X": 160,
           "Y": 605,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "WC Damen 2",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 10,
       "Coordinate": {
         "X": 160,
         "Y": 605,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 27
   },
@@ -3280,14 +3065,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 13,
           "Coordinate": {
             "X": 180,
             "Y": 630,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -3372,8 +3156,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 12,
@@ -3381,21 +3163,17 @@
           "X": 160,
           "Y": 635,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "WC Herren 1",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 12,
       "Coordinate": {
         "X": 160,
         "Y": 635,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 28
   },
@@ -3456,8 +3234,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 120491,
@@ -3465,21 +3241,17 @@
           "X": 380,
           "Y": 115,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "Aufzug 1",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 120491,
       "Coordinate": {
         "X": 380,
         "Y": 115,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 29
   },
@@ -3878,8 +3650,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 14,
@@ -3887,8 +3657,7 @@
           "X": 257,
           "Y": 198,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 15,
@@ -3896,8 +3665,7 @@
           "X": 257,
           "Y": 222,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 16,
@@ -3905,8 +3673,7 @@
           "X": 257,
           "Y": 245,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 17,
@@ -3914,8 +3681,7 @@
           "X": 265,
           "Y": 280,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 18,
@@ -3923,8 +3689,7 @@
           "X": 265,
           "Y": 288,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 19,
@@ -3932,8 +3697,7 @@
           "X": 265,
           "Y": 310,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 20,
@@ -3941,8 +3705,7 @@
           "X": 265,
           "Y": 335,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 21,
@@ -3950,8 +3713,7 @@
           "X": 265,
           "Y": 365,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 22,
@@ -3959,8 +3721,7 @@
           "X": 265,
           "Y": 403,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 23,
@@ -3968,8 +3729,7 @@
           "X": 265,
           "Y": 438,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 24,
@@ -3977,8 +3737,7 @@
           "X": 265,
           "Y": 445,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 25,
@@ -3986,8 +3745,7 @@
           "X": 265,
           "Y": 470,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 26,
@@ -3995,8 +3753,7 @@
           "X": 265,
           "Y": 503,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 27,
@@ -4004,8 +3761,7 @@
           "X": 265,
           "Y": 505,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 28,
@@ -4013,8 +3769,7 @@
           "X": 265,
           "Y": 535,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 29,
@@ -4022,8 +3777,7 @@
           "X": 180,
           "Y": 620,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 30,
@@ -4031,8 +3785,7 @@
           "X": 265,
           "Y": 620,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 31,
@@ -4040,8 +3793,7 @@
           "X": 265,
           "Y": 628,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 32,
@@ -4049,8 +3801,7 @@
           "X": 265,
           "Y": 673,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 33,
@@ -4058,8 +3809,7 @@
           "X": 265,
           "Y": 728,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 34,
@@ -4067,8 +3817,7 @@
           "X": 265,
           "Y": 773,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 35,
@@ -4076,8 +3825,7 @@
           "X": 265,
           "Y": 828,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 36,
@@ -4085,8 +3833,7 @@
           "X": 265,
           "Y": 870,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 37,
@@ -4094,8 +3841,7 @@
           "X": 265,
           "Y": 903,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 38,
@@ -4103,8 +3849,7 @@
           "X": 265,
           "Y": 910,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 39,
@@ -4112,8 +3857,7 @@
           "X": 310,
           "Y": 198,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 40,
@@ -4121,8 +3865,7 @@
           "X": 320,
           "Y": 178,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 41,
@@ -4130,8 +3873,7 @@
           "X": 333,
           "Y": 178,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 42,
@@ -4139,8 +3881,7 @@
           "X": 335,
           "Y": 230,
           "Z": 3
-        },
-        "Group": null
+        }
       },
       {
         "Id": 43,
@@ -4148,21 +3889,17 @@
           "X": 257,
           "Y": 230,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "corridor 1",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 14,
       "Coordinate": {
         "X": 257,
         "Y": 198,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 30
   },
@@ -4223,8 +3960,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 120491,
@@ -4232,21 +3967,17 @@
           "X": 380,
           "Y": 115,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "WASISTDAS2",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 120491,
       "Coordinate": {
         "X": 380,
         "Y": 115,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 31
   },
@@ -4267,14 +3998,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3341,
           "Coordinate": {
             "X": 240,
             "Y": 673,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -4292,14 +4022,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3342,
           "Coordinate": {
             "X": 240,
             "Y": 728,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -4358,8 +4087,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 334,
@@ -4367,21 +4094,17 @@
           "X": 195,
           "Y": 700,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.334",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 334,
       "Coordinate": {
         "X": 195,
         "Y": 700,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 32
   },
@@ -4402,14 +4125,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3361,
           "Coordinate": {
             "X": 240,
             "Y": 773,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -4468,8 +4190,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 336,
@@ -4477,21 +4197,17 @@
           "X": 195,
           "Y": 790,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.336",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 336,
       "Coordinate": {
         "X": 195,
         "Y": 790,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 33
   },
@@ -4512,14 +4228,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3381,
           "Coordinate": {
             "X": 240,
             "Y": 870,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -4537,14 +4252,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3382,
           "Coordinate": {
             "X": 240,
             "Y": 910,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -4603,8 +4317,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 338,
@@ -4612,21 +4324,17 @@
           "X": 195,
           "Y": 880,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.338",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 338,
       "Coordinate": {
         "X": 195,
         "Y": 880,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 34
   },
@@ -4647,14 +4355,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3131,
           "Coordinate": {
             "X": 290,
             "Y": 628,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -4713,8 +4420,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 313,
@@ -4722,21 +4427,17 @@
           "X": 345,
           "Y": 600,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.313",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 313,
       "Coordinate": {
         "X": 345,
         "Y": 600,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 35
   },
@@ -4757,14 +4458,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3151,
           "Coordinate": {
             "X": 290,
             "Y": 673,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -4782,14 +4482,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3152,
           "Coordinate": {
             "X": 290,
             "Y": 728,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -4807,14 +4506,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3153,
           "Coordinate": {
             "X": 308,
             "Y": 750,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -4873,8 +4571,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 315,
@@ -4882,21 +4578,17 @@
           "X": 335,
           "Y": 700,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.315",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 315,
       "Coordinate": {
         "X": 335,
         "Y": 700,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 36
   },
@@ -4917,14 +4609,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3171,
           "Coordinate": {
             "X": 290,
             "Y": 773,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -4942,14 +4633,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3172,
           "Coordinate": {
             "X": 290,
             "Y": 828,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -4967,14 +4657,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3173,
           "Coordinate": {
             "X": 308,
             "Y": 750,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -4992,14 +4681,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3174,
           "Coordinate": {
             "X": 308,
             "Y": 850,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -5058,8 +4746,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 317,
@@ -5067,21 +4753,17 @@
           "X": 335,
           "Y": 800,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.317",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 317,
       "Coordinate": {
         "X": 335,
         "Y": 800,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 37
   },
@@ -5102,14 +4784,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3191,
           "Coordinate": {
             "X": 290,
             "Y": 903,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       },
       {
@@ -5127,14 +4808,13 @@
             "Z": 3
           }
         },
-        "PathNode": {
+        "pathNode": {
           "Id": 3192,
           "Coordinate": {
             "X": 308,
             "Y": 850,
             "Z": 3
-          },
-          "Group": null
+          }
         }
       }
     ],
@@ -5193,8 +4873,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 319,
@@ -5202,21 +4880,17 @@
           "X": 335,
           "Y": 890,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "KA.319",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 319,
       "Coordinate": {
         "X": 335,
         "Y": 890,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 38
   },
@@ -5277,8 +4951,6 @@
         }
       }
     ],
-    "Campus": "",
-    "Building": "",
     "PathNodes": [
       {
         "Id": 120491,
@@ -5286,22 +4958,43 @@
           "X": 380,
           "Y": 115,
           "Z": 3
-        },
-        "Group": null
+        }
       }
     ],
     "Name": "Treppe 4 3.OG",
-    "Description": "",
-    "Tags": null,
-    "PathNode": {
+    "pathNode": {
       "Id": 120491,
       "Coordinate": {
         "X": 380,
         "Y": 115,
         "Z": 3
-      },
-      "Group": null
+      }
     },
     "Id": 39
   }
-]
+];
+
+export let testDataPathNodes:PathNode[] = [
+  { "X": 187, "Y": 170, "Z": 3 },
+  { "X": 225, "Y": 198, "Z": 3 },
+  { "X": 257, "Y": 198, "Z": 3 },
+  { "X": 257, "Y": 222, "Z": 3 },
+  { "X": 257, "Y": 230, "Z": 3 },
+  { "X": 257, "Y": 245, "Z": 3 },
+  { "X": 265, "Y": 280, "Z": 3 },
+  { "X": 265, "Y": 288, "Z": 3 },
+  { "X": 265, "Y": 310, "Z": 3 },
+  { "X": 265, "Y": 335, "Z": 3 },
+  { "X": 265, "Y": 365, "Z": 3 },
+  { "X": 265, "Y": 403, "Z": 3 },
+  { "X": 265, "Y": 438, "Z": 3 },
+  { "X": 265, "Y": 445, "Z": 3 },
+  { "X": 265, "Y": 470, "Z": 3 },
+  { "X": 265, "Y": 503, "Z": 3 },
+  { "X": 265, "Y": 505, "Z": 3 },
+  { "X": 265, "Y": 535, "Z": 3 },
+  { "X": 265, "Y": 620, "Z": 3 },
+  { "X": 265, "Y": 628, "Z": 3 },
+  { "X": 290, "Y": 628, "Z": 3 },
+  { "X": 345, "Y": 600, "Z": 3 }
+];
