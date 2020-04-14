@@ -147,7 +147,12 @@ func (r *EntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFi
 }
 
 func (r *EntityService) GetAllMapItems() ([]MapItem, error) {
-	entMapItems, err := r.client.MapItem.Query().All(r.context)
+	entMapItems, err := r.client.MapItem.Query().
+		WithPathNodes().
+		WithColor().
+		WithDoors().
+		WithSections().
+		All(r.context)
 	if err != nil {
 		return nil, err
 	}
@@ -161,7 +166,12 @@ func (r *EntityService) FilterMapItems(floor, building, campus string) ([]MapIte
 		return nil, err
 	}
 	// Missing items: campus, building
-	entMapItems, err := r.client.MapItem.Query().Where(mapitem.Floor(iFloor)).All(r.context)
+	entMapItems, err := r.client.MapItem.Query().Where(mapitem.Floor(iFloor)).
+		WithPathNodes().
+		WithColor().
+		WithDoors().
+		WithSections().
+		All(r.context)
 	if err != nil {
 		return nil, err
 	}
@@ -267,9 +277,9 @@ func (r *EntityService) mapItemArrayMapper(entMapItems []*ent.MapItem) []MapItem
 
 func (r *EntityService) mapItemMapper(entMapItem *ent.MapItem) *MapItem {
 	m := MapItem{
-		Doors:       nil,
+		Doors:       []Door{},
 		Color:       "",
-		Sections:    nil,
+		Sections:    []Section{},
 		Floor:       entMapItem.Floor,
 		PathNodes: []*navigation.PathNode{},
 	}
