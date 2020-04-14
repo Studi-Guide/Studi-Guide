@@ -28,7 +28,7 @@ func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) erro
 // @Param floor query int false "floor of the map items"
 // @Param campus query string false "map item is linked to a certain campus"
 // @Param building query string false "map item is linked to a building"
-// @Success 200 {array} models.MapItem
+// @Success 200 {array} entityservice.MapItem
 // @Router /map [get]
 func (l MapController) GetMapItems(c *gin.Context) {
 	floor := c.Query("floor")
@@ -79,7 +79,7 @@ func (l MapController) GetMapItems(c *gin.Context) {
 // @Produce  json
 // @Tags MapController
 // @Param floor path int true "filter map items by floor"
-// @Success 200 {array} models.MapItem
+// @Success 200 {array} entityservice.MapItem
 // @Router /map/floor/{floor} [get]
 func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
 	floor := c.Param("floor") //mux.Vars(r)["name"]
