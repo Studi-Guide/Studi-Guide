@@ -83,6 +83,10 @@ jobs:
         working-directory: ${{env.GO_HTTP}}
         run: go generate ./ent
 
+      - name: Generate Mocks
+        working-directory: ${{env.GO_HTTP}}
+        run: go generate ./pkg/map ./pkg/navigation/services
+
       - name: Run backend Unit Tests
         working-directory: ${{env.GO_HTTP}}
         run: go test -race -coverprofile=coverage.txt -covermode=atomic ./...
