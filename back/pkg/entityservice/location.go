@@ -1,4 +1,4 @@
-package models
+package entityservice
 
 import "studi-guide/pkg/navigation"
 

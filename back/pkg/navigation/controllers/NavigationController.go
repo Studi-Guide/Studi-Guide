@@ -27,16 +27,16 @@ func NewNavigationController(router *gin.RouterGroup, service services.Navigatio
 // @Accept  json
 // @Produce  json
 // @Tags NavigationController
-// @Param startroom query string false "the start room name"
-// @Param endroom query string false "the end room name"
+// @Param startlocation query string false "the start location name"
+// @Param endlocation query string false "the end location name"
 // @Success 200 {array} navigation.Coordinate
 // @Router /navigation/dir [get]
 func (l *NavigationController) GetNavigationRoute(c *gin.Context) {
-	startroom := c.Query("startroom")
-	endroom := c.Query("endroom")
+	startlocation := c.Query("startlocation")
+	endlocation := c.Query("endlocation")
 
-	log.Printf("[NavigationController] Request navigation received for start '%v' and end '%v'", startroom, endroom)
-	coordinates, err := l.service.CalculateFromString(startroom, endroom)
+	log.Printf("[NavigationController] Request navigation received for start '%v' and end '%v'", startlocation, endlocation)
+	coordinates, err := l.service.CalculateFromString(startlocation, endlocation)
 
 	if err != nil {
 		fmt.Println("GetAllRomms() failed with error", err)

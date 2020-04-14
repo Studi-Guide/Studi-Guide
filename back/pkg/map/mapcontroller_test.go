@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/roomcontroller/models"
 	"testing"
 )
@@ -147,8 +148,8 @@ func TestMapController_GetMapItemsFromFloor_EmptyConnectorlist(t *testing.T) {
 }
 
 // Helper method
-func GetExpectedJson(rooms []models.Room) ([]models.MapItem)	 {
-	var mapItems []models.MapItem
+func GetExpectedJson(rooms []entityservice.Room) ([]entityservice.MapItem)	 {
+	var mapItems []entityservice.MapItem
 	for _, room := range rooms {
 		mapItems = append(mapItems, room.MapItem)
 	}

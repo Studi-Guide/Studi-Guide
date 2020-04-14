@@ -7,8 +7,8 @@ import (
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/navigation"
-	"studi-guide/pkg/roomcontroller/models"
 	"testing"
 )
 
@@ -35,7 +35,7 @@ func (m MockNavigationService) CalculateFromString(startRoomName string, endRoom
 	return m.nodes, nil
 }
 
-func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.Room) ([]navigation.PathNode, error) {
+func (m MockNavigationService) Calculate(startRoom entityservice.Room, endRoom entityservice.Room) ([]navigation.PathNode, error) {
 	if !(startRoom.Name == m.startroom) || !(endRoom.Name == m.endroom) {
 		return nil, errors.New("wrong rooms")
 	}

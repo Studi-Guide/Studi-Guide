@@ -1,4 +1,4 @@
-package models
+package entityservice
 
 import (
 	"context"
@@ -17,7 +17,7 @@ import (
 
 var testRooms []Room
 
-func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
+func setupTestRoomDbService() (*EntityService, *sql.DB) {
 	os.Setenv("DB_DRIVER_NAME", "sqlite3")
 	os.Setenv("DB_DATA_SOURCE", ":memory:")
 
@@ -125,7 +125,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 		})
 	}
 
-	dbService := RoomEntityService{client: client, table: "", context: ctx}
+	dbService := EntityService{client: client, table: "", context: ctx}
 
 	return &dbService, drv.DB()
 }
@@ -136,7 +136,7 @@ func TestNewRoomDbService(t *testing.T) {
 
 	e := env.NewEnv()
 
-	dbService, err := NewRoomEntityService(e)
+	dbService, err := NewEntityService(e)
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
@@ -148,7 +148,7 @@ func TestNewRoomDbService(t *testing.T) {
 	os.Setenv("DB_DATA_SOURCE", ":memory:")
 
 	e = env.NewEnv()
-	dbService, err = NewRoomEntityService(e)
+	dbService, err = NewEntityService(e)
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}

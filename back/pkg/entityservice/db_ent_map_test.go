@@ -1,4 +1,4 @@
-package models
+package entityservice
 
 import (
 	"os"
@@ -10,13 +10,13 @@ import (
 	"testing"
 )
 
-func setupRoomEntityService() (*RoomEntityService, error) {
+func setupRoomEntityService() (*EntityService, error) {
 	os.Setenv("DB_DRIVER_NAME", "sqlite3")
 	os.Setenv("DB_DATA_SOURCE", ":memory:")
 
 	e := env.NewEnv()
 
-	return newRoomEntityService(e)
+	return newEntityService(e)
 }
 
 func TestMapRoom(t *testing.T) {
@@ -129,7 +129,7 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		Location:Location{
+		Location: Location{
 			Name:        "RoomN01",
 			Description: "Room Number 1 Special Description",
 			Tags:       []string{
@@ -236,7 +236,7 @@ func TestMapRoom(t *testing.T) {
 			Floor: 1,
 		},
 
-		Location:Location{
+		Location: Location{
 			Name:        "RoomN01",
 			Description: "Room Number 1 Special Description",
 			Tags:       []string{

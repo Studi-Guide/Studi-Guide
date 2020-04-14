@@ -9,19 +9,19 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/env"
 	maps "studi-guide/pkg/map"
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
 	"studi-guide/pkg/roomcontroller/controllers"
-	"studi-guide/pkg/roomcontroller/models"
 )
 
 type StudiGuideServer struct {
 	router *gin.Engine
 }
 
-func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, navigationprovider services.NavigationServiceProvider) *StudiGuideServer {
+func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityService, navigationprovider services.NavigationServiceProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -53,7 +53,7 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, 
 	roomRouter := router.Group("/roomlist")
 	{
 		log.Print("Creating room controllers")
-		err := controllers.NewRoomController(roomRouter, roomprovider)
+		err := controllers.NewRoomController(roomRouter, entityService)
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -76,7 +76,7 @@ func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, 
 	mapRouter := router.Group("/map")
 	{
 		log.Print("Creating map controllers")
-		err := maps.NewMapController(mapRouter, roomprovider)
+		err := maps.NewMapController(mapRouter, entityService)
 		if err != nil {
 			log.Fatal(err)
 		} else {

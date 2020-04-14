@@ -2,6 +2,7 @@ package services
 
 import (
 	"encoding/json"
+	"github.com/golang/mock/gomock"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/roomcontroller/models"
 	"testing"
@@ -50,9 +51,14 @@ func (l *MockRouteCalculator) GetRoute(start, end navigation.PathNode) ([]naviga
 func TestNavigationService_CalculateFromString(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mock := mock_services.NewMockLocationProvider(ctrl)
+	mock.EXPECT().GetAllPathNodes()
+
 	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
-	navigationservice, _ := NewNavigationService(calculator, roomprovider)
+	navigationservice, _ := NewNavigationService(calculator, mock)
 
 	nodes, err := navigationservice.CalculateFromString(startroomname, endroomname)
 

@@ -7,8 +7,8 @@ import (
 	"os"
 	"studi-guide/cmd/studi-guide-ctl/ctl"
 	"studi-guide/pkg/config"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/env"
-	"studi-guide/pkg/roomcontroller/models"
 )
 
 func main() {
@@ -28,7 +28,7 @@ func BuildContainer() *dig.Container {
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
 	container.Provide(config.NewConfig)
-	container.Provide(models.NewRoomEntityService)
+	container.Provide(entityservice.NewEntityService)
 	container.Provide(ctl.StudiGuideCtlCli)
 	return container
 }

@@ -6,10 +6,10 @@ import (
 	"studi-guide/cmd/studi-guide/server"
 	"studi-guide/docs"
 	"studi-guide/pkg/config"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/navigation/services"
-	"studi-guide/pkg/roomcontroller/models"
 )
 
 func main() {
@@ -41,7 +41,7 @@ func BuildContainer() *dig.Container {
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
 	container.Provide(config.NewConfig)
-	container.Provide(models.NewRoomEntityService)
+	container.Provide(entityservice.NewEntityService)
 	container.Provide(server.NewStudiGuideServer)
 	container.Provide(navigation.NewDijkstraNavigation)
 	container.Provide(services.NewNavigationService)

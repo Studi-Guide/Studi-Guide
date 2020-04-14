@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
@@ -41,7 +42,7 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 	aliasFilter := c.Query("alias")
 	roomFilter := c.Query("room")
 
-	var rooms []models.Room
+	var rooms []entityservice.Room
 	var err error
 
 	if len(nameFilter) == 0 && len(floorFilter) == 0 && len(aliasFilter) == 0 && len(roomFilter) == 0 {
