@@ -21,7 +21,7 @@ func NewNavigationService(routeCalculator navigation.RouteCalculator, roomProvid
 	return &NavigationService{routeCalc: routeCalculator, roomProvider: roomProvider}, nil
 }
 
-func (n *NavigationService) CalculateFromString(startRoomName string, endRoomName string) ([]navigation.PathNode, error) {
+func (n *NavigationService) CalculateFromString(startRoomName string, endRoomName string) (*navigation.NavigationRoute, error) {
 
 	startRoom, err := n.roomProvider.GetRoom(startRoomName)
 	if err != nil {
@@ -36,14 +36,14 @@ func (n *NavigationService) CalculateFromString(startRoomName string, endRoomNam
 	return n.Calculate(startRoom, endRoom)
 }
 
-func (n *NavigationService) Calculate(startRoom models.Room, endRoom models.Room) ([]navigation.PathNode, error) {
+func (n *NavigationService) Calculate(startRoom models.Room, endRoom models.Room) (*navigation.NavigationRoute, error) {
 	startNode := startRoom.PathNode
 	endNode := endRoom.PathNode
-	nodes, _, err := n.routeCalc.GetRoute(startNode, endNode)
-	return nodes, err
+	nodes, distance, err := n.routeCalc.GetRoute(startNode, endNode)
+	return &navigation.NavigationRoute{Route: nodes, Distance: distance}, err
 }
 
-func (n *NavigationService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) ([]navigation.PathNode, error) {
+func (n *NavigationService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) (*navigation.NavigationRoute, error) {
 
 	//TODO implement
 	return nil, nil

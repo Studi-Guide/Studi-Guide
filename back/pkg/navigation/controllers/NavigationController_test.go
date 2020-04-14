@@ -26,25 +26,34 @@ func NewRoomMockService(startroom, endrooom string) MockNavigationService {
 	return rms
 }
 
-func (m MockNavigationService) CalculateFromString(startRoomName string, endRoomName string) ([]navigation.PathNode, error) {
+func (m MockNavigationService) CalculateFromString(startRoomName string, endRoomName string) (*navigation.NavigationRoute, error) {
 	log.Print("Calculating entered")
 	if !(startRoomName == m.startroom) || !(endRoomName == m.endroom) {
 		return nil, errors.New("wrong rooms")
 	}
 
-	return m.nodes, nil
+	return &navigation.NavigationRoute{
+		Route:    m.nodes,
+		Distance: int64(m.nodes[1].Coordinate.DistanceTo(m.nodes[0].Coordinate)),
+	}, nil
 }
 
-func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.Room) ([]navigation.PathNode, error) {
+func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.Room) (*navigation.NavigationRoute, error) {
 	if !(startRoom.Name == m.startroom) || !(endRoom.Name == m.endroom) {
 		return nil, errors.New("wrong rooms")
 	}
 
-	return m.nodes, nil
+	return &navigation.NavigationRoute{
+		Route:    m.nodes,
+		Distance: int64(m.nodes[1].Coordinate.DistanceTo(m.nodes[0].Coordinate)),
+	}, nil
 }
 
-func (m MockNavigationService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) ([]navigation.PathNode, error) {
-	return m.nodes, nil
+func (m MockNavigationService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) (*navigation.NavigationRoute, error) {
+	return &navigation.NavigationRoute{
+		Route:    m.nodes,
+		Distance: int64(m.nodes[1].Coordinate.DistanceTo(m.nodes[0].Coordinate)),
+	}, nil
 }
 
 func (m MockNavigationService) getDummyValues() []navigation.PathNode {
@@ -94,7 +103,12 @@ func TestNavigationCalculatefromString_NoRooms(t *testing.T) {
 
 	router.ServeHTTP(rec, req)
 
-	expected, err := json.Marshal(provider.nodes)
+	expectedRoute := navigation.NavigationRoute{
+		Route: provider.nodes,
+		Distance: 2,
+	}
+
+	expected, err := json.Marshal(expectedRoute)
 	if err != nil {
 		t.Error(err)
 	}
@@ -120,16 +134,22 @@ func TestNavigationCalculatefromString(t *testing.T) {
 	router := gin.Default()
 	roomRouter := router.Group("/navigation")
 	NewNavigationController(roomRouter, provider)
-
+rec.Body.String()
 	router.ServeHTTP(rec, req)
 
-	expected, err := json.Marshal(provider.nodes)
+	expectedRoute := navigation.NavigationRoute{
+		Route: provider.nodes,
+		Distance: 2,
+	}
+
+	expected, err := json.Marshal(expectedRoute)
 	if err != nil {
 		t.Error(err)
 	}
 
 	expected = append(expected, '\n')
-	if string(expected) != rec.Body.String() {
+	actual := rec.Body.String()
+	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
 }

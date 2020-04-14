@@ -62,8 +62,13 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 
 	startroom, _ := roomprovider.GetRoom(startroomname)
 	endroom, _ := roomprovider.GetRoom(endroomname)
-	expected, _, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
-	expectedAsString, _ := json.Marshal(expected)
+	expected, distance, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
+	expectedRoute := navigation.NavigationRoute{
+		Route: expected,
+		Distance: distance,
+	}
+
+	expectedAsString, _ := json.Marshal(expectedRoute)
 	resultAsString, _ := json.Marshal(nodes)
 	if string(expectedAsString) != string(resultAsString) {
 		t.Errorf("expected = %v; actual = %v", string(expectedAsString), string(resultAsString))
@@ -100,8 +105,12 @@ func TestNavigationService_Calculate(t *testing.T) {
 		t.Error(err)
 	}
 
-	expected, _, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
-	expectedAsString, _ := json.Marshal(expected)
+	expected, distance, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
+	expectedRoute := navigation.NavigationRoute{
+		Route: expected,
+		Distance: distance,
+	}
+	expectedAsString, _ := json.Marshal(expectedRoute)
 	resultAsString, _ := json.Marshal(nodes)
 	if string(expectedAsString) != string(resultAsString) {
 		t.Errorf("expected = %v; actual = %v", string(expectedAsString), string(resultAsString))
