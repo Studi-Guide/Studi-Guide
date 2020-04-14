@@ -86,7 +86,7 @@ export class NavigationPage {
 
   private fetchFloorByItsNumber(floor:any) {
     this.progressIsVisible = true;
-    this.dataService.get_floor(floor).subscribe((res : Room[])=>{
+    this.dataService.get_map_floor(floor).subscribe((res : Room[])=>{
       this.floorToDisplay = new FloorMap(res);
       this.displayFloor();
     });

@@ -11,8 +11,8 @@ export class DataService {
 
     }
 
-    get_floor(floor:any){
-        return this.httpClient.get(this.baseUrl + '/roomlist/floor/' + floor);
+    get_map_floor(floor:any){
+        return this.httpClient.get(this.baseUrl + '/map/floor/' + floor);
     }
 
     get_route(start:string, end:string){
@@ -22,4 +22,5 @@ export class DataService {
     get_room_search(room:string) {
         return this.httpClient.get(this.baseUrl + '/roomlist/room/' + room );
     }
+
 }
