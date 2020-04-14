@@ -29,7 +29,7 @@ func NewNavigationController(router *gin.RouterGroup, service services.Navigatio
 // @Tags NavigationController
 // @Param startroom query string false "the start room name"
 // @Param endroom query string false "the end room name"
-// @Success 200 {array} navigation.Coordinate
+// @Success 200 {array} navigation.NavigationRoute
 // @Router /navigation/dir [get]
 func (l *NavigationController) GetNavigationRoute(c *gin.Context) {
 	startroom := c.Query("startroom")
