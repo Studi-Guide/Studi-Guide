@@ -82,8 +82,8 @@ func TestNavigationCalculatefromString_NoRooms(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/navigation/dir", nil)
 	q := req.URL.Query()
-	q.Add("startroom", startroomname)
-	q.Add("endroom", endroomname)
+	q.Add("startlocation", startroomname)
+	q.Add("endlocation", endroomname)
 
 	req.URL.RawQuery = q.Encode()
 
@@ -111,8 +111,8 @@ func TestNavigationCalculatefromString(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/navigation/dir", nil)
 	q := req.URL.Query()
-	q.Add("startroom", startroomname)
-	q.Add("endroom", endroomname)
+	q.Add("startlocation", startroomname)
+	q.Add("endlocation", endroomname)
 
 	req.URL.RawQuery = q.Encode()
 
