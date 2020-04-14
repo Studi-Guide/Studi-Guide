@@ -7,15 +7,17 @@ import (
 
 type Env struct {
 	dbDriverName, dbDataSource, frontendPath string
+	develop bool
 }
 
 var dBDriverNameKey string = "DB_DRIVER_NAME"
 var dbDataSourceKey string = "DB_DATA_SOURCE"
 var frontendPath string = "FRONTEND_PATH"
+var develop string = "DEVELOP"
 
 func NewEnv() *Env {
 
-	env := &Env{os.Getenv(dBDriverNameKey), os.Getenv(dbDataSourceKey), os.Getenv(frontendPath)}
+	env := &Env{os.Getenv(dBDriverNameKey), os.Getenv(dbDataSourceKey), os.Getenv(frontendPath), false}
 
 	if len(env.dbDriverName) == 0 && len(env.dbDataSource) == 0 {
 		log.Println("Using sqlite3 DB driver as no environment variables were provided.")
@@ -26,6 +28,11 @@ func NewEnv() *Env {
 	if len(env.frontendPath) == 0 {
 		log.Print("Using default frontend path ...")
 		env.frontendPath = "./ionic"
+	}
+
+	if (os.Getenv(develop) == "TRUE") {
+		log.Println("Running in development mode now. Make sure to disable this in production.")
+		env.develop = true
 	}
 
 	return env
@@ -47,4 +54,8 @@ func (e *Env) DbDataSource() string {
 
 func (e *Env) FrontendPath() string {
 	return e.frontendPath
+}
+
+func (e *Env) Develop() bool {
+	return e.develop
 }
