@@ -1,6 +1,7 @@
 package server
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -23,6 +24,13 @@ type StudiGuideServer struct {
 func NewStudiGuideServer(env *env.Env, roomprovider models.RoomServiceProvider, navigationprovider services.NavigationServiceProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
+
+	if env.Develop() {
+		log.Println("allowing all origins in develop mode")
+		router.Use(cors.New(cors.Config{
+			AllowAllOrigins:        true,
+		}))
+	}
 
 	// Global middleware
 	// Logger middleware will write the logs to gin.DefaultWriter even if you set with GIN_MODE=release.
