@@ -1,3 +1,3 @@
 package services
 
-//go:generate mockgen -package=services -source=locationprovider.go -destination=mock_locationprovider.go
+//go:generate go run github.com/golang/mock/mockgen -package=services -source=locationprovider.go -destination=mock_locationprovider.go
