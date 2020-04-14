@@ -51,10 +51,12 @@ func (l *MockRouteCalculator) GetRoute(start, end navigation.PathNode) ([]naviga
 func TestNavigationService_CalculateFromString(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
+
+
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mock := mock_services.NewMockLocationProvider(ctrl)
-	mock.EXPECT().GetAllPathNodes()
+	mock := NewMockLocationProvider(ctrl)
+	mock.EXPECT().GetAllPathNodes().Return()
 
 	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
@@ -79,9 +81,16 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 func TestNavigationService_CalculateFromString_Negative(t *testing.T) {
 	startroomname := "RoomN00"
 	endroomname := "RoomN02"
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mock := NewMockLocationProvider(ctrl)
+	mock.EXPECT().GetAllPathNodes().Return()
+
 	roomprovider := models.NewRoomMockService()
+
 	calculator, _ := NewMockRoutecalCulator()
-	navigationservice, _ := NewNavigationService(calculator, roomprovider)
+	navigationservice, _ := NewNavigationService(calculator, mock)
 
 	_, err := navigationservice.CalculateFromString(startroomname, endroomname)
 
@@ -93,9 +102,15 @@ func TestNavigationService_CalculateFromString_Negative(t *testing.T) {
 func TestNavigationService_Calculate(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mock := NewMockLocationProvider(ctrl)
+	mock.EXPECT().GetAllPathNodes().Return()
+
 	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
-	navigationservice, _ := NewNavigationService(calculator, roomprovider)
+	navigationservice, _ := NewNavigationService(calculator, mock)
 
 	startroom, _ := roomprovider.GetRoom(startroomname)
 	endroom, _ := roomprovider.GetRoom(endroomname)
@@ -117,9 +132,15 @@ func TestNavigationService_Calculate(t *testing.T) {
 func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN0001"
-	roomprovider := models.NewRoomMockService()
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mock := NewMockLocationProvider(ctrl)
+	mock.EXPECT().GetAllPathNodes().Return()
+
+
 	calculator, _ := NewMockRoutecalCulator()
-	navigationservice, _ := NewNavigationService(calculator, roomprovider)
+	navigationservice, _ := NewNavigationService(calculator, mock)
 
 	_, err := navigationservice.CalculateFromString(startroomname, endroomname)
 	if err == nil {
@@ -130,9 +151,15 @@ func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
 func TestNavigationService_CalculateFromCoordinate(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mock := NewMockLocationProvider(ctrl)
+	mock.EXPECT().GetAllPathNodes().Return()
+
 	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
-	navigationservice, _ := NewNavigationService(calculator, roomprovider)
+	navigationservice, _ := NewNavigationService(calculator, mock)
 
 	startroom, _ := roomprovider.GetRoom(startroomname)
 	endroom, _ := roomprovider.GetRoom(endroomname)
