@@ -563,3 +563,4 @@ func TestEntityService_GetLocation(t *testing.T) {
 		t.Error("expected: ", testRooms[0].Location, "; got: ", getLocation)
 	}
 }
+

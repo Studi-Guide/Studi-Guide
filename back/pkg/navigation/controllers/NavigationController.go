@@ -27,13 +27,13 @@ func NewNavigationController(router *gin.RouterGroup, service services.Navigatio
 // @Accept  json
 // @Produce  json
 // @Tags NavigationController
-// @Param startlocation query string false "the start location name"
-// @Param endlocation query string false "the end location name"
+// @Param start query string false "the start location name"
+// @Param end query string false "the end location name"
 // @Success 200 {array} navigation.Coordinate
 // @Router /navigation/dir [get]
 func (l *NavigationController) GetNavigationRoute(c *gin.Context) {
-	startlocation := c.Query("startlocation")
-	endlocation := c.Query("endlocation")
+	startlocation := c.Query("start")
+	endlocation := c.Query("end")
 
 	log.Printf("[NavigationController] Request navigation received for start '%v' and end '%v'", startlocation, endlocation)
 	coordinates, err := l.service.CalculateFromString(startlocation, endlocation)
