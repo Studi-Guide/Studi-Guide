@@ -564,3 +564,36 @@ func TestEntityService_GetLocation(t *testing.T) {
 	}
 }
 
+func TestEntityService_GetAllMapItems(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getMapItems, err := dbService.GetAllMapItems()
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	var expectMapItems []MapItem
+	for _, room := range testRooms {
+		expectMapItems = append(expectMapItems, room.MapItem)
+	}
+
+	if !reflect.DeepEqual(expectMapItems, getMapItems) {
+		t.Error("expected: ", expectMapItems, "; got: ", getMapItems)
+	}
+}
+
+func TestEntityService_FilterMapItems(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getMapItems, err := dbService.FilterMapItems("2", "", "")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	var expectMapItems []MapItem
+	expectMapItems = append(expectMapItems, testRooms[1].MapItem)
+
+	if !reflect.DeepEqual(expectMapItems, getMapItems) {
+		t.Error("expected: ", expectMapItems, "; got: ", getMapItems)
+	}
+}
