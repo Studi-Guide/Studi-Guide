@@ -517,3 +517,21 @@ func TestRoomEntityService_FilterRooms_DbCrash(t *testing.T) {
 		t.Error("expect no error, got:", err)
 	}
 }
+
+func TestEntityService_GetAllLocations(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getLocations, err := dbService.GetAllLocations()
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	var testLocations []Location
+	for _, room := range testRooms {
+		testLocations = append(testLocations, room.Location)
+	}
+
+	if !reflect.DeepEqual(testLocations, getLocations) {
+		t.Error("expected: ", testLocations, "; got: ", getLocations)
+	}
+}
