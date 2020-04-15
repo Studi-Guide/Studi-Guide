@@ -1,6 +1,7 @@
 package env
 
 import (
+	"github.com/gin-gonic/gin"
 	"log"
 	"os"
 )
@@ -14,6 +15,7 @@ var dBDriverNameKey string = "DB_DRIVER_NAME"
 var dbDataSourceKey string = "DB_DATA_SOURCE"
 var frontendPath string = "FRONTEND_PATH"
 var develop string = "DEVELOP"
+var gin_mode string = "GIN_MODE"
 
 func NewEnv() *Env {
 
@@ -33,6 +35,9 @@ func NewEnv() *Env {
 	if (os.Getenv(develop) == "TRUE") {
 		log.Println("Running in development mode now. Make sure to disable this in production.")
 		env.develop = true
+		gin.SetMode(gin.DebugMode)
+	} else {
+		gin.SetMode(gin.ReleaseMode)
 	}
 
 	return env
