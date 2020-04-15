@@ -6,6 +6,8 @@ This go example uses mux of the gorilla webkit.
 
  - execute `go mod download`
  - create database schema `go generate ./ent`
+ - generate docs `go run github.com/swaggo/swag/cmd/swag init -g ./cmd/studi-guide/main.go`
+ - optionally generate mocks `go generate ./pkg/map ./pkg/navigation/services ./pkg/location`
 
 ## Run
 

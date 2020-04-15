@@ -11,6 +11,7 @@ import (
 	"os"
 	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/env"
+	"studi-guide/pkg/location"
 	maps "studi-guide/pkg/map"
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
@@ -81,6 +82,17 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 			log.Fatal(err)
 		} else {
 			log.Print("Successfully initialized map controllers")
+		}
+	}
+
+	locationRouter := router.Group("/location")
+	{
+		log.Println("Creating location controller")
+		err := location.NewLocationController(locationRouter, entityService)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Println("Successfully initialized location controller")
 		}
 	}
 

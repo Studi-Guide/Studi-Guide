@@ -7,6 +7,7 @@ import (
 	"studi-guide/pkg/config"
 	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/env"
+	"studi-guide/pkg/location"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/navigation/services"
 	"studi-guide/pkg/roomcontroller/models"
@@ -53,6 +54,10 @@ func BuildContainer() *dig.Container {
 		})
 
 		container.Provide(func() models.RoomServiceProvider {
+			return entityserver
+		})
+
+		container.Provide(func() location.LocationProvider {
 			return entityserver
 		})
 	})

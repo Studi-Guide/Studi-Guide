@@ -102,12 +102,35 @@ func (r *EntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	return nodes, nil
 }
 
+func (r *EntityService) GetAllLocations() ([]Location, error) {
+	entLoactions, err := r.client.Location.Query().
+		WithTags().
+		WithPathnode().
+		All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.locationArrayMapper(entLoactions), nil
+}
+
 func (r *EntityService) GetLocation(name string) (Location, error) {
 	entLocation, err := r.client.Location.Query().WithPathnode().WithTags().Where(location.NameEQ(name)).First(r.context)
 	if err != nil {
 		return Location{}, err
 	}
 	return *r.locationMapper(entLocation), nil
+}
+
+func (r *EntityService) FilterLocations(name, tagStr, floor, building, campus string) ([]Location, error) {
+	entLocations, err := r.client.Location.Query().
+		WithPathnode().WithTags().
+		Where(location.And(location.NameContains(name), location.HasTagsWith(tag.NameContains(tagStr)))).
+		All(r.context)
+	if err != nil {
+		return nil, err
+	}
+	return r.locationArrayMapper(entLocations), nil
 }
 
 func (r *EntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter string) ([]Room, error) {
@@ -197,6 +220,14 @@ func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Cont
 	}
 
 	return client, ctx, err
+}
+
+func (r *EntityService) locationArrayMapper(entLocations []*ent.Location) []Location {
+	var locations []Location
+	for _, entLocation := range entLocations {
+		locations = append(locations, *r.locationMapper(entLocation))
+	}
+	return locations
 }
 
 func (r *EntityService) locationMapper(entLocation *ent.Location) *Location {

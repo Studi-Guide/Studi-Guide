@@ -93,7 +93,7 @@ jobs:
 
       - name: Generate Mocks
         working-directory: ${{env.GO_HTTP}}
-        run: go generate ./pkg/map ./pkg/navigation/services
+        run: go generate ./pkg/map ./pkg/navigation/services ./pkg/location
 
       - name: Run backend Unit Tests
         working-directory: ${{env.GO_HTTP}}
