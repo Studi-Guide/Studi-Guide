@@ -1,3 +1,5 @@
+import {Path} from "@angular-devkit/core";
+
 export class floor {
   rooms: Room[];
   corridors: Corridor[];
@@ -33,13 +35,26 @@ export interface Section {
   End: Coordinate;
 }
 
-export interface Room {
-  Name: string;
-  Floor: number;
-  Sections: Section[];
-  PathNodes: PathNode[];
+export interface MapItem {
   Doors: Door[];
   Color: string;
+  Floor: number;
+  Sections: Section[];
+  Campus: string;
+  Building: string;
+  PathNodes: PathNode[];
+}
+
+export interface Location {
+  Id: number;
+  Name: string;
+  Description: string;
+  Tags: string[];
+  PathNode: PathNode;
+}
+
+export interface Room extends MapItem, Location{
+
 }
 
 export class svgPath {
@@ -47,7 +62,7 @@ export class svgPath {
   fill: string;
 }
 
-export class RoomName {
+export class SvgLocationName {
   name: string;
   x: number;
   y: number;

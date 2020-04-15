@@ -30,12 +30,12 @@
             attr.fill="{{path.fill}}"
             stroke="#FFF"
       />
-      <text *ngFor="let roomName of roomNames"
-            attr.x="{{roomName.x}}"
-            attr.y="{{roomName.y}}"
+      <text *ngFor="let location of locations"
+            attr.x="{{location.x}}"
+            attr.y="{{location.y}}"
             font-size="9px"
             fill="#FFF">
-        {{roomName.name}}
+        {{location.name}}
       </text>
       <path *ngFor="let doorLine of calculatedDoorLines" attr.d="{{doorLine.d}}" attr.stroke="{{doorLine.fill}}" />
       <!-- TEST -->

@@ -1,4 +1,4 @@
-import {PathNode, Room, svgPath, RoomName} from '../building-objects-if';
+import {PathNode, Room, svgPath, Location, SvgLocationName} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component} from "@angular/core";
 import {DataService} from "../services/data.service";
@@ -30,7 +30,7 @@ export class NavigationPage {
   public calculatedDoorLines: svgPath[];
   public mapSvgWidth: number;
   public mapSvgHeight: number;
-  public roomNames: RoomName[];
+  public locations: SvgLocationName[];
 
 //  public testRooms:Room[] = [];
 //  public testRoute:PathNode[];
@@ -46,7 +46,7 @@ export class NavigationPage {
     this.calculatedDoorLines = [];
     this.mapSvgWidth = 0;
     this.mapSvgHeight = 0;
-    this.roomNames = [];
+    this.locations = [];
 
     // this.testRooms = testDataRooms;
     // this.testRoute = testDataPathNodes;
@@ -59,7 +59,6 @@ export class NavigationPage {
     } else if (this.startInput != undefined && this.startInput != '' && this.startInput != null) {
       this.mapIsVisible = true;
       this.fetchFloorByRoom(this.startInput);
-      this.fetchFloorByItsNumber(this.startInput[3]);
     }
   }
 
@@ -67,6 +66,7 @@ export class NavigationPage {
     this.progressIsVisible = true;
     this.dataService.get_room_search(room).subscribe((res : Room)=>{
       this.fetchFloorByItsNumber(res.Floor);
+      this.fetchLocations(res.Floor)
     });
   }
 
@@ -107,15 +107,20 @@ export class NavigationPage {
     });
   }
 
+  private fetchLocations(floor:any) {
+    this.dataService.get_locations(floor).subscribe((res : Location[])=>{
+      for(const l of res) {
+        this.locations.push({name: l.Name, x: l.PathNode.Coordinate.X, y: l.PathNode.Coordinate.Y})
+      }
+    })
+  }
+
   private displayFloor() {
     this.floorToDisplay.calculateSvgPathsAndSvgWidthHeight();
     this.mapSvgHeight = this.floorToDisplay.svgHeight;
     this.mapSvgWidth = this.floorToDisplay.svgWidth;
     this.calculatedRoomPaths = this.floorToDisplay.calculatedRoomPaths;
     this.calculatedDoorLines = this.floorToDisplay.calculatedDoorLines;
-    this.floorToDisplay.collectAllRoomNames();
-    this.roomNames = this.floorToDisplay.allRoomNames;
-
     this.progressIsVisible = false;
     this.mapIsVisible = true;
   }

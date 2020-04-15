@@ -1,27 +1,25 @@
 import { Injectable } from '@angular/core';
-import {Room, Door, Section, svgPath, RoomName} from "../building-objects-if";
+import {Room, Door, Section, svgPath, MapItem} from "../building-objects-if";
 
 @Injectable({
     providedIn: 'root'
 })
 export class FloorMap {
 
-    public objectsToBeVisualized: Room[];
+    public objectsToBeVisualized: MapItem[];
 
     public calculatedRoomPaths: svgPath[];
     public calculatedDoorLines: svgPath[];
 
     public svgWidth: number;
     public svgHeight: number;
-    public allRoomNames: RoomName[];
 
-    constructor(objectsToBeVisualized: Room[]) {
+    constructor(objectsToBeVisualized: MapItem[]) {
         this.objectsToBeVisualized = objectsToBeVisualized;
         this.calculatedRoomPaths = [];
         this.calculatedDoorLines = [];
         this.svgWidth = 0;
         this.svgHeight = 0;
-        this.allRoomNames = [];
     }
 
     private static buildDoorSvgLineFromSection(door:Door) : string {
@@ -43,23 +41,23 @@ export class FloorMap {
     }
 
     public calculateSvgPathsAndSvgWidthHeight() {
-        for (const room of this.objectsToBeVisualized) {
-            let roomShapePath:svgPath = {
-                d : FloorMap.buildRoomSvgPathFromSections(room.Sections),
-                fill : room.Color
+        for (const item of this.objectsToBeVisualized) {
+            let itemShapePath:svgPath = {
+                d : FloorMap.buildRoomSvgPathFromSections(item.Sections),
+                fill : item.Color
             };
-            this.calculatedRoomPaths.push(roomShapePath);
+            this.calculatedRoomPaths.push(itemShapePath);
             // TODO remove check if null
-            if (room.Doors != null && room.Doors.length >= 1) {
-                for (const door of room.Doors) {
+            if (item.Doors != null && item.Doors.length >= 1) {
+                for (const door of item.Doors) {
                     let doorLine:svgPath = {
                         d : FloorMap.buildDoorSvgLineFromSection(door),
-                        fill : roomShapePath.fill
+                        fill : itemShapePath.fill
                     };
                     this.calculatedDoorLines.push(doorLine);
                 }
             }
-            for (const section of room.Sections) {
+            for (const section of item.Sections) {
                 if (section.End.X > this.svgWidth) {
                     this.svgWidth = section.End.X;
                 }
@@ -70,19 +68,6 @@ export class FloorMap {
             // bottom navigation bar overlays svg
             this.svgHeight += 1;
             this.svgWidth += 0.15;
-        }
-    }
-
-    public collectAllRoomNames() {
-        this.allRoomNames = []; // why is this initialization necessary?
-        for (const room of this.objectsToBeVisualized) {
-            this.allRoomNames.push(
-                {
-                    name: room.Name,
-                    x: room.Sections[0].Start.X+6,
-                    y: room.Sections[0].Start.Y+16
-                }
-            );
         }
     }
 }
