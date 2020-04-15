@@ -123,10 +123,32 @@ func (r *EntityService) GetLocation(name string) (Location, error) {
 }
 
 func (r *EntityService) FilterLocations(name, tagStr, floor, building, campus string) ([]Location, error) {
-	entLocations, err := r.client.Location.Query().
-		WithPathnode().WithTags().
-		Where(location.And(location.NameContains(name), location.HasTagsWith(tag.NameContains(tagStr)))).
-		All(r.context)
+
+	query := r.client.Location.Query().
+		WithPathnode().WithTags()
+
+	if len(name) > 0 {
+		query = query.Where(location.NameContains(name))
+	}
+
+	if len(tagStr) > 0 {
+		query = query.Where(location.HasTagsWith(tag.NameContains(tagStr)))
+	}
+
+	if len(floor) > 0 {
+		// Todo query floor
+	}
+
+	if len(building) > 0 {
+		// Todo query building
+	}
+
+	if len(campus) > 0 {
+		// Todo query campus
+	}
+
+
+	entLocations, err := query.All(r.context)
 	if err != nil {
 		return nil, err
 	}

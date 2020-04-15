@@ -535,3 +535,31 @@ func TestEntityService_GetAllLocations(t *testing.T) {
 		t.Error("expected: ", testLocations, "; got: ", getLocations)
 	}
 }
+
+func TestEntityService_FilterLocations(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getLocations, err := dbService.FilterLocations("1", "", "1", "2", "3")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	var testLocations []Location
+	testLocations = append(testLocations, testRooms[0].Location)
+	if !reflect.DeepEqual(testLocations, getLocations) {
+		t.Error("expected: ", testLocations, "; got: ", getLocations)
+	}
+}
+
+func TestEntityService_GetLocation(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getLocation, err := dbService.GetLocation("1")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	if !reflect.DeepEqual(testRooms[0].Location, getLocation) {
+		t.Error("expected: ", testRooms[0].Location, "; got: ", getLocation)
+	}
+}
