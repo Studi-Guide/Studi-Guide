@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import {Room, Door, Section, svgPath, MapItem} from "../building-objects-if";
 
-@Injectable({
-    providedIn: 'root'
-})
+// @Injectable({
+//   providedIn: 'root'
+// })
 export class FloorMap {
 
     public objectsToBeVisualized: MapItem[];

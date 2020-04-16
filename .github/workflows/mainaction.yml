@@ -116,8 +116,8 @@ jobs:
         uses: actions/checkout@v1
 
       - name: Build Docker
-        #working-directory: ${{env.GO_HTTP}}
-        run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice .
+        # pass production parameter to docker to make user ionic users the right base url
+        run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice . --build-arg ionicproduction=--prod
 
       - name: Publish Docker
         if: github.ref == 'refs/heads/master'

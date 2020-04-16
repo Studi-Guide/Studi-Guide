@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment, SERVER_URL} from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
 })
 export class DataService {
-    //baseUrl:string = "https://studi-guide.azurewebsites.net"; // for development: http://localhost:8090
-    baseUrl:string = "http://127.0.0.1:8080"
+
+    baseUrl:string = SERVER_URL // "https://studi-guide.azurewebsites.net"; // for development: http://localhost:8090
 
     constructor(private httpClient : HttpClient) {
 
