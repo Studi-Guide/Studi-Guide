@@ -32,3 +32,7 @@ https://github.com/swaggo/swag#getting-started
    - copy files into build outputfolder `./ionic`
    - execute  `go run ./cmd/studi-guide`
    - hit http://localhost:8080
+   
+ ## Run Docker
+  - to create the docker: `docker build --rm -f Dockerfile -t studiguide/studiguide_appservice .`
+  - to run the docker:  `docker run -it --rm -p 8080:8080 studiguide/studiguide_appservice:latest`
