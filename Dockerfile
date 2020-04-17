@@ -6,7 +6,7 @@ ARG ionicproduction
 
 COPY /front /www/app
 
-RUN npm install -g ionic
+RUN npm install -g @ionic/cli
 
 WORKDIR /www/app
 RUN npm install

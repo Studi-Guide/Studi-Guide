@@ -2,6 +2,13 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+import {Injectable} from "@angular/core";
+
+export const environment = {
+  production: false
+}
+
+@Injectable()
 export class Env {
 
   serverUrl = 'http://localhost:8080';
