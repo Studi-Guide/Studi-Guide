@@ -1,4 +1,4 @@
-package models
+package entityservice
 
 import (
 	"context"
@@ -17,7 +17,7 @@ import (
 
 var testRooms []Room
 
-func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
+func setupTestRoomDbService() (*EntityService, *sql.DB) {
 	os.Setenv("DB_DRIVER_NAME", "sqlite3")
 	os.Setenv("DB_DATA_SOURCE", ":memory:")
 
@@ -81,6 +81,7 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 		entLocation, err := client.Location.Create().
 			SetName(strconv.Itoa(i)).
 			SetPathnode(pathNode).
+			SetFloor(i).
 			Save(ctx)
 
 		if err != nil {
@@ -117,15 +118,17 @@ func setupTestRoomDbService() (RoomServiceProvider, *sql.DB) {
 				PathNodes: []*navigation.PathNode{&patnode},
 			},
 			Location: Location{
+				Id: entLocation.ID,
 				Name:        entLocation.Name,
 				Description: entLocation.Description,
 				Tags:       nil,
 				PathNode: patnode,
+				Floor: i,
 			},
 		})
 	}
 
-	dbService := RoomEntityService{client: client, table: "", context: ctx}
+	dbService := EntityService{client: client, table: "", context: ctx}
 
 	return &dbService, drv.DB()
 }
@@ -136,7 +139,7 @@ func TestNewRoomDbService(t *testing.T) {
 
 	e := env.NewEnv()
 
-	dbService, err := NewRoomEntityService(e)
+	dbService, err := NewEntityService(e)
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
@@ -148,7 +151,7 @@ func TestNewRoomDbService(t *testing.T) {
 	os.Setenv("DB_DATA_SOURCE", ":memory:")
 
 	e = env.NewEnv()
-	dbService, err = NewRoomEntityService(e)
+	dbService, err = NewEntityService(e)
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
@@ -515,5 +518,85 @@ func TestRoomEntityService_FilterRooms_DbCrash(t *testing.T) {
 
 	if err == nil {
 		t.Error("expect no error, got:", err)
+	}
+}
+
+func TestEntityService_GetAllLocations(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getLocations, err := dbService.GetAllLocations()
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	var testLocations []Location
+	for _, room := range testRooms {
+		testLocations = append(testLocations, room.Location)
+	}
+
+	if !reflect.DeepEqual(testLocations, getLocations) {
+		t.Error("expected: ", testLocations, "; got: ", getLocations)
+	}
+}
+
+func TestEntityService_FilterLocations(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getLocations, err := dbService.FilterLocations("1", "", "1", "2", "3")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	var testLocations []Location
+	testLocations = append(testLocations, testRooms[0].Location)
+	if !reflect.DeepEqual(testLocations, getLocations) {
+		t.Error("expected: ", testLocations, "; got: ", getLocations)
+	}
+}
+
+func TestEntityService_GetLocation(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getLocation, err := dbService.GetLocation("1")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	if !reflect.DeepEqual(testRooms[0].Location, getLocation) {
+		t.Error("expected: ", testRooms[0].Location, "; got: ", getLocation)
+	}
+}
+
+func TestEntityService_GetAllMapItems(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getMapItems, err := dbService.GetAllMapItems()
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	var expectMapItems []MapItem
+	for _, room := range testRooms {
+		expectMapItems = append(expectMapItems, room.MapItem)
+	}
+
+	if !reflect.DeepEqual(expectMapItems, getMapItems) {
+		t.Error("expected: ", expectMapItems, "; got: ", getMapItems)
+	}
+}
+
+func TestEntityService_FilterMapItems(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getMapItems, err := dbService.FilterMapItems("2", "", "")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	var expectMapItems []MapItem
+	expectMapItems = append(expectMapItems, testRooms[1].MapItem)
+
+	if !reflect.DeepEqual(expectMapItems, getMapItems) {
+		t.Error("expected: ", expectMapItems, "; got: ", getMapItems)
 	}
 }

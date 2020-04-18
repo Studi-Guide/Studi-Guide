@@ -1,4 +1,4 @@
-package models
+package entityservice
 
 import (
 	"context"
@@ -22,13 +22,13 @@ import (
 	"studi-guide/pkg/navigation"
 )
 
-type RoomEntityService struct {
+type EntityService struct {
 	client  *ent.Client
 	context context.Context
 	table   string
 }
 
-func newRoomEntityService(env *env.Env) (*RoomEntityService, error) {
+func newEntityService(env *env.Env) (*EntityService, error) {
 	driverName := env.DbDriverName()
 	dataSourceName := env.DbDataSource()
 	table := "rooms"
@@ -40,14 +40,14 @@ func newRoomEntityService(env *env.Env) (*RoomEntityService, error) {
 
 	roomCount, _ :=	client.Room.Query().Count(ctx)
 	log.Println("Found number of rooms:", roomCount)
-	return &RoomEntityService{client: client, table: table, context: ctx}, nil
+	return &EntityService{client: client, table: table, context: ctx}, nil
 }
 
-func NewRoomEntityService(env *env.Env) (RoomServiceProvider, error) {
-	return newRoomEntityService(env)
+func NewEntityService(env *env.Env) (*EntityService, error) {
+	return newEntityService(env)
 }
 
-func (r *RoomEntityService) GetAllRooms() ([]Room, error) {
+func (r *EntityService) GetAllRooms() ([]Room, error) {
 
 	roomsPtr, err := r.client.Room.Query().WithMapitem().All(r.context)
 	if err != nil {
@@ -63,7 +63,7 @@ func (r *RoomEntityService) GetAllRooms() ([]Room, error) {
 	return rooms, nil
 }
 
-func (r *RoomEntityService) GetRoom(name string) (Room, error) {
+func (r *EntityService) GetRoom(name string) (Room, error) {
 
 	entRoom, err := r.client.Room.Query().Where(room.HasLocationWith(location.Name(name))).
 		First(r.context)
@@ -75,16 +75,16 @@ func (r *RoomEntityService) GetRoom(name string) (Room, error) {
 	return *r.roomMapper(entRoom), nil
 }
 
-func (r *RoomEntityService) AddRoom(room Room) error {
+func (r *EntityService) AddRoom(room Room) error {
 
-	return r.storeRooms([]Room {room})
+	return r.storeRooms([]Room{room})
 }
 
-func (r *RoomEntityService) AddRooms(rooms []Room) error {
+func (r *EntityService) AddRooms(rooms []Room) error {
 	return r.storeRooms(rooms)
 }
 
-func (r *RoomEntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
+func (r *EntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	nodesPrt, err := r.client.PathNode.Query().WithLinkedFrom().WithLinkedTo().All(r.context)
 	if err != nil {
 		return nil, err
@@ -102,7 +102,64 @@ func (r *RoomEntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	return nodes, nil
 }
 
-func (r *RoomEntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter string) ([]Room, error) {
+func (r *EntityService) GetAllLocations() ([]Location, error) {
+	entLoactions, err := r.client.Location.Query().
+		WithTags().
+		WithPathnode().
+		All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.locationArrayMapper(entLoactions), nil
+}
+
+func (r *EntityService) GetLocation(name string) (Location, error) {
+	entLocation, err := r.client.Location.Query().WithPathnode().WithTags().Where(location.NameEQ(name)).First(r.context)
+	if err != nil {
+		return Location{}, err
+	}
+	return *r.locationMapper(entLocation), nil
+}
+
+func (r *EntityService) FilterLocations(name, tagStr, floor, building, campus string) ([]Location, error) {
+
+	query := r.client.Location.Query().
+		WithPathnode().WithTags()
+
+	if len(name) > 0 {
+		query = query.Where(location.NameContains(name))
+	}
+
+	if len(tagStr) > 0 {
+		query = query.Where(location.HasTagsWith(tag.NameContains(tagStr)))
+	}
+
+	if len(floor) > 0 {
+		iFloor, err := strconv.Atoi(floor)
+		if err != nil {
+			return nil, err
+		}
+		query = query.Where(location.FloorEQ(iFloor))
+	}
+
+	if len(building) > 0 {
+		// Todo query building
+	}
+
+	if len(campus) > 0 {
+		// Todo query campus
+	}
+
+
+	entLocations, err := query.All(r.context)
+	if err != nil {
+		return nil, err
+	}
+	return r.locationArrayMapper(entLocations), nil
+}
+
+func (r *EntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter string) ([]Room, error) {
 
 	var entRooms []*ent.Room
 	var err error = nil
@@ -138,6 +195,38 @@ func (r *RoomEntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, ro
 	return r.roomArrayMapper(entRooms), nil
 }
 
+func (r *EntityService) GetAllMapItems() ([]MapItem, error) {
+	entMapItems, err := r.client.MapItem.Query().
+		WithPathNodes().
+		WithColor().
+		WithDoors().
+		WithSections().
+		All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.mapItemArrayMapper(entMapItems), nil
+}
+
+func (r *EntityService) FilterMapItems(floor, building, campus string) ([]MapItem, error) {
+	iFloor, err := strconv.Atoi(floor)
+	if err != nil {
+		return nil, err
+	}
+	// Missing items: campus, building
+	entMapItems, err := r.client.MapItem.Query().Where(mapitem.Floor(iFloor)).
+		WithPathNodes().
+		WithColor().
+		WithDoors().
+		WithSections().
+		All(r.context)
+	if err != nil {
+		return nil, err
+	}
+	return r.mapItemArrayMapper(entMapItems), nil
+}
+
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {
 	client, err := ent.Open(dbDriverName, "file:"+dbSourceName+"?cache=shared&_fk=1")
 	if err != nil {
@@ -159,7 +248,38 @@ func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Cont
 	return client, ctx, err
 }
 
-func (r *RoomEntityService) roomArrayMapper(entRooms []*ent.Room) []Room {
+func (r *EntityService) locationArrayMapper(entLocations []*ent.Location) []Location {
+	var locations []Location
+	for _, entLocation := range entLocations {
+		locations = append(locations, *r.locationMapper(entLocation))
+	}
+	return locations
+}
+
+func (r *EntityService) locationMapper(entLocation *ent.Location) *Location {
+	l := Location{
+		Id:          entLocation.ID,
+		Name:        entLocation.Name,
+		Description: entLocation.Description,
+		Tags:        nil,
+		Floor:       entLocation.Floor,
+		PathNode:    navigation.PathNode{},
+	}
+
+	t, err := entLocation.Edges.TagsOrErr()
+	if err == nil {
+		l.Tags = r.tagsArrayMapper(t)
+	}
+
+	pn, err := entLocation.Edges.PathnodeOrErr()
+	if err == nil {
+		l.PathNode = *r.pathNodeMapper(pn, []*navigation.PathNode{}, false)
+	}
+
+	return &l
+}
+
+func (r *EntityService) roomArrayMapper(entRooms []*ent.Room) []Room {
 	var rooms []Room
 
 	for _, roomPtr := range entRooms {
@@ -169,7 +289,7 @@ func (r *RoomEntityService) roomArrayMapper(entRooms []*ent.Room) []Room {
 	return rooms
 }
 
-func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
+func (r *EntityService) roomMapper(entRoom *ent.Room) *Room {
 
 	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).
 		WithMapitem(func (q *ent.MapItemQuery) {
@@ -199,54 +319,55 @@ func (r *RoomEntityService) roomMapper(entRoom *ent.Room) *Room {
 
 	rm := Room{
 		Id:          entRoom.ID,
-		MapItem:MapItem{
-			Doors:       nil,
-			Color:       "",
-			Sections:    nil,
-			Floor:       entMapItem.Floor,
-			PathNodes: []*navigation.PathNode{},
-		},
-		Location:Location{
-			PathNode: navigation.PathNode{},
-			Name: entLocation.Name,
-			Description: entLocation.Description,
-		},
+		MapItem: *r.mapItemMapper(entMapItem),
+		Location: *r.locationMapper(entLocation),
 	}
 
-	c, err := entMapItem.Edges.ColorOrErr()
-	if err == nil {
-		rm.MapItem.Color = c.Color
-	}
-
-	d, err := entMapItem.Edges.DoorsOrErr()
-	if err == nil {
-		rm.MapItem.Doors = r.doorArrayMapper(d)
-	}
-
-	s, err := entMapItem.Edges.SectionsOrErr()
-	if err == nil {
-		rm.MapItem.Sections = r.sectionArrayMapper(s)
-	}
-
-	p, err := entMapItem.Edges.PathNodesOrErr()
-	if err == nil {
-		rm.PathNodes = r.pathNodeArrayMapper(p, []*navigation.PathNode{})
-	}
-
-	t, err := entLocation.Edges.TagsOrErr()
-	if err == nil {
-		rm.Tags = r.tagsArrayMapper(t)
-	}
-
-	pn, err := entLocation.Edges.PathnodeOrErr()
-	if err == nil {
-		rm.Location.PathNode = *r.pathNodeMapper(pn, []*navigation.PathNode{}, false)
-	}
 
 	return &rm
 }
 
-func (r *RoomEntityService) sectionArrayMapper(sections []*ent.Section) []Section {
+func (r *EntityService) mapItemArrayMapper(entMapItems []*ent.MapItem) []MapItem {
+	var mapItems []MapItem
+	for _, entMapItem := range entMapItems {
+		mapItems = append(mapItems, *r.mapItemMapper(entMapItem))
+	}
+	return mapItems
+}
+
+func (r *EntityService) mapItemMapper(entMapItem *ent.MapItem) *MapItem {
+	m := MapItem{
+		Doors:       []Door{},
+		Color:       "",
+		Sections:    []Section{},
+		Floor:       entMapItem.Floor,
+		PathNodes: []*navigation.PathNode{},
+	}
+
+	d, err := entMapItem.Edges.DoorsOrErr()
+	if err == nil {
+		m.Doors = r.doorArrayMapper(d)
+	}
+
+	s, err := entMapItem.Edges.SectionsOrErr()
+	if err == nil {
+		m.Sections = r.sectionArrayMapper(s)
+	}
+
+	p, err := entMapItem.Edges.PathNodesOrErr()
+	if err == nil {
+		m.PathNodes = r.pathNodeArrayMapper(p, []*navigation.PathNode{})
+	}
+
+	c, err := entMapItem.Edges.ColorOrErr()
+	if err == nil {
+		m.Color = c.Color
+	}
+
+	return &m;
+}
+
+func (r *EntityService) sectionArrayMapper(sections []*ent.Section) []Section {
 	var s []Section
 	for _, seq := range sections {
 		s = append(s, *r.sectionMapper(seq))
@@ -254,7 +375,7 @@ func (r *RoomEntityService) sectionArrayMapper(sections []*ent.Section) []Sectio
 	return s
 }
 
-func (r *RoomEntityService) sectionMapper(s *ent.Section) *Section {
+func (r *EntityService) sectionMapper(s *ent.Section) *Section {
 
 	if s == nil {
 		return nil
@@ -272,7 +393,7 @@ func (r *RoomEntityService) sectionMapper(s *ent.Section) *Section {
 	}
 }
 
-func (r *RoomEntityService) doorArrayMapper(doors []*ent.Door) []Door {
+func (r *EntityService) doorArrayMapper(doors []*ent.Door) []Door {
 	var d []Door
 	for _, door := range doors {
 		d = append(d, *r.doorMapper(door))
@@ -280,7 +401,7 @@ func (r *RoomEntityService) doorArrayMapper(doors []*ent.Door) []Door {
 	return d
 }
 
-func (r *RoomEntityService) doorMapper(entDoor *ent.Door) *Door {
+func (r *EntityService) doorMapper(entDoor *ent.Door) *Door {
 
 	entDoor, err := r.client.Door.Query().WithPathNode().WithOwner().WithSection().Where(door.ID(entDoor.ID)).First(r.context)
 	if err != nil {
@@ -306,7 +427,7 @@ func (r *RoomEntityService) doorMapper(entDoor *ent.Door) *Door {
 	return &d
 }
 
-func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode, availableNodes []*navigation.PathNode) []*navigation.PathNode {
+func (r *EntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode, availableNodes []*navigation.PathNode) []*navigation.PathNode {
 	var pathNodes []*navigation.PathNode
 	for _, node := range pathNodePtr {
 		pathNodes = append(pathNodes, r.pathNodeMapper(node, availableNodes, false))
@@ -314,7 +435,7 @@ func (r *RoomEntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode, ava
 	return pathNodes
 }
 
-func (r *RoomEntityService) pathNodeMapper(entPathNode *ent.PathNode, availableNodes []*navigation.PathNode, resolveConnectedNodes bool) *navigation.PathNode {
+func (r *EntityService) pathNodeMapper(entPathNode *ent.PathNode, availableNodes []*navigation.PathNode, resolveConnectedNodes bool) *navigation.PathNode {
 
 	entPathNode, err := r.client.PathNode.Query().Where(pathnode.IDEQ(entPathNode.ID)).WithLinkedTo().First(r.context)
 	if err != nil {
@@ -342,11 +463,11 @@ func (r *RoomEntityService) pathNodeMapper(entPathNode *ent.PathNode, availableN
 	return &p
 }
 
-func (r *RoomEntityService) tagMapper(entTag *ent.Tag) string {
+func (r *EntityService) tagMapper(entTag *ent.Tag) string {
 	return entTag.Name
 }
 
-func (r *RoomEntityService) tagsArrayMapper(entTags []*ent.Tag) []string {
+func (r *EntityService) tagsArrayMapper(entTags []*ent.Tag) []string {
 	var tags []string
 	for _, t := range entTags {
 		tags = append(tags, r.tagMapper(t))
@@ -355,7 +476,7 @@ func (r *RoomEntityService) tagsArrayMapper(entTags []*ent.Tag) []string {
 }
 
 
-func (r *RoomEntityService) storeRooms(rooms []Room) error {
+func (r *EntityService) storeRooms(rooms []Room) error {
 	var errorStr []string
 
 	for _, rm := range rooms {
@@ -417,6 +538,7 @@ func (r *RoomEntityService) storeRooms(rooms []Room) error {
 			SetName(rm.Location.Name).
 			SetDescription(rm.Location.Description).
 			SetPathnode(entNode).
+			SetFloor(rm.Location.Floor).
 			Save(r.context)
 
 		entRoom, err := r.client.Room.Create().
@@ -467,7 +589,7 @@ func (r *RoomEntityService) storeRooms(rooms []Room) error {
 	return err
 }
 
-func (r *RoomEntityService) mapSectionArray(sections []Section) ([]*ent.Section, error) {
+func (r *EntityService) mapSectionArray(sections []Section) ([]*ent.Section, error) {
 
 	var entSections []*ent.Section
 
@@ -483,7 +605,7 @@ func (r *RoomEntityService) mapSectionArray(sections []Section) ([]*ent.Section,
 
 }
 
-func (r *RoomEntityService) mapSection(s *Section) (*ent.Section, error) {
+func (r *EntityService) mapSection(s *Section) (*ent.Section, error) {
 
 	if s.Id != 0 {
 		return r.client.Section.Query().Where(section.ID(s.Id)).First(r.context)
@@ -496,7 +618,7 @@ func (r *RoomEntityService) mapSection(s *Section) (*ent.Section, error) {
 		Save(r.context)
 }
 
-func (r *RoomEntityService) mapDoorArray(doors []Door) ([]*ent.Door, error) {
+func (r *EntityService) mapDoorArray(doors []Door) ([]*ent.Door, error) {
 	var entDoors []*ent.Door
 
 	for _, d := range doors {
@@ -510,7 +632,7 @@ func (r *RoomEntityService) mapDoorArray(doors []Door) ([]*ent.Door, error) {
 	return entDoors, nil
 }
 
-func (r *RoomEntityService) mapDoor(d *Door) (*ent.Door, error) {
+func (r *EntityService) mapDoor(d *Door) (*ent.Door, error) {
 
 	if d.Id != 0 {
 		return r.client.Door.Query().Where(door.ID(d.Id)).First(r.context)
@@ -532,7 +654,7 @@ func (r *RoomEntityService) mapDoor(d *Door) (*ent.Door, error) {
 		Save(r.context)
 }
 
-func (r *RoomEntityService) mapPathNodeArray(pathNodePtr []*navigation.PathNode) ([]*ent.PathNode, error) {
+func (r *EntityService) mapPathNodeArray(pathNodePtr []*navigation.PathNode) ([]*ent.PathNode, error) {
 
 	var entPathNodes []*ent.PathNode
 
@@ -554,7 +676,7 @@ func (r *RoomEntityService) mapPathNodeArray(pathNodePtr []*navigation.PathNode)
 	return entPathNodes, nil
 }
 
-func (r *RoomEntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, error) {
+func (r *EntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, error) {
 
 	if p.Id != 0 {
 		node, err := r.client.PathNode.Get(r.context, p.Id)
@@ -581,7 +703,7 @@ func (r *RoomEntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, 
 		Save(r.context)
 }
 
-func (r *RoomEntityService) linkPathNode(pathNode *navigation.PathNode) error {
+func (r *EntityService) linkPathNode(pathNode *navigation.PathNode) error {
 
 	var connectedIDs []int
 
@@ -604,7 +726,7 @@ func (r *RoomEntityService) linkPathNode(pathNode *navigation.PathNode) error {
 	return err
 }
 
-func (r *RoomEntityService) mapColor(c string) (*ent.Color, error) {
+func (r *EntityService) mapColor(c string) (*ent.Color, error) {
 
 	format := "#[0-9a-fA-F]{3}$|#[0-9a-fA-F]{6}$"
 	reg := regexp.MustCompile(format)
@@ -625,7 +747,7 @@ func (r *RoomEntityService) mapColor(c string) (*ent.Color, error) {
 	return col, nil
 }
 
-func (r *RoomEntityService) mapTag(t string, entLocation *ent.Location) (*ent.Tag, error) {
+func (r *EntityService) mapTag(t string, entLocation *ent.Location) (*ent.Tag, error) {
 	entTag, err := r.client.Tag.Query().Where(tag.Name(t)).First(r.context)
 	if err != nil && entTag == nil {
 		entTag, err = r.client.Tag.Create().SetName(t).AddLocations(entLocation).Save(r.context)
@@ -638,7 +760,7 @@ func (r *RoomEntityService) mapTag(t string, entLocation *ent.Location) (*ent.Ta
 	return entTag, err
 }
 
-func (r *RoomEntityService) mapTagArray(ts []string, entLocation *ent.Location) ([]*ent.Tag, error) {
+func (r *EntityService) mapTagArray(ts []string, entLocation *ent.Location) ([]*ent.Tag, error) {
 	var entTags []*ent.Tag
 	for _, t := range ts {
 		entTag, err := r.mapTag(t, entLocation)

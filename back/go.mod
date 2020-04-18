@@ -13,6 +13,7 @@ require (
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-openapi/spec v0.19.7 // indirect
 	github.com/go-openapi/swag v0.19.8 // indirect
+	github.com/golang/mock v1.4.3
 	github.com/mailru/easyjson v0.7.1 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14

@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/navigation"
 )
 
@@ -52,7 +53,7 @@ func (r *RoomXmlImporter) RunImport() error {
 	}
 
 	var rooms struct {
-		Rooms []Room `xml:"Room"`
+		Rooms []entityservice.Room `xml:"Room"`
 	}
 	err = xml.NewDecoder(file).Decode(&rooms)
 	if err != nil {
@@ -76,13 +77,13 @@ func NewRoomImporter(file string, dbService RoomServiceProvider) (RoomImporter, 
 	return i, nil
 }
 
-func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Room, error) {
-	var rooms []Room
+func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]entityservice.Room, error) {
+	var rooms []entityservice.Room
 
 	for _, item := range importItems {
 
 		var roomNodes []*navigation.PathNode
-		var doors []Door
+		var doors []entityservice.Door
 		for _, importDoor := range item.Doors {
 
 			// extract connected nodes
@@ -98,8 +99,8 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 				})
 			}
 
-			doors = append(doors,Door{
-				Section:  Section{
+			doors = append(doors, entityservice.Door{
+				Section:  entityservice.Section{
 					Id:    0,
 					Start: importDoor.Start,
 					End:   importDoor.End,
@@ -149,8 +150,8 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 		}
 
 
-		room := Room{
-			MapItem: MapItem{
+		room := entityservice.Room{
+			MapItem: entityservice.MapItem{
 				Color:       item.Color,
 				Floor:       item.Floor,
 				Sections:    item.Sections,
@@ -161,11 +162,11 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]Roo
 			},
 
 			// Id should be set be DB
-			Location: Location{
+			Location: entityservice.Location{
 				Name:			item.Name,
 				Description:	item.Description,
 				Tags: 			item.Tags,
-
+				Floor: 			item.Floor,
 				PathNode:		locationNode,
 			},
 		}

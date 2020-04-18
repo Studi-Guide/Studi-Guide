@@ -2,14 +2,16 @@
 # --------------------- IONIC Build ------------------------
 FROM node:latest as ionicbuilder
 
+ARG ionicproduction
+
 COPY /front /www/app
 
-RUN npm install -g ionic
+RUN npm install -g @ionic/cli
 
 WORKDIR /www/app
 RUN npm install
 
-RUN ionic build --engine=browser
+RUN ionic build --engine=browser ${ionicproduction}
 RUN ls
 
 # Start from the latest golang base image

@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core';
 import {PathNode} from "../building-objects-if";
 
-@Injectable({
-    providedIn: 'root'
-})
 export class NaviRoute {
 
     private pathNodesToGo:PathNode[];

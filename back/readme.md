@@ -6,29 +6,27 @@ This go example uses mux of the gorilla webkit.
 
  - execute `go mod download`
  - create database schema `go generate ./ent`
+ - generate swagger docs `go run github.com/swaggo/swag/cmd/swag init -g ./cmd/studi-guide/main.go`
+ - optionally generate mocks `go generate ./pkg/map ./pkg/navigation/services ./pkg/location`
 
 ## Run
-
+ - import data `go run ./cmd/studi-guide-ctl migrate import rooms internal/rooms.json`
  - verify that no other process runs on port 8080
- - execute `go run ./cmd/studi-guide`
+ - run server `DEVELOP=TRUE go run ./cmd/studi-guide`
 
 ## Try
 
-Hit http://localhost:8080/shoppinglist/index
+Hit http://localhost:8080/swagger/index.html to open the swagger api page
 
-## Swagger
-
-   - execute `swag init -g cmd/studi-guide/main.go`
-   - run the application
-   - Hit http://localhost:8080/swagger/index.html to open the swagger api page
-
-API infos:
+## Swagger API infos:
 https://github.com/swaggo/swag#getting-started
 
 ## Frontend integration
    - download latest frontend binaries from https://github.com/Studi-Guide/Studi-Guide/actions?query=workflow%3AGo
    - copy files into build outputfolder `./ionic`
    - execute  `go run ./cmd/studi-guide`
+   - or build frontend in `front/` with the command `ionic build --engine=browser --prod`
+   - execute `FRONTEND_PATH=../front/www go run ./cmd/studi-guide`
    - hit http://localhost:8080
    
  ## Run Docker
