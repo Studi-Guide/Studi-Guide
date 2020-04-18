@@ -136,7 +136,11 @@ func (r *EntityService) FilterLocations(name, tagStr, floor, building, campus st
 	}
 
 	if len(floor) > 0 {
-		// Todo query floor
+		iFloor, err := strconv.Atoi(floor)
+		if err != nil {
+			return nil, err
+		}
+		query = query.Where(location.FloorEQ(iFloor))
 	}
 
 	if len(building) > 0 {
@@ -254,9 +258,12 @@ func (r *EntityService) locationArrayMapper(entLocations []*ent.Location) []Loca
 
 func (r *EntityService) locationMapper(entLocation *ent.Location) *Location {
 	l := Location{
-		PathNode: navigation.PathNode{},
-		Name: entLocation.Name,
+		Id:          entLocation.ID,
+		Name:        entLocation.Name,
 		Description: entLocation.Description,
+		Tags:        nil,
+		Floor:       entLocation.Floor,
+		PathNode:    navigation.PathNode{},
 	}
 
 	t, err := entLocation.Edges.TagsOrErr()
@@ -531,6 +538,7 @@ func (r *EntityService) storeRooms(rooms []Room) error {
 			SetName(rm.Location.Name).
 			SetDescription(rm.Location.Description).
 			SetPathnode(entNode).
+			SetFloor(rm.Location.Floor).
 			Save(r.context)
 
 		entRoom, err := r.client.Room.Create().

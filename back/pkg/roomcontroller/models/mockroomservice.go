@@ -122,7 +122,7 @@ func (r *RoomMockService) FilterRooms(floor, name, alias, room string) ([]entity
 
 		var list []entityservice.Room
 		for _, room := range r.RoomList {
-			if room.Floor == floorInt {
+			if room.Location.Floor == floorInt && room.MapItem.Floor == floorInt {
 				list = append(list, room)
 			}
 		}

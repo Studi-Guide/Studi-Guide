@@ -166,7 +166,7 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]ent
 				Name:			item.Name,
 				Description:	item.Description,
 				Tags: 			item.Tags,
-
+				Floor: 			item.Floor,
 				PathNode:		locationNode,
 			},
 		}

@@ -81,6 +81,7 @@ func setupTestRoomDbService() (*EntityService, *sql.DB) {
 		entLocation, err := client.Location.Create().
 			SetName(strconv.Itoa(i)).
 			SetPathnode(pathNode).
+			SetFloor(i).
 			Save(ctx)
 
 		if err != nil {
@@ -117,10 +118,12 @@ func setupTestRoomDbService() (*EntityService, *sql.DB) {
 				PathNodes: []*navigation.PathNode{&patnode},
 			},
 			Location: Location{
+				Id: entLocation.ID,
 				Name:        entLocation.Name,
 				Description: entLocation.Description,
 				Tags:       nil,
 				PathNode: patnode,
+				Floor: i,
 			},
 		})
 	}

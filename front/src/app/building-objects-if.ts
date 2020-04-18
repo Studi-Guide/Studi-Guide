@@ -51,6 +51,7 @@ export interface Location {
   Description: string;
   Tags: string[];
   PathNode: PathNode;
+  Floor: number;
 }
 
 export interface Room extends MapItem, Location{

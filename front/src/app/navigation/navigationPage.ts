@@ -58,13 +58,13 @@ export class NavigationPage {
       this.routeInputIsVisible = false;
     } else if (this.startInput != undefined && this.startInput != '' && this.startInput != null) {
       this.mapIsVisible = true;
-      this.fetchFloorByRoom(this.startInput);
+      this.fetchFloorByLocation(this.startInput);
     }
   }
 
-  private fetchFloorByRoom(room: string) {
+  private fetchFloorByLocation(name: string) {
     this.progressIsVisible = true;
-    this.dataService.get_room_search(room).subscribe((res : Room)=>{
+    this.dataService.get_location_search(name).subscribe((res : Location)=>{
       this.fetchFloorByItsNumber(res.Floor);
       this.fetchLocations(res.Floor)
     });
@@ -78,8 +78,7 @@ export class NavigationPage {
         && this.startInput != null && this.destinationInput != null
     ) {
       this.mapIsVisible = true;
-      // TODO only in KA.304 is the 4. character always the floor
-      this.fetchFloorByItsNumber(this.startInput[3]);
+      this.fetchFloorByLocation(this.startInput)
       this.fetchRouteToDisplay(this.startInput, this.destinationInput); // 'KA.308','KA.313'
     }
   }
