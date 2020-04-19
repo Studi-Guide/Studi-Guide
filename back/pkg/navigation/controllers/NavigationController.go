@@ -27,8 +27,8 @@ func NewNavigationController(router *gin.RouterGroup, service services.Navigatio
 // @Accept  json
 // @Produce  json
 // @Tags NavigationController
-// @Param startroom query string false "the start room name"
-// @Param endroom query string false "the end room name"
+// @Param start query string false "the start location name"
+// @Param end query string false "the end location name"
 // @Success 200 {array} navigation.NavigationRoute
 // @Router /navigation/dir [get]
 func (l *NavigationController) GetNavigationRoute(c *gin.Context) {
