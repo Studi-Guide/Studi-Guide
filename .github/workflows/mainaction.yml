@@ -32,13 +32,9 @@ jobs:
         working-directory: ${{env.GO_HTTP}}
         run: go mod download
 
-      - name: Generate Database Schema
+      - name: Generate Database Schema/Docs/Mocks
         working-directory: ${{env.GO_HTTP}}
-        run: go generate ./ent
-
-      - name: Generate Docs
-        working-directory: ${{env.GO_HTTP}}
-        run: go run github.com/swaggo/swag/cmd/swag init -g ./cmd/studi-guide/main.go
+        run: go generate ./...
 
       - name: Build backend
         working-directory: ${{env.GO_HTTP}}
@@ -83,17 +79,9 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
 
-      - name: Generate Database Schema
+      - name: Generate Database Schema/Docs/Mocks
         working-directory: ${{env.GO_HTTP}}
-        run: go generate ./ent
-
-      - name: Generate Docs
-        working-directory: ${{env.GO_HTTP}}
-        run: go run github.com/swaggo/swag/cmd/swag init -g ./cmd/studi-guide/main.go
-
-      - name: Generate Mocks
-        working-directory: ${{env.GO_HTTP}}
-        run: go generate ./pkg/map ./pkg/navigation/services ./pkg/location
+        run: go generate ./...
 
       - name: Run backend Unit Tests
         working-directory: ${{env.GO_HTTP}}
