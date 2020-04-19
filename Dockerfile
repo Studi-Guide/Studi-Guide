@@ -22,12 +22,8 @@ WORKDIR /go/src/studi-guide
 RUN ls
 RUN go mod download
 
-# update swagger files
-RUN go get -u github.com/swaggo/swag/cmd/swag
-RUN swag init -g ./cmd/studi-guide/main.go
-
-# generate database schema
-RUN go generate ./ent
+# generate database schema/docs/mocks
+RUN go generate ./...
 
 # build go binaries
 RUN go install ./cmd/...
