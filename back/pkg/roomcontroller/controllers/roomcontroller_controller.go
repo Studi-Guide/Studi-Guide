@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
@@ -32,7 +33,7 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Param floor query int false "floor of the room"
 // @Param alias query string false "potential alias of the room"
 // @Param room query string false "rooms that contain the query string in name, alias or description"
-// @Success 200 {array} models.Room
+// @Success 200 {array} entityservice.Room
 // @Router /roomlist/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
 
@@ -41,7 +42,7 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 	aliasFilter := c.Query("alias")
 	roomFilter := c.Query("room")
 
-	var rooms []models.Room
+	var rooms []entityservice.Room
 	var err error
 
 	if len(nameFilter) == 0 && len(floorFilter) == 0 && len(aliasFilter) == 0 && len(roomFilter) == 0 {
@@ -77,7 +78,7 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 // @Tags RoomController
 // @Produce  json
 // @Param name path string true "get room by name"
-// @Success 200 {object} models.Room
+// @Success 200 {object} entityservice.Room
 // @Router /roomlist/room/{name} [get]
 func (l *RoomController) GetRoom(c *gin.Context) {
 	//name := c.Query("name") //mux.Vars(r)["name"]
@@ -99,7 +100,7 @@ func (l *RoomController) GetRoom(c *gin.Context) {
 // @Tags RoomController
 // @Produce  json
 // @Param floor path int true "filter rooms by floor"
-// @Success 200 {array} models.Room
+// @Success 200 {array} entityservice.Room
 // @Router /roomlist/floor/{floor} [get]
 func (l *RoomController) GetRoomListFromFloor(c *gin.Context) {
 	floor := c.Param("floor")

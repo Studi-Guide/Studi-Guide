@@ -1,6 +1,8 @@
-package models
+package entityservice
 
-import "studi-guide/pkg/navigation"
+import (
+	"studi-guide/pkg/navigation"
+)
 
 type MapItem struct {
 	Doors       []Door

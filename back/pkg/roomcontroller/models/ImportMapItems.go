@@ -1,6 +1,9 @@
 package models
 
-import "studi-guide/pkg/navigation"
+import (
+	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/navigation"
+)
 
 type ImportDoor struct {
 	Start	 	navigation.Coordinate
@@ -24,7 +27,7 @@ type ImportMapItems struct {
 	Doors       []ImportDoor
 	Color       string
 	Floor 		int
-	Sections    []Section
+	Sections    []entityservice.Section
 	Campus      string
 	Building 	string
 	PathNodes 	[]ImportPathNode

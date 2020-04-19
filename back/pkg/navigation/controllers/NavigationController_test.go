@@ -3,13 +3,14 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"net/http/httptest"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/navigation"
-	"studi-guide/pkg/roomcontroller/models"
 	"testing"
+
+	"github.com/gin-gonic/gin"
 )
 
 type MockNavigationService struct {
@@ -38,7 +39,7 @@ func (m MockNavigationService) CalculateFromString(startRoomName string, endRoom
 	}, nil
 }
 
-func (m MockNavigationService) Calculate(startRoom models.Room, endRoom models.Room) (*navigation.NavigationRoute, error) {
+func (m MockNavigationService) Calculate(startRoom entityservice.Location, endRoom entityservice.Location) (*navigation.NavigationRoute, error) {
 	if !(startRoom.Name == m.startroom) || !(endRoom.Name == m.endroom) {
 		return nil, errors.New("wrong rooms")
 	}
@@ -91,8 +92,8 @@ func TestNavigationCalculatefromString_NoRooms(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/navigation/dir", nil)
 	q := req.URL.Query()
-	q.Add("startroom", startroomname)
-	q.Add("endroom", endroomname)
+	q.Add("start", startroomname)
+	q.Add("end", endroomname)
 
 	req.URL.RawQuery = q.Encode()
 
@@ -104,7 +105,7 @@ func TestNavigationCalculatefromString_NoRooms(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expectedRoute := navigation.NavigationRoute{
-		Route: provider.nodes,
+		Route:    provider.nodes,
 		Distance: 2,
 	}
 
@@ -125,8 +126,8 @@ func TestNavigationCalculatefromString(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/navigation/dir", nil)
 	q := req.URL.Query()
-	q.Add("startroom", startroomname)
-	q.Add("endroom", endroomname)
+	q.Add("start", startroomname)
+	q.Add("end", endroomname)
 
 	req.URL.RawQuery = q.Encode()
 
@@ -134,11 +135,11 @@ func TestNavigationCalculatefromString(t *testing.T) {
 	router := gin.Default()
 	roomRouter := router.Group("/navigation")
 	NewNavigationController(roomRouter, provider)
-rec.Body.String()
+	rec.Body.String()
 	router.ServeHTTP(rec, req)
 
 	expectedRoute := navigation.NavigationRoute{
-		Route: provider.nodes,
+		Route:    provider.nodes,
 		Distance: 2,
 	}
 

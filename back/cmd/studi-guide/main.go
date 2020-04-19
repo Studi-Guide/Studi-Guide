@@ -1,15 +1,18 @@
 package main
 
 import (
-	"go.uber.org/dig"
 	"log"
 	"studi-guide/cmd/studi-guide/server"
 	"studi-guide/docs"
 	"studi-guide/pkg/config"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/env"
+	"studi-guide/pkg/location"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/navigation/services"
 	"studi-guide/pkg/roomcontroller/models"
+
+	"go.uber.org/dig"
 )
 
 func main() {
@@ -41,8 +44,28 @@ func BuildContainer() *dig.Container {
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
 	container.Provide(config.NewConfig)
-	container.Provide(models.NewRoomEntityService)
+	container.Provide(entityservice.NewEntityService)
 	container.Provide(server.NewStudiGuideServer)
+
+	// Register entity service for multiple interfaces
+	container.Invoke(func(entityserver *entityservice.EntityService) {
+		container.Provide(func() services.LocationProvider {
+			return entityserver
+		})
+
+		container.Provide(func() models.RoomServiceProvider {
+			return entityserver
+		})
+
+		container.Provide(func() location.LocationProvider {
+			return entityserver
+		})
+	})
+
+	// container.Provide(container.Provide(func() services.LocationProvider {
+	// 	return entityservice.NewEntityService()
+	// }))
+
 	container.Provide(navigation.NewDijkstraNavigation)
 	container.Provide(services.NewNavigationService)
 	return container

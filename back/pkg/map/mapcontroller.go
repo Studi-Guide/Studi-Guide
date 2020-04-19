@@ -4,15 +4,15 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"studi-guide/pkg/roomcontroller/models"
+	"studi-guide/pkg/entityservice"
 )
 
 type MapController struct {
 	router   *gin.RouterGroup
-	provider models.RoomServiceProvider
+	provider MapServiceProvider
 }
 
-func NewMapController(router *gin.RouterGroup, provider models.RoomServiceProvider) error {
+func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) error {
 	r := MapController{router: router, provider: provider}
 	r.router.GET("/", r.GetMapItems)
 	r.router.GET("/floor/:floor", r.GetMapItemsFromFloor)
@@ -25,17 +25,13 @@ func NewMapController(router *gin.RouterGroup, provider models.RoomServiceProvid
 // @Accept  json
 // @Produce  json
 // @Tags MapController
-// @Param name query string false "name of the map items"
 // @Param floor query int false "floor of the map items"
-// @Param alias query string false "potential alias of the room"
 // @Param campus query string false "map item is linked to a certain campus"
 // @Param building query string false "map item is linked to a building"
-// @Success 200 {array} models.MapItem
+// @Success 200 {array} entityservice.MapItem
 // @Router /map [get]
 func (l MapController) GetMapItems(c *gin.Context) {
 	floor := c.Query("floor")
-	name := c.Query("name") //mux.Vars(r)["name"]
-	alias := c.Query("alias")
 	campus := c.Query("campus")
 	building := c.Query("building")
 
@@ -44,7 +40,7 @@ func (l MapController) GetMapItems(c *gin.Context) {
 	coordinateDelta := c.Query("coordinate-delta")
 	//-----------------------------
 
-	var rooms []models.Room
+	var mapItems []entityservice.MapItem
 	var err error
 
 	var useFilterApi bool
@@ -57,9 +53,9 @@ func (l MapController) GetMapItems(c *gin.Context) {
 	}
 
 	if useFilterApi {
-		rooms, err = l.provider.FilterRooms(floor, name, alias, "")
+		mapItems, err = l.provider.FilterMapItems(floor, building, campus)
 	} else {
-		rooms, err = l.provider.GetAllRooms()
+		mapItems, err = l.provider.GetAllMapItems()
 	}
 
 	if err != nil {
@@ -72,7 +68,7 @@ func (l MapController) GetMapItems(c *gin.Context) {
 		return
 	}
 
-	l.CreateAndSendMapList(rooms, c)
+	c.JSON(http.StatusOK, mapItems)
 }
 
 // GetMapItems godoc
@@ -83,12 +79,12 @@ func (l MapController) GetMapItems(c *gin.Context) {
 // @Produce  json
 // @Tags MapController
 // @Param floor path int true "filter map items by floor"
-// @Success 200 {array} models.MapItem
+// @Success 200 {array} entityservice.MapItem
 // @Router /map/floor/{floor} [get]
 func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
 	floor := c.Param("floor") //mux.Vars(r)["name"]
 
-	rooms, err := l.provider.FilterRooms(floor, "", "", "")
+	mapItems, err := l.provider.FilterMapItems(floor, "", "")
 	if err != nil {
 		fmt.Println("GetMapItemsFromFloor() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -97,16 +93,6 @@ func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
 		})
 
 		return
-	}
-
-	l.CreateAndSendMapList(rooms, c)
-}
-
-// Helper method
-func (l MapController) CreateAndSendMapList(rooms []models.Room, c *gin.Context) {
-	var mapItems []models.MapItem
-	for _, room := range rooms {
-		mapItems = append(mapItems, room.MapItem)
 	}
 
 	c.JSON(http.StatusOK, mapItems)
