@@ -108,6 +108,7 @@ export class NavigationPage {
 
   private fetchLocations(floor:any) {
     this.dataService.get_locations(floor).subscribe((res : Location[])=>{
+      this.locations = [];
       for(const l of res) {
         this.locations.push({name: l.Name, x: l.PathNode.Coordinate.X, y: l.PathNode.Coordinate.Y})
       }
