@@ -215,7 +215,7 @@
         "pathNode": {
           "Id": 2001,
           "ConnectedPathNodes" : [
-            45,
+            47,
             200
           ],
           "X": 173, "Y": 100, "Z": 2 }
