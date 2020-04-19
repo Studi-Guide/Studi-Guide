@@ -42,4 +42,12 @@ export class NaviRoute {
         }
         this.svgRoute = points;
     }
+
+    public getRouteStart() {
+        return this.pathNodesToGo[0];
+    }
+
+    public getRouteEnd() {
+        return this.pathNodesToGo[this.pathNodesToGo.length-1];
+    }
 }
