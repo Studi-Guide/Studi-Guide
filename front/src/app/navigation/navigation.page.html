@@ -24,7 +24,7 @@
   </ion-grid>
 
   <div id="building-map" *ngIf="mapIsVisible">
-    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{mapSvgWidth}}" attr.height="{{mapSvgHeight}}" class="center">
+    <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{mapSvgWidth}}" attr.height="{{mapSvgHeight}}">
       <path *ngFor="let path of calculatedRoomPaths"
             attr.d="{{path.d}}"
             attr.fill="{{path.fill}}"
@@ -41,7 +41,26 @@
       <!-- TEST -->
       <circle *ngFor="let pathNode of testRoute" attr.cx="{{pathNode.X}}" attr.cy="{{pathNode.Y}}" r="2" fill="red" />
       <!-- TEST END -->
+      <!-- route -->
       <polyline attr.points="{{calculatedRoute}}" style="fill:none;stroke:#A00;stroke-width:3" />
+      <svg viewBox="0 0 58 58" width="18" height="30"
+           attr.x="{{routeStart.Coordinate.X-9}}"
+           attr.y="{{routeStart.Coordinate.Y-15}}"
+           *ngIf="startIsVisible">
+        <path
+          d="M40.94,5.617C37.318,1.995,32.502,0,27.38,0c-5.123,0-9.938,1.995-13.56,5.617c-6.703,6.702-7.536,19.312-1.804,26.952
+	      L27.38,54.757L42.721,32.6C48.476,24.929,47.643,12.319,40.94,5.617z
+	      M27.557,26c-3.859,0-7-3.141-7-7s3.141-7,7-7s7,3.141,7,7
+	      S31.416,26,27.557,26z"
+        />
+      </svg>
+      <!-- distance -->
+      <svg attr.x="{{distanceToDisplay.X}}" attr.y="{{distanceToDisplay.Y}}" *ngIf="distanceIsVisible">
+        <rect x="0" y="0" width="32" height="14" fill="#A00"></rect>
+        <text x="4" y="11" font-size="12px" fill="#FFF" style="stroke:#FFF;">
+          {{distanceToDisplay.Value}}
+        </text>
+      </svg>
     </svg>
   </div>
 </ion-content>

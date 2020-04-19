@@ -1,9 +1,9 @@
-import {PathNode, Room, svgPath, RoomName} from '../building-objects-if';
+import {Room, svgPath, RoomName, PathNode} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component} from "@angular/core";
 import {DataService} from "../services/data.service";
 import {FloorMap} from "./floorMap";
-import {NaviRoute} from "./naviRoute";
+import {DistanceToBeDisplayed, NaviRoute, ReceivedRoute} from "./naviRoute";
 
 @Component({
   selector: 'app-navigation',
@@ -16,21 +16,27 @@ export class NavigationPage {
   public routeInputIsVisible: boolean = false;
   public searchBtnIsVisible: boolean = true;
   public routeBtnIsVisible: boolean = true;
-  public mapIsVisible: boolean = false;
-  public routeIsVisible: boolean = false;
 
   public startInput: string;
   public destinationInput: string;
 
-  private routeToDisplay: NaviRoute;
+  private route: NaviRoute;
+  public distanceToDisplay: DistanceToBeDisplayed;
   public calculatedRoute: string;
+  public routeIsVisible: boolean = false;
+  public routeStart: PathNode; // = {"Coordinate":{"X":0, "Y":0, "Z":0}}
+  public routeEnd: PathNode; // = {"Coordinate":{"X":0, "Y":0, "Z":0}};
 
-  private floorToDisplay: FloorMap;
+  public startIsVisible: boolean = false;
+  public distanceIsVisible: boolean = false;
+
+  private floor: FloorMap;
   public calculatedRoomPaths: svgPath[];
   public calculatedDoorLines: svgPath[];
   public mapSvgWidth: number;
   public mapSvgHeight: number;
   public roomNames: RoomName[];
+  public mapIsVisible: boolean = false;
 
 //  public testRooms:Room[] = [];
 //  public testRoute:PathNode[];
@@ -59,7 +65,6 @@ export class NavigationPage {
     } else if (this.startInput != undefined && this.startInput != '' && this.startInput != null) {
       this.mapIsVisible = true;
       this.fetchFloorByRoom(this.startInput);
-      this.fetchFloorByItsNumber(this.startInput[3]);
     }
   }
 
@@ -78,46 +83,57 @@ export class NavigationPage {
         && this.startInput != null && this.destinationInput != null
     ) {
       this.mapIsVisible = true;
-      // TODO only in KA.304 is the 4. character always the floor
-      this.fetchFloorByItsNumber(this.startInput[3]);
-      this.fetchRouteToDisplay(this.startInput, this.destinationInput); // 'KA.308','KA.313'
+//      this.fetchFloorByRoom(this.startInput);
+      this.fetchRouteToDisplay(this.startInput, this.destinationInput);
     }
   }
 
   private fetchFloorByItsNumber(floor:any) {
     this.progressIsVisible = true;
     this.dataService.get_floor(floor).subscribe((res : Room[])=>{
-      this.floorToDisplay = new FloorMap(res);
+      this.floor = new FloorMap(res);
+      this.routeIsVisible = false;
       this.displayFloor();
     });
   }
 
   private fetchRouteToDisplay(start:string, end:string) {
     this.progressIsVisible = true;
-    this.dataService.get_route(start, end).subscribe((res : PathNode[])=>{
-      this.routeToDisplay = new NaviRoute(res);
-      console.log(res);
+    this.dataService.get_room_search(start).subscribe((res1 : Room)=>{
+      this.dataService.get_floor(res1.Floor).subscribe((res2 : Room[])=>{
+        this.floor = new FloorMap(res2);
+        this.dataService.get_route(start, end).subscribe((res3 : ReceivedRoute)=>{
+          this.route = new NaviRoute(res3);
 
-      this.routeToDisplay.calculateSvgPathForRoute();
-      // this.sourceSvg = '<image x="100" y="200" width="20" height="20" xlink:href="../../assets/navigation-svgs/race-flag.svg" />';
-      this.calculatedRoute = this.routeToDisplay.svgRoute;
+          // this.sourceSvg = '<image x="100" y="200" width="20" height="20" xlink:href="../../assets/navigation-svgs/race-flag.svg" />';
+          this.distanceToDisplay = this.route.distance;
+          this.calculatedRoute = this.route.svgRoute;
 
-      this.progressIsVisible = false;
-      this.routeIsVisible = true;
+          this.progressIsVisible = false;
+          this.routeIsVisible = true;
+          this.routeStart = this.route.getRouteStart();
+
+          this.displayFloor();
+          this.startIsVisible = true;
+          this.distanceIsVisible = true;
+        });
+      });
     });
   }
 
   private displayFloor() {
-    this.floorToDisplay.calculateSvgPathsAndSvgWidthHeight();
-    this.mapSvgHeight = this.floorToDisplay.svgHeight;
-    this.mapSvgWidth = this.floorToDisplay.svgWidth;
-    this.calculatedRoomPaths = this.floorToDisplay.calculatedRoomPaths;
-    this.calculatedDoorLines = this.floorToDisplay.calculatedDoorLines;
-    this.floorToDisplay.collectAllRoomNames();
-    this.roomNames = this.floorToDisplay.allRoomNames;
+    this.floor.calculateSvgPathsAndSvgWidthHeight();
+    this.mapSvgHeight = this.floor.svgHeight;
+    this.mapSvgWidth = this.floor.svgWidth;
+    this.calculatedRoomPaths = this.floor.calculatedRoomPaths;
+    this.calculatedDoorLines = this.floor.calculatedDoorLines;
+    this.floor.collectAllRoomNames();
+    this.roomNames = this.floor.allRoomNames;
 
     this.progressIsVisible = false;
     this.mapIsVisible = true;
+    this.distanceIsVisible = false;
+    this.startIsVisible = false;
   }
 
 /*  private static testRenderPathNodes() : Coordinate[] {
