@@ -1,5 +1,3 @@
-import {Path} from "@angular-devkit/core";
-
 export class floor {
   rooms: Room[];
   corridors: Corridor[];
