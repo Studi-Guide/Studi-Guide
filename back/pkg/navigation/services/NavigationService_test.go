@@ -2,10 +2,8 @@ package services
 
 import (
 	"encoding/json"
-	"errors"
-	"github.com/golang/mock/gomock"
-	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/navigation"
+	"studi-guide/pkg/roomcontroller/models"
 	"testing"
 )
 
@@ -52,32 +50,9 @@ func (l *MockRouteCalculator) GetRoute(start, end navigation.PathNode) ([]naviga
 func TestNavigationService_CalculateFromString(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
-
-	loc1 := entityservice.Location{
-		Id:          1,
-		Name:        "RoomN01",
-		Description: "",
-		Tags:        nil,
-		PathNode:    navigation.PathNode{},
-	}
-	loc2 := entityservice.Location{
-		Id:          2,
-		Name:        "RoomN02",
-		Description: "",
-		Tags:        nil,
-		PathNode:    navigation.PathNode{},
-	}
-
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-	mock := NewMockLocationProvider(ctrl)
-	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
-	mock.EXPECT().GetLocation("RoomN01").Return(loc1, nil)
-	mock.EXPECT().GetLocation("RoomN02").Return(loc2, nil)
-
+	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
-	navigationservice, _ := NewNavigationService(calculator, mock)
+	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
 	nodes, err := navigationservice.CalculateFromString(startroomname, endroomname)
 
@@ -85,9 +60,15 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 		t.Error(err)
 	}
 
+	startroom, _ := roomprovider.GetRoom(startroomname)
+	endroom, _ := roomprovider.GetRoom(endroomname)
+	expected, distance, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
+	expectedRoute := navigation.NavigationRoute{
+		Route: expected,
+		Distance: distance,
+	}
 
-	expected, _, _ := calculator.GetRoute(loc1.PathNode, loc2.PathNode)
-	expectedAsString, _ := json.Marshal(expected)
+	expectedAsString, _ := json.Marshal(expectedRoute)
 	resultAsString, _ := json.Marshal(nodes)
 	if string(expectedAsString) != string(resultAsString) {
 		t.Errorf("expected = %v; actual = %v", string(expectedAsString), string(resultAsString))
@@ -97,31 +78,9 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 func TestNavigationService_CalculateFromString_Negative(t *testing.T) {
 	startroomname := "RoomN00"
 	endroomname := "RoomN02"
-
-	loc1 := entityservice.Location{
-		Id:          1,
-		Name:        "RoomN00",
-		Description: "",
-		Tags:        nil,
-		PathNode:    navigation.PathNode{},
-	}
-	loc2 := entityservice.Location{
-		Id:          2,
-		Name:        "RoomN02",
-		Description: "",
-		Tags:        nil,
-		PathNode:    navigation.PathNode{},
-	}
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-	mock := NewMockLocationProvider(ctrl)
-	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
-	mock.EXPECT().GetLocation("RoomN00").Return(entityservice.Location{}, errors.New("error text"))
-
-
+	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
-	navigationservice, _ := NewNavigationService(calculator, mock)
+	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
 	_, err := navigationservice.CalculateFromString(startroomname, endroomname)
 
@@ -131,37 +90,27 @@ func TestNavigationService_CalculateFromString_Negative(t *testing.T) {
 }
 
 func TestNavigationService_Calculate(t *testing.T) {
-	loc1 := entityservice.Location{
-		Id:          1,
-		Name:        "RoomN01",
-		Description: "",
-		Tags:        nil,
-		PathNode:    navigation.PathNode{},
-	}
-	loc2 := entityservice.Location{
-		Id:          2,
-		Name:        "RoomN02",
-		Description: "",
-		Tags:        nil,
-		PathNode:    navigation.PathNode{},
-	}
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-	mock := NewMockLocationProvider(ctrl)
-	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
-
+	startroomname := "RoomN01"
+	endroomname := "RoomN02"
+	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
-	navigationservice, _ := NewNavigationService(calculator, mock)
+	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
-	nodes, err := navigationservice.Calculate(loc1, loc2)
+	startroom, _ := roomprovider.GetRoom(startroomname)
+	endroom, _ := roomprovider.GetRoom(endroomname)
+
+	nodes, err := navigationservice.Calculate(startroom, endroom)
 
 	if err != nil {
 		t.Error(err)
 	}
 
-	expected, _, _ := calculator.GetRoute(loc1.PathNode, loc2.PathNode)
-	expectedAsString, _ := json.Marshal(expected)
+	expected, distance, _ := calculator.GetRoute(startroom.PathNode, endroom.PathNode)
+	expectedRoute := navigation.NavigationRoute{
+		Route: expected,
+		Distance: distance,
+	}
+	expectedAsString, _ := json.Marshal(expectedRoute)
 	resultAsString, _ := json.Marshal(nodes)
 	if string(expectedAsString) != string(resultAsString) {
 		t.Errorf("expected = %v; actual = %v", string(expectedAsString), string(resultAsString))
@@ -171,25 +120,9 @@ func TestNavigationService_Calculate(t *testing.T) {
 func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN0001"
-
-	loc1 := entityservice.Location{
-		Id:          1,
-		Name:        "RoomN01",
-		Description: "",
-		Tags:        nil,
-		PathNode:    navigation.PathNode{},
-	}
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-	mock := NewMockLocationProvider(ctrl)
-	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode}, nil)
-	mock.EXPECT().GetLocation("RoomN01").Return(loc1, nil)
-	mock.EXPECT().GetLocation("RoomN0001").Return(entityservice.Location{}, errors.New("error text"))
-
-
+	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
-	navigationservice, _ := NewNavigationService(calculator, mock)
+	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
 	_, err := navigationservice.CalculateFromString(startroomname, endroomname)
 	if err == nil {
@@ -198,33 +131,16 @@ func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
 }
 
 func TestNavigationService_CalculateFromCoordinate(t *testing.T) {
-
-	loc1 := entityservice.Location{
-		Id:          1,
-		Name:        "RoomN01",
-		Description: "",
-		Tags:        nil,
-		PathNode:    navigation.PathNode{},
-	}
-	loc2 := entityservice.Location{
-		Id:          2,
-		Name:        "RoomN02",
-		Description: "",
-		Tags:        nil,
-		PathNode:    navigation.PathNode{},
-	}
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-	mock := NewMockLocationProvider(ctrl)
-	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
-
-
+	startroomname := "RoomN01"
+	endroomname := "RoomN02"
+	roomprovider := models.NewRoomMockService()
 	calculator, _ := NewMockRoutecalCulator()
-	navigationservice, _ := NewNavigationService(calculator, mock)
+	navigationservice, _ := NewNavigationService(calculator, roomprovider)
 
+	startroom, _ := roomprovider.GetRoom(startroomname)
+	endroom, _ := roomprovider.GetRoom(endroomname)
 
-	nodes, err := navigationservice.CalculateFromCoordinate(loc1.PathNode.Coordinate, loc2.PathNode.Coordinate)
+	nodes, err := navigationservice.CalculateFromCoordinate(startroom.PathNode.Coordinate, endroom.PathNode.Coordinate)
 
 	if err != nil {
 		t.Error(err)
