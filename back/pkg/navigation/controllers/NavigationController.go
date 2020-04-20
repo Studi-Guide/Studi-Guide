@@ -29,7 +29,7 @@ func NewNavigationController(router *gin.RouterGroup, service services.Navigatio
 // @Tags NavigationController
 // @Param start query string false "the start location name"
 // @Param end query string false "the end location name"
-// @Success 200 navigation.NavigationRoute
+// @Success 200 {object} navigation.NavigationRoute
 // @Router /navigation/dir [get]
 func (l *NavigationController) GetNavigationRoute(c *gin.Context) {
 	start := c.Query("start")
