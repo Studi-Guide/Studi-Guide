@@ -39,7 +39,7 @@
       </text>
       <path *ngFor="let doorLine of calculatedDoorLines" attr.d="{{doorLine.d}}" attr.stroke="{{doorLine.fill}}" />
       <!-- TEST -->
-      <circle *ngFor="let pathNode of testRoute" attr.cx="{{pathNode.X}}" attr.cy="{{pathNode.Y}}" r="2" fill="red" />
+      <!-- <circle *ngFor="let pathNode of testRoute" attr.cx="{{pathNode.X}}" attr.cy="{{pathNode.Y}}" r="2" fill="red" /> -->
       <!-- TEST END -->
       <!-- route -->
       <polyline attr.points="{{calculatedRoute}}" style="fill:none;stroke:#A00;stroke-width:3" *ngIf="routeIsVisible" />
