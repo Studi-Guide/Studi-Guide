@@ -29,14 +29,14 @@ func NewNavigationController(router *gin.RouterGroup, service services.Navigatio
 // @Tags NavigationController
 // @Param start query string false "the start location name"
 // @Param end query string false "the end location name"
-// @Success 200 {array} navigation.Coordinate
+// @Success 200 {object} navigation.NavigationRoute
 // @Router /navigation/dir [get]
 func (l *NavigationController) GetNavigationRoute(c *gin.Context) {
-	startlocation := c.Query("start")
-	endlocation := c.Query("end")
+	start := c.Query("start")
+	end := c.Query("end")
 
-	log.Printf("[NavigationController] Request navigation received for start '%v' and end '%v'", startlocation, endlocation)
-	coordinates, err := l.service.CalculateFromString(startlocation, endlocation)
+	log.Printf("[NavigationController] Request navigation received for start '%v' and end '%v'", start, end)
+	coordinates, err := l.service.CalculateFromString(start, end)
 
 	if err != nil {
 		fmt.Println("GetAllRomms() failed with error", err)
