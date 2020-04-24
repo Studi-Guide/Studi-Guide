@@ -3,18 +3,20 @@ package entityservice
 import (
 	"context"
 	"errors"
-	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"os"
 	"strconv"
 	"strings"
 	"studi-guide/ent"
+	"studi-guide/ent/building"
 	"studi-guide/ent/location"
 	"studi-guide/ent/mapitem"
 	"studi-guide/ent/room"
 	"studi-guide/ent/tag"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type EntityService struct {
@@ -33,7 +35,7 @@ func newEntityService(env *env.Env) (*EntityService, error) {
 		return nil, err
 	}
 
-	roomCount, _ :=	client.Room.Query().Count(ctx)
+	roomCount, _ := client.Room.Query().Count(ctx)
 	log.Println("Found number of rooms:", roomCount)
 	return &EntityService{client: client, table: table, context: ctx}, nil
 }
@@ -146,7 +148,6 @@ func (r *EntityService) FilterLocations(name, tagStr, floor, building, campus st
 		// Todo query campus
 	}
 
-
 	entLocations, err := query.All(r.context)
 	if err != nil {
 		return nil, err
@@ -162,9 +163,9 @@ func (r *EntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFi
 	q := r.client.Room.Query()
 	if len(roomFilter) > 0 {
 		q = q.Where(
-				room.Or(
-					room.HasLocationWith(location.NameContains(roomFilter)),
-					room.HasLocationWith(location.DescriptionContains(roomFilter))))
+			room.Or(
+				room.HasLocationWith(location.NameContains(roomFilter)),
+				room.HasLocationWith(location.DescriptionContains(roomFilter))))
 	} else {
 
 		if len(nameFilter) > 0 {
@@ -248,14 +249,19 @@ func (r *EntityService) storeRooms(rooms []Room) error {
 
 	for _, rm := range rooms {
 
-		log.Printf("Adding room %s",rm.Name)
+		log.Printf("Adding room %s", rm.Name)
 		if rm.Id != 0 {
-			_, err:= r.client.Room.Get(r.context, rm.Id)
+			_, err := r.client.Room.Get(r.context, rm.Id)
 			if err != nil {
 				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
 			}
 
 			continue
+		}
+
+		entBuilding, err := r.mapBuilding(rm.Building)
+		if err != nil {
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.PathNode.Id))
 		}
 
 		var entNodes []*ent.PathNode
@@ -291,6 +297,7 @@ func (r *EntityService) storeRooms(rooms []Room) error {
 		entMapItem, err := r.client.MapItem.Create().
 			AddDoors(entDoors...).
 			SetColor(entColor).
+			SetBuilding(entBuilding).
 			AddSections(entSections...).
 			AddPathNodes(entNodes...).
 			SetFloor(rm.MapItem.Floor).
@@ -315,8 +322,7 @@ func (r *EntityService) storeRooms(rooms []Room) error {
 
 		if err != nil {
 			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
-		} else
-		{
+		} else {
 			log.Println("Added room:", rm, " as:", entRoom)
 		}
 
@@ -340,7 +346,7 @@ func (r *EntityService) storeRooms(rooms []Room) error {
 				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
 			}
 		}
-		for _, door := range rm.MapItem.Doors{
+		for _, door := range rm.MapItem.Doors {
 			err := r.linkPathNode(&door.PathNode)
 			if err != nil {
 				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
@@ -379,3 +385,13 @@ func (r *EntityService) linkPathNode(pathNode *navigation.PathNode) error {
 	return err
 }
 
+func (r *EntityService) mapBuilding(buildingName string) (*ent.Building, error) {
+	entBuilding, err := r.client.Building.Query().Where(building.NameEQ(buildingName)).First(r.context)
+	if err != nil {
+		return entBuilding, nil
+	}
+
+	return r.client.Building.Create().
+		SetName(buildingName).
+		Save(r.context)
+}
