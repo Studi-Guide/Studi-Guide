@@ -42,6 +42,10 @@ func (r *EntityService) mapItemMapper(entMapItem *ent.MapItem) *MapItem {
 		m.Color = c.Color
 	}
 
-	return &m;
-}
+	b, err := entMapItem.Edges.BuildingOrErr()
+	if err == nil {
+		m.Building = b.Name
+	}
 
+	return &m
+}

@@ -32,6 +32,7 @@ func (r *EntityService) roomMapper(entRoom *ent.Room) *Room {
 	entMapItem, err := r.client.Room.QueryMapitem(entRoom).WithPathNodes().
 		WithColor().
 		WithDoors().
+		WithBuilding().
 		WithSections().
 		First(r.context)
 	if err != nil || entMapItem == nil {
@@ -51,4 +52,3 @@ func (r *EntityService) roomMapper(entRoom *ent.Room) *Room {
 
 	return &rm
 }
-
