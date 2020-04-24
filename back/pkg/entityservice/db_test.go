@@ -365,7 +365,7 @@ func TestRoomEntityService_GetAllPathNodes(t *testing.T) {
 func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
 	dbService, db := setupTestRoomDbService()
 
-	getConnectors, err := dbService.FilterRooms("1", "", "", "")
+	getConnectors, err := dbService.FilterRooms("1", "", "", "", "", "")
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
@@ -391,7 +391,7 @@ func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
 
 	db.Exec("drop table rooms")
 
-	getConnectors, err = dbService.FilterRooms("1", "", "", "")
+	getConnectors, err = dbService.FilterRooms("1", "", "", "", "","")
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
@@ -406,7 +406,7 @@ func TestRoomEntityService_FilterRooms(t *testing.T) {
 
 	dbService, _ := setupTestRoomDbService()
 
-	rooms, err := dbService.FilterRooms("1", "", "", "") // no floor 0 in test data
+	rooms, err := dbService.FilterRooms("1", "", "", "", "", "") // no floor 0 in test data
 
 	if err != nil {
 		t.Error("expect no error, got:", err)
@@ -415,7 +415,7 @@ func TestRoomEntityService_FilterRooms(t *testing.T) {
 		t.Error("expect room array but is nil")
 	}
 
-	rooms, err = dbService.FilterRooms("abcd", "", "", "")
+	rooms, err = dbService.FilterRooms("abcd", "", "", "", "", "")
 	if err == nil {
 		t.Error("expect error", err, " got nil")
 	}
@@ -427,7 +427,7 @@ func TestRoomEntityService_FilterRooms(t *testing.T) {
 func TestRoomEntityService_FilterRooms_RoomFilterParam(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	rooms, err := dbService.FilterRooms("", "", "", "1") // no floor 0 in test data
+	rooms, err := dbService.FilterRooms("", "", "", "1", "", "") // no floor 0 in test data
 
 	if err != nil {
 		t.Error("expect no error, got:", err)
@@ -436,7 +436,7 @@ func TestRoomEntityService_FilterRooms_RoomFilterParam(t *testing.T) {
 		t.Error("expect room array but is nil")
 	}
 
-	rooms, err = dbService.FilterRooms("", "", "", "abcd")
+	rooms, err = dbService.FilterRooms("", "", "", "abcd", "", "")
 	if err != nil {
 		t.Error("expect no error", err, " got not nil")
 	}
@@ -448,7 +448,7 @@ func TestRoomEntityService_FilterRooms_RoomFilterParam(t *testing.T) {
 func TestRoomEntityService_FilterRooms_NameFilterParam(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	rooms, err := dbService.FilterRooms("", "1", "", "") // no floor 0 in test data
+	rooms, err := dbService.FilterRooms("", "1", "", "", "", "") // no floor 0 in test data
 	if err != nil {
 		t.Error("expect no error, got:", err)
 	}
@@ -461,7 +461,7 @@ func TestRoomEntityService_FilterRooms_NameFilterParam(t *testing.T) {
 	}
 
 
-	rooms, err = dbService.FilterRooms("", "foobar", "", "")
+	rooms, err = dbService.FilterRooms("", "foobar", "", "", "", "")
 	if err != nil {
 		t.Error("expect no error", err, " got not nil")
 	}
@@ -473,16 +473,18 @@ func TestRoomEntityService_FilterRooms_NameFilterParam(t *testing.T) {
 func TestRoomEntityService_FilterRooms_RoomFilterParam_FloorFilterParam(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	rooms, err := dbService.FilterRooms("1", "", "", "1") // no floor 0 in test data
+	rooms, err := dbService.FilterRooms("1", "", "", "1", "", "") // no floor 0 in test data
 
 	if err != nil {
 		t.Error("expect no error, got:", err)
+
+	rooms, err = dbService.FilterRooms("abcd", "", "", "", "", "")
 	}
 	if rooms == nil {
 		t.Error("expect room array but is nil")
 	}
 
-	rooms, err = dbService.FilterRooms("", "", "", "abcd")
+	rooms, err = dbService.FilterRooms("", "", "", "abcd", "", "")
 	if err != nil {
 		t.Error("expect no error", err, " got not nil")
 	}
@@ -494,7 +496,7 @@ func TestRoomEntityService_FilterRooms_RoomFilterParam_FloorFilterParam(t *testi
 func TestRoomEntityService_FilterRooms_RoomFilterParam_FloorFilterParam_BadInteger(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	rooms, err := dbService.FilterRooms("1", "", "", "1") // no floor 0 in test data
+	rooms, err := dbService.FilterRooms("1", "", "", "1", "", "") // no floor 0 in test data
 
 	if err != nil {
 		t.Error("expect no error, got:", err)
@@ -503,7 +505,7 @@ func TestRoomEntityService_FilterRooms_RoomFilterParam_FloorFilterParam_BadInteg
 		t.Error("expect room array but is nil")
 	}
 
-	rooms, err = dbService.FilterRooms("resr", "", "", "1")
+	rooms, err = dbService.FilterRooms("resr", "", "", "1", "", "")
 	if err == nil {
 		t.Error("expect error")
 	}
@@ -517,7 +519,7 @@ func TestRoomEntityService_FilterRooms_DbCrash(t *testing.T) {
 
 	db.Exec("drop table rooms")
 
-	_, err := dbService.FilterRooms("1", "", "", "1") // no floor 0 in test data
+	_, err := dbService.FilterRooms("1", "", "", "1", "", "") // no floor 0 in test data
 
 	if err == nil {
 		t.Error("expect no error, got:", err)

@@ -155,7 +155,7 @@ func (r *EntityService) FilterLocations(name, tagStr, floor, building, campus st
 	return r.locationArrayMapper(entLocations), nil
 }
 
-func (r *EntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter string) ([]Room, error) {
+func (r *EntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter, buildingFilter, campus string) ([]Room, error) {
 
 	var entRooms []*ent.Room
 	var err error = nil
@@ -170,6 +170,10 @@ func (r *EntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFi
 
 		if len(nameFilter) > 0 {
 			q = q.Where(room.HasLocationWith(location.NameContains(nameFilter)))
+		}
+
+		if len(buildingFilter) > 0 {
+			q = q.Where(room.HasMapitemWith(mapitem.HasBuildingWith(building.NameContains(buildingFilter))))
 		}
 	}
 
@@ -206,18 +210,24 @@ func (r *EntityService) GetAllMapItems() ([]MapItem, error) {
 	return r.mapItemArrayMapper(entMapItems), nil
 }
 
-func (r *EntityService) FilterMapItems(floor, building, campus string) ([]MapItem, error) {
+func (r *EntityService) FilterMapItems(floor, buildingFilter, campus string) ([]MapItem, error) {
 	iFloor, err := strconv.Atoi(floor)
 	if err != nil {
 		return nil, err
 	}
-	// Missing items: campus, building
-	entMapItems, err := r.client.MapItem.Query().Where(mapitem.Floor(iFloor)).
-		WithPathNodes().
-		WithColor().
+
+	mapQuery := r.client.MapItem.Query()
+
+	if len(buildingFilter) > 0 {
+		mapQuery.Where(mapitem.HasBuildingWith(building.Name(buildingFilter)))
+	}
+
+	// TODO Missing items: campus
+	entMapItems, err := mapQuery.Where(mapitem.Floor(iFloor)).
 		WithBuilding().
 		WithDoors().
 		WithSections().
+		WithPathNodes().
 		All(r.context)
 	if err != nil {
 		return nil, err

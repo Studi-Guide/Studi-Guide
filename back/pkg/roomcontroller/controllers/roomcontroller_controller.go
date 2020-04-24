@@ -18,7 +18,7 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 	r := RoomController{router: router, provider: provider}
 	r.router.GET("/", r.GetRoomList)
 	r.router.GET("/room/:name", r.GetRoom)
-	r.router.GET("/floor/:floor", r.GetRoomListFromFloor)
+	r.router.GET("/building/:building/floor/:floor", r.GetRoomListFromFloor)
 	return nil
 }
 
@@ -30,6 +30,8 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Tags RoomController
 // @Produce  json
 // @Param name query string false "room name"
+// @Param name building string false "building name"
+// @Param name campus string false "campus name"
 // @Param floor query int false "floor of the room"
 // @Param alias query string false "potential alias of the room"
 // @Param room query string false "rooms that contain the query string in name, alias or description"
@@ -41,14 +43,16 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 	floorFilter := c.Query("floor")
 	aliasFilter := c.Query("alias")
 	roomFilter := c.Query("room")
+	buildingFilter := c.Query("building")
+	campusFilter := c.Query("campus")
 
 	var rooms []entityservice.Room
 	var err error
 
-	if len(nameFilter) == 0 && len(floorFilter) == 0 && len(aliasFilter) == 0 && len(roomFilter) == 0 {
+	if len(nameFilter) == 0 && len(floorFilter) == 0 && len(aliasFilter) == 0 && len(roomFilter) == 0 && len(buildingFilter) == 0 && len(campusFilter) == 0{
 		rooms, err = l.provider.GetAllRooms()
 	} else {
-		rooms, err = l.provider.FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter)
+		rooms, err = l.provider.FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter, buildingFilter, campusFilter)
 	}
 
 	if err != nil {
@@ -99,11 +103,20 @@ func (l *RoomController) GetRoom(c *gin.Context) {
 // @Accept  json
 // @Tags RoomController
 // @Produce  json
+// @Param building path string true "filter rooms by building"
 // @Param floor path int true "filter rooms by floor"
 // @Success 200 {array} entityservice.Room
 // @Router /roomlist/floor/{floor} [get]
 func (l *RoomController) GetRoomListFromFloor(c *gin.Context) {
+	building := c.Param("building")
 	floor := c.Param("floor")
+
+	if len(building) == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": "No building parameter received",
+		})
+	}
 
 	_, err := strconv.Atoi(floor)
 	if err != nil {
@@ -115,7 +128,7 @@ func (l *RoomController) GetRoomListFromFloor(c *gin.Context) {
 		})
 	}
 
-	rooms, err := l.provider.FilterRooms(floor, "", "", "")
+	rooms, err := l.provider.FilterRooms(floor, "", "", "", building, "")
 	if err != nil {
 		fmt.Println("GetRoomListFromFloor() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{

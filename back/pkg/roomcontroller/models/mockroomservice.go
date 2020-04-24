@@ -109,26 +109,37 @@ func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	return list, nil
 }
 
-func (r *RoomMockService) FilterRooms(floor, name, alias, room string) ([]entityservice.Room, error) {
+func (r *RoomMockService) FilterRooms(floor, name, alias, room, building, campus string) ([]entityservice.Room, error) {
 	if r.RoomList == nil {
 		return nil, errors.New("no room list initialized")
 	}
 
+	var list []entityservice.Room
 	if len(floor) > 0 {
 		floorInt, err := strconv.Atoi(floor)
 		if err != nil {
 			return nil, err
 		}
 
-		var list []entityservice.Room
 		for _, room := range r.RoomList {
 			if room.Location.Floor == floorInt && room.MapItem.Floor == floorInt {
 				list = append(list, room)
 			}
 		}
-
-		return list, nil
+	} else {
+		list = r.RoomList
 	}
 
-	return r.RoomList, nil
+	if len(building) > 0 {
+		var buildingFiltered []entityservice.Room
+		for _, room := range list {
+			if room.Building == building {
+				buildingFiltered = append(buildingFiltered, room)
+			}
+		}
+
+		list = buildingFiltered
+	}
+
+	return list, nil
 }
