@@ -30,8 +30,8 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Tags RoomController
 // @Produce  json
 // @Param name query string false "room name"
-// @Param name building string false "building name"
-// @Param name campus string false "campus name"
+// @Param building query string false "building name"
+// @Param campus query string false "campus name"
 // @Param floor query int false "floor of the room"
 // @Param alias query string false "potential alias of the room"
 // @Param room query string false "rooms that contain the query string in name, alias or description"
