@@ -605,3 +605,28 @@ func TestEntityService_FilterMapItems(t *testing.T) {
 		t.Error("expected: ", expectMapItems, "; got: ", getMapItems)
 	}
 }
+
+func TestEntityService_FilterMapItems_Building(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getMapItems, err := dbService.FilterMapItems("2", "main", "")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	var expectMapItems []MapItem
+	expectMapItems = append(expectMapItems, testRooms[1].MapItem)
+
+	if !reflect.DeepEqual(expectMapItems, getMapItems) {
+		t.Error("expected: ", expectMapItems, "; got: ", getMapItems)
+	}
+}
+
+func TestEntityService_FilterMapItems_Building_Negativ(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	getMapItems, _ := dbService.FilterMapItems("2", "main2", "")
+	if len(getMapItems) != 0 {
+		t.Error("expected: ", nil, "; got: ", getMapItems)
+	}
+}
