@@ -12,8 +12,7 @@ type Room struct {
 
 // Fields of the Room.
 func (Room) Fields() []ent.Field {
-	return []ent.Field{
-	}
+	return []ent.Field{}
 }
 
 // Edges of the Room.
@@ -21,6 +20,7 @@ func (Room) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("mapitem", MapItem.Type).Unique().Required(),
 		edge.To("location", Location.Type).Unique().Required(),
+		edge.To("rooms", Building.Type).Unique().Required(),
 	}
 }
 
