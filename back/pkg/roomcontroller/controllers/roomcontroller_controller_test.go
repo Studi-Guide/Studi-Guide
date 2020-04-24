@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
-	"studi-guide/pkg/roomcontroller/models"
+	"studi-guide/pkg/roomcontroller/mock"
 	"testing"
 )
 
@@ -13,7 +13,7 @@ func TestRoomlistIndex(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/", nil)
 
-	provider := models.NewRoomMockService()
+	provider := mock.NewRoomMockService()
 	router := gin.Default()
 	roomRouter := router.Group("/roomlist")
 	NewRoomController(roomRouter, provider)
@@ -31,7 +31,7 @@ func TestRoomlistIndex_Negativ(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/", nil)
 
-	provider := models.NewRoomMockService()
+	provider := mock.NewRoomMockService()
 	router := gin.Default()
 	roomRouter := router.Group("/roomlist")
 	NewRoomController(roomRouter, provider)
@@ -48,7 +48,7 @@ func TestGetRoom(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/room/RoomN01", nil)
 
-	provider := models.NewRoomMockService()
+	provider := mock.NewRoomMockService()
 	router := gin.Default()
 	roomRouter := router.Group("/roomlist")
 	NewRoomController(roomRouter, provider)
@@ -66,7 +66,7 @@ func TestGetRoomNotExists(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/room/abcdefg", nil)
 
-	provider := models.NewRoomMockService()
+	provider := mock.NewRoomMockService()
 	router := gin.Default()
 	roomRouter := router.Group("/roomlist")
 	NewRoomController(roomRouter, provider)
@@ -83,7 +83,7 @@ func TestRoomController_GetRoomsFromFloor_Filter(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/?floor=1", nil)
 
-	provider :=  models.NewRoomMockService()
+	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/roomlist")
 	NewRoomController(mapRouter, provider)
@@ -103,7 +103,7 @@ func TestRoomController_GetRoomsFromFloor(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/building/main/floor/1", nil)
 
-	provider :=  models.NewRoomMockService()
+	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/roomlist")
 	NewRoomController(mapRouter, provider)
@@ -123,7 +123,7 @@ func TestRoomController_GetRoomsFromFloor_BadInteger(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/building/main/floor/bla", nil)
 
-	provider :=  models.NewRoomMockService()
+	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/roomlist")
 	NewRoomController(mapRouter, provider)
@@ -138,7 +138,7 @@ func TestRoomController_GetRoomFromFloor_EmptyRoomlist(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/building/main/floor/1", nil)
 
-	provider :=  models.NewRoomMockService()
+	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/roomlist")
 	NewRoomController(mapRouter, provider)
@@ -154,7 +154,7 @@ func TestRoomController_GetRoomList_FilterFloor(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/?floor=0", nil)
 
-	provider :=  models.NewRoomMockService()
+	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/roomlist")
 	NewRoomController(mapRouter, provider)
@@ -170,7 +170,7 @@ func TestRoomController_GetRoomList_BadFilterFloor(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/?floor=first", nil)
 
-	provider :=  models.NewRoomMockService()
+	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/roomlist")
 	NewRoomController(mapRouter, provider)
@@ -186,7 +186,7 @@ func TestRoomController_GetAllRoom(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/roomlist/", nil)
 
-	provider :=  models.NewRoomMockService()
+	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/roomlist")
 	NewRoomController(mapRouter, provider)

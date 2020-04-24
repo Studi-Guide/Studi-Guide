@@ -1,4 +1,4 @@
-package models
+package mock
 
 import (
 	"errors"
