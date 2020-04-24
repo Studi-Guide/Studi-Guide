@@ -1,6 +1,7 @@
 [
   {
     "name": "KA.206",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 0, "Y": 0, "Z": 2 },
@@ -61,6 +62,7 @@
   },
   {
     "name": "KA.204",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 50, "Y": 0, "Z": 2 },
@@ -121,6 +123,7 @@
   },
   {
     "name": "KA.202",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 100, "Y": 0, "Z": 2 },
@@ -181,6 +184,7 @@
   },
   {
     "name": "KA.200",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 0, "Z": 2 },
@@ -226,6 +230,7 @@
   },
   {
     "name": "Treppe 1 2.OG",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 360, "Y": 0, "Z": 2 },
@@ -258,6 +263,7 @@
   },
   {
     "name": "corridor 2",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 0, "Y": 100, "Z": 2 },
@@ -346,6 +352,7 @@
   },
   {
     "name": "Aufzug 2",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 360, "Y": 100, "Z": 2 },
@@ -379,6 +386,7 @@
   },
   {
     "name": "KA.208",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 130, "Z": 2 },
@@ -423,6 +431,7 @@
   },
   {
     "name": "Treppe 2 2.OG",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 225, "Y": 155, "Z": 2 },
@@ -457,6 +466,7 @@
   },
   {
     "name": "WC Herren 2",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 130, "Z": 2 },
@@ -508,6 +518,7 @@
   },
   {
     "name": "WC Damen 1",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 200, "Z": 2 },
@@ -558,6 +569,7 @@
   },
   {
     "name": "KA.210",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 210, "Z": 2 },
@@ -601,6 +613,7 @@
   },
   {
     "name": "KA.212",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 235, "Z": 2 },
@@ -644,6 +657,7 @@
   },
   {
     "name": "KA.205",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 245, "Z": 2 },
@@ -687,6 +701,7 @@
   },
   {
     "name": "KA.214",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 265, "Z": 2 },
@@ -735,6 +750,7 @@
   },
   {
     "name": "KA.216",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 295, "Z": 2 },
@@ -788,6 +804,7 @@
   },
   {
     "name": "KA.218",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 325, "Z": 2 },
@@ -837,6 +854,7 @@
   },
   {
     "name": "KA.220",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 350, "Z": 2 },
@@ -880,6 +898,7 @@
   },
   {
     "name": "KA.222",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 380, "Z": 2 },
@@ -923,6 +942,7 @@
   },
   {
     "name": "KA.224",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 460, "Z": 2 },
@@ -966,6 +986,7 @@
   },
   {
     "name": "KA.226",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 490, "Z": 2 },
@@ -1009,6 +1030,7 @@
   },
   {
     "name": "KA.228",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 520, "Z": 2 },
@@ -1052,6 +1074,7 @@
   },
   {
     "name": "KA.207",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 265, "Z": 2 },
@@ -1101,6 +1124,7 @@
   },
   {
     "name": "KA.209",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 320, "Z": 2 },
@@ -1165,6 +1189,7 @@
   },
   {
     "name": "KA.211",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 420, "Z": 2 },
@@ -1224,6 +1249,7 @@
   },
   {
     "name": "WASISTDAS",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 520, "Z": 2 },
@@ -1267,6 +1293,7 @@
   },
   {
     "name": "Treppe 3 2.OG",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 130, "Y": 550, "Z": 2 },
@@ -1299,6 +1326,7 @@
   },
   {
     "name": "WC Damen 2",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 130, "Y": 590, "Z": 2 },
@@ -1349,6 +1377,7 @@
   },
   {
     "name": "WC Herren 1",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 130, "Y": 620, "Z": 2 },
@@ -1399,6 +1428,7 @@
   },
   {
     "name": "Aufzug 1",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 190, "Y": 590, "Z": 2 },
@@ -1431,6 +1461,7 @@
   },
   {
     "name": "corridor 1",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 225, "Y": 185, "Z": 2 },
@@ -1774,6 +1805,7 @@
   },
   {
     "name": "WASISTDAS2",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 190, "Y": 630, "Z": 2 },
@@ -1807,6 +1839,7 @@
   },
   {
     "name": "KA.234",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 650, "Z": 2 },
@@ -1861,6 +1894,7 @@
   },
   {
     "name": "KA.236",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 750, "Z": 2 },
@@ -1904,6 +1938,7 @@
   },
   {
     "name": "KA.238",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 830, "Z": 2 },
@@ -1958,6 +1993,7 @@
   },
   {
     "name": "KA.213",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 550, "Z": 2 },
@@ -2001,6 +2037,7 @@
   },
   {
     "name": "KA.215",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 650, "Z": 2 },
@@ -2060,6 +2097,7 @@
   },
   {
     "name": "KA.217",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 750, "Z": 2 },
@@ -2124,6 +2162,7 @@
   },
   {
     "name": "KA.219",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 850, "Z": 2 },
@@ -2173,6 +2212,7 @@
   },
   {
     "name": "Treppe 4 2.OG",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 220, "Y": 960, "Z": 2 },
@@ -2206,6 +2246,7 @@
   },
   {
     "name": "KA.304",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 0, "Y": 0, "Z": 3 },
@@ -2266,6 +2307,7 @@
   },
   {
     "name": "KA.302",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 0, "Z": 3 },
@@ -2311,6 +2353,7 @@
   },
   {
     "name": "Treppe 1 3.OG",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 360, "Y": 0, "Z": 3 },
@@ -2343,6 +2386,7 @@
   },
   {
     "name": "KA.306",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 0, "Y": 100, "Z": 3 },
@@ -2388,6 +2432,7 @@
   },
   {
     "name": "corridor 3-2",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 100, "Y": 100, "Z": 3 },
@@ -2461,6 +2506,7 @@
   },
   {
     "name": "Aufzug 3-2",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 360, "Y": 100, "Z": 3 },
@@ -2494,6 +2540,7 @@
   },
   {
     "name": "KA.308",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 130, "Z": 3 },
@@ -2538,6 +2585,7 @@
   },
   {
     "name": "Treppe 2 3.OG",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 225, "Y": 155, "Z": 3 },
@@ -2572,6 +2620,7 @@
   },
   {
     "name": "WC Herren 3-2",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 130, "Z": 3 },
@@ -2623,6 +2672,7 @@
   },
   {
     "name": "WC Damen 3-1",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 200, "Z": 3 },
@@ -2673,6 +2723,7 @@
   },
   {
     "name": "KA.310",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 210, "Z": 3 },
@@ -2716,6 +2767,7 @@
   },
   {
     "name": "KA.312",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 235, "Z": 3 },
@@ -2759,6 +2811,7 @@
   },
   {
     "name": "KA.305",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 245, "Z": 3 },
@@ -2802,6 +2855,7 @@
   },
   {
     "name": "KA.314",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 265, "Z": 3 },
@@ -2850,6 +2904,7 @@
   },
   {
     "name": "KA.316",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 295, "Z": 3 },
@@ -2903,6 +2958,7 @@
   },
   {
     "name": "KA.318",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 325, "Z": 3 },
@@ -2952,6 +3008,7 @@
   },
   {
     "name": "KA.320",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 350, "Z": 3 },
@@ -2995,6 +3052,7 @@
   },
   {
     "name": "KA.322",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 380, "Z": 3 },
@@ -3038,6 +3096,7 @@
   },
   {
     "name": "KA.324",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 460, "Z": 3 },
@@ -3081,6 +3140,7 @@
   },
   {
     "name": "KA.326",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 490, "Z": 3 },
@@ -3124,6 +3184,7 @@
   },
   {
     "name": "KA.328",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 520, "Z": 3 },
@@ -3167,6 +3228,7 @@
   },
   {
     "name": "KA.307",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 265, "Z": 3 },
@@ -3216,6 +3278,7 @@
   },
   {
     "name": "KA.309",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 320, "Z": 3 },
@@ -3280,6 +3343,7 @@
   },
   {
     "name": "KA.311",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 420, "Z": 3 },
@@ -3339,6 +3403,7 @@
   },
   {
     "name": "WASISTDAS3-",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 520, "Z": 3 },
@@ -3382,6 +3447,7 @@
   },
   {
     "name": "Treppe 3 3.OG",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 130, "Y": 550, "Z": 3 },
@@ -3414,6 +3480,7 @@
   },
   {
     "name": "WC Damen 3-2",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 130, "Y": 590, "Z": 3 },
@@ -3464,6 +3531,7 @@
   },
   {
     "name": "WC Herren 3-1",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 130, "Y": 620, "Z": 3 },
@@ -3514,6 +3582,7 @@
   },
   {
     "name": "Aufzug 3-1",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 190, "Y": 590, "Z": 3 },
@@ -3546,6 +3615,7 @@
   },
   {
     "name": "corridor 3-1",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 225, "Y": 185, "Z": 3 },
@@ -3889,6 +3959,7 @@
   },
   {
     "name": "WASISTDAS3-2",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 190, "Y": 630, "Z": 3 },
@@ -3922,6 +3993,7 @@
   },
   {
     "name": "KA.334",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 650, "Z": 3 },
@@ -3976,6 +4048,7 @@
   },
   {
     "name": "KA.336",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 750, "Z": 3 },
@@ -4019,6 +4092,7 @@
   },
   {
     "name": "KA.338",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 150, "Y": 830, "Z": 3 },
@@ -4073,6 +4147,7 @@
   },
   {
     "name": "KA.313",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 550, "Z": 3 },
@@ -4116,6 +4191,7 @@
   },
   {
     "name": "KA.315",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 650, "Z": 3 },
@@ -4175,6 +4251,7 @@
   },
   {
     "name": "KA.317",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 750, "Z": 3 },
@@ -4239,6 +4316,7 @@
   },
   {
     "name": "KA.319",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 290, "Y": 850, "Z": 3 },
@@ -4288,6 +4366,7 @@
   },
   {
     "name": "Treppe 4 3.OG",
+    "building": "KA",
     "sections": [
       {
         "Start": { "X": 220, "Y": 960, "Z": 3 },
