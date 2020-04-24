@@ -195,6 +195,7 @@ func (r *EntityService) GetAllMapItems() ([]MapItem, error) {
 	entMapItems, err := r.client.MapItem.Query().
 		WithPathNodes().
 		WithColor().
+		WithBuilding().
 		WithDoors().
 		WithSections().
 		All(r.context)
@@ -214,6 +215,7 @@ func (r *EntityService) FilterMapItems(floor, building, campus string) ([]MapIte
 	entMapItems, err := r.client.MapItem.Query().Where(mapitem.Floor(iFloor)).
 		WithPathNodes().
 		WithColor().
+		WithBuilding().
 		WithDoors().
 		WithSections().
 		All(r.context)
@@ -386,8 +388,8 @@ func (r *EntityService) linkPathNode(pathNode *navigation.PathNode) error {
 }
 
 func (r *EntityService) mapBuilding(buildingName string) (*ent.Building, error) {
-	entBuilding, err := r.client.Building.Query().Where(building.NameEQ(buildingName)).First(r.context)
-	if err != nil {
+	entBuilding, _ := r.client.Building.Query().Where(building.NameEQ(buildingName)).First(r.context)
+	if entBuilding != nil {
 		return entBuilding, nil
 	}
 

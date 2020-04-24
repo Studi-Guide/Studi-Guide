@@ -44,6 +44,7 @@ func setupTestRoomDbService() (*EntityService, *sql.DB) {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
+	building,_ := client.Building.Create().SetName("main").Save(ctx)
 	testRooms = []Room{}
 	for i := 1; i < 4; i++ {
 
@@ -72,6 +73,7 @@ func setupTestRoomDbService() (*EntityService, *sql.DB) {
 			AddPathNodes(pathNode).
 			AddDoorIDs(door.ID).
 			SetFloor(i).
+			SetBuilding(building).
 			Save(ctx)
 
 		if err != nil {
@@ -115,6 +117,7 @@ func setupTestRoomDbService() (*EntityService, *sql.DB) {
 				Color:    "",
 				Sections: nil,
 				Floor:    i,
+				Building: "main",
 				PathNodes: []*navigation.PathNode{&patnode},
 			},
 			Location: Location{

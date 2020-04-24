@@ -127,6 +127,7 @@ func TestMapRoom(t *testing.T) {
 				},
 			},
 			Floor: 1,
+			Building: "main",
 		},
 
 		Location: Location{
@@ -235,6 +236,7 @@ func TestMapRoom(t *testing.T) {
 				},
 			},
 			Floor: 1,
+			Building: "main",
 		},
 
 		Location: Location{
@@ -360,6 +362,7 @@ func TestMapRoom(t *testing.T) {
 				},
 			},
 			Floor: 1,
+			Building: "main",
 		},
 		Location: Location{
 			Id: 2,
