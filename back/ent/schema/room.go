@@ -20,7 +20,6 @@ func (Room) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("mapitem", MapItem.Type).Unique().Required(),
 		edge.To("location", Location.Type).Unique().Required(),
-		edge.To("rooms", Building.Type).Unique().Required(),
 	}
 }
 

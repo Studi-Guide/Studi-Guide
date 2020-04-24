@@ -22,7 +22,7 @@ func (Building) Fields() []ent.Field {
 // Edges of the Building.
 func (Building) Edges() []ent.Edge {
 	return []ent.Edge{
-		edge.From("owner", Room.Type).Ref("rooms"),
+		edge.From("owner", MapItem.Type).Ref("building"),
 	}
 }
 
