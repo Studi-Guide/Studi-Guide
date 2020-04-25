@@ -48,8 +48,8 @@ func TestRoomJsonImporter_RunImport(t *testing.T) {
 		t.Error("expected error; got: ", err)
 	}
 
-	tmpFile := "./tmp/test.json"
-	ensureDir("./tmp")
+	tmpFile := "/tmp/test.json"
+	ensureDir("/tmp")
 	_, err = os.Create(tmpFile)
 	if err != nil {
 		t.Error(err)
@@ -81,8 +81,8 @@ func TestRoomXmlImporter_RunImport(t *testing.T) {
 		t.Error("expected error; got: ", err)
 	}
 
-	tmpFile := "./tmp/test.xml"
-	ensureDir("./tmp")
+	tmpFile := "/tmp/test.xml"
+	ensureDir("/tmp")
 	_, err = os.Create(tmpFile)
 	if err != nil {
 		t.Error(err)
