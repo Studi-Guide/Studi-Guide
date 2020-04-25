@@ -397,13 +397,3 @@ func (r *EntityService) linkPathNode(pathNode *navigation.PathNode) error {
 	return err
 }
 
-func (r *EntityService) mapBuilding(buildingName string) (*ent.Building, error) {
-	entBuilding, _ := r.client.Building.Query().Where(building.NameEQ(buildingName)).First(r.context)
-	if entBuilding != nil {
-		return entBuilding, nil
-	}
-
-	return r.client.Building.Create().
-		SetName(buildingName).
-		Save(r.context)
-}

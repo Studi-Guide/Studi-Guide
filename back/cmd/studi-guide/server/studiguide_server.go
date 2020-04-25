@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"studi-guide/pkg/building"
 	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/location"
@@ -93,6 +94,17 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 			log.Fatal(err)
 		} else {
 			log.Println("Successfully initialized location controller")
+		}
+	}
+
+	buildingRouter := router.Group("/buildings")
+	{
+		log.Println("Creating building controller")
+		err := building.NewBuildingController(buildingRouter, entityService)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Println("Successfully initialized building controller")
 		}
 	}
 
