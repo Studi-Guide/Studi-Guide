@@ -339,3 +339,8 @@ ASALocalRun/
 
 # Sqlite 3 database files
 *.sqlite3
+back/pkg/entityservice/debug.test
+back/pkg/roomcontroller/models/tmp/test.xml
+back/pkg/roomcontroller/models/tmp/test.json
+.vscode/studiguide.code-workspace
+.gitignore
