@@ -8,8 +8,9 @@ import (
 	"github.com/swaggo/gin-swagger"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
-	"studi-guide/pkg/building"
+	"studi-guide/pkg/building/controller"
 	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/location"
@@ -52,7 +53,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 		router.Use(static.Serve("/", static.LocalFile(env.FrontendPath(), true)))
 	}
 
-	roomRouter := router.Group("/roomlist")
+	roomRouter := router.Group("/rooms")
 	{
 		log.Print("Creating room controllers")
 		err := controllers.NewRoomController(roomRouter, entityService)
@@ -75,7 +76,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 		}
 	}
 
-	mapRouter := router.Group("/map")
+	mapRouter := router.Group("/maps")
 	{
 		log.Print("Creating map controllers")
 		err := maps.NewMapController(mapRouter, entityService)
@@ -86,7 +87,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 		}
 	}
 
-	locationRouter := router.Group("/location")
+	locationRouter := router.Group("/locations")
 	{
 		log.Println("Creating location controller")
 		err := location.NewLocationController(locationRouter, entityService)
@@ -100,7 +101,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 	buildingRouter := router.Group("/buildings")
 	{
 		log.Println("Creating building controller")
-		err := building.NewBuildingController(buildingRouter, entityService)
+		err := controller.NewBuildingController(buildingRouter, entityService, entityService, entityService, entityService)
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -109,7 +110,25 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 	}
 
 	router.NoRoute(func(c *gin.Context) {
-		c.Redirect(301, "/")
+		if env.Develop() {
+			type ErrInfo struct{
+				Url url.URL
+				Header http.Header
+				Proto string
+				Host string
+				Err error
+			}
+			c.JSON(http.StatusNotFound, ErrInfo{
+				Url: *c.Request.URL,
+				Header: c.Request.Header,
+				Proto: c.Request.Proto,
+				Host: c.Request.Host,
+				Err: c.Err(),
+			})
+		} else {
+			_, _ = c.Writer.WriteString(c.Request.URL.Path + " not found")
+			c.Status(http.StatusNotFound)
+		}
 	})
 
 	server := StudiGuideServer{router: router}

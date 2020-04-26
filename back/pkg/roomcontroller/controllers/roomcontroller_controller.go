@@ -16,9 +16,9 @@ type RoomController struct {
 
 func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvider) error {
 	r := RoomController{router: router, provider: provider}
-	r.router.GET("/", r.GetRoomList)
-	r.router.GET("/room/:name", r.GetRoom)
-	r.router.GET("/building/:building/floor/:floor", r.GetRoomListFromFloor)
+	r.router.GET("", r.GetRoomList)
+	r.router.GET("/:room", r.GetRoom)
+	//r.router.GET("/building/:building/floor/:floor", r.GetRoomListFromFloor)
 	return nil
 }
 
@@ -39,11 +39,15 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Router /roomlist/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
 
+	buildingFilter := c.Param("building")
+
 	nameFilter := c.Query("name")
 	floorFilter := c.Query("floor")
 	aliasFilter := c.Query("alias")
 	roomFilter := c.Query("room")
-	buildingFilter := c.Query("building")
+	if len(buildingFilter) == 0 {
+		buildingFilter = c.Query("building")
+	}
 	campusFilter := c.Query("campus")
 
 	var rooms []entityservice.Room
@@ -86,13 +90,17 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 // @Router /roomlist/room/{name} [get]
 func (l *RoomController) GetRoom(c *gin.Context) {
 	//name := c.Query("name") //mux.Vars(r)["name"]
-	name := c.Param("name")
+	room := c.Param("room")
+	building := c.Param("building")
+	campus := c.Param("campus")
 
-	room, err := l.provider.GetRoom(name)
+
+	r, err := l.provider.GetRoom(room, building, campus)
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, err.Error())
 	} else {
-		c.JSON(http.StatusOK, room)
+		c.JSON(http.StatusOK, r)
 	}
 }
 

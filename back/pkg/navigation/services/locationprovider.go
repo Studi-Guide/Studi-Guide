@@ -7,5 +7,5 @@ import (
 
 type LocationProvider interface {
 	GetAllPathNodes() ([]navigation.PathNode, error)
-	GetLocation(name string) (entityservice.Location, error)
+	GetLocation(name, building, campus string) (entityservice.Location, error)
 }

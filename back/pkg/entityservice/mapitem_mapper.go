@@ -69,10 +69,6 @@ func (r *EntityService) GetAllMapItems() ([]MapItem, error) {
 }
 
 func (r *EntityService) FilterMapItems(floor, buildingFilter, campus string) ([]MapItem, error) {
-	iFloor, err := strconv.Atoi(floor)
-	if err != nil {
-		return nil, err
-	}
 
 	mapQuery := r.client.MapItem.Query()
 
@@ -80,8 +76,17 @@ func (r *EntityService) FilterMapItems(floor, buildingFilter, campus string) ([]
 		mapQuery.Where(mapitem.HasBuildingWith(building.Name(buildingFilter)))
 	}
 
+	if len(floor) > 0 {
+		iFloor, err := strconv.Atoi(floor)
+		if err != nil {
+			return nil, err
+		} else {
+			mapQuery = mapQuery.Where(mapitem.Floor(iFloor))
+		}
+	}
+
 	// TODO Missing items: campus
-	entMapItems, err := mapQuery.Where(mapitem.Floor(iFloor)).
+	entMapItems, err := mapQuery.
 		WithBuilding().
 		WithDoors().
 		WithSections().

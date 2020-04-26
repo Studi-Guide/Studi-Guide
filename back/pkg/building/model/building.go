@@ -1,4 +1,4 @@
-package building
+package model
 
 type Building struct {
 	Id   int
