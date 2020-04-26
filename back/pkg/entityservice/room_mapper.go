@@ -128,13 +128,8 @@ func (r *EntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFi
 		}
 	}
 
-	if floor, err := strconv.Atoi(floorFilter); len(floorFilter) > 0 && err != nil {
-		return nil, err
-	} else {
-		// Just use query when its available
-		if len(floorFilter) > 0 {
-			q = q.Where(room.HasMapitemWith(mapitem.FloorEQ(floor)))
-		}
+	if len(floorFilter) > 0 {
+		q = q.Where(room.HasMapitemWith(mapitem.Floor(floorFilter)))
 	}
 
 	// alias is missing here ...

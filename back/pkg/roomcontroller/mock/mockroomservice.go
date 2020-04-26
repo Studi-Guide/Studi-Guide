@@ -2,7 +2,6 @@ package mock
 
 import (
 	"errors"
-	"strconv"
 	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/navigation"
 )
@@ -15,7 +14,7 @@ func NewRoomMockService() *RoomMockService {
 	var rms RoomMockService
 
 	rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.MapItem{
-		Floor: 1,
+		Floor: "1",
 		},
 		Location: entityservice.Location{PathNode: navigation.PathNode{
 			Id:             0,
@@ -53,7 +52,7 @@ func NewRoomMockService() *RoomMockService {
 
 
 rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.MapItem{
-		Floor: 1,
+		Floor: "1",
 	},
 	Location: entityservice.Location{PathNode:navigation.PathNode{
 		Id:             1,
@@ -116,13 +115,8 @@ func (r *RoomMockService) FilterRooms(floor, name, alias, room, building, campus
 
 	var list []entityservice.Room
 	if len(floor) > 0 {
-		floorInt, err := strconv.Atoi(floor)
-		if err != nil {
-			return nil, err
-		}
-
 		for _, room := range r.RoomList {
-			if room.Location.Floor == floorInt && room.MapItem.Floor == floorInt {
+			if room.Location.Floor == floor && room.MapItem.Floor == floor {
 				list = append(list, room)
 			}
 		}

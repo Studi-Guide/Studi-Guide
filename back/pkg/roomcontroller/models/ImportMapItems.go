@@ -26,7 +26,7 @@ type ImportMapItems struct {
 	Tags        []string
 	Doors       []ImportDoor
 	Color       string
-	Floor 		int
+	Floor 		string
 	Sections    []entityservice.Section
 	Campus      string
 	Building 	string

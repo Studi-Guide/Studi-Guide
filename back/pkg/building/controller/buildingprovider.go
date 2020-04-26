@@ -6,4 +6,5 @@ type BuildingProvider interface {
 	GetAllBuildings() ([]model.Building, error)
 	GetBuilding(name string) (model.Building, error)
 	FilterBuildings(name string) ([]model.Building, error)
+	GetFloorsFromBuilding(building model.Building) ([]string, error)
 }

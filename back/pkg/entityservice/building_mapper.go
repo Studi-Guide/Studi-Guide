@@ -34,6 +34,19 @@ func (r *EntityService) FilterBuildings(name string) ([]model.Building, error) {
 	return r.buildingArrayMapper(buildings)
 }
 
+func (r *EntityService) GetFloorsFromBuilding(building model.Building) ([]string, error) {
+	floors, err := r.client.Building.Query().
+		Where(entbuilding.Name(building.Name)).
+		QueryMapitems().
+		Select("Floor").Strings(r.context)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return floors, nil //r.buildingArrayMapper(buildings)
+}
+
 func (r *EntityService) buildingArrayMapper(entBuildings []*ent.Building) ([]model.Building, error) {
 	var buildings []model.Building
 	for _, b := range(entBuildings) {

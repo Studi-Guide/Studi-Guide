@@ -7,7 +7,6 @@ import (
 	"studi-guide/pkg/building/model"
 	"studi-guide/pkg/location"
 	maps "studi-guide/pkg/map"
-	"studi-guide/pkg/roomcontroller/controllers"
 	"studi-guide/pkg/roomcontroller/models"
 )
 
@@ -32,21 +31,10 @@ func NewBuildingController(router *gin.RouterGroup, buildingProvider BuildingPro
 
 	b.router.GET("", b.GetBuildings)
 	b.router.GET("/:building", b.GetBuildingByName)
-
-	roomRouter := b.router.Group("/:building/rooms")
-	if err := controllers.NewRoomController(roomRouter, b.roomProvider); err != nil {
-		return err
-	}
-
-	locationRouter := b.router.Group("/:building/locations")
-	if err := location.NewLocationController(locationRouter, b.locationProvider); err != nil {
-		return err
-	}
-
-	mapsRouter := b.router.Group("/:building/maps")
-	if err := maps.NewMapController(mapsRouter, b.mapProvider); err != nil {
-		return err
-	}
+	b.router.GET("/:building/floors", b.GetFloorsFromBuilding)
+	b.router.GET("/:building/floors/:floor/rooms", b.GetRoomsFromBuildingFloor)
+	b.router.GET("/:building/floors/:floor/maps", b.GetMapsFromBuildingFloor)
+	b.router.GET("/:building/floors/:floor/locations", b.GetLocationFromBuildingFloor)
 
 	return nil
 }
@@ -103,19 +91,48 @@ func (b BuildingController) GetBuildings(c *gin.Context) {
 // @Param building path string true "name of the building"
 // @Success 200 {array} model.Building
 // @Router /buildings/{building} [get]
-func (b BuildingController) GetBuildingByName(c *gin.Context) {
-	name := c.Param("building")
+func (b BuildingController) GetBuildingByName(context *gin.Context) {
+	name := context.Param("building")
 
 	building, err := b.buildingProvider.GetBuilding(name)
 	if err != nil {
 		fmt.Println("GetBuilding() failed with error", err)
-		c.JSON(http.StatusBadRequest, gin.H{
+		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": err.Error(),
 		})
 		return
 	}
-	c.JSON(http.StatusOK, building)
+	context.JSON(http.StatusOK, building)
+}
+
+func (b BuildingController) GetFloorsFromBuilding(context *gin.Context) {
+	buildingName := context.Param("building")
+	building, _ := b.buildingProvider.GetBuilding(buildingName)
+	floors, err := b.buildingProvider.GetFloorsFromBuilding(building)
+
+	if err != nil {
+		fmt.Println("GetFloorsFromBuilding() failed with error", err)
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	context.JSON(http.StatusOK, floors)
+}
+
+func (b BuildingController) GetRoomsFromBuildingFloor(context *gin.Context) {
+
+}
+
+func (b BuildingController) GetMapsFromBuildingFloor(context *gin.Context) {
+
+}
+
+func (b BuildingController) GetLocationFromBuildingFloor(context *gin.Context) {
+
 }
 
 // from room controller

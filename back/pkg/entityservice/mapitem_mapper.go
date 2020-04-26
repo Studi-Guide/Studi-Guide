@@ -1,7 +1,6 @@
 package entityservice
 
 import (
-	"strconv"
 	"studi-guide/ent"
 	"studi-guide/ent/building"
 	"studi-guide/ent/mapitem"
@@ -77,12 +76,7 @@ func (r *EntityService) FilterMapItems(floor, buildingFilter, campus string) ([]
 	}
 
 	if len(floor) > 0 {
-		iFloor, err := strconv.Atoi(floor)
-		if err != nil {
-			return nil, err
-		} else {
-			mapQuery = mapQuery.Where(mapitem.Floor(iFloor))
-		}
+		mapQuery = mapQuery.Where(mapitem.Floor(floor))
 	}
 
 	// TODO Missing items: campus

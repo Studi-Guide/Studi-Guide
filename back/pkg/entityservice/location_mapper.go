@@ -1,7 +1,6 @@
 package entityservice
 
 import (
-	"strconv"
 	"studi-guide/ent"
 	"studi-guide/ent/location"
 	"studi-guide/ent/tag"
@@ -100,11 +99,7 @@ func (r *EntityService) FilterLocations(name, tagStr, floor, building, campus st
 	}
 
 	if len(floor) > 0 {
-		iFloor, err := strconv.Atoi(floor)
-		if err != nil {
-			return nil, err
-		}
-		query = query.Where(location.FloorEQ(iFloor))
+		query = query.Where(location.FloorContains(floor))
 	}
 
 	if len(building) > 0 {

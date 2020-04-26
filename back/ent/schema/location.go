@@ -17,7 +17,7 @@ func (Location) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("Name").Unique(),
 		field.String("Description").Default(""),
-		field.Int("Floor").Default(0),
+		field.String("Floor").Default("0"),
 	}
 }
 
