@@ -160,3 +160,24 @@ func TestBuildingController_GetFloorsFromBuilding(t *testing.T) {
 	}
 }
 
+func TestBuildingController_GetFloorsFromBuilding_Exception(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/buildings/main/floors", nil)
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	buildingprovider := mock2.NewMockBuildingProvider()
+	locationProvider := location.NewMockLocationProvider(ctrl)
+	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
+	router := gin.Default()
+	mapRouter := router.Group("/buildings")
+	buildingprovider.BuildingList = nil
+	NewBuildingController(mapRouter, buildingprovider, buildingprovider.RoomProvider, locationProvider, mapsProvider)
+	router.ServeHTTP(rec, req)
+
+	if http.StatusBadRequest != rec.Code {
+		t.Error("expected ", http.StatusOK)
+	}
+}
+
