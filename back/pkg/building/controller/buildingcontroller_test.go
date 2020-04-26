@@ -7,8 +7,10 @@ import (
 	"net/http"
 	"net/http/httptest"
 	mock2 "studi-guide/pkg/building/mock"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/location"
 	maps "studi-guide/pkg/map"
+	"studi-guide/pkg/navigation"
 	"testing"
 )
 
@@ -37,7 +39,6 @@ func TestBuildingController_GetAllBuildings(t *testing.T) {
 	}
 }
 
-
 func TestBuildingController_GetBuildings_Error(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/buildings", nil)
@@ -59,8 +60,6 @@ func TestBuildingController_GetBuildings_Error(t *testing.T) {
 		t.Error("expected ", http.StatusOK)
 	}
 }
-
-
 
 func TestBuildingController_GetBuildings_Filter(t *testing.T) {
 	rec := httptest.NewRecorder()
@@ -181,3 +180,47 @@ func TestBuildingController_GetFloorsFromBuilding_Exception(t *testing.T) {
 	}
 }
 
+func TestBuildingController_GetLocationsFromBuildingFloor(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/buildings/main/floors/1/locations", nil)
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	excepectedLocations := []entityservice.Location{{
+		Id:          1,
+		Name:        "test",
+		Description: "",
+		Tags:        nil,
+		Floor:       "1",
+		PathNode:    navigation.PathNode{},
+		},
+		{
+			Id:          2,
+			Name:        "test",
+			Description: "",
+			Tags:        nil,
+			Floor:       "1",
+			PathNode:    navigation.PathNode{},
+		},
+	}
+
+	buildingprovider := mock2.NewMockBuildingProvider()
+	locationProviderMock := location.NewMockLocationProvider(ctrl)
+	locationProviderMock.EXPECT().
+		FilterLocations("", "", "1", "main", "").
+		Return(excepectedLocations, nil)
+
+	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
+	router := gin.Default()
+	mapRouter := router.Group("/buildings")
+	NewBuildingController(mapRouter, buildingprovider, buildingprovider.RoomProvider, locationProviderMock, mapsProvider)
+	router.ServeHTTP(rec, req)
+
+	expected, _ := json.Marshal(excepectedLocations)
+	expected = append(expected, '\n')
+	actual := rec.Body.String()
+	if string(expected) != actual {
+		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
