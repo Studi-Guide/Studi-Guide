@@ -17,7 +17,7 @@ import (
 	maps "studi-guide/pkg/map"
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
-	"studi-guide/pkg/rooom/controllers"
+	"studi-guide/pkg/room/controllers"
 )
 
 type StudiGuideServer struct {

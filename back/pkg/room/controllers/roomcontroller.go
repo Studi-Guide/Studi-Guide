@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strconv"
 	"studi-guide/pkg/entityservice"
-	"studi-guide/pkg/rooom/models"
+	"studi-guide/pkg/room/models"
 )
 
 type RoomController struct {

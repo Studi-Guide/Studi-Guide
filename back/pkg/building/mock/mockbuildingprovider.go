@@ -4,7 +4,7 @@ import (
 	"errors"
 	"strings"
 	"studi-guide/pkg/building/model"
-	"studi-guide/pkg/rooom/mock"
+	"studi-guide/pkg/room/mock"
 )
 
 type MockBuildingProvider struct {

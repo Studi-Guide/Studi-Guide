@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"net/http/httptest"
-	"studi-guide/pkg/rooom/mock"
+	"studi-guide/pkg/room/mock"
 	"testing"
 )
 

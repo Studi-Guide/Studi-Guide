@@ -7,7 +7,7 @@ import (
 	"studi-guide/pkg/building/model"
 	"studi-guide/pkg/location"
 	maps "studi-guide/pkg/map"
-	"studi-guide/pkg/rooom/models"
+	"studi-guide/pkg/room/models"
 )
 
 type BuildingController struct {
