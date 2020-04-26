@@ -80,7 +80,7 @@ func (r *MockBuildingProvider) GetFloorsFromBuilding(building model.Building) ([
 		}
 	}
 
-	return floors, errors.New("no room found")
+	return floors, nil
 }
 
 func contains(s []string, e string) bool {

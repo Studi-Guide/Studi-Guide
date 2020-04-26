@@ -134,5 +134,29 @@ func TestBuildingController_GetBuildings_Filter_Error(t *testing.T) {
 	}
 }
 
+func TestBuildingController_GetFloorsFromBuilding(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/buildings/main/floors", nil)
 
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	buildingprovider := mock2.NewMockBuildingProvider()
+	locationProvider := location.NewMockLocationProvider(ctrl)
+	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
+	router := gin.Default()
+	mapRouter := router.Group("/buildings")
+	NewBuildingController(mapRouter, buildingprovider, buildingprovider.RoomProvider, locationProvider, mapsProvider)
+	router.ServeHTTP(rec, req)
+
+	building,_ := buildingprovider.GetBuilding("main");
+	floors,_ := buildingprovider.GetFloorsFromBuilding(building)
+
+	expected, _ := json.Marshal(floors)
+	expected = append(expected, '\n')
+	actual := rec.Body.String()
+	if string(expected) != actual {
+		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
 
