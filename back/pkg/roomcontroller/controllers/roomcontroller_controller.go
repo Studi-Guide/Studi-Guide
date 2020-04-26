@@ -36,7 +36,7 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Param alias query string false "potential alias of the room"
 // @Param room query string false "rooms that contain the query string in name, alias or description"
 // @Success 200 {array} entityservice.Room
-// @Router /roomlist/ [get]
+// @Router /rooms/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
 
 	buildingFilter := c.Param("building")
@@ -87,7 +87,7 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 // @Produce  json
 // @Param name path string true "get room by name"
 // @Success 200 {object} entityservice.Room
-// @Router /roomlist/room/{name} [get]
+// @Router /rooms/{name} [get]
 func (l *RoomController) GetRoom(c *gin.Context) {
 	//name := c.Query("name") //mux.Vars(r)["name"]
 	room := c.Param("room")
@@ -114,7 +114,7 @@ func (l *RoomController) GetRoom(c *gin.Context) {
 // @Param building path string true "filter rooms by building"
 // @Param floor path int true "filter rooms by floor"
 // @Success 200 {array} entityservice.Room
-// @Router /roomlist/floor/{floor} [get]
+// @Router /rooms/floor/{floor} [get]
 func (l *RoomController) GetRoomListFromFloor(c *gin.Context) {
 	building := c.Param("building")
 	floor := c.Param("floor")
