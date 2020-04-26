@@ -4,6 +4,7 @@ import (
 	"studi-guide/ent"
 	entbuilding "studi-guide/ent/building"
 	"studi-guide/pkg/building/model"
+	"studi-guide/pkg/utils"
 )
 
 func (r *EntityService) GetAllBuildings() ([]model.Building, error) {
@@ -44,7 +45,7 @@ func (r *EntityService) GetFloorsFromBuilding(building model.Building) ([]string
 		return nil, err
 	}
 
-	return floors, nil //r.buildingArrayMapper(buildings)
+	return utils.Distinct(floors), nil
 }
 
 func (r *EntityService) buildingArrayMapper(entBuildings []*ent.Building) ([]model.Building, error) {

@@ -58,7 +58,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.204",
@@ -119,7 +119,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.202",
@@ -180,7 +180,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.200",
@@ -226,7 +226,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "Treppe 1 2.OG",
@@ -259,7 +259,7 @@
     ],
     "doors": [],
     "Color": "#AFAFAF",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "corridor 2",
@@ -348,7 +348,7 @@
     ],
     "doors": [],
     "Color": "#BBB",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "Aufzug 2",
@@ -382,7 +382,7 @@
 
     "doors": [],
     "Color": "#817464",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.208",
@@ -427,7 +427,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "Treppe 2 2.OG",
@@ -462,7 +462,7 @@
     ],
     "doors": [],
     "Color": "#AFAFAF",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "WC Herren 2",
@@ -514,7 +514,7 @@
       }
     ],
     "Color": "#AEA693",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "WC Damen 1",
@@ -565,7 +565,7 @@
       }
     ],
     "Color": "#AEA693",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.210",
@@ -609,7 +609,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.212",
@@ -653,7 +653,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.205",
@@ -697,7 +697,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.214",
@@ -746,7 +746,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.216",
@@ -800,7 +800,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.218",
@@ -850,7 +850,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.220",
@@ -894,7 +894,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.222",
@@ -938,7 +938,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.224",
@@ -982,7 +982,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.226",
@@ -1026,7 +1026,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.228",
@@ -1070,7 +1070,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.207",
@@ -1120,7 +1120,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.209",
@@ -1185,7 +1185,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.211",
@@ -1245,7 +1245,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "WASISTDAS",
@@ -1289,7 +1289,7 @@
       }
     ],
     "Color": "#949494",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "Treppe 3 2.OG",
@@ -1322,7 +1322,7 @@
 
     "doors": [],
     "Color": "#AFAFAF",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "WC Damen 2",
@@ -1373,7 +1373,7 @@
       }
     ],
     "Color": "#AEA693",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "WC Herren 1",
@@ -1424,7 +1424,7 @@
       }
     ],
     "Color": "#AEA693",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "Aufzug 1",
@@ -1457,7 +1457,7 @@
 
     "doors": [],
     "Color": "#817464",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "corridor 1",
@@ -1801,7 +1801,7 @@
     ],
     "doors": [],
     "Color": "#BBB",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "WASISTDAS2",
@@ -1835,7 +1835,7 @@
 
     "doors": [],
     "Color": "#949494",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.234",
@@ -1890,7 +1890,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.236",
@@ -1934,7 +1934,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.238",
@@ -1989,7 +1989,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.213",
@@ -2033,7 +2033,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.215",
@@ -2093,7 +2093,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.217",
@@ -2158,7 +2158,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.219",
@@ -2208,7 +2208,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "Treppe 4 2.OG",
@@ -2242,7 +2242,7 @@
 
     "doors": [],
     "Color": "#AFAFAF",
-    "floor": 2
+    "floor": "2"
   },
   {
     "name": "KA.304",
@@ -2303,7 +2303,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.302",
@@ -2349,7 +2349,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "Treppe 1 3.OG",
@@ -2382,7 +2382,7 @@
     ],
     "doors": [],
     "Color": "#AFAFAF",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.306",
@@ -2428,7 +2428,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "corridor 3-2",
@@ -2502,7 +2502,7 @@
     ],
     "doors": [],
     "Color": "#BBB",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "Aufzug 3-2",
@@ -2536,7 +2536,7 @@
 
     "doors": [],
     "Color": "#817464",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.308",
@@ -2581,7 +2581,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "Treppe 2 3.OG",
@@ -2616,7 +2616,7 @@
     ],
     "doors": [],
     "Color": "#AFAFAF",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "WC Herren 3-2",
@@ -2668,7 +2668,7 @@
       }
     ],
     "Color": "#AEA693",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "WC Damen 3-1",
@@ -2719,7 +2719,7 @@
       }
     ],
     "Color": "#AEA693",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.310",
@@ -2763,7 +2763,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.312",
@@ -2807,7 +2807,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.305",
@@ -2851,7 +2851,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.314",
@@ -2900,7 +2900,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.316",
@@ -2954,7 +2954,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.318",
@@ -3004,7 +3004,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.320",
@@ -3048,7 +3048,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.322",
@@ -3092,7 +3092,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.324",
@@ -3136,7 +3136,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.326",
@@ -3180,7 +3180,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.328",
@@ -3224,7 +3224,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.307",
@@ -3274,7 +3274,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.309",
@@ -3339,7 +3339,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.311",
@@ -3399,7 +3399,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "WASISTDAS3-",
@@ -3443,7 +3443,7 @@
       }
     ],
     "Color": "#949494",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "Treppe 3 3.OG",
@@ -3476,7 +3476,7 @@
 
     "doors": [],
     "Color": "#AFAFAF",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "WC Damen 3-2",
@@ -3527,7 +3527,7 @@
       }
     ],
     "Color": "#AEA693",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "WC Herren 3-1",
@@ -3578,7 +3578,7 @@
       }
     ],
     "Color": "#AEA693",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "Aufzug 3-1",
@@ -3611,7 +3611,7 @@
 
     "doors": [],
     "Color": "#817464",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "corridor 3-1",
@@ -3955,7 +3955,7 @@
     ],
     "doors": [],
     "Color": "#BBB",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "WASISTDAS3-2",
@@ -3989,7 +3989,7 @@
 
     "doors": [],
     "Color": "#949494",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.334",
@@ -4044,7 +4044,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.336",
@@ -4088,7 +4088,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.338",
@@ -4143,7 +4143,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.313",
@@ -4187,7 +4187,7 @@
       }
     ],
     "Color": "#5682a3",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.315",
@@ -4247,7 +4247,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.317",
@@ -4312,7 +4312,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "KA.319",
@@ -4362,7 +4362,7 @@
       }
     ],
     "Color": "#4b7989",
-    "floor": 3
+    "floor": "3"
   },
   {
     "name": "Treppe 4 3.OG",
@@ -4396,6 +4396,6 @@
 
     "doors": [],
     "Color": "#AFAFAF",
-    "floor": 3
+    "floor": "3"
   }
 ]

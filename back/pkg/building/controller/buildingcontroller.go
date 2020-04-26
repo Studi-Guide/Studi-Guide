@@ -34,7 +34,7 @@ func NewBuildingController(router *gin.RouterGroup, buildingProvider BuildingPro
 	b.router.GET("/:building/floors", b.GetFloorsFromBuilding)
 	b.router.GET("/:building/floors/:floor/rooms", b.GetRoomsFromBuildingFloor)
 	b.router.GET("/:building/floors/:floor/maps", b.GetMapsFromBuildingFloor)
-	b.router.GET("/:building/floors/:floor/locations", b.GetLocationFromBuildingFloor)
+	b.router.GET("/:building/floors/:floor/locations", b.GetLocationsFromBuildingFloor)
 
 	return nil
 }
@@ -123,70 +123,80 @@ func (b BuildingController) GetFloorsFromBuilding(context *gin.Context) {
 	context.JSON(http.StatusOK, floors)
 }
 
-func (b BuildingController) GetRoomsFromBuildingFloor(context *gin.Context) {
-
-}
-
-func (b BuildingController) GetMapsFromBuildingFloor(context *gin.Context) {
-
-}
-
-func (b BuildingController) GetLocationFromBuildingFloor(context *gin.Context) {
-
-}
-
-// from room controller
-
-// @Summary Get Rooms of a Building by a certain name
+// @Summary Get Rooms of a Building of a floor
 // @Description Get one building by name
 // @ID get-building-room-name
 // @Accept  json
 // @Produce  json
 // @Tags BuildingController
 // @Param building path string false "name of the building"
-// @Success 200 {array} model.Building
-// @Router /buildings/{building}/rooms [get]
+// @Param floor path string false "name of the floor"
+// @Success 200 {array} entityservice.Room
+// @Router /buildings/{building}/floors/{floor}/rooms [get]
+func (b BuildingController) GetRoomsFromBuildingFloor(context *gin.Context) {
+	building := context.Param("building")
+	floor := context.Param("floor")
+	rooms, err := b.roomProvider.FilterRooms(floor, "", "", "", building, "")
+	if err != nil {
+		fmt.Println("GetRoomsFromBuildingFloor() failed with error", err)
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+		return
+	}
 
-// @Summary Get Rooms of a Building by a certain name
+	context.JSON(http.StatusOK, rooms)
+}
+
+// @Summary Get Rooms of a Building of a floor
 // @Description Get one building by name
 // @ID get-building-room-name
 // @Accept  json
 // @Produce  json
 // @Tags BuildingController
-// @Param building path string true "name of the building"
-// @Param room path string true "name of the room"
-// @Success 200 {array} entityservice.Room
-// @Router /buildings/{building}/rooms/{room} [get]
+// @Param building path string false "name of the building"
+// @Param floor path string false "name of the floor"
+// @Success 200 {array} entityservice.MapItem
+// @Router /buildings/{building}/floors/{floor}/maps [get]
+func (b BuildingController) GetMapsFromBuildingFloor(context *gin.Context) {
+	building := context.Param("building")
+	floor := context.Param("floor")
+	maps, err := b.mapProvider.FilterMapItems(floor, building, "")
+	if err != nil {
+		fmt.Println("GetMapsFromBuildingFloor() failed with error", err)
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+		return
+	}
 
-/*
- /buildings
- /buildings/:name
+	context.JSON(http.StatusOK, maps)
+}
 
- /buildings/:name/rooms
- /buildings/:name/locations
- /buildings/:name/mapitems
- /buildings/:name/floors
+// @Summary Get Rooms of a Building of a floor
+// @Description Get one building by name
+// @ID get-building-room-name
+// @Accept  json
+// @Produce  json
+// @Tags BuildingController
+// @Param building path string false "name of the building"
+// @Param floor path string false "name of the floor"
+// @Success 200 {array} entityservice.Location
+// @Router /buildings/{building}/floors/{floor}/locations [get]
+func (b BuildingController) GetLocationsFromBuildingFloor(context *gin.Context) {
+	building := context.Param("building")
+	floor := context.Param("floor")
+	maps, err := b.mapProvider.FilterMapItems(floor, building, "")
+	if err != nil {
+		fmt.Println("GetMapsFromBuildingFloor() failed with error", err)
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+		return
+	}
 
- /buildings/:name/rooms/:name
- /buildings/:name/locations/:name
- /buildings/:name/mapitems/:id
- /buildings/:name/floors/
-
- /buildings?filter=value
- /buildings/:name/rooms?filter=value
- /buildings/:name/locations?filter=value
- /buildings/:name/mapitems?filter=value
-
- /locations
- /rooms
- /mapitems
-
- /locations/:name
- /rooms/:name
- /mapitems/:name
-
- /locations?filter=value
- /rooms?filter?value
- /mapitems?filter=value
-
-*/
+	context.JSON(http.StatusOK, maps)
+}
