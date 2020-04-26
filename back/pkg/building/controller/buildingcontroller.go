@@ -39,9 +39,10 @@ func NewBuildingController(router *gin.RouterGroup, buildingProvider BuildingPro
 	return nil
 }
 
-// GetLocations godoc
-// @Summary Get All Buildings
-// @Description Gets buildings by possible filters
+// GetBuildings godoc
+// @Summary Get Buildings by name
+// @ID get-buildings
+// @Description Gets a list of buildings filtered by name
 // @Accept  json
 // @Produce  json
 // @Tags BuildingController
@@ -106,6 +107,16 @@ func (b BuildingController) GetBuildingByName(context *gin.Context) {
 	context.JSON(http.StatusOK, building)
 }
 
+// GetFloorsFromBuilding godoc
+// @Summary Gets all available floors for a certain building
+// @Description return a list of strings representing each floor of the requested building
+// @ID get-floor-of-building
+// @Accept  json
+// @Produce  json
+// @Tags BuildingController
+// @Param building path string true "name of the building"
+// @Success 200 {array} model.Building
+// @Router /buildings/{building}/floors [get]
 func (b BuildingController) GetFloorsFromBuilding(context *gin.Context) {
 	buildingName := context.Param("building")
 	building, _ := b.buildingProvider.GetBuilding(buildingName)
@@ -134,7 +145,7 @@ func (b BuildingController) GetFloorsFromBuilding(context *gin.Context) {
 // @Success 200 {array} entityservice.Room
 // @Router /buildings/{building}/floors/{floor}/rooms [get]
 func (b BuildingController) GetRoomsFromBuildingFloor(context *gin.Context) {
-	building := context.Param("building")
+ 	building := context.Param("building")
 	floor := context.Param("floor")
 	rooms, err := b.roomProvider.FilterRooms(floor, "", "", "", building, "")
 	if err != nil {
@@ -188,7 +199,7 @@ func (b BuildingController) GetMapsFromBuildingFloor(context *gin.Context) {
 func (b BuildingController) GetLocationsFromBuildingFloor(context *gin.Context) {
 	building := context.Param("building")
 	floor := context.Param("floor")
-	maps, err := b.mapProvider.FilterMapItems(floor, building, "")
+	location, err := b.locationProvider.FilterLocations("", "", floor, building, "")
 	if err != nil {
 		fmt.Println("GetMapsFromBuildingFloor() failed with error", err)
 		context.JSON(http.StatusBadRequest, gin.H{
@@ -198,5 +209,5 @@ func (b BuildingController) GetLocationsFromBuildingFloor(context *gin.Context) 
 		return
 	}
 
-	context.JSON(http.StatusOK, maps)
+	context.JSON(http.StatusOK, location)
 }
