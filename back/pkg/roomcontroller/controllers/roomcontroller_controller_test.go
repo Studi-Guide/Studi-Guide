@@ -11,11 +11,11 @@ import (
 
 func TestRoomlistIndex(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/", nil)
+	req, _ := http.NewRequest("GET", "/rooms", nil)
 
 	provider := mock.NewRoomMockService()
 	router := gin.Default()
-	roomRouter := router.Group("/roomlist")
+	roomRouter := router.Group("/rooms")
 	NewRoomController(roomRouter, provider)
 
 	router.ServeHTTP(rec, req)
@@ -29,11 +29,11 @@ func TestRoomlistIndex(t *testing.T) {
 
 func TestRoomlistIndex_Negativ(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/", nil)
+	req, _ := http.NewRequest("GET", "/rooms", nil)
 
 	provider := mock.NewRoomMockService()
 	router := gin.Default()
-	roomRouter := router.Group("/roomlist")
+	roomRouter := router.Group("/rooms")
 	NewRoomController(roomRouter, provider)
 
 	provider.RoomList = nil
@@ -46,11 +46,11 @@ func TestRoomlistIndex_Negativ(t *testing.T) {
 
 func TestGetRoom(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/room/RoomN01", nil)
+	req, _ := http.NewRequest("GET", "/rooms/RoomN01", nil)
 
 	provider := mock.NewRoomMockService()
 	router := gin.Default()
-	roomRouter := router.Group("/roomlist")
+	roomRouter := router.Group("/rooms")
 	NewRoomController(roomRouter, provider)
 
 	router.ServeHTTP(rec, req)
@@ -64,11 +64,11 @@ func TestGetRoom(t *testing.T) {
 
 func TestGetRoomNotExists(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/room/abcdefg", nil)
+	req, _ := http.NewRequest("GET", "/rooms/abcdefg", nil)
 
 	provider := mock.NewRoomMockService()
 	router := gin.Default()
-	roomRouter := router.Group("/roomlist")
+	roomRouter := router.Group("/rooms")
 	NewRoomController(roomRouter, provider)
 
 	router.ServeHTTP(rec, req)
@@ -81,11 +81,11 @@ func TestGetRoomNotExists(t *testing.T) {
 
 func TestRoomController_GetRoomsFromFloor_Filter(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/?floor=1", nil)
+	req, _ := http.NewRequest("GET", "/rooms?floor=1", nil)
 
 	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
-	mapRouter := router.Group("/roomlist")
+	mapRouter := router.Group("/rooms")
 	NewRoomController(mapRouter, provider)
 	router.ServeHTTP(rec, req)
 
@@ -99,64 +99,64 @@ func TestRoomController_GetRoomsFromFloor_Filter(t *testing.T) {
 	}
 }
 
-func TestRoomController_GetRoomsFromFloor(t *testing.T) {
-	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/building/main/floor/1", nil)
-
-	provider :=  mock.NewRoomMockService()
-	router := gin.Default()
-	mapRouter := router.Group("/roomlist")
-	NewRoomController(mapRouter, provider)
-	router.ServeHTTP(rec, req)
-
-	rooms,_ := provider.FilterRooms("1", "", "", "", "main", "")
-
-	expected, _ := json.Marshal(rooms)
-	expected = append(expected, '\n')
-	actual := rec.Body.String()
-	if string(expected) != actual {
-		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
-	}
-}
-
-func TestRoomController_GetRoomsFromFloor_BadInteger(t *testing.T) {
-	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/building/main/floor/bla", nil)
-
-	provider :=  mock.NewRoomMockService()
-	router := gin.Default()
-	mapRouter := router.Group("/roomlist")
-	NewRoomController(mapRouter, provider)
-	router.ServeHTTP(rec, req)
-
-	if http.StatusBadRequest != rec.Code {
-		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
-	}
-}
-
-func TestRoomController_GetRoomFromFloor_EmptyRoomlist(t *testing.T) {
-	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/building/main/floor/1", nil)
-
-	provider :=  mock.NewRoomMockService()
-	router := gin.Default()
-	mapRouter := router.Group("/roomlist")
-	NewRoomController(mapRouter, provider)
-	provider.RoomList = nil
-	router.ServeHTTP(rec, req)
-
-	if http.StatusBadRequest != rec.Code {
-		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
-	}
-}
+//func TestRoomController_GetRoomsFromFloor(t *testing.T) {
+//	rec := httptest.NewRecorder()
+//	req, _ := http.NewRequest("GET", "/rooms/building/main/floor/1", nil)
+//
+//	provider :=  mock.NewRoomMockService()
+//	router := gin.Default()
+//	mapRouter := router.Group("/rooms")
+//	NewRoomController(mapRouter, provider)
+//	router.ServeHTTP(rec, req)
+//
+//	rooms,_ := provider.FilterRooms("1", "", "", "", "main", "")
+//
+//	expected, _ := json.Marshal(rooms)
+//	expected = append(expected, '\n')
+//	actual := rec.Body.String()
+//	if string(expected) != actual {
+//		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+//	}
+//}
+//
+//func TestRoomController_GetRoomsFromFloor_BadInteger(t *testing.T) {
+//	rec := httptest.NewRecorder()
+//	req, _ := http.NewRequest("GET", "/rooms/building/main/floor/bla", nil)
+//
+//	provider :=  mock.NewRoomMockService()
+//	router := gin.Default()
+//	mapRouter := router.Group("/rooms")
+//	NewRoomController(mapRouter, provider)
+//	router.ServeHTTP(rec, req)
+//
+//	if http.StatusBadRequest != rec.Code {
+//		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
+//	}
+//}
+//
+//func TestRoomController_GetRoomFromFloor_EmptyRoomlist(t *testing.T) {
+//	rec := httptest.NewRecorder()
+//	req, _ := http.NewRequest("GET", "/rooms/building/main/floor/1", nil)
+//
+//	provider :=  mock.NewRoomMockService()
+//	router := gin.Default()
+//	mapRouter := router.Group("/rooms")
+//	NewRoomController(mapRouter, provider)
+//	provider.RoomList = nil
+//	router.ServeHTTP(rec, req)
+//
+//	if http.StatusBadRequest != rec.Code {
+//		t.Errorf("expected = %v; actual = %v", http.StatusBadRequest, rec.Code)
+//	}
+//}
 
 func TestRoomController_GetRoomList_FilterFloor(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/?floor=0", nil)
+	req, _ := http.NewRequest("GET", "/rooms?floor=0", nil)
 
 	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
-	mapRouter := router.Group("/roomlist")
+	mapRouter := router.Group("/rooms")
 	NewRoomController(mapRouter, provider)
 	provider.RoomList = nil
 	router.ServeHTTP(rec, req)
@@ -168,11 +168,11 @@ func TestRoomController_GetRoomList_FilterFloor(t *testing.T) {
 
 func TestRoomController_GetRoomList_BadFilterFloor(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/?floor=first", nil)
+	req, _ := http.NewRequest("GET", "/rooms?floor=first", nil)
 
 	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
-	mapRouter := router.Group("/roomlist")
+	mapRouter := router.Group("/rooms")
 	NewRoomController(mapRouter, provider)
 	provider.RoomList = nil
 	router.ServeHTTP(rec, req)
@@ -184,11 +184,11 @@ func TestRoomController_GetRoomList_BadFilterFloor(t *testing.T) {
 
 func TestRoomController_GetAllRoom(t *testing.T) {
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/roomlist/", nil)
+	req, _ := http.NewRequest("GET", "/rooms", nil)
 
 	provider :=  mock.NewRoomMockService()
 	router := gin.Default()
-	mapRouter := router.Group("/roomlist")
+	mapRouter := router.Group("/rooms")
 	NewRoomController(mapRouter, provider)
 	router.ServeHTTP(rec, req)
 

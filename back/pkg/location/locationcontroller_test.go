@@ -28,11 +28,11 @@ func TestLocationController_GetLocations(t *testing.T) {
 	mock.EXPECT().GetAllLocations().Return(expectLocations, nil)
 
 	router := gin.Default()
-	locationRouter := router.Group("/location")
+	locationRouter := router.Group("/locations")
 	_ = NewLocationController(locationRouter, mock)
 
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/location/", nil)
+	req, _ := http.NewRequest("GET", "/locations", nil)
 
 	router.ServeHTTP(rec, req)
 
@@ -64,11 +64,11 @@ func TestLocationController_GetLocations2(t *testing.T) {
 	mock.EXPECT().FilterLocations("abc", "taaaag", "1", "KA", "KA").Return(expectLocations, nil)
 
 	router := gin.Default()
-	locationRouter := router.Group("/location")
+	locationRouter := router.Group("/locations")
 	_ = NewLocationController(locationRouter, mock)
 
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/location/?name=abc&tag=taaaag&floor=1&building=KA&campus=KA&", nil)
+	req, _ := http.NewRequest("GET", "/locations?name=abc&tag=taaaag&floor=1&building=KA&campus=KA&", nil)
 
 	router.ServeHTTP(rec, req)
 
@@ -91,11 +91,11 @@ func TestLocationController_GetLocations3(t *testing.T) {
 	mock.EXPECT().FilterLocations("abc", "taaaag", "1", "KA", "KA").Return(nil, errors.New("error text"))
 
 	router := gin.Default()
-	locationRouter := router.Group("/location")
+	locationRouter := router.Group("/locations")
 	_ = NewLocationController(locationRouter, mock)
 
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/location/?name=abc&tag=taaaag&floor=1&building=KA&campus=KA&", nil)
+	req, _ := http.NewRequest("GET", "/locations?name=abc&tag=taaaag&floor=1&building=KA&campus=KA&", nil)
 
 	router.ServeHTTP(rec, req)
 
@@ -117,14 +117,14 @@ func TestLocationController_GetLocationByName(t *testing.T) {
 	}
 
 	mock := NewMockLocationProvider(ctrl)
-	mock.EXPECT().GetLocation("bla").Return(expectLocation, nil)
+	mock.EXPECT().GetLocation("bla", "", "").Return(expectLocation, nil)
 
 	router := gin.Default()
-	locationRouter := router.Group("/location")
+	locationRouter := router.Group("/locations")
 	_ = NewLocationController(locationRouter, mock)
 
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/location/name/bla", nil)
+	req, _ := http.NewRequest("GET", "/locations/bla", nil)
 
 	router.ServeHTTP(rec, req)
 
@@ -144,14 +144,14 @@ func TestLocationController_GetLocationByName2(t *testing.T) {
 	defer ctrl.Finish()
 
 	mock := NewMockLocationProvider(ctrl)
-	mock.EXPECT().GetLocation("bla").Return(entityservice.Location{}, errors.New("error text"))
+	mock.EXPECT().GetLocation("bla", "", "").Return(entityservice.Location{}, errors.New("error text"))
 
 	router := gin.Default()
-	locationRouter := router.Group("/location")
+	locationRouter := router.Group("/locations")
 	_ = NewLocationController(locationRouter, mock)
 
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/location/name/bla", nil)
+	req, _ := http.NewRequest("GET", "/locations/bla", nil)
 
 	router.ServeHTTP(rec, req)
 

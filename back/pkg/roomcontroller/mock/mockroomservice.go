@@ -75,7 +75,7 @@ func (r *RoomMockService) GetAllRooms() ([]entityservice.Room, error) {
 	return r.RoomList, nil
 }
 
-func (r *RoomMockService) GetRoom(name string) (entityservice.Room, error) {
+func (r *RoomMockService) GetRoom(name, building, campus string) (entityservice.Room, error) {
 
 	for _, room := range r.RoomList {
 		if room.Name == name {

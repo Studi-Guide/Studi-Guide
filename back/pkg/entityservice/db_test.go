@@ -206,7 +206,7 @@ func TestGetRoomAllRooms(t *testing.T) {
 func TestGetRoom(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	room, err := dbService.GetRoom(strconv.Itoa(2))
+	room, err := dbService.GetRoom(strconv.Itoa(2), "", "")
 	if err != nil {
 		t.Error(err)
 	}
@@ -216,7 +216,7 @@ func TestGetRoom(t *testing.T) {
 		t.Error("expected: ", testRooms[1], "; got: ", room)
 	}
 
-	room, err = dbService.GetRoom("4")
+	room, err = dbService.GetRoom("4", "", "")
 	if err == nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
@@ -562,7 +562,7 @@ func TestEntityService_FilterLocations(t *testing.T) {
 func TestEntityService_GetLocation(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	getLocation, err := dbService.GetLocation("1")
+	getLocation, err := dbService.GetLocation("1", "", "")
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
