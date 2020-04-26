@@ -93,3 +93,44 @@ func (r *EntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, erro
 		Save(r.context)
 }
 
+func (r *EntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
+	nodesPrt, err := r.client.PathNode.Query().WithLinkedFrom().WithLinkedTo().All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+	var nodes []navigation.PathNode
+	var nodesCache []*navigation.PathNode
+	for _, nodePtr := range nodesPrt {
+
+		node := *r.pathNodeMapper(nodePtr, nodesCache, true)
+		nodes = append(nodes, node)
+		nodesCache = append(nodesCache, &node)
+	}
+
+	return nodes, nil
+}
+
+func (r *EntityService) linkPathNode(pathNode *navigation.PathNode) error {
+
+	var connectedIDs []int
+
+	//Get database IDs
+	for _, connectedNode := range pathNode.ConnectedNodes {
+
+		entityConnectedNode, err := r.client.PathNode.Get(r.context, connectedNode.Id)
+		if err != nil {
+			return err
+		}
+
+		connectedIDs = append(connectedIDs, entityConnectedNode.ID)
+	}
+
+	entityNode, _ := r.client.PathNode.Get(r.context, pathNode.Id)
+
+	update := entityNode.Update()
+	update.AddLinkedToIDs(connectedIDs...)
+	entityNode, err := update.Save(r.context)
+	return err
+}
+

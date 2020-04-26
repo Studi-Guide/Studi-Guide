@@ -3,10 +3,10 @@ package entityservice
 import (
 	"studi-guide/ent"
 	entbuilding "studi-guide/ent/building"
-	"studi-guide/pkg/building"
+	"studi-guide/pkg/building/model"
 )
 
-func (r *EntityService) GetAllBuildings() ([]building.Building, error) {
+func (r *EntityService) GetAllBuildings() ([]model.Building, error) {
 	buildings, err := r.client.Building.Query().All(r.context)
 	if err != nil {
 		return nil, err
@@ -14,19 +14,19 @@ func (r *EntityService) GetAllBuildings() ([]building.Building, error) {
 	return r.buildingArrayMapper(buildings)
 }
 
-func (r *EntityService) GetBuilding(name string) (building.Building, error) {
+func (r *EntityService) GetBuilding(name string) (model.Building, error) {
 	b, err := r.client.Building.Query().Where(entbuilding.NameEQ(name)).First(r.context)
 	if err != nil {
-		return building.Building{}, err
+		return model.Building{}, err
 	}
 	bding, err := r.buildingMapper(b)
 	if err != nil {
-		return building.Building{}, err
+		return model.Building{}, err
 	}
 	return *bding, nil
 }
 
-func (r *EntityService) FilterBuildings(name string) ([]building.Building, error) {
+func (r *EntityService) FilterBuildings(name string) ([]model.Building, error) {
 	buildings, err := r.client.Building.Query().Where(entbuilding.NameContains(name)).All(r.context)
 	if err != nil {
 		return nil, err
@@ -34,8 +34,8 @@ func (r *EntityService) FilterBuildings(name string) ([]building.Building, error
 	return r.buildingArrayMapper(buildings)
 }
 
-func (r *EntityService) buildingArrayMapper(entBuildings []*ent.Building) ([]building.Building, error) {
-	var buildings []building.Building
+func (r *EntityService) buildingArrayMapper(entBuildings []*ent.Building) ([]model.Building, error) {
+	var buildings []model.Building
 	for _, b := range(entBuildings) {
 		bding, err := r.buildingMapper(b)
 		if err != nil {
@@ -46,14 +46,14 @@ func (r *EntityService) buildingArrayMapper(entBuildings []*ent.Building) ([]bui
 	return buildings, nil
 }
 
-func (r *EntityService) buildingMapper(entBuilding *ent.Building) (*building.Building, error) {
-	return &building.Building{
+func (r *EntityService) buildingMapper(entBuilding *ent.Building) (*model.Building, error) {
+	return &model.Building{
 		Id:   entBuilding.ID,
 		Name: entBuilding.Name,
 	}, nil
 }
 
-func (r *EntityService) mapBuildingArray(buildings []building.Building) ([]*ent.Building, error) {
+func (r *EntityService) mapBuildingArray(buildings []model.Building) ([]*ent.Building, error) {
 	var entBuildings []*ent.Building
 	for _, b := range buildings {
 		entBuilding, err := r.mapBuilding(b.Name)
