@@ -2,6 +2,8 @@ package entityservice
 
 import (
 	"studi-guide/ent"
+	"studi-guide/ent/building"
+	"studi-guide/ent/mapitem"
 	"studi-guide/pkg/navigation"
 )
 
@@ -49,3 +51,44 @@ func (r *EntityService) mapItemMapper(entMapItem *ent.MapItem) *MapItem {
 
 	return &m
 }
+
+func (r *EntityService) GetAllMapItems() ([]MapItem, error) {
+	entMapItems, err := r.client.MapItem.Query().
+		WithPathNodes().
+		WithColor().
+		WithBuilding().
+		WithDoors().
+		WithSections().
+		All(r.context)
+	if err != nil {
+		return nil, err
+	}
+
+	return r.mapItemArrayMapper(entMapItems), nil
+}
+
+func (r *EntityService) FilterMapItems(floor, buildingFilter, campus string) ([]MapItem, error) {
+
+	mapQuery := r.client.MapItem.Query()
+
+	if len(buildingFilter) > 0 {
+		mapQuery.Where(mapitem.HasBuildingWith(building.Name(buildingFilter)))
+	}
+
+	if len(floor) > 0 {
+		mapQuery = mapQuery.Where(mapitem.Floor(floor))
+	}
+
+	// TODO Missing items: campus
+	entMapItems, err := mapQuery.
+		WithBuilding().
+		WithDoors().
+		WithSections().
+		WithPathNodes().
+		All(r.context)
+	if err != nil {
+		return nil, err
+	}
+	return r.mapItemArrayMapper(entMapItems), nil
+}
+

@@ -14,7 +14,7 @@ type MapController struct {
 
 func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) error {
 	r := MapController{router: router, provider: provider}
-	r.router.GET("/", r.GetMapItems)
+	r.router.GET("", r.GetMapItems)
 	r.router.GET("/floor/:floor", r.GetMapItemsFromFloor)
 	return nil
 }
@@ -29,12 +29,17 @@ func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) erro
 // @Param campus query string false "map item is linked to a certain campus"
 // @Param building query string false "map item is linked to a building"
 // @Success 200 {array} entityservice.MapItem
-// @Router /map [get]
+// @Router /maps [get]
 func (l MapController) GetMapItems(c *gin.Context) {
+	building := c.Param("building")
+
 	floor := c.Query("floor")
 	campus := c.Query("campus")
-	building := c.Query("building")
+	if len(building) == 0 {
+		building = c.Query("building")
+	}
 
+	// TODO implementation of correct building, campus and floor query
 	//TODO include these filters
 	coordinate := c.Query("coordinate")
 	coordinateDelta := c.Query("coordinate-delta")
@@ -80,7 +85,7 @@ func (l MapController) GetMapItems(c *gin.Context) {
 // @Tags MapController
 // @Param floor path int true "filter map items by floor"
 // @Success 200 {array} entityservice.MapItem
-// @Router /map/floor/{floor} [get]
+// @Router /maps/{floor} [get]
 func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
 	floor := c.Param("floor") //mux.Vars(r)["name"]
 

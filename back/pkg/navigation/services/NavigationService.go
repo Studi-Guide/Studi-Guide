@@ -23,12 +23,12 @@ func NewNavigationService(routeCalculator navigation.RouteCalculator, locationPr
 
 func (n *NavigationService) CalculateFromString(startLocationName string, endLocationName string) (*navigation.NavigationRoute, error) {
 
-	startLocation, err := n.locationProvider.GetLocation(startLocationName)
+	startLocation, err := n.locationProvider.GetLocation(startLocationName, "", "")
 	if err != nil {
 		return nil, err
 	}
 
-	endLocation, err := n.locationProvider.GetLocation(endLocationName)
+	endLocation, err := n.locationProvider.GetLocation(endLocationName, "", "")
 	if err != nil {
 		return nil, err
 	}

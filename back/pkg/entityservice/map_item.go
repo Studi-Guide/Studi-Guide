@@ -5,11 +5,11 @@ import (
 )
 
 type MapItem struct {
-	Doors       []Door
-	Color       string
-	Floor 		int
-	Sections    []Section
-	Campus      string
-	Building 	string
-	PathNodes   []*navigation.PathNode
+	Doors     []Door
+	Color     string
+	Sections  []Section
+	Campus    string
+	Building  string
+	PathNodes []*navigation.PathNode
+	Floor     string
 }

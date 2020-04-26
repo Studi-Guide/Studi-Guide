@@ -14,7 +14,7 @@ type MapItem struct {
 // Fields of the Room.
 func (MapItem) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("Floor").Default(0),
+		field.String("Floor").Default("0"),
 	}
 }
 

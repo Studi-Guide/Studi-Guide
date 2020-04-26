@@ -10,7 +10,7 @@ import (
 	"studi-guide/pkg/location"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/navigation/services"
-	"studi-guide/pkg/roomcontroller/models"
+	"studi-guide/pkg/room/models"
 
 	"go.uber.org/dig"
 )

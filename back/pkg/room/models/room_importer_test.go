@@ -2,7 +2,7 @@ package models
 
 import (
 	"os"
-	"studi-guide/pkg/roomcontroller/mock"
+	"studi-guide/pkg/room/mock"
 	"testing"
 )
 
