@@ -15,6 +15,7 @@ func NewRoomMockService() *RoomMockService {
 
 	rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.MapItem{
 		Floor: "1",
+		Building: "main",
 		},
 		Location: entityservice.Location{PathNode: navigation.PathNode{
 			Id:             0,
@@ -28,6 +29,7 @@ func NewRoomMockService() *RoomMockService {
 		}})
 
 	rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.MapItem{
+		Building: "main",
 		Floor: "2",
 	},
 	Location: entityservice.Location{PathNode:navigation.PathNode{
@@ -42,6 +44,7 @@ func NewRoomMockService() *RoomMockService {
 	}})
 
 	rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.MapItem{
+		Building: "main",
 		Floor: "1",
 	},
 		Location: entityservice.Location{PathNode:navigation.PathNode{
@@ -58,6 +61,7 @@ func NewRoomMockService() *RoomMockService {
 
 rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.MapItem{
 		Floor: "2",
+		Building: "main",
 	},
 	Location: entityservice.Location{PathNode:navigation.PathNode{
 		Id:             1,
