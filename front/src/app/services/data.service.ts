@@ -26,7 +26,7 @@ export class DataService {
     }
 
     get_locations(building:string, floor:string) {
-        return this.httpClient.get(this.baseUrl + 'buildings/'+ building +'/floors/' + floor + '/locations');
+        return this.httpClient.get(this.baseUrl + '/buildings/'+ building +'/floors/' + floor + '/locations');
     }
 
 }
