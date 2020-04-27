@@ -22,7 +22,7 @@ export class DataService {
     }
 
     get_location_search(name:string) {
-        return this.httpClient.get(this.baseUrl + '/location/ ' + name );
+        return this.httpClient.get(this.baseUrl + '/locations/' + name );
     }
 
     get_locations(building:string, floor:string) {
