@@ -84,6 +84,7 @@ func (r *EntityService) FilterMapItems(floor, buildingFilter, campus string) ([]
 		WithBuilding().
 		WithDoors().
 		WithSections().
+		WithColor().
 		WithPathNodes().
 		All(r.context)
 	if err != nil {
