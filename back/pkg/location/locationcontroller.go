@@ -20,7 +20,7 @@ func NewLocationController(router *gin.RouterGroup, provider LocationProvider) e
 }
 
 // GetLocations godoc
-// @Summary Get All Locations
+// @Summary Query locations
 // @Description Gets locations by possible filters
 // @Accept  json
 // @Produce  json

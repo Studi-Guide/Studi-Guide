@@ -71,8 +71,8 @@ export class NavigationPage {
   private fetchFloorByLocation(room: string) {
     this.progressIsVisible = true;
     this.dataService.get_location_search(room).subscribe((res : Location)=>{
-      this.fetchFloorByItsNumber(res.Floor);
-      this.fetchLocations(res.Floor);
+      this.fetchFloorByItsNumber(res.Building, res.Floor);
+      this.fetchLocations(res.Building, res.Floor);
     });
   }
 
@@ -88,9 +88,9 @@ export class NavigationPage {
     }
   }
 
-  private fetchFloorByItsNumber(floor:any) {
+  private fetchFloorByItsNumber(building:string, floor:string) {
     this.progressIsVisible = true;
-    this.dataService.get_map_floor(floor).subscribe((res : MapItem[])=>{
+    this.dataService.get_map_floor(building, floor).subscribe((res : MapItem[])=>{
       this.floor = new FloorMap(res);
       this.displayFloor();
     });
@@ -99,7 +99,7 @@ export class NavigationPage {
   private fetchRouteToDisplay(start:string, end:string) {
     this.progressIsVisible = true;
     this.dataService.get_location_search(start).subscribe((res1 : Location)=>{
-      this.dataService.get_map_floor(res1.Floor).subscribe((res2 : MapItem[])=>{
+      this.dataService.get_map_floor(res1.Building, res1.Floor).subscribe((res2 : MapItem[])=>{
         this.floor = new FloorMap(res2);
         this.dataService.get_route(start, end).subscribe((res3 : ReceivedRoute)=>{
           this.route = new NaviRoute(res3);
@@ -120,8 +120,8 @@ export class NavigationPage {
     });
   }
 
-  private fetchLocations(floor:any) {
-    this.dataService.get_locations(floor).subscribe((res : Location[])=>{
+  private fetchLocations(building:string, floor:string) {
+    this.dataService.get_locations(building, floor).subscribe((res : Location[])=>{
       this.locations = [];
       for(const l of res) {
         this.locations.push({name: l.Name, x: l.PathNode.Coordinate.X, y: l.PathNode.Coordinate.Y})

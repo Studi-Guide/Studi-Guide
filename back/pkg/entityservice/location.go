@@ -8,5 +8,6 @@ type Location struct {
 	Description string
 	Tags        []string
 	Floor       string
+	Building 	string
 	PathNode    navigation.PathNode
 }

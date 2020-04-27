@@ -13,8 +13,8 @@ export class DataService {
         this.baseUrl = env.serverUrl;
     }
 
-    get_map_floor(floor:any){
-        return this.httpClient.get(this.baseUrl + '/map/floor/' + floor);
+    get_map_floor(building:string, floor:string){
+        return this.httpClient.get(this.baseUrl + '/buildings/' + building + '/floors/'+ floor + '/maps');
     }
 
     get_route(start:string, end:string){
@@ -22,11 +22,11 @@ export class DataService {
     }
 
     get_location_search(name:string) {
-        return this.httpClient.get(this.baseUrl + '/location/name/' + name );
+        return this.httpClient.get(this.baseUrl + '/location/ ' + name );
     }
 
-    get_locations(floor:any) {
-        return this.httpClient.get(this.baseUrl + '/location/?floor=' + floor);
+    get_locations(building:string, floor:string) {
+        return this.httpClient.get(this.baseUrl + 'buildings/'+ building +'/floors/' + floor + '/locations');
     }
 
 }

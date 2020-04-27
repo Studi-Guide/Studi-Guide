@@ -26,35 +26,20 @@ func (r *EntityService) roomMapper(entRoom *ent.Room) *Room {
 
 	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).
 		WithMapitem(func(q *ent.MapItemQuery) {
-			q.WithPathNodes().WithColor().WithDoors(func(p *ent.DoorQuery) { p.WithPathNode().WithSection() }).WithSections()
+			q.WithPathNodes().WithColor().WithBuilding().WithDoors(func(p *ent.DoorQuery) { p.WithPathNode().WithSection() }).WithSections()
 		}).
 		WithLocation(func(q *ent.LocationQuery) {
-			q.WithPathnode().WithTags()
+			q.WithPathnode().WithTags().WithBuilding()
 		}).
 		First(r.context)
 	if err != nil || entRoom == nil {
 		return nil
 	}
 
-	entMapItem, err := r.client.Room.QueryMapitem(entRoom).WithPathNodes().
-		WithColor().
-		WithDoors().
-		WithBuilding().
-		WithSections().
-		First(r.context)
-	if err != nil || entMapItem == nil {
-		return nil
-	}
-
-	entLocation, err := r.client.Room.QueryLocation(entRoom).WithTags().WithPathnode().First(r.context)
-	if err != nil || entLocation == nil {
-		return nil
-	}
-
 	rm := Room{
 		Id:       entRoom.ID,
-		MapItem:  *r.mapItemMapper(entMapItem),
-		Location: *r.locationMapper(entLocation),
+		MapItem:  *r.mapItemMapper(entRoom.Edges.Mapitem),
+		Location: *r.locationMapper(entRoom.Edges.Location),
 	}
 
 	return &rm
@@ -156,7 +141,7 @@ func (r *EntityService) storeRooms(rooms []Room) error {
 			continue
 		}
 
-		entBuilding, err := r.mapBuilding(rm.Building)
+		entBuilding, err := r.mapBuilding(rm.Location.Building)
 		if err != nil {
 			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.PathNode.Id))
 		}
@@ -209,6 +194,7 @@ func (r *EntityService) storeRooms(rooms []Room) error {
 			SetName(rm.Location.Name).
 			SetDescription(rm.Location.Description).
 			SetPathnode(entNode).
+			SetBuilding(entBuilding).
 			SetFloor(rm.Location.Floor).
 			Save(r.context)
 

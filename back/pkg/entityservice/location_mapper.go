@@ -35,6 +35,11 @@ func (r *EntityService) locationMapper(entLocation *ent.Location) *Location {
 		l.PathNode = *r.pathNodeMapper(pn, []*navigation.PathNode{}, false)
 	}
 
+	b, err := entLocation.Edges.BuildingOrErr()
+	if err == nil {
+		l.Building = b.Name
+	}
+
 	return &l
 }
 
@@ -57,6 +62,7 @@ func (r *EntityService) mapSectionArray(sections []Section) ([]*ent.Section, err
 func (r *EntityService) GetAllLocations() ([]Location, error) {
 	entLoactions, err := r.client.Location.Query().
 		WithTags().
+		WithBuilding().
 		WithPathnode().
 		All(r.context)
 	if err != nil {
@@ -68,7 +74,7 @@ func (r *EntityService) GetAllLocations() ([]Location, error) {
 
 func (r *EntityService) GetLocation(name, building, campus string) (Location, error) {
 
-	q := r.client.Location.Query().WithPathnode().WithTags().Where(location.NameEQ(name))
+	q := r.client.Location.Query().WithPathnode().WithBuilding().WithTags().Where(location.NameEQ(name))
 
 	if len(building) > 0 {
 		// TODO implement building

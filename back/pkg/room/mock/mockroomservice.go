@@ -137,7 +137,7 @@ func (r *RoomMockService) FilterRooms(floor, name, alias, room, building, campus
 	if len(building) > 0 {
 		var buildingFiltered []entityservice.Room
 		for _, room := range list {
-			if room.Building == building {
+			if room.Location.Building == building {
 				buildingFiltered = append(buildingFiltered, room)
 			}
 		}
