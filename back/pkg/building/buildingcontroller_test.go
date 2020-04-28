@@ -43,9 +43,7 @@ func TestBuildingController_GetAllBuildings(t *testing.T) {
 		},
 	}
 
-
 	buildingprovider.EXPECT().GetAllBuildings().Return(building, nil)
-
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(building)
