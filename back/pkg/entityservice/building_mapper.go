@@ -35,22 +35,9 @@ func (r *EntityService) FilterBuildings(name string) ([]model.Building, error) {
 	return r.buildingArrayMapper(buildings)
 }
 
-func (r *EntityService) GetFloorsFromBuilding(building model.Building) ([]string, error) {
-	floors, err := r.client.Building.Query().
-		Where(entbuilding.Name(building.Name)).
-		QueryMapitems().
-		Select("Floor").Strings(r.context)
-
-	if err != nil {
-		return nil, err
-	}
-
-	return utils.Distinct(floors), nil
-}
-
 func (r *EntityService) buildingArrayMapper(entBuildings []*ent.Building) ([]model.Building, error) {
 	var buildings []model.Building
-	for _, b := range(entBuildings) {
+	for _, b := range entBuildings {
 		bding, err := r.buildingMapper(b)
 		if err != nil {
 			return nil, err
@@ -61,10 +48,23 @@ func (r *EntityService) buildingArrayMapper(entBuildings []*ent.Building) ([]mod
 }
 
 func (r *EntityService) buildingMapper(entBuilding *ent.Building) (*model.Building, error) {
+	floors, _ := r.getFloorsFromBuilding(entBuilding)
 	return &model.Building{
-		Id:   entBuilding.ID,
-		Name: entBuilding.Name,
+		Id:     entBuilding.ID,
+		Name:   entBuilding.Name,
+		Floors: floors,
 	}, nil
+}
+
+func (r *EntityService) getFloorsFromBuilding(building *ent.Building) ([]string, error) {
+	floors, err := building.QueryMapitems().
+		Select("Floor").Strings(r.context)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return utils.Distinct(floors), nil
 }
 
 func (r *EntityService) mapBuildingArray(buildings []model.Building) ([]*ent.Building, error) {
