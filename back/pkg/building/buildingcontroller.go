@@ -1,9 +1,9 @@
-package controller
+package building
 
 import (
 	"fmt"
 	"net/http"
-	"studi-guide/pkg/building/model"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/location"
 	maps "studi-guide/pkg/map"
 	"studi-guide/pkg/room/models"
@@ -47,12 +47,12 @@ func NewBuildingController(router *gin.RouterGroup, buildingProvider BuildingPro
 // @Produce  json
 // @Tags BuildingController
 // @Param name query string false "name of the building"
-// @Success 200 {array} model.Building
+// @Success 200 {array} entityservice.Building
 // @Router /buildings [get]
 func (b BuildingController) GetBuildings(c *gin.Context) {
 	name := c.Query("name")
 
-	var buildings []model.Building
+	var buildings []entityservice.Building
 	var err error
 
 	var useFilterApi bool
@@ -90,7 +90,7 @@ func (b BuildingController) GetBuildings(c *gin.Context) {
 // @Produce  json
 // @Tags BuildingController
 // @Param building path string true "name of the building"
-// @Success 200 {array} model.Building
+// @Success 200 {object} entityservice.Building
 // @Router /buildings/{building} [get]
 func (b BuildingController) GetBuildingByName(context *gin.Context) {
 	name := context.Param("building")

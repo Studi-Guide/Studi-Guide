@@ -1,4 +1,4 @@
-package model
+package entityservice
 
 type Building struct {
 	Id     int

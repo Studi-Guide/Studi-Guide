@@ -1,11 +1,10 @@
-package controller
+package building
 
 import (
 	"encoding/json"
 	"errors"
 	"net/http"
 	"net/http/httptest"
-	mock2 "studi-guide/pkg/building/mock"
 	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/location"
 	maps "studi-guide/pkg/map"
@@ -23,7 +22,7 @@ func TestBuildingController_GetAllBuildings(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	buildingprovider := mock2.NewMockBuildingProvider()
+	buildingprovider := NewMockBuildingProvider()
 	locationProvider := location.NewMockLocationProvider(ctrl)
 	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	router := gin.Default()
@@ -48,7 +47,7 @@ func TestBuildingController_GetBuildings_Error(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	buildingprovider := mock2.NewMockBuildingProvider()
+	buildingprovider := NewMockBuildingProvider()
 	locationProvider := location.NewMockLocationProvider(ctrl)
 	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	router := gin.Default()
@@ -70,7 +69,7 @@ func TestBuildingController_GetBuildings_Filter(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	buildingprovider := mock2.NewMockBuildingProvider()
+	buildingprovider := NewMockBuildingProvider()
 	locationProvider := location.NewMockLocationProvider(ctrl)
 	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	router := gin.Default()
@@ -95,7 +94,7 @@ func TestBuildingController_GetBuildings_Filter_Negative(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	buildingprovider := mock2.NewMockBuildingProvider()
+	buildingprovider := NewMockBuildingProvider()
 	locationProvider := location.NewMockLocationProvider(ctrl)
 	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	router := gin.Default()
@@ -120,7 +119,7 @@ func TestBuildingController_GetBuildings_Filter_Error(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	buildingprovider := mock2.NewMockBuildingProvider()
+	buildingprovider := NewMockBuildingProvider()
 	locationProvider := location.NewMockLocationProvider(ctrl)
 	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	router := gin.Default()
@@ -160,7 +159,7 @@ func TestBuildingController_GetLocationsFromBuildingFloor(t *testing.T) {
 		},
 	}
 
-	buildingprovider := mock2.NewMockBuildingProvider()
+	buildingprovider := NewMockBuildingProvider()
 	locationProviderMock := location.NewMockLocationProvider(ctrl)
 	locationProviderMock.EXPECT().
 		FilterLocations("", "", "1", "main", "").
@@ -187,7 +186,7 @@ func TestBuildingController_GetRoomsFromBuildingFloor(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	buildingprovider := mock2.NewMockBuildingProvider()
+	buildingprovider := NewMockBuildingProvider()
 	locationProviderMock := location.NewMockLocationProvider(ctrl)
 
 	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
@@ -214,7 +213,7 @@ func TestBuildingController_GetRoomsFromBuildingFloor_Exception(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	buildingprovider := mock2.NewMockBuildingProvider()
+	buildingprovider := NewMockBuildingProvider()
 	locationProviderMock := location.NewMockLocationProvider(ctrl)
 
 	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
@@ -235,7 +234,7 @@ func TestBuildingController_GetMapsFromBuildingFloor(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	buildingprovider := mock2.NewMockBuildingProvider()
+	buildingprovider := NewMockBuildingProvider()
 	locationProviderMock := location.NewMockLocationProvider(ctrl)
 
 	mockmaps := []entityservice.MapItem{{
@@ -297,7 +296,7 @@ func TestBuildingController_GetMapsFromBuildingFloor_Exception(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	buildingprovider := mock2.NewMockBuildingProvider()
+	buildingprovider := NewMockBuildingProvider()
 	locationProviderMock := location.NewMockLocationProvider(ctrl)
 
 	mapsProvider := maps.NewMockMapServiceProvider(ctrl)

@@ -1,20 +1,20 @@
-package mock
+package building
 
 import (
 	"errors"
 	"strings"
-	"studi-guide/pkg/building/model"
+	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/room/mock"
 )
 
 type MockBuildingProvider struct {
-	BuildingList []model.Building
+	BuildingList []entityservice.Building
 	RoomProvider *mock.RoomMockService
 }
 
 func NewMockBuildingProvider() *MockBuildingProvider {
 	mock := MockBuildingProvider{
-		BuildingList: []model.Building{{
+		BuildingList: []entityservice.Building{{
 			Id:   1,
 			Name: "main",
 		},
@@ -30,7 +30,7 @@ func NewMockBuildingProvider() *MockBuildingProvider {
 }
 
 
-func (r *MockBuildingProvider) GetAllBuildings() ([]model.Building, error) {
+func (r *MockBuildingProvider) GetAllBuildings() ([]entityservice.Building, error) {
 	if r.BuildingList == nil {
 		return nil, errors.New("no buildings available")
 	}
@@ -38,9 +38,9 @@ func (r *MockBuildingProvider) GetAllBuildings() ([]model.Building, error) {
 	return r.BuildingList, nil
 }
 
-func (r *MockBuildingProvider) GetBuilding(name string) (model.Building, error) {
+func (r *MockBuildingProvider) GetBuilding(name string) (entityservice.Building, error) {
 	if r.BuildingList == nil {
-		return model.Building{}, errors.New("no buildings available")
+		return entityservice.Building{}, errors.New("no buildings available")
 	}
 
 	for _, bd := range r.BuildingList {
@@ -49,11 +49,11 @@ func (r *MockBuildingProvider) GetBuilding(name string) (model.Building, error) 
 		}
 	}
 
-	return model.Building{}, nil
+	return entityservice.Building{}, nil
 }
 
-func (r *MockBuildingProvider) FilterBuildings(name string) ([]model.Building, error) {
-	var buildings []model.Building
+func (r *MockBuildingProvider) FilterBuildings(name string) ([]entityservice.Building, error) {
+	var buildings []entityservice.Building
 	if r.BuildingList == nil {
 		return buildings, errors.New("no buildings available")
 	}
@@ -67,7 +67,7 @@ func (r *MockBuildingProvider) FilterBuildings(name string) ([]model.Building, e
 	return buildings, nil
 }
 
-func (r *MockBuildingProvider) GetFloorsFromBuilding(building model.Building) ([]string, error) {
+func (r *MockBuildingProvider) GetFloorsFromBuilding(building entityservice.Building) ([]string, error) {
 	var floors []string
 	if r.BuildingList == nil {
 		return nil, errors.New("no buildings available")
