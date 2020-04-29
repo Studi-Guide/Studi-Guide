@@ -100,6 +100,7 @@ export class NavigationPage {
     this.progressIsVisible = true;
     this.dataService.get_location_search(start).subscribe((res1 : Location)=>{
       this.dataService.get_map_floor(res1.Building, res1.Floor).subscribe((res2 : MapItem[])=>{
+        this.fetchLocations(res2[0].Building, res2[0].Floor)
         this.floor = new FloorMap(res2);
         this.dataService.get_route(start, end).subscribe((res3 : ReceivedRoute)=>{
           this.route = new NaviRoute(res3);
