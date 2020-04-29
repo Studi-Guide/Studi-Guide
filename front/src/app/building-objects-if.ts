@@ -36,7 +36,7 @@ export interface Section {
 export interface MapItem {
   Doors: Door[];
   Color: string;
-  Floor: number;
+  Floor: string;
   Sections: Section[];
   Campus: string;
   Building: string;
@@ -49,7 +49,8 @@ export interface Location {
   Description: string;
   Tags: string[];
   PathNode: PathNode;
-  Floor: number;
+  Floor: string;
+  Building: string;
 }
 
 export interface Room extends MapItem, Location{

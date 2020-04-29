@@ -2,6 +2,7 @@ package models
 
 import (
 	"os"
+	"studi-guide/pkg/room/mock"
 	"testing"
 )
 
@@ -48,6 +49,7 @@ func TestRoomJsonImporter_RunImport(t *testing.T) {
 	}
 
 	tmpFile := "/tmp/test.json"
+	ensureDir("/tmp")
 	_, err = os.Create(tmpFile)
 	if err != nil {
 		t.Error(err)
@@ -80,6 +82,7 @@ func TestRoomXmlImporter_RunImport(t *testing.T) {
 	}
 
 	tmpFile := "/tmp/test.xml"
+	ensureDir("/tmp")
 	_, err = os.Create(tmpFile)
 	if err != nil {
 		t.Error(err)
@@ -96,11 +99,22 @@ func TestRoomXmlImporter_RunImport(t *testing.T) {
 }
 
 func TestRoomJsonImporter_ImportRealFile(t *testing.T) {
-	var dbService = NewRoomMockService()
+	var dbService = mock.NewRoomMockService()
 
-	jsonImporter := RoomJsonImporter{dbService: dbService, file: "room_importer_test_json.json"}
+	jsonImporter := RoomJsonImporter{dbService: dbService, file: "../../../internal/rooms.json"}
 	err := jsonImporter.RunImport()
 	if err != nil {
 		t.Error("expected error; got: ", err)
+	}
+}
+
+func ensureDir(dirName string) error {
+
+	err := os.MkdirAll(dirName, os.ModeDir)
+
+	if err == nil || os.IsExist(err) {
+		return nil
+	} else {
+		return err
 	}
 }

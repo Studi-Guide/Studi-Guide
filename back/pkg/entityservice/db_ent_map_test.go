@@ -126,17 +126,19 @@ func TestMapRoom(t *testing.T) {
 					},
 				},
 			},
-			Floor: 1,
+			Floor: "1",
+			Building: "main",
 		},
 
 		Location: Location{
 			Name:        "RoomN01",
+			Building: "main",
 			Description: "Room Number 1 Special Description",
 			Tags:       []string{
 				"Tag1",
 				"#Tag2",
 			},
-			Floor: 1,
+			Floor: "1",
 			PathNode: node1,
 	}}
 
@@ -234,7 +236,8 @@ func TestMapRoom(t *testing.T) {
 					},
 				},
 			},
-			Floor: 1,
+			Floor: "1",
+			Building: "main",
 		},
 
 		Location: Location{
@@ -245,7 +248,8 @@ func TestMapRoom(t *testing.T) {
 				"Tag1",
 				"#Tag2",
 			},
-			Floor: 1,
+			Floor: "1",
+			Building: "main",
 			PathNode:navigation.PathNode{
 				Id: 2,
 				Coordinate: navigation.Coordinate{
@@ -359,11 +363,13 @@ func TestMapRoom(t *testing.T) {
 					},
 				},
 			},
-			Floor: 1,
+			Floor: "1",
+			Building: "main",
 		},
 		Location: Location{
 			Id: 2,
 			Name:        "Fancy Room",
+			Building: "main",
 			Description: "Room Number 1 Special Description",
 			Tags:       []string{
 				"Tag1",

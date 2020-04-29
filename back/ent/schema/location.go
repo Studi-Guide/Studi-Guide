@@ -17,7 +17,7 @@ func (Location) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("Name").Unique(),
 		field.String("Description").Default(""),
-		field.Int("Floor").Default(0),
+		field.String("Floor").Default("0"),
 	}
 }
 
@@ -26,6 +26,7 @@ func (Location) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("pathnode", PathNode.Type).Unique().Required(),
 		edge.From("tags", Tag.Type).Ref("locations"),
+		edge.To("building", Building.Type).Unique(),
 	}
 }
 

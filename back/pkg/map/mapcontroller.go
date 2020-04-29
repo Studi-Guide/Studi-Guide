@@ -14,13 +14,12 @@ type MapController struct {
 
 func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) error {
 	r := MapController{router: router, provider: provider}
-	r.router.GET("/", r.GetMapItems)
-	r.router.GET("/floor/:floor", r.GetMapItemsFromFloor)
+	r.router.GET("", r.GetMapItems)
 	return nil
 }
 
 // GetMapItems godoc
-// @Summary Get All Map Items
+// @Summary Query Map Items
 // @Description Gets map items of available rooms and connector spaces (corridor, stairs, etc..) with optional filter parameters
 // @Accept  json
 // @Produce  json
@@ -29,12 +28,17 @@ func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) erro
 // @Param campus query string false "map item is linked to a certain campus"
 // @Param building query string false "map item is linked to a building"
 // @Success 200 {array} entityservice.MapItem
-// @Router /map [get]
+// @Router /maps [get]
 func (l MapController) GetMapItems(c *gin.Context) {
+	building := c.Param("building")
+
 	floor := c.Query("floor")
 	campus := c.Query("campus")
-	building := c.Query("building")
+	if len(building) == 0 {
+		building = c.Query("building")
+	}
 
+	// TODO implementation of correct building, campus and floor query
 	//TODO include these filters
 	coordinate := c.Query("coordinate")
 	coordinateDelta := c.Query("coordinate-delta")
@@ -60,33 +64,6 @@ func (l MapController) GetMapItems(c *gin.Context) {
 
 	if err != nil {
 		fmt.Println("GetMapItems() failed with error", err)
-		c.JSON(http.StatusBadRequest, gin.H{
-			"code":    http.StatusBadRequest,
-			"message": err.Error(),
-		})
-
-		return
-	}
-
-	c.JSON(http.StatusOK, mapItems)
-}
-
-// GetMapItems godoc
-// @Summary Get All Map Items from a certain floor
-// @Description Gets all map items of available rooms and connector spaces (corridor, stairs, etc..) of a certain floor
-// @ID get-room-list-floor
-// @Accept  json
-// @Produce  json
-// @Tags MapController
-// @Param floor path int true "filter map items by floor"
-// @Success 200 {array} entityservice.MapItem
-// @Router /map/floor/{floor} [get]
-func (l MapController) GetMapItemsFromFloor(c *gin.Context) {
-	floor := c.Param("floor") //mux.Vars(r)["name"]
-
-	mapItems, err := l.provider.FilterMapItems(floor, "", "")
-	if err != nil {
-		fmt.Println("GetMapItemsFromFloor() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": err.Error(),

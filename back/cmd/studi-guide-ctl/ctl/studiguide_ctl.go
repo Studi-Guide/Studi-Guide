@@ -3,7 +3,7 @@ package ctl
 import (
 	"github.com/urfave/cli/v2"
 	"studi-guide/pkg/entityservice"
-	"studi-guide/pkg/roomcontroller/models"
+	"studi-guide/pkg/room/models"
 )
 
 //StudiGuideCtlCli

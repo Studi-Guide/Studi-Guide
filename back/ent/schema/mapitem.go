@@ -14,7 +14,7 @@ type MapItem struct {
 // Fields of the Room.
 func (MapItem) Fields() []ent.Field {
 	return []ent.Field{
-		field.Int("Floor").Default(0),
+		field.String("Floor").Default("0"),
 	}
 }
 
@@ -26,11 +26,10 @@ func (MapItem) Edges() []ent.Edge {
 		edge.To("pathNodes", PathNode.Type),
 		edge.To("color", Color.Type).Unique(),
 		edge.From("room", Room.Type).Ref("mapitem"),
+		edge.To("building", Building.Type).Unique().Required(),
 	}
 }
 
 func (MapItem) Indexes() []ent.Index {
-	return []ent.Index{
-
-	}
+	return []ent.Index{}
 }

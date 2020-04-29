@@ -1,8 +1,7 @@
-package models
+package mock
 
 import (
 	"errors"
-	"strconv"
 	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/navigation"
 )
@@ -15,7 +14,8 @@ func NewRoomMockService() *RoomMockService {
 	var rms RoomMockService
 
 	rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.MapItem{
-		Floor: 1,
+		Floor: "1",
+		Building: "main",
 		},
 		Location: entityservice.Location{PathNode: navigation.PathNode{
 			Id:             0,
@@ -25,9 +25,12 @@ func NewRoomMockService() *RoomMockService {
 		},
 			Name:        "RoomN01",
 			Description: "Dummy",
+			Floor: "1",
 		}})
 
 	rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.MapItem{
+		Building: "main",
+		Floor: "2",
 	},
 	Location: entityservice.Location{PathNode:navigation.PathNode{
 		Id:             3,
@@ -37,9 +40,12 @@ func NewRoomMockService() *RoomMockService {
 		},
 		Name:        "RoomN02",
 		Description: "Dummy",
+		Floor: "2",
 	}})
 
 	rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.MapItem{
+		Building: "main",
+		Floor: "1",
 	},
 		Location: entityservice.Location{PathNode:navigation.PathNode{
 		Id:             2,
@@ -49,11 +55,13 @@ func NewRoomMockService() *RoomMockService {
 		},
 		Name:        "RoomN03",
 		Description: "Dummy",
+		Floor: "1",
 		}})
 
 
 rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.MapItem{
-		Floor: 1,
+		Floor: "2",
+		Building: "main",
 	},
 	Location: entityservice.Location{PathNode:navigation.PathNode{
 		Id:             1,
@@ -63,6 +71,7 @@ rms.RoomList = append(rms.RoomList, entityservice.Room{MapItem: entityservice.Ma
 		},
 		Name:        "RoomN04",
 		Description: "Dummy",
+		Floor: "2",
 	}})
 
 	return &rms
@@ -75,7 +84,7 @@ func (r *RoomMockService) GetAllRooms() ([]entityservice.Room, error) {
 	return r.RoomList, nil
 }
 
-func (r *RoomMockService) GetRoom(name string) (entityservice.Room, error) {
+func (r *RoomMockService) GetRoom(name, building, campus string) (entityservice.Room, error) {
 
 	for _, room := range r.RoomList {
 		if room.Name == name {
@@ -109,26 +118,32 @@ func (r *RoomMockService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	return list, nil
 }
 
-func (r *RoomMockService) FilterRooms(floor, name, alias, room string) ([]entityservice.Room, error) {
+func (r *RoomMockService) FilterRooms(floor, name, alias, room, building, campus string) ([]entityservice.Room, error) {
 	if r.RoomList == nil {
 		return nil, errors.New("no room list initialized")
 	}
 
+	var list []entityservice.Room
 	if len(floor) > 0 {
-		floorInt, err := strconv.Atoi(floor)
-		if err != nil {
-			return nil, err
-		}
-
-		var list []entityservice.Room
 		for _, room := range r.RoomList {
-			if room.Location.Floor == floorInt && room.MapItem.Floor == floorInt {
+			if room.Location.Floor == floor && room.MapItem.Floor == floor {
 				list = append(list, room)
 			}
 		}
-
-		return list, nil
+	} else {
+		list = r.RoomList
 	}
 
-	return r.RoomList, nil
+	if len(building) > 0 {
+		var buildingFiltered []entityservice.Room
+		for _, room := range list {
+			if room.Location.Building == building {
+				buildingFiltered = append(buildingFiltered, room)
+			}
+		}
+
+		list = buildingFiltered
+	}
+
+	return list, nil
 }

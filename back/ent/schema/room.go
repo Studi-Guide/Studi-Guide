@@ -12,8 +12,7 @@ type Room struct {
 
 // Fields of the Room.
 func (Room) Fields() []ent.Field {
-	return []ent.Field{
-	}
+	return []ent.Field{}
 }
 
 // Edges of the Room.
