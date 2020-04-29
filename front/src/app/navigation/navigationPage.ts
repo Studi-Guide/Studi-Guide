@@ -1,4 +1,4 @@
-import {Room, svgPath, Location, SvgLocationName, PathNode, MapItem} from '../building-objects-if';
+import {svgPath, Location, SvgLocationName, PathNode, MapItem} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component} from '@angular/core';
 import {DataService} from '../services/data.service';
@@ -24,10 +24,10 @@ export class NavigationPage {
   public distanceToDisplay: DistanceToBeDisplayed;
   public calculatedRoute: string;
   public routeIsVisible = false;
-  public routeStart: PathNode;
+  public startPin: PathNode;
   public routeEnd: PathNode;
 
-  public startIsVisible = false;
+  public startPinIsVisible = false;
   public distanceIsVisible = false;
 
   private floor: FloorMap;
@@ -63,7 +63,7 @@ export class NavigationPage {
     } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput != null) {
       this.fetchFloorByLocation(this.startInput);
       this.routeIsVisible = false;
-      this.startIsVisible = false;
+      this.startPinIsVisible = false;
       this.mapIsVisible = true;
     }
   }
@@ -71,6 +71,8 @@ export class NavigationPage {
   private fetchFloorByLocation(room: string) {
     this.progressIsVisible = true;
     this.dataService.get_location_search(room).subscribe((res : Location)=>{
+      this.startPin = res.PathNode;
+      this.startPinIsVisible = true;
       this.fetchFloorByItsNumber(res.Building, res.Floor);
       this.fetchLocations(res.Building, res.Floor);
     });
@@ -100,7 +102,7 @@ export class NavigationPage {
     this.progressIsVisible = true;
     this.dataService.get_location_search(start).subscribe((res1 : Location)=>{
       this.dataService.get_map_floor(res1.Building, res1.Floor).subscribe((res2 : MapItem[])=>{
-        this.fetchLocations(res2[0].Building, res2[0].Floor)
+        this.fetchLocations(res2[0].Building, res2[0].Floor);
         this.floor = new FloorMap(res2);
         this.dataService.get_route(start, end).subscribe((res3 : ReceivedRoute)=>{
           this.route = new NaviRoute(res3);
@@ -108,13 +110,13 @@ export class NavigationPage {
           this.distanceToDisplay = this.route.distance;
           this.calculatedRoute = this.route.svgRoute;
 
-          this.routeStart = this.route.getRouteStart();
+          this.startPin = this.route.getRouteStart();
           this.routeEnd = this.route.getRouteEnd();
           this.displayFloor();
 
           this.progressIsVisible = false;
           this.routeIsVisible = true;
-          this.startIsVisible = true;
+          this.startPinIsVisible = true;
           this.distanceIsVisible = true;
         });
       });
@@ -140,7 +142,6 @@ export class NavigationPage {
     this.progressIsVisible = false;
     this.mapIsVisible = true;
     this.routeIsVisible = false;
-    this.startIsVisible = false;
     this.distanceIsVisible = false;
   }
 
