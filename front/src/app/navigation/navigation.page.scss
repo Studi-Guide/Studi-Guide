@@ -22,6 +22,11 @@
     display: block;
 }
 
+ion-progress-bar {
+    position: absolute;
+    z-index: 9999;
+}
+
 ion-searchbar {
     max-width: 300px;
 }
