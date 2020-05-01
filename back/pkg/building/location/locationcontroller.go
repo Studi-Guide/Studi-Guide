@@ -81,7 +81,7 @@ func (l LocationController) GetLocations(c *gin.Context) {
 // @Accept  json
 // @Produce  json
 // @Tags LocationController
-// @Param name path int true "get location by name"
+// @Param name path string true "get location by name"
 // @Success 200 {array} entityservice.Location
 // @Router /locations/{location} [get]
 func (l LocationController) GetLocationByName(c *gin.Context) {
