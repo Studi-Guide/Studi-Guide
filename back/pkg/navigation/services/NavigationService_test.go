@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/golang/mock/gomock"
-	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/building/db/entityservice"
 	"studi-guide/pkg/navigation"
 	"testing"
 )

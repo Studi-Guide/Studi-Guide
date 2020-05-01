@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 	"studi-guide/cmd/studi-guide-ctl/ctl"
-	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/building/db/entityservice"
 	"studi-guide/pkg/env"
 )
 

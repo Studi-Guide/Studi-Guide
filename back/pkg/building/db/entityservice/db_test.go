@@ -9,7 +9,7 @@ import (
 	"os"
 	"reflect"
 	"strconv"
-	"studi-guide/ent"
+	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
 	"testing"

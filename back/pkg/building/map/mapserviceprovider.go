@@ -1,6 +1,6 @@
 package maps
 
-import "studi-guide/pkg/entityservice"
+import "studi-guide/pkg/building/db/entityservice"
 
 type MapServiceProvider interface {
 	GetAllMapItems() ([]entityservice.MapItem, error)

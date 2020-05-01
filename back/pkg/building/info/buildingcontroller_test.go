@@ -5,10 +5,10 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"studi-guide/pkg/building/db/entityservice"
 	"studi-guide/pkg/building/location"
 	maps "studi-guide/pkg/building/map"
 	"studi-guide/pkg/building/room/mock"
-	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/navigation"
 	"testing"
 

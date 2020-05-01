@@ -7,7 +7,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"net/http"
 	"net/http/httptest"
-	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/building/db/entityservice"
 	"studi-guide/pkg/navigation"
 	"testing"
 )

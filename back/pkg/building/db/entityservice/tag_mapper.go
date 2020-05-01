@@ -3,9 +3,9 @@ package entityservice
 import (
 	"errors"
 	"regexp"
-	"studi-guide/ent"
-	"studi-guide/ent/color"
-	"studi-guide/ent/tag"
+	"studi-guide/pkg/building/db/ent"
+	"studi-guide/pkg/building/db/ent/color"
+	"studi-guide/pkg/building/db/ent/tag"
 )
 
 func (r *EntityService) mapTag(t string, entLocation *ent.Location) (*ent.Tag, error) {

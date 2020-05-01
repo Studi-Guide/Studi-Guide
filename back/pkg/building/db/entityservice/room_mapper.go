@@ -5,11 +5,11 @@ import (
 	"log"
 	"strconv"
 	"strings"
-	"studi-guide/ent"
-	"studi-guide/ent/building"
-	"studi-guide/ent/location"
-	"studi-guide/ent/mapitem"
-	"studi-guide/ent/room"
+	"studi-guide/pkg/building/db/ent"
+	"studi-guide/pkg/building/db/ent/building"
+	"studi-guide/pkg/building/db/ent/location"
+	"studi-guide/pkg/building/db/ent/mapitem"
+	"studi-guide/pkg/building/db/ent/room"
 )
 
 func (r *EntityService) roomArrayMapper(entRooms []*ent.Room) []Room {

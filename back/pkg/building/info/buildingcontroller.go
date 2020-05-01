@@ -3,10 +3,10 @@ package info
 import (
 	"fmt"
 	"net/http"
+	"studi-guide/pkg/building/db/entityservice"
 	"studi-guide/pkg/building/location"
 	maps "studi-guide/pkg/building/map"
 	"studi-guide/pkg/building/room/models"
-	"studi-guide/pkg/entityservice"
 
 	"github.com/gin-gonic/gin"
 )

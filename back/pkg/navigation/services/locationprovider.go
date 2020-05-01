@@ -1,7 +1,7 @@
 package services
 
 import (
-	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/building/db/entityservice"
 	"studi-guide/pkg/navigation"
 )
 

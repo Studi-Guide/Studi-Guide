@@ -1,6 +1,6 @@
 package info
 
-import "studi-guide/pkg/entityservice"
+import "studi-guide/pkg/building/db/entityservice"
 
 type BuildingProvider interface {
 	GetAllBuildings() ([]entityservice.Building, error)

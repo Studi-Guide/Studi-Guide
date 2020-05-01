@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/building/db/entityservice"
 	"studi-guide/pkg/navigation"
 )
 

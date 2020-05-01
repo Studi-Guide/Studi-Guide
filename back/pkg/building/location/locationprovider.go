@@ -1,7 +1,7 @@
 package location
 
 import (
-	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/building/db/entityservice"
 )
 
 type LocationProvider interface {

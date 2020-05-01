@@ -1,7 +1,7 @@
 package models
 
 import (
-	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/building/db/entityservice"
 )
 
 type RoomServiceProvider interface {

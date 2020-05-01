@@ -5,7 +5,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"os"
-	"studi-guide/ent"
+	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/env"
 )
 

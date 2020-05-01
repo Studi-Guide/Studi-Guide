@@ -4,8 +4,8 @@ import (
 	"errors"
 	"log"
 	"strings"
-	"studi-guide/ent"
-	"studi-guide/ent/pathnode"
+	"studi-guide/pkg/building/db/ent"
+	"studi-guide/pkg/building/db/ent/pathnode"
 	"studi-guide/pkg/navigation"
 )
 

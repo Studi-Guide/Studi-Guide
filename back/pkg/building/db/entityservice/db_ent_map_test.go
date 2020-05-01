@@ -3,8 +3,8 @@ package entityservice
 import (
 	"os"
 	"reflect"
-	"studi-guide/ent/location"
-	"studi-guide/ent/room"
+	"studi-guide/pkg/building/db/ent/location"
+	"studi-guide/pkg/building/db/ent/room"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
 	"testing"

@@ -1,8 +1,8 @@
 package entityservice
 
 import (
-	"studi-guide/ent"
-	"studi-guide/ent/door"
+	"studi-guide/pkg/building/db/ent"
+	"studi-guide/pkg/building/db/ent/door"
 	"studi-guide/pkg/navigation"
 )
 

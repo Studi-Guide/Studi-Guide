@@ -2,7 +2,7 @@ package mock
 
 import (
 	"errors"
-	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/building/db/entityservice"
 	"studi-guide/pkg/navigation"
 )
 
