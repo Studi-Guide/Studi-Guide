@@ -7,7 +7,7 @@
     padding: 2px;
     overflow-y: scroll;
     overflow-x: scroll;
-    height: 80%;
+    height: calc(100% - 62px);
     scrollbar-width: none; // FF
     -ms-overflow-style: none; // IE
 }
@@ -20,4 +20,13 @@
     margin-left: auto;
     margin-right: auto;
     display: block;
+}
+
+ion-searchbar {
+    max-width: 300px;
+}
+
+.vertical-line {
+  border-left: 2px solid #9d9fa6;
+  height: 38px;
 }

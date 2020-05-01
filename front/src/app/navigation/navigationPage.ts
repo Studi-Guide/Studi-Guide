@@ -1,6 +1,6 @@
 import {svgPath, Location, SvgLocationName, PathNode, MapItem} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import {DataService} from '../services/data.service';
 import {FloorMap} from './floorMap';
 import {DistanceToBeDisplayed, NaviRoute, ReceivedRoute} from './naviRoute';
@@ -12,10 +12,12 @@ import {DistanceToBeDisplayed, NaviRoute, ReceivedRoute} from './naviRoute';
 })
 
 export class NavigationPage {
+  @ViewChild('discoverySearchbar') discoverySearchbarRef;
+
   public progressIsVisible = false;
   public routeInputIsVisible = false;
   public searchBtnIsVisible = true;
-  public routeBtnIsVisible = true;
+  public closeRouteBtnIsVisible = false;
 
   public startInput: string;
   public destinationInput: string;
@@ -59,7 +61,7 @@ export class NavigationPage {
 
   public showFloorForSearch() {
     if (this.routeInputIsVisible) {
-      this.routeInputIsVisible = false;
+      this.hideRouteSearchbar();
     } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput != null) {
       this.fetchFloorByLocation(this.startInput);
       this.routeIsVisible = false;
@@ -81,6 +83,11 @@ export class NavigationPage {
   public showRoute() {
     if (!this.routeInputIsVisible) {
       this.routeInputIsVisible = true;
+      // TODO set #discoverySearchbar color blue
+      const searchbars = document.querySelector('ion-item');
+      searchbars.setAttribute('color', 'primary');
+      this.searchBtnIsVisible = false;
+      this.closeRouteBtnIsVisible = true;
     } else if (this.startInput !== undefined && this.destinationInput !== undefined
         && this.startInput !== '' && this.destinationInput !== ''
         && this.startInput != null && this.destinationInput != null
@@ -143,6 +150,34 @@ export class NavigationPage {
     this.mapIsVisible = true;
     this.routeIsVisible = false;
     this.distanceIsVisible = false;
+  }
+
+  public checkWhatIsRequestedByEnterKey() {
+    if (this.startInput !== undefined && this.startInput !== '' && this.startInput !== null &&
+        !this.routeInputIsVisible
+    ) {
+      this.showFloorForSearch();
+    } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput !== null &&
+        this.routeInputIsVisible &&
+        (this.destinationInput === undefined || this.destinationInput === '' || this.destinationInput === null)
+    ) {
+      // TODO check setFocus on Android, iOS, etc.
+      this.discoverySearchbarRef.setFocus();
+      this.showFloorForSearch();
+    } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput != null &&
+        this.routeInputIsVisible &&
+        this.destinationInput !== undefined && this.destinationInput !== '' && this.destinationInput !== null
+    ) {
+      this.showRoute();
+    }
+  }
+
+  public hideRouteSearchbar() {
+    this.routeInputIsVisible = false;
+    const searchbars = document.querySelector('ion-item');
+    searchbars.setAttribute('color', 'light-tint');
+    this.searchBtnIsVisible = true;
+    this.closeRouteBtnIsVisible = false;
   }
 
 /*  private static testRenderPathNodes() : Coordinate[] {
