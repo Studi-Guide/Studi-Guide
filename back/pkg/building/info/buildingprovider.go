@@ -1,4 +1,4 @@
-package building
+package info
 
 import "studi-guide/pkg/entityservice"
 

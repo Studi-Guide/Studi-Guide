@@ -2,7 +2,7 @@ package models
 
 import (
 	"os"
-	"studi-guide/pkg/room/mock"
+	"studi-guide/pkg/building/room/mock"
 	"testing"
 )
 
@@ -101,7 +101,7 @@ func TestRoomXmlImporter_RunImport(t *testing.T) {
 func TestRoomJsonImporter_ImportRealFile(t *testing.T) {
 	var dbService = mock.NewRoomMockService()
 
-	jsonImporter := RoomJsonImporter{dbService: dbService, file: "../../../internal/rooms.json"}
+	jsonImporter := RoomJsonImporter{dbService: dbService, file: "../../../../internal/rooms.json"}
 	err := jsonImporter.RunImport()
 	if err != nil {
 		t.Error("expected error; got: ", err)

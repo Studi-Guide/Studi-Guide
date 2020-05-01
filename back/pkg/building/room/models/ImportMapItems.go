@@ -6,9 +6,9 @@ import (
 )
 
 type ImportDoor struct {
-	Start	 	navigation.Coordinate
-	End 		navigation.Coordinate
-	PathNode 	ImportPathNode
+	Start    navigation.Coordinate
+	End      navigation.Coordinate
+	PathNode ImportPathNode
 }
 
 

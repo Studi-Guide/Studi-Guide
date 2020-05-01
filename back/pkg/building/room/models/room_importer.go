@@ -77,7 +77,7 @@ func NewRoomImporter(file string, dbService RoomServiceProvider) (RoomImporter, 
 	return i, nil
 }
 
-func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems ) ([]entityservice.Room, error) {
+func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems) ([]entityservice.Room, error) {
 	var rooms []entityservice.Room
 
 	for _, item := range importItems {

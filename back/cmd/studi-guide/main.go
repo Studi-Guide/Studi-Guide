@@ -4,13 +4,12 @@ import (
 	"log"
 	"studi-guide/cmd/studi-guide/server"
 	"studi-guide/docs"
-	"studi-guide/pkg/config"
+	"studi-guide/pkg/building/location"
+	"studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/env"
-	"studi-guide/pkg/location"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/navigation/services"
-	"studi-guide/pkg/room/models"
 
 	"go.uber.org/dig"
 )
@@ -43,7 +42,6 @@ func BuildContainer() *dig.Container {
 
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
-	container.Provide(config.NewConfig)
 	container.Provide(entityservice.NewEntityService)
 	container.Provide(server.NewStudiGuideServer)
 

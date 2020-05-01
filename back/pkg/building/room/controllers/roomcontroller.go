@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/entityservice"
-	"studi-guide/pkg/room/models"
 )
 
 type RoomController struct {

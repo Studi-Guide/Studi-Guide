@@ -10,14 +10,14 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"studi-guide/pkg/building"
+	"studi-guide/pkg/building/info"
+	"studi-guide/pkg/building/location"
+	maps "studi-guide/pkg/building/map"
+	"studi-guide/pkg/building/room/controllers"
 	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/env"
-	"studi-guide/pkg/location"
-	maps "studi-guide/pkg/map"
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
-	"studi-guide/pkg/room/controllers"
 )
 
 type StudiGuideServer struct {
@@ -101,7 +101,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 	buildingRouter := router.Group("/buildings")
 	{
 		log.Println("Creating building controller")
-		err := building.NewBuildingController(buildingRouter, entityService, entityService, entityService, entityService)
+		err := info.NewBuildingController(buildingRouter, entityService, entityService, entityService, entityService)
 		if err != nil {
 			log.Fatal(err)
 		} else {
