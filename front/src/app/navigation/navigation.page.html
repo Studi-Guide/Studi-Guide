@@ -5,7 +5,7 @@
                    mode="ios" placeholder="location" color="light" icon-color="dark"
                    [(ngModel)]="startInput" (keyup.enter)="checkWhatIsRequestedByEnterKey()">
     </ion-searchbar>
-    <ion-button size="default" mode="ios" color="medium" (click)="showFloorForSearch(discovery)" *ngIf="searchBtnIsVisible">
+    <ion-button size="default" mode="ios" color="medium" (click)="showFloorForSearch()" *ngIf="searchBtnIsVisible">
       <ion-icon size="large" slot="icon-only" name="search" color=""></ion-icon>
     </ion-button>
     <span class="vertical-line" *ngIf="searchBtnIsVisible"></span>
