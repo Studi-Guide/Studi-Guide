@@ -149,6 +149,7 @@ export class NavigationPage {
   }
 
   async presentAvailableFloorModal() {
+    this.startPinIsVisible = false;
     this.dataService.get_building(this.startInput.slice(0, 2)).subscribe(async (res: JSON) => {
       // @ts-ignore
       const {Floors} = res;
