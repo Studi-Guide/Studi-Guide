@@ -29,4 +29,8 @@ export class DataService {
         return this.httpClient.get(this.baseUrl + '/buildings/'+ building +'/floors/' + floor + '/locations');
     }
 
+    get_building(name:string) {
+        return this.httpClient.get(this.baseUrl + '/building/' + name );
+    }
+
 }

@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { NavigationPage } from './navigationPage';
+import { AvailableFloorsPage } from './available-floors.page';
 
-describe('NavigationPage', () => {
-  let component: NavigationPage;
-  let fixture: ComponentFixture<NavigationPage>;
+describe('AvailableFloorsPage', () => {
+  let component: AvailableFloorsPage;
+  let fixture: ComponentFixture<AvailableFloorsPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [NavigationPage],
+      declarations: [ AvailableFloorsPage ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NavigationPage);
+    fixture = TestBed.createComponent(AvailableFloorsPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
