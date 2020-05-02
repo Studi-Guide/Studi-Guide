@@ -30,7 +30,7 @@ export class DataService {
     }
 
     get_building(name:string) {
-        return this.httpClient.get(this.baseUrl + '/building/' + name );
+        return this.httpClient.get(this.baseUrl + '/buildings/' + name );
     }
 
 }

@@ -9,12 +9,10 @@ import {Components} from '@ionic/core';
 })
 export class AvailableFloorsPage implements OnInit {
 
-  public building: JSON;
   public floors:Array<string>;
   modal: Components.IonModal;
   constructor(navParams: NavParams) {
-    this.building = JSON.parse(navParams.get('building'));
-    this.floors = this.building['Floors'];
+    this.floors = navParams.get('floors');
   }
 
   ngOnInit() {

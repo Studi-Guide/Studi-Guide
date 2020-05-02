@@ -149,21 +149,26 @@ export class NavigationPage {
   }
 
   async presentAvailableFloorModal() {
-    const availableFloorModal = await this.modalCtrl.create({
-      component: AvailableFloorsPage,
-      componentProps: {
-        building: this.dataService.get_building(this.startInput.slice(0,2))
-      }
+    let floors: Array<string>;
+    this.dataService.get_building(this.startInput.slice(0, 2)).subscribe(async (res: JSON) => {
+      floors = res.Floors;
+      const availableFloorModal = await this.modalCtrl.create({
+        component: AvailableFloorsPage,
+        componentProps: {
+          floors
+        }
+      });
+      availableFloorModal.present();
+
+      availableFloorModal.onDidDismiss()
+          .then((data) => {
+            const building = this.startInput.slice(0, 2);
+            this.fetchFloorByItsNumber(building, data["data"])
+            this.fetchLocations(building, data["data"])
+          })
+
+
     });
-    availableFloorModal.present();
-
-    availableFloorModal.onDidDismiss()
-        .then((data) => {
-          const building = this.startInput.slice(0,2);
-          this.fetchFloorByItsNumber(building, data["data"])
-          this.fetchLocations(building, data["data"])
-        })
-
   }
 
 /*  private static testRenderPathNodes() : Coordinate[] {
