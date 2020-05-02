@@ -1,7 +1,7 @@
-import {svgPath, Location, SvgLocationName, PathNode, MapItem} from '../building-objects-if';
+import {Location, MapItem, PathNode, SvgLocationName, svgPath} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component} from '@angular/core';
-import {ModalController, NavParams} from "@ionic/angular";
+import {ModalController} from "@ionic/angular";
 import {DataService} from '../services/data.service';
 import {FloorMap} from './floorMap';
 import {DistanceToBeDisplayed, NaviRoute, ReceivedRoute} from './naviRoute';
@@ -149,13 +149,14 @@ export class NavigationPage {
   }
 
   async presentAvailableFloorModal() {
-    let floors: Array<string>;
     this.dataService.get_building(this.startInput.slice(0, 2)).subscribe(async (res: JSON) => {
-      floors = res.Floors;
+      // @ts-ignore
+      const {Floors} = res;
       const availableFloorModal = await this.modalCtrl.create({
         component: AvailableFloorsPage,
+        cssClass: 'floor-modal',
         componentProps: {
-          floors
+          floors: Floors
         }
       });
       availableFloorModal.present();
