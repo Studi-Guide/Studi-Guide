@@ -1,9 +1,11 @@
-import {svgPath, Location, SvgLocationName, PathNode, MapItem} from '../building-objects-if';
+import {Location, MapItem, PathNode, SvgLocationName, SvgPath} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
-import {Component} from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
+import {ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {FloorMap} from './floorMap';
 import {DistanceToBeDisplayed, NaviRoute, ReceivedRoute} from './naviRoute';
+import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 
 @Component({
   selector: 'app-navigation',
@@ -12,10 +14,12 @@ import {DistanceToBeDisplayed, NaviRoute, ReceivedRoute} from './naviRoute';
 })
 
 export class NavigationPage {
+  @ViewChild('discoverySearchbar') discoverySearchbarRef;
+
   public progressIsVisible = false;
   public routeInputIsVisible = false;
   public searchBtnIsVisible = true;
-  public routeBtnIsVisible = true;
+  public closeRouteBtnIsVisible = false;
 
   public startInput: string;
   public destinationInput: string;
@@ -31,8 +35,8 @@ export class NavigationPage {
   public distanceIsVisible = false;
 
   private floor: FloorMap;
-  public calculatedRoomPaths: svgPath[];
-  public calculatedDoorLines: svgPath[];
+  public calculatedRoomPaths: SvgPath[];
+  public calculatedDoorLines: SvgPath[];
   public mapSvgWidth: number;
   public mapSvgHeight: number;
   public locations: SvgLocationName[];
@@ -41,7 +45,8 @@ export class NavigationPage {
 //  public testRooms:Room[] = [];
 //  public testRoute:PathNode[];
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService,
+              private modalCtrl: ModalController) {
     this.dataService = dataService;
 
     this.calculatedRoute = '';
@@ -59,7 +64,7 @@ export class NavigationPage {
 
   public showFloorForSearch() {
     if (this.routeInputIsVisible) {
-      this.routeInputIsVisible = false;
+      this.hideRouteSearchbar();
     } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput != null) {
       this.fetchFloorByLocation(this.startInput);
       this.routeIsVisible = false;
@@ -81,6 +86,11 @@ export class NavigationPage {
   public showRoute() {
     if (!this.routeInputIsVisible) {
       this.routeInputIsVisible = true;
+      // TODO set #discoverySearchbar color blue
+      const searchbars = document.querySelector('ion-item');
+      searchbars.setAttribute('color', 'primary');
+      this.searchBtnIsVisible = false;
+      this.closeRouteBtnIsVisible = true;
     } else if (this.startInput !== undefined && this.destinationInput !== undefined
         && this.startInput !== '' && this.destinationInput !== ''
         && this.startInput != null && this.destinationInput != null
@@ -143,6 +153,61 @@ export class NavigationPage {
     this.mapIsVisible = true;
     this.routeIsVisible = false;
     this.distanceIsVisible = false;
+  }
+
+  public checkWhatIsRequestedByEnterKey() {
+    if (this.startInput !== undefined && this.startInput !== '' && this.startInput !== null &&
+        !this.routeInputIsVisible
+    ) {
+      this.showFloorForSearch();
+    } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput !== null &&
+        this.routeInputIsVisible &&
+        (this.destinationInput === undefined || this.destinationInput === '' || this.destinationInput === null)
+    ) {
+      // TODO check setFocus on Android, iOS, etc.
+      this.discoverySearchbarRef.setFocus();
+      this.showFloorForSearch();
+    } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput != null &&
+        this.routeInputIsVisible &&
+        this.destinationInput !== undefined && this.destinationInput !== '' && this.destinationInput !== null
+    ) {
+      this.showRoute();
+    }
+  }
+
+  public hideRouteSearchbar() {
+    this.routeInputIsVisible = false;
+    const searchbars = document.querySelector('ion-item');
+    searchbars.setAttribute('color', 'light-tint');
+    this.searchBtnIsVisible = true;
+    this.closeRouteBtnIsVisible = false;
+  }
+
+  async presentAvailableFloorModal() {
+    this.startPinIsVisible = false;
+    this.dataService.get_building(this.startInput.slice(0, 2)).subscribe(async (res: JSON) => {
+      // @ts-ignore
+      const {Floors} = res;
+      const availableFloorModal = await this.modalCtrl.create({
+        component: AvailableFloorsPage,
+        cssClass: 'floor-modal',
+        componentProps: {
+          floors: Floors
+        }
+      });
+      availableFloorModal.present();
+
+      availableFloorModal.onDidDismiss()
+          .then((data) => {
+            if (data['data']) {
+              const building = this.startInput.slice(0, 2);
+              this.fetchFloorByItsNumber(building, data['data'])
+              this.fetchLocations(building, data['data'])
+            }
+          })
+
+
+    });
   }
 
 /*  private static testRenderPathNodes() : Coordinate[] {

@@ -1,4 +1,4 @@
-import {Inject, Injectable} from '@angular/core';
+import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
 
@@ -27,6 +27,10 @@ export class DataService {
 
     get_locations(building:string, floor:string) {
         return this.httpClient.get(this.baseUrl + '/buildings/'+ building +'/floors/' + floor + '/locations');
+    }
+
+    get_building(name:string) {
+        return this.httpClient.get(this.baseUrl + '/buildings/' + name );
     }
 
 }

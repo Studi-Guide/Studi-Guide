@@ -1,4 +1,4 @@
-export class floor {
+export class Floor {
   rooms: Room[];
   corridors: Corridor[];
 }
@@ -57,7 +57,7 @@ export interface Room extends MapItem, Location{
 
 }
 
-export class svgPath {
+export class SvgPath {
   d: string;
   fill: string;
 }

@@ -1,0 +1,6 @@
+<ion-content>
+  <ion-list>
+    <ion-list-header>Verfügbaren Stockwerke</ion-list-header>
+      <ion-item *ngFor="let floor of floors" button (click)="cancel(floor)" >{{floor}}</ion-item>
+  </ion-list>
+</ion-content>
