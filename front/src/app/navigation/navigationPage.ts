@@ -195,14 +195,14 @@ export class NavigationPage {
           floors: Floors
         }
       });
-      availableFloorModal.present();
+      await availableFloorModal.present();
 
       availableFloorModal.onDidDismiss()
           .then((data) => {
-            if (data['data']) {
+            if (data.data) {
               const building = this.startInput.slice(0, 2);
-              this.fetchFloorByItsNumber(building, data['data'])
-              this.fetchLocations(building, data['data'])
+              this.fetchFloorByItsNumber(building, data.data)
+              this.fetchLocations(building, data.data)
             }
           })
 
