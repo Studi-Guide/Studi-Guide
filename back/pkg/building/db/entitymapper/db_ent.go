@@ -9,13 +9,13 @@ import (
 	"studi-guide/pkg/env"
 )
 
-type EntityService struct {
+type EntityMapper struct {
 	client  *ent.Client
 	context context.Context
 	table   string
 }
 
-func newEntityService(env *env.Env) (*EntityService, error) {
+func newEntityMapper(env *env.Env) (*EntityMapper, error) {
 	driverName := env.DbDriverName()
 	dataSourceName := env.DbDataSource()
 	table := "rooms"
@@ -27,11 +27,11 @@ func newEntityService(env *env.Env) (*EntityService, error) {
 
 	roomCount, _ := client.Room.Query().Count(ctx)
 	log.Println("Found number of rooms:", roomCount)
-	return &EntityService{client: client, table: table, context: ctx}, nil
+	return &EntityMapper{client: client, table: table, context: ctx}, nil
 }
 
-func NewEntityService(env *env.Env) (*EntityService, error) {
-	return newEntityService(env)
+func NewEntityMapper(env *env.Env) (*EntityMapper, error) {
+	return newEntityMapper(env)
 }
 
 func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Context, error) {

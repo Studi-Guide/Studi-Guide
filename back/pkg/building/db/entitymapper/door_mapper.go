@@ -6,7 +6,7 @@ import (
 	"studi-guide/pkg/navigation"
 )
 
-func (r *EntityService) doorArrayMapper(doors []*ent.Door) []Door {
+func (r *EntityMapper) doorArrayMapper(doors []*ent.Door) []Door {
 	var d []Door
 	for _, door := range doors {
 		d = append(d, *r.doorMapper(door))
@@ -14,7 +14,7 @@ func (r *EntityService) doorArrayMapper(doors []*ent.Door) []Door {
 	return d
 }
 
-func (r *EntityService) doorMapper(entDoor *ent.Door) *Door {
+func (r *EntityMapper) doorMapper(entDoor *ent.Door) *Door {
 
 	entDoor, err := r.client.Door.Query().WithPathNode().WithOwner().WithSection().Where(door.ID(entDoor.ID)).First(r.context)
 	if err != nil {
@@ -40,7 +40,7 @@ func (r *EntityService) doorMapper(entDoor *ent.Door) *Door {
 	return &d
 }
 
-func (r *EntityService) mapDoorArray(doors []Door) ([]*ent.Door, error) {
+func (r *EntityMapper) mapDoorArray(doors []Door) ([]*ent.Door, error) {
 	var entDoors []*ent.Door
 
 	for _, d := range doors {
@@ -54,7 +54,7 @@ func (r *EntityService) mapDoorArray(doors []Door) ([]*ent.Door, error) {
 	return entDoors, nil
 }
 
-func (r *EntityService) mapDoor(d *Door) (*ent.Door, error) {
+func (r *EntityMapper) mapDoor(d *Door) (*ent.Door, error) {
 
 	if d.Id != 0 {
 		return r.client.Door.Query().Where(door.ID(d.Id)).First(r.context)

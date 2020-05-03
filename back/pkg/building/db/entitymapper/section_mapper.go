@@ -6,7 +6,7 @@ import (
 	"studi-guide/pkg/navigation"
 )
 
-func (r *EntityService) sectionArrayMapper(sections []*ent.Section) []Section {
+func (r *EntityMapper) sectionArrayMapper(sections []*ent.Section) []Section {
 	var s []Section
 	for _, seq := range sections {
 		s = append(s, *r.sectionMapper(seq))
@@ -14,7 +14,7 @@ func (r *EntityService) sectionArrayMapper(sections []*ent.Section) []Section {
 	return s
 }
 
-func (r *EntityService) sectionMapper(s *ent.Section) *Section {
+func (r *EntityMapper) sectionMapper(s *ent.Section) *Section {
 
 	if s == nil {
 		return nil
@@ -32,7 +32,7 @@ func (r *EntityService) sectionMapper(s *ent.Section) *Section {
 	}
 }
 
-func (r *EntityService) mapSection(s *Section) (*ent.Section, error) {
+func (r *EntityMapper) mapSection(s *Section) (*ent.Section, error) {
 
 	if s.Id != 0 {
 		return r.client.Section.Query().Where(section.ID(s.Id)).First(r.context)

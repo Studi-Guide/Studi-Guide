@@ -9,7 +9,7 @@ import (
 	"studi-guide/pkg/navigation"
 )
 
-func (r *EntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode, availableNodes []*navigation.PathNode) []*navigation.PathNode {
+func (r *EntityMapper) pathNodeArrayMapper(pathNodePtr []*ent.PathNode, availableNodes []*navigation.PathNode) []*navigation.PathNode {
 	var pathNodes []*navigation.PathNode
 	for _, node := range pathNodePtr {
 		pathNodes = append(pathNodes, r.pathNodeMapper(node, availableNodes, false))
@@ -17,7 +17,7 @@ func (r *EntityService) pathNodeArrayMapper(pathNodePtr []*ent.PathNode, availab
 	return pathNodes
 }
 
-func (r *EntityService) pathNodeMapper(entPathNode *ent.PathNode, availableNodes []*navigation.PathNode, resolveConnectedNodes bool) *navigation.PathNode {
+func (r *EntityMapper) pathNodeMapper(entPathNode *ent.PathNode, availableNodes []*navigation.PathNode, resolveConnectedNodes bool) *navigation.PathNode {
 
 	entPathNode, err := r.client.PathNode.Query().Where(pathnode.IDEQ(entPathNode.ID)).WithLinkedTo().First(r.context)
 	if err != nil {
@@ -45,7 +45,7 @@ func (r *EntityService) pathNodeMapper(entPathNode *ent.PathNode, availableNodes
 	return &p
 }
 
-func (r *EntityService) mapPathNodeArray(pathNodePtr []*navigation.PathNode) ([]*ent.PathNode, error) {
+func (r *EntityMapper) mapPathNodeArray(pathNodePtr []*navigation.PathNode) ([]*ent.PathNode, error) {
 
 	var entPathNodes []*ent.PathNode
 
@@ -67,7 +67,7 @@ func (r *EntityService) mapPathNodeArray(pathNodePtr []*navigation.PathNode) ([]
 	return entPathNodes, nil
 }
 
-func (r *EntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, error) {
+func (r *EntityMapper) mapPathNode(p *navigation.PathNode) (*ent.PathNode, error) {
 
 	if p.Id != 0 {
 		node, err := r.client.PathNode.Get(r.context, p.Id)
@@ -93,7 +93,7 @@ func (r *EntityService) mapPathNode(p *navigation.PathNode) (*ent.PathNode, erro
 		Save(r.context)
 }
 
-func (r *EntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
+func (r *EntityMapper) GetAllPathNodes() ([]navigation.PathNode, error) {
 	nodesPrt, err := r.client.PathNode.Query().WithLinkedFrom().WithLinkedTo().All(r.context)
 	if err != nil {
 		return nil, err
@@ -111,7 +111,7 @@ func (r *EntityService) GetAllPathNodes() ([]navigation.PathNode, error) {
 	return nodes, nil
 }
 
-func (r *EntityService) linkPathNode(pathNode *navigation.PathNode) error {
+func (r *EntityMapper) linkPathNode(pathNode *navigation.PathNode) error {
 
 	var connectedIDs []int
 

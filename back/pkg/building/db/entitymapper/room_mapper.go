@@ -12,7 +12,7 @@ import (
 	"studi-guide/pkg/building/db/ent/room"
 )
 
-func (r *EntityService) roomArrayMapper(entRooms []*ent.Room) []Room {
+func (r *EntityMapper) roomArrayMapper(entRooms []*ent.Room) []Room {
 	var rooms []Room
 
 	for _, roomPtr := range entRooms {
@@ -22,7 +22,7 @@ func (r *EntityService) roomArrayMapper(entRooms []*ent.Room) []Room {
 	return rooms
 }
 
-func (r *EntityService) roomMapper(entRoom *ent.Room) *Room {
+func (r *EntityMapper) roomMapper(entRoom *ent.Room) *Room {
 
 	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).
 		WithMapitem(func(q *ent.MapItemQuery) {
@@ -45,7 +45,7 @@ func (r *EntityService) roomMapper(entRoom *ent.Room) *Room {
 	return &rm
 }
 
-func (r *EntityService) GetAllRooms() ([]Room, error) {
+func (r *EntityMapper) GetAllRooms() ([]Room, error) {
 
 	roomsPtr, err := r.client.Room.Query().WithMapitem().All(r.context)
 	if err != nil {
@@ -61,7 +61,7 @@ func (r *EntityService) GetAllRooms() ([]Room, error) {
 	return rooms, nil
 }
 
-func (r *EntityService) GetRoom(roomName, buildingName, campusName string) (Room, error) {
+func (r *EntityMapper) GetRoom(roomName, buildingName, campusName string) (Room, error) {
 
 	q := r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(roomName)))
 
@@ -82,16 +82,16 @@ func (r *EntityService) GetRoom(roomName, buildingName, campusName string) (Room
 	return *r.roomMapper(entRoom), nil
 }
 
-func (r *EntityService) AddRoom(room Room) error {
+func (r *EntityMapper) AddRoom(room Room) error {
 
 	return r.storeRooms([]Room{room})
 }
 
-func (r *EntityService) AddRooms(rooms []Room) error {
+func (r *EntityMapper) AddRooms(rooms []Room) error {
 	return r.storeRooms(rooms)
 }
 
-func (r *EntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter, buildingFilter, campus string) ([]Room, error) {
+func (r *EntityMapper) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter, buildingFilter, campus string) ([]Room, error) {
 
 	var entRooms []*ent.Room
 	var err error = nil
@@ -126,7 +126,7 @@ func (r *EntityService) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFi
 	return r.roomArrayMapper(entRooms), nil
 }
 
-func (r *EntityService) storeRooms(rooms []Room) error {
+func (r *EntityMapper) storeRooms(rooms []Room) error {
 	var errorStr []string
 
 	for _, rm := range rooms {

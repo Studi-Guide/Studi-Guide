@@ -26,7 +26,7 @@ func BuildContainer() *dig.Container {
 
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
-	container.Provide(entitymapper.NewEntityService)
+	container.Provide(entitymapper.NewEntityMapper)
 	container.Provide(ctl.StudiGuideCtlCli)
 	return container
 }

@@ -10,13 +10,13 @@ import (
 	"testing"
 )
 
-func setupRoomEntityService() (*EntityService, error) {
+func setupRoomEntityService() (*EntityMapper, error) {
 	os.Setenv("DB_DRIVER_NAME", "sqlite3")
 	os.Setenv("DB_DATA_SOURCE", ":memory:")
 
 	e := env.NewEnv()
 
-	return newEntityService(e)
+	return newEntityMapper(e)
 }
 
 func TestMapRoom(t *testing.T) {

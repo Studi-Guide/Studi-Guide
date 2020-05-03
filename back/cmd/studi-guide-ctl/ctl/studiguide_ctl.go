@@ -8,7 +8,7 @@ import (
 
 //StudiGuideCtlCli
 // get the CLI to run control commands on the studi guide server
-func StudiGuideCtlCli(dbService *entitymapper.EntityService) *cli.App {
+func StudiGuideCtlCli(dbService *entitymapper.EntityMapper) *cli.App {
 
 	app := cli.App{
 		Name:  "studi-guide-ctl",

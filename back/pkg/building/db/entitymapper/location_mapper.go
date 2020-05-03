@@ -7,7 +7,7 @@ import (
 	"studi-guide/pkg/navigation"
 )
 
-func (r *EntityService) locationArrayMapper(entLocations []*ent.Location) []Location {
+func (r *EntityMapper) locationArrayMapper(entLocations []*ent.Location) []Location {
 	var locations []Location
 	for _, entLocation := range entLocations {
 		locations = append(locations, *r.locationMapper(entLocation))
@@ -15,7 +15,7 @@ func (r *EntityService) locationArrayMapper(entLocations []*ent.Location) []Loca
 	return locations
 }
 
-func (r *EntityService) locationMapper(entLocation *ent.Location) *Location {
+func (r *EntityMapper) locationMapper(entLocation *ent.Location) *Location {
 	l := Location{
 		Id:          entLocation.ID,
 		Name:        entLocation.Name,
@@ -43,7 +43,7 @@ func (r *EntityService) locationMapper(entLocation *ent.Location) *Location {
 	return &l
 }
 
-func (r *EntityService) mapSectionArray(sections []Section) ([]*ent.Section, error) {
+func (r *EntityMapper) mapSectionArray(sections []Section) ([]*ent.Section, error) {
 
 	var entSections []*ent.Section
 
@@ -59,7 +59,7 @@ func (r *EntityService) mapSectionArray(sections []Section) ([]*ent.Section, err
 
 }
 
-func (r *EntityService) GetAllLocations() ([]Location, error) {
+func (r *EntityMapper) GetAllLocations() ([]Location, error) {
 	entLoactions, err := r.client.Location.Query().
 		WithTags().
 		WithBuilding().
@@ -72,7 +72,7 @@ func (r *EntityService) GetAllLocations() ([]Location, error) {
 	return r.locationArrayMapper(entLoactions), nil
 }
 
-func (r *EntityService) GetLocation(name, building, campus string) (Location, error) {
+func (r *EntityMapper) GetLocation(name, building, campus string) (Location, error) {
 
 	q := r.client.Location.Query().WithPathnode().WithBuilding().WithTags().Where(location.NameEQ(name))
 
@@ -91,7 +91,7 @@ func (r *EntityService) GetLocation(name, building, campus string) (Location, er
 	return *r.locationMapper(entLocation), nil
 }
 
-func (r *EntityService) FilterLocations(name, tagStr, floor, building, campus string) ([]Location, error) {
+func (r *EntityMapper) FilterLocations(name, tagStr, floor, building, campus string) ([]Location, error) {
 
 	query := r.client.Location.Query().
 		WithPathnode().WithTags()

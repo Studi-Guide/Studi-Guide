@@ -7,7 +7,7 @@ import (
 	"studi-guide/pkg/navigation"
 )
 
-func (r *EntityService) mapItemArrayMapper(entMapItems []*ent.MapItem) []MapItem {
+func (r *EntityMapper) mapItemArrayMapper(entMapItems []*ent.MapItem) []MapItem {
 	var mapItems []MapItem
 	for _, entMapItem := range entMapItems {
 		mapItems = append(mapItems, *r.mapItemMapper(entMapItem))
@@ -15,7 +15,7 @@ func (r *EntityService) mapItemArrayMapper(entMapItems []*ent.MapItem) []MapItem
 	return mapItems
 }
 
-func (r *EntityService) mapItemMapper(entMapItem *ent.MapItem) *MapItem {
+func (r *EntityMapper) mapItemMapper(entMapItem *ent.MapItem) *MapItem {
 	m := MapItem{
 		Doors:     []Door{},
 		Color:     "",
@@ -52,7 +52,7 @@ func (r *EntityService) mapItemMapper(entMapItem *ent.MapItem) *MapItem {
 	return &m
 }
 
-func (r *EntityService) GetAllMapItems() ([]MapItem, error) {
+func (r *EntityMapper) GetAllMapItems() ([]MapItem, error) {
 	entMapItems, err := r.client.MapItem.Query().
 		WithPathNodes().
 		WithColor().
@@ -67,7 +67,7 @@ func (r *EntityService) GetAllMapItems() ([]MapItem, error) {
 	return r.mapItemArrayMapper(entMapItems), nil
 }
 
-func (r *EntityService) FilterMapItems(floor, buildingFilter, campus string) ([]MapItem, error) {
+func (r *EntityMapper) FilterMapItems(floor, buildingFilter, campus string) ([]MapItem, error) {
 
 	mapQuery := r.client.MapItem.Query()
 

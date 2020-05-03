@@ -17,7 +17,7 @@ import (
 
 var testRooms []Room
 
-func setupTestRoomDbService() (*EntityService, *sql.DB) {
+func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 	os.Setenv("DB_DRIVER_NAME", "sqlite3")
 	os.Setenv("DB_DATA_SOURCE", ":memory:")
 
@@ -131,7 +131,7 @@ func setupTestRoomDbService() (*EntityService, *sql.DB) {
 		})
 	}
 
-	dbService := EntityService{client: client, table: "", context: ctx}
+	dbService := EntityMapper{client: client, table: "", context: ctx}
 
 	return &dbService, drv.DB()
 }
@@ -142,7 +142,7 @@ func TestNewRoomDbService(t *testing.T) {
 
 	e := env.NewEnv()
 
-	dbService, err := NewEntityService(e)
+	dbService, err := NewEntityMapper(e)
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
@@ -154,7 +154,7 @@ func TestNewRoomDbService(t *testing.T) {
 	os.Setenv("DB_DATA_SOURCE", ":memory:")
 
 	e = env.NewEnv()
-	dbService, err = NewEntityService(e)
+	dbService, err = NewEntityMapper(e)
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}

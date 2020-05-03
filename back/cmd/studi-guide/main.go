@@ -42,11 +42,11 @@ func BuildContainer() *dig.Container {
 
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
-	container.Provide(entitymapper.NewEntityService)
+	container.Provide(entitymapper.NewEntityMapper)
 	container.Provide(server.NewStudiGuideServer)
 
 	// Register entity service for multiple interfaces
-	container.Invoke(func(entityserver *entitymapper.EntityService) {
+	container.Invoke(func(entityserver *entitymapper.EntityMapper) {
 		container.Provide(func() services.LocationProvider {
 			return entityserver
 		})
@@ -61,7 +61,7 @@ func BuildContainer() *dig.Container {
 	})
 
 	// container.Provide(container.Provide(func() services.LocationProvider {
-	// 	return entitymapper.NewEntityService()
+	// 	return entitymapper.NewEntityMapper()
 	// }))
 
 	container.Provide(navigation.NewDijkstraNavigation)
