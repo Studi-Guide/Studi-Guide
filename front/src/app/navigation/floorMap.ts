@@ -1,5 +1,4 @@
-import { Injectable } from '@angular/core';
-import {Room, Door, Section, svgPath, MapItem} from "../building-objects-if";
+import {Door, Section, SvgPath, MapItem} from '../building-objects-if';
 
 // @Injectable({
 //   providedIn: 'root'
@@ -8,8 +7,8 @@ export class FloorMap {
 
     public objectsToBeVisualized: MapItem[];
 
-    public calculatedRoomPaths: svgPath[];
-    public calculatedDoorLines: svgPath[];
+    public calculatedRoomPaths: SvgPath[];
+    public calculatedDoorLines: SvgPath[];
 
     public svgWidth: number;
     public svgHeight: number;
@@ -29,20 +28,20 @@ export class FloorMap {
     }
 
     private static buildRoomSvgPathFromSections(roomSections:Section[]) : string {
-        let path_d:string = 'M';
+        let pathD = 'M';
         for (const section of roomSections) {
-            if (path_d !== 'M') {
-                path_d += 'L';
+            if (pathD !== 'M') {
+                pathD += 'L';
             }
-            path_d += section.Start.X + ' ' + section.Start.Y + ' ';
+            pathD += section.Start.X + ' ' + section.Start.Y + ' ';
         }
-        path_d += 'Z';
-        return path_d;
+        pathD += 'Z';
+        return pathD;
     }
 
     public calculateSvgPathsAndSvgWidthHeight() {
         for (const item of this.objectsToBeVisualized) {
-            let itemShapePath:svgPath = {
+            const itemShapePath:SvgPath = {
                 d : FloorMap.buildRoomSvgPathFromSections(item.Sections),
                 fill : item.Color
             };
@@ -50,7 +49,7 @@ export class FloorMap {
             // TODO remove check if null
             if (item.Doors != null && item.Doors.length >= 1) {
                 for (const door of item.Doors) {
-                    let doorLine:svgPath = {
+                    const doorLine:SvgPath = {
                         d : FloorMap.buildDoorSvgLineFromSection(door),
                         fill : itemShapePath.fill
                     };

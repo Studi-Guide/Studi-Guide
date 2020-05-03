@@ -1,7 +1,7 @@
-import {Location, MapItem, PathNode, SvgLocationName, svgPath} from '../building-objects-if';
+import {Location, MapItem, PathNode, SvgLocationName, SvgPath} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component, ViewChild} from '@angular/core';
-import {ModalController} from "@ionic/angular";
+import {ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {FloorMap} from './floorMap';
 import {DistanceToBeDisplayed, NaviRoute, ReceivedRoute} from './naviRoute';
@@ -35,8 +35,8 @@ export class NavigationPage {
   public distanceIsVisible = false;
 
   private floor: FloorMap;
-  public calculatedRoomPaths: svgPath[];
-  public calculatedDoorLines: svgPath[];
+  public calculatedRoomPaths: SvgPath[];
+  public calculatedDoorLines: SvgPath[];
   public mapSvgWidth: number;
   public mapSvgHeight: number;
   public locations: SvgLocationName[];
@@ -182,7 +182,7 @@ export class NavigationPage {
     this.searchBtnIsVisible = true;
     this.closeRouteBtnIsVisible = false;
   }
-  
+
   async presentAvailableFloorModal() {
     this.startPinIsVisible = false;
     this.dataService.get_building(this.startInput.slice(0, 2)).subscribe(async (res: JSON) => {
@@ -199,10 +199,10 @@ export class NavigationPage {
 
       availableFloorModal.onDidDismiss()
           .then((data) => {
-            if (data["data"]) {
+            if (data['data']) {
               const building = this.startInput.slice(0, 2);
-              this.fetchFloorByItsNumber(building, data["data"])
-              this.fetchLocations(building, data["data"])
+              this.fetchFloorByItsNumber(building, data['data'])
+              this.fetchLocations(building, data['data'])
             }
           })
 

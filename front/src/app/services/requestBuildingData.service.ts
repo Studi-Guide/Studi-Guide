@@ -5,19 +5,19 @@ import { Injectable } from '@angular/core';
 })
 export class RequestBuildingDataService {
 
-  private async:boolean = true;
+  private async = true;
 
   constructor() { }
 
   public fetchDiscoverFloorData(method, url:string, dataToSend, callback) {
-    let xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
 
     xhr.onreadystatechange = function() {
-      if (this.readyState == 4 && this.status == 200) {
-        if (callback!=undefined) {
+      if (this.readyState === 4 && this.status === 200) {
+        if (callback !== undefined) {
           callback(xhr.responseText);
         } else {
-          console.info("no request callback passed");
+          console.info('no request callback passed');
         }
       }
     };

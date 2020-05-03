@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {PathNode} from "../building-objects-if";
+import {PathNode} from '../building-objects-if';
 
 @Injectable({
     providedIn: 'root'
@@ -18,8 +18,8 @@ export class DistanceToBeDisplayed {
 
 export class NaviRoute {
 
-    private pathNodesToGo:PathNode[] = [{"Coordinate": { "X": 0, "Y": 0, "Z": 0 }}];
-    public distance: DistanceToBeDisplayed = { "Value":0, "X": 0, "Y": 0 };
+    private pathNodesToGo:PathNode[] = [{'Coordinate': { 'X': 0, 'Y': 0, 'Z': 0 }}];
+    public distance: DistanceToBeDisplayed = { 'Value':0, 'X': 0, 'Y': 0 };
     public svgRoute: string;
 
     constructor(response:ReceivedRoute) {
@@ -30,13 +30,13 @@ export class NaviRoute {
     }
 
     private calculateSvgPositionForDistance() {
-        let numberOfPathNodes:number = this.pathNodesToGo.length;
+        const numberOfPathNodes:number = this.pathNodesToGo.length;
         this.distance.X = this.pathNodesToGo[Math.round((numberOfPathNodes-1)/2)].Coordinate.X;
         this.distance.Y = this.pathNodesToGo[Math.round((numberOfPathNodes-1)/2)].Coordinate.Y;
     }
 
     private calculateSvgPathForRoute() {
-        let points:string = '';
+        let points = '';
         for (const pathNode of this.pathNodesToGo) {
             points += pathNode.Coordinate.X + ',' + pathNode.Coordinate.Y + ' ';
         }
