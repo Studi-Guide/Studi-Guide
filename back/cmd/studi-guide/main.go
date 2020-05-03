@@ -49,7 +49,7 @@ func BuildContainer() *dig.Container {
 
 	// Register entity service for multiple interfaces
 	container.Invoke(func(entityserver *entitymapper.EntityMapper) {
-		container.Provide(func() services.LocationProvider {
+		container.Provide(func() services.PathNodeProvider {
 			return entityserver
 		})
 

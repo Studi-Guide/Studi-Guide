@@ -72,10 +72,10 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mock := NewMockLocationProvider(ctrl)
+	mock := NewMockPathNodeProvider(ctrl)
 	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
-	mock.EXPECT().GetLocation("RoomN01", "", "").Return(loc1, nil)
-	mock.EXPECT().GetLocation("RoomN02", "", "").Return(loc2, nil)
+	mock.EXPECT().GetPathNode("RoomN01").Return(loc1.PathNode, nil)
+	mock.EXPECT().GetPathNode("RoomN02").Return(loc2.PathNode, nil)
 
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, mock)
@@ -121,9 +121,9 @@ func TestNavigationService_CalculateFromString_Negative(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mock := NewMockLocationProvider(ctrl)
+	mock := NewMockPathNodeProvider(ctrl)
 	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
-	mock.EXPECT().GetLocation("RoomN00", "", "").Return(entitymapper.Location{}, errors.New("error text"))
+	mock.EXPECT().GetPathNode("RoomN00").Return(navigation.PathNode{}, errors.New("error text"))
 
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, mock)
@@ -153,13 +153,15 @@ func TestNavigationService_Calculate(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mock := NewMockLocationProvider(ctrl)
+	mock := NewMockPathNodeProvider(ctrl)
 	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
+	mock.EXPECT().GetPathNode("loc1").Return(loc1.PathNode, nil)
+	mock.EXPECT().GetPathNode("loc2").Return(loc2.PathNode, nil)
 
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, mock)
 
-	nodes, err := navigationservice.Calculate(loc1, loc2)
+	nodes, err := navigationservice.CalculateFromString("loc1", "loc2")
 
 	if err != nil {
 		t.Error(err)
@@ -191,10 +193,10 @@ func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mock := NewMockLocationProvider(ctrl)
+	mock := NewMockPathNodeProvider(ctrl)
 	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode}, nil)
-	mock.EXPECT().GetLocation("RoomN01", "", "").Return(loc1, nil)
-	mock.EXPECT().GetLocation("RoomN0001", "", "").Return(entitymapper.Location{}, errors.New("error text"))
+	mock.EXPECT().GetPathNode("RoomN01").Return(loc1.PathNode, nil)
+	mock.EXPECT().GetPathNode("RoomN0001").Return(navigation.PathNode{}, errors.New("error text"))
 
 
 	calculator, _ := NewMockRoutecalCulator()
@@ -225,7 +227,7 @@ func TestNavigationService_CalculateFromCoordinate(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
-	mock := NewMockLocationProvider(ctrl)
+	mock := NewMockPathNodeProvider(ctrl)
 	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
 
 

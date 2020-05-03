@@ -1,11 +1,10 @@
 package services
 
 import (
-	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/navigation"
 )
 
-type LocationProvider interface {
+type PathNodeProvider interface {
 	GetAllPathNodes() ([]navigation.PathNode, error)
-	GetLocation(name, building, campus string) (entitymapper.Location, error)
+	GetPathNode(name string) (navigation.PathNode, error)
 }
