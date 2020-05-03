@@ -5,7 +5,9 @@ import (
 	"studi-guide/cmd/studi-guide/server"
 	"studi-guide/docs"
 	"studi-guide/pkg/building/db/entitymapper"
+	"studi-guide/pkg/building/info"
 	"studi-guide/pkg/building/location"
+	maps "studi-guide/pkg/building/map"
 	"studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
@@ -56,6 +58,14 @@ func BuildContainer() *dig.Container {
 		})
 
 		container.Provide(func() location.LocationProvider {
+			return entityserver
+		})
+
+		container.Provide(func() maps.MapServiceProvider {
+			return entityserver
+		})
+
+		container.Provide(func() info.BuildingProvider {
 			return entityserver
 		})
 	})
