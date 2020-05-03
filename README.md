@@ -1,6 +1,7 @@
 # Build status
 ![Go](https://github.com/Studi-Guide/Studi-Guide/workflows/Go/badge.svg?branch=master)
 [![codecov](https://codecov.io/gh/Studi-Guide/Studi-Guide/branch/master/graph/badge.svg)](https://codecov.io/gh/Studi-Guide/Studi-Guide)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Studi-Guide/Studi-Guide)](https://goreportcard.com/report/github.com/Studi-Guide/Studi-Guide)
 
 # Studi-Guide
 TH Nürnberg
