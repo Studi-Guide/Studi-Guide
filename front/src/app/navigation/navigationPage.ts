@@ -1,9 +1,11 @@
-import {svgPath, Location, SvgLocationName, PathNode, MapItem} from '../building-objects-if';
+import {Location, MapItem, PathNode, SvgLocationName, svgPath} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component, ViewChild} from '@angular/core';
+import {ModalController} from "@ionic/angular";
 import {DataService} from '../services/data.service';
 import {FloorMap} from './floorMap';
 import {DistanceToBeDisplayed, NaviRoute, ReceivedRoute} from './naviRoute';
+import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 
 @Component({
   selector: 'app-navigation',
@@ -43,7 +45,8 @@ export class NavigationPage {
 //  public testRooms:Room[] = [];
 //  public testRoute:PathNode[];
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService,
+              private modalCtrl: ModalController) {
     this.dataService = dataService;
 
     this.calculatedRoute = '';
@@ -178,6 +181,33 @@ export class NavigationPage {
     searchbars.setAttribute('color', 'light-tint');
     this.searchBtnIsVisible = true;
     this.closeRouteBtnIsVisible = false;
+  }
+  
+  async presentAvailableFloorModal() {
+    this.startPinIsVisible = false;
+    this.dataService.get_building(this.startInput.slice(0, 2)).subscribe(async (res: JSON) => {
+      // @ts-ignore
+      const {Floors} = res;
+      const availableFloorModal = await this.modalCtrl.create({
+        component: AvailableFloorsPage,
+        cssClass: 'floor-modal',
+        componentProps: {
+          floors: Floors
+        }
+      });
+      availableFloorModal.present();
+
+      availableFloorModal.onDidDismiss()
+          .then((data) => {
+            if (data["data"]) {
+              const building = this.startInput.slice(0, 2);
+              this.fetchFloorByItsNumber(building, data["data"])
+              this.fetchLocations(building, data["data"])
+            }
+          })
+
+
+    });
   }
 
 /*  private static testRenderPathNodes() : Coordinate[] {
