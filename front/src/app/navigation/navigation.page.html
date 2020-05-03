@@ -1,27 +1,27 @@
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
-  <ion-item>
-    <ion-label position="stacked"><ion-text color="primary">room / floor</ion-text></ion-label>
-    <ion-input type="text" placeholder="KA.3xx" [(ngModel)]="startInput"></ion-input>
+  <ion-item color="">
+    <ion-searchbar #discoverySearchbar animated="true" search-icon="search-circle-outline" inputmode="text"
+                   mode="ios" placeholder="location" color="light" icon-color="dark"
+                   [(ngModel)]="startInput" (keyup.enter)="checkWhatIsRequestedByEnterKey()">
+    </ion-searchbar>
+    <ion-button size="default" mode="ios" color="medium" (click)="showFloorForSearch()" *ngIf="searchBtnIsVisible">
+      <ion-icon size="large" slot="icon-only" name="search" color=""></ion-icon>
+    </ion-button>
+    <span class="vertical-line" *ngIf="searchBtnIsVisible"></span>
+    <ion-button size="default" mode="ios" color="primary" (click)="showRoute()">
+      <ion-icon size="large" slot="icon-only" src="/assets/navigation-svgs/directions-24px.svg"></ion-icon>
+    </ion-button>
   </ion-item>
-  <ion-item *ngIf="routeInputIsVisible">
-    <ion-label position="stacked"><ion-text color="primary">destination</ion-text></ion-label>
-    <ion-input type="text" placeholder="KA.3yy" [(ngModel)]="destinationInput"></ion-input>
+  <ion-item color="primary" *ngIf="routeInputIsVisible">
+    <ion-searchbar search-icon="navigate-circle-outline" animated="true" inputmode="text" mode="ios"
+                   placeholder="destination" color="light" icon-color="dark"
+                   [(ngModel)]="destinationInput" (keyup.enter)="checkWhatIsRequestedByEnterKey()">
+    </ion-searchbar>
+    <ion-button size="default" mode="ios" color="primary" (click)="hideRouteSearchbar()" *ngIf="closeRouteBtnIsVisible">
+      <ion-icon size="large" slot="icon-only" name="close-outline"></ion-icon>
+    </ion-button>
   </ion-item>
-  <ion-grid>
-    <ion-row>
-      <ion-col size="8">
-        <ion-button size="small" color="primary" (click)="showFloorForSearch()" *ngIf="searchBtnIsVisible">
-          <ion-icon slot="end" name="search"></ion-icon>
-          search
-        </ion-button>
-        <ion-button size="small" color="primary" (click)="showRoute()" *ngIf="routeBtnIsVisible">
-          <ion-icon slot="end" name="map"></ion-icon>
-          <span id="routeBtnText">route</span>
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
 
   <div id="building-map" *ngIf="mapIsVisible">
     <span>
