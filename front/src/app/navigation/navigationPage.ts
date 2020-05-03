@@ -164,9 +164,11 @@ export class NavigationPage {
 
       availableFloorModal.onDidDismiss()
           .then((data) => {
-            const building = this.startInput.slice(0, 2);
-            this.fetchFloorByItsNumber(building, data["data"])
-            this.fetchLocations(building, data["data"])
+            if (data["data"]) {
+              const building = this.startInput.slice(0, 2);
+              this.fetchFloorByItsNumber(building, data["data"])
+              this.fetchLocations(building, data["data"])
+            }
           })
 
 
