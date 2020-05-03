@@ -24,6 +24,11 @@
   </ion-grid>
 
   <div id="building-map" *ngIf="mapIsVisible">
+    <span>
+    <ion-item (click)="presentAvailableFloorModal()">
+      <ion-icon slot="start" name="layers"></ion-icon>
+    </ion-item>
+    </span>
     <svg xmlns="http://www.w3.org/2000/svg" attr.width="{{mapSvgWidth}}" attr.height="{{mapSvgHeight}}">
       <path *ngFor="let path of calculatedRoomPaths"
             attr.d="{{path.d}}"

@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavigationPage } from './navigationPage';
+import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 
 @NgModule({
   imports: [
