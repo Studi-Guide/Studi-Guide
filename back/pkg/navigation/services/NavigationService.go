@@ -1,7 +1,7 @@
 package services
 
 import (
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/navigation"
 )
 
@@ -36,7 +36,7 @@ func (n *NavigationService) CalculateFromString(startLocationName string, endLoc
 	return n.Calculate(startLocation, endLocation)
 }
 
-func (n *NavigationService) Calculate(startLocation entityservice.Location, endLocation entityservice.Location) (*navigation.NavigationRoute, error) {
+func (n *NavigationService) Calculate(startLocation entitymapper.Location, endLocation entitymapper.Location) (*navigation.NavigationRoute, error) {
 	startNode := startLocation.PathNode
 	endNode := endLocation.PathNode
 	nodes, distance, err := n.routeCalc.GetRoute(startNode, endNode)

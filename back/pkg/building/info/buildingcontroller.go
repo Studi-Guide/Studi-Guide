@@ -3,7 +3,7 @@ package info
 import (
 	"fmt"
 	"net/http"
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/building/location"
 	maps "studi-guide/pkg/building/map"
 	"studi-guide/pkg/building/room/models"
@@ -47,12 +47,12 @@ func NewBuildingController(router *gin.RouterGroup, buildingProvider BuildingPro
 // @Produce  json
 // @Tags BuildingController
 // @Param name query string false "name of the building"
-// @Success 200 {array} entityservice.Building
+// @Success 200 {array} entitymapper.Building
 // @Router /buildings [get]
 func (b BuildingController) GetBuildings(c *gin.Context) {
 	name := c.Query("name")
 
-	var buildings []entityservice.Building
+	var buildings []entitymapper.Building
 	var err error
 
 	var useFilterApi bool
@@ -90,7 +90,7 @@ func (b BuildingController) GetBuildings(c *gin.Context) {
 // @Produce  json
 // @Tags BuildingController
 // @Param building path string true "name of the building"
-// @Success 200 {object} entityservice.Building
+// @Success 200 {object} entitymapper.Building
 // @Router /buildings/{building} [get]
 func (b BuildingController) GetBuildingByName(context *gin.Context) {
 	name := context.Param("building")
@@ -115,7 +115,7 @@ func (b BuildingController) GetBuildingByName(context *gin.Context) {
 // @Tags BuildingController
 // @Param building path string false "name of the building"
 // @Param floor path string false "name of the floor"
-// @Success 200 {array} entityservice.Room
+// @Success 200 {array} entitymapper.Room
 // @Router /buildings/{building}/floors/{floor}/rooms [get]
 func (b BuildingController) GetRoomsFromBuildingFloor(context *gin.Context) {
 	building := context.Param("building")
@@ -141,7 +141,7 @@ func (b BuildingController) GetRoomsFromBuildingFloor(context *gin.Context) {
 // @Tags BuildingController
 // @Param building path string false "name of the building"
 // @Param floor path string false "name of the floor"
-// @Success 200 {array} entityservice.MapItem
+// @Success 200 {array} entitymapper.MapItem
 // @Router /buildings/{building}/floors/{floor}/maps [get]
 func (b BuildingController) GetMapsFromBuildingFloor(context *gin.Context) {
 	building := context.Param("building")
@@ -167,7 +167,7 @@ func (b BuildingController) GetMapsFromBuildingFloor(context *gin.Context) {
 // @Tags BuildingController
 // @Param building path string false "name of the building"
 // @Param floor path string false "name of the floor"
-// @Success 200 {array} entityservice.Location
+// @Success 200 {array} entitymapper.Location
 // @Router /buildings/{building}/floors/{floor}/locations [get]
 func (b BuildingController) GetLocationsFromBuildingFloor(context *gin.Context) {
 	building := context.Param("building")

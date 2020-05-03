@@ -1,13 +1,13 @@
 package models
 
 import (
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 )
 
 type RoomServiceProvider interface {
-	GetAllRooms() ([]entityservice.Room, error)
-	GetRoom(name, building, campus string) (entityservice.Room, error)
-	AddRoom(room entityservice.Room) error
-	AddRooms(rooms []entityservice.Room) error
-	FilterRooms(floor, name, alias, room, building, campus string) ([]entityservice.Room, error)
+	GetAllRooms() ([]entitymapper.Room, error)
+	GetRoom(name, building, campus string) (entitymapper.Room, error)
+	AddRoom(room entitymapper.Room) error
+	AddRooms(rooms []entitymapper.Room) error
+	FilterRooms(floor, name, alias, room, building, campus string) ([]entitymapper.Room, error)
 }

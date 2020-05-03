@@ -1,8 +1,8 @@
 package maps
 
-import "studi-guide/pkg/building/db/entityservice"
+import "studi-guide/pkg/building/db/entitymapper"
 
 type MapServiceProvider interface {
-	GetAllMapItems() ([]entityservice.MapItem, error)
-	FilterMapItems(floor, building, campus string) ([]entityservice.MapItem, error)
+	GetAllMapItems() ([]entitymapper.MapItem, error)
+	FilterMapItems(floor, building, campus string) ([]entitymapper.MapItem, error)
 }

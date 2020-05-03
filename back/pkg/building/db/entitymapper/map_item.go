@@ -1,4 +1,4 @@
-package entityservice
+package entitymapper
 
 import (
 	"studi-guide/pkg/navigation"

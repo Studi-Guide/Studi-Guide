@@ -4,7 +4,7 @@ import (
 	"log"
 	"studi-guide/cmd/studi-guide/server"
 	"studi-guide/docs"
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/building/location"
 	"studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/env"
@@ -42,11 +42,11 @@ func BuildContainer() *dig.Container {
 
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
-	container.Provide(entityservice.NewEntityService)
+	container.Provide(entitymapper.NewEntityService)
 	container.Provide(server.NewStudiGuideServer)
 
 	// Register entity service for multiple interfaces
-	container.Invoke(func(entityserver *entityservice.EntityService) {
+	container.Invoke(func(entityserver *entitymapper.EntityService) {
 		container.Provide(func() services.LocationProvider {
 			return entityserver
 		})
@@ -61,7 +61,7 @@ func BuildContainer() *dig.Container {
 	})
 
 	// container.Provide(container.Provide(func() services.LocationProvider {
-	// 	return entityservice.NewEntityService()
+	// 	return entitymapper.NewEntityService()
 	// }))
 
 	container.Provide(navigation.NewDijkstraNavigation)

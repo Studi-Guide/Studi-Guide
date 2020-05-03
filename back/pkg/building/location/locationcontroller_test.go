@@ -7,7 +7,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"net/http"
 	"net/http/httptest"
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/navigation"
 	"testing"
 )
@@ -16,7 +16,7 @@ func TestLocationController_GetLocations(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	expectLocations := []entityservice.Location{entityservice.Location{
+	expectLocations := []entitymapper.Location{entitymapper.Location{
 		Id:          1,
 		Name:        "bla",
 		Description: "descr",
@@ -52,7 +52,7 @@ func TestLocationController_GetLocations2(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	expectLocations := []entityservice.Location{entityservice.Location{
+	expectLocations := []entitymapper.Location{entitymapper.Location{
 		Id:          1,
 		Name:        "bla",
 		Description: "descr",
@@ -108,7 +108,7 @@ func TestLocationController_GetLocationByName(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
-	expectLocation := entityservice.Location{
+	expectLocation := entitymapper.Location{
 		Id:          1,
 		Name:        "bla",
 		Description: "descr",
@@ -144,7 +144,7 @@ func TestLocationController_GetLocationByName2(t *testing.T) {
 	defer ctrl.Finish()
 
 	mock := NewMockLocationProvider(ctrl)
-	mock.EXPECT().GetLocation("bla", "", "").Return(entityservice.Location{}, errors.New("error text"))
+	mock.EXPECT().GetLocation("bla", "", "").Return(entitymapper.Location{}, errors.New("error text"))
 
 	router := gin.Default()
 	locationRouter := router.Group("/locations")

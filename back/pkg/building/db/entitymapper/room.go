@@ -1,4 +1,4 @@
-package entityservice
+package entitymapper
 
 type Room struct {
 	MapItem

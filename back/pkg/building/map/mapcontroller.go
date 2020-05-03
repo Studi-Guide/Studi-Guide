@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 )
 
 type MapController struct {
@@ -27,7 +27,7 @@ func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) erro
 // @Param floor query int false "floor of the map items"
 // @Param campus query string false "map item is linked to a certain campus"
 // @Param building query string false "map item is linked to a building"
-// @Success 200 {array} entityservice.MapItem
+// @Success 200 {array} entitymapper.MapItem
 // @Router /maps [get]
 func (l MapController) GetMapItems(c *gin.Context) {
 	building := c.Param("building")
@@ -44,7 +44,7 @@ func (l MapController) GetMapItems(c *gin.Context) {
 	coordinateDelta := c.Query("coordinate-delta")
 	//-----------------------------
 
-	var mapItems []entityservice.MapItem
+	var mapItems []entitymapper.MapItem
 	var err error
 
 	var useFilterApi bool

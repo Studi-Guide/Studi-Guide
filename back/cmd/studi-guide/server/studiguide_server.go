@@ -10,7 +10,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/building/info"
 	"studi-guide/pkg/building/location"
 	maps "studi-guide/pkg/building/map"
@@ -24,7 +24,7 @@ type StudiGuideServer struct {
 	router *gin.Engine
 }
 
-func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityService, navigationprovider services.NavigationServiceProvider) *StudiGuideServer {
+func NewStudiGuideServer(env *env.Env, entityService *entitymapper.EntityService, navigationprovider services.NavigationServiceProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/building/room/models"
 )
 
@@ -34,7 +34,7 @@ func NewRoomController(router *gin.RouterGroup, provider models.RoomServiceProvi
 // @Param floor query int false "floor of the room"
 // @Param alias query string false "potential alias of the room"
 // @Param room query string false "rooms that contain the query string in name, alias or description"
-// @Success 200 {array} entityservice.Room
+// @Success 200 {array} entitymapper.Room
 // @Router /rooms/ [get]
 func (l *RoomController) GetRoomList(c *gin.Context) {
 
@@ -49,7 +49,7 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 	}
 	campusFilter := c.Query("campus")
 
-	var rooms []entityservice.Room
+	var rooms []entitymapper.Room
 	var err error
 
 	if len(nameFilter) == 0 && len(floorFilter) == 0 && len(aliasFilter) == 0 && len(roomFilter) == 0 && len(buildingFilter) == 0 && len(campusFilter) == 0{
@@ -85,7 +85,7 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 // @Tags RoomController
 // @Produce  json
 // @Param name path string true "get room by name"
-// @Success 200 {object} entityservice.Room
+// @Success 200 {object} entitymapper.Room
 // @Router /rooms/{name} [get]
 func (l *RoomController) GetRoom(c *gin.Context) {
 	//name := c.Query("name") //mux.Vars(r)["name"]

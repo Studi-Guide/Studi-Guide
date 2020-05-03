@@ -1,7 +1,7 @@
 package models
 
 import (
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/navigation"
 )
 
@@ -27,7 +27,7 @@ type ImportMapItems struct {
 	Doors       []ImportDoor
 	Color       string
 	Floor 		string
-	Sections    []entityservice.Section
+	Sections    []entitymapper.Section
 	Campus      string
 	Building 	string
 	PathNodes 	[]ImportPathNode

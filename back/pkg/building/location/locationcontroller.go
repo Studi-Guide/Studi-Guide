@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 )
 
 type LocationController struct {
@@ -30,7 +30,7 @@ func NewLocationController(router *gin.RouterGroup, provider LocationProvider) e
 // @Param floor query string false "floor of the location"
 // @Param campus query string false "campus of the location"
 // @Param building query string false "building of the location"
-// @Success 200 {array} entityservice.Location
+// @Success 200 {array} entitymapper.Location
 // @Router /locations [get]
 func (l LocationController) GetLocations(c *gin.Context) {
 
@@ -44,7 +44,7 @@ func (l LocationController) GetLocations(c *gin.Context) {
 		building = c.Query("building")
 	}
 
-	var locations []entityservice.Location
+	var locations []entitymapper.Location
 	var err error
 
 	var useFilterApi bool
@@ -82,7 +82,7 @@ func (l LocationController) GetLocations(c *gin.Context) {
 // @Produce  json
 // @Tags LocationController
 // @Param name path string true "get location by name"
-// @Success 200 {array} entityservice.Location
+// @Success 200 {array} entitymapper.Location
 // @Router /locations/{location} [get]
 func (l LocationController) GetLocationByName(c *gin.Context) {
 	buildingName := c.Param("building")

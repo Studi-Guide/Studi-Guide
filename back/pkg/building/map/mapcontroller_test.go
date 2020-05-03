@@ -7,7 +7,7 @@ import (
 	"github.com/golang/mock/gomock"
 	"net/http"
 	"net/http/httptest"
-	"studi-guide/pkg/building/db/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/navigation"
 	"testing"
 )
@@ -16,10 +16,10 @@ func TestMapController_GetMapItems(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/maps", nil)
 
-	expectedMapItems := []entityservice.MapItem{{
-		Doors:     []entityservice.Door{entityservice.Door{
+	expectedMapItems := []entitymapper.MapItem{{
+		Doors:     []entitymapper.Door{entitymapper.Door{
 			Id:       1,
-			Section:  entityservice.Section{},
+			Section:  entitymapper.Section{},
 			PathNode: navigation.PathNode{},
 		}},
 		Color:     "",
@@ -88,10 +88,10 @@ func TestMapController_GetMapItemsFromFloor_Filter(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/maps?floor=1", nil)
 
-	expectedMapItems := []entityservice.MapItem{{
-		Doors:     []entityservice.Door{entityservice.Door{
+	expectedMapItems := []entitymapper.MapItem{{
+		Doors:     []entitymapper.Door{entitymapper.Door{
 			Id:       1,
-			Section:  entityservice.Section{},
+			Section:  entitymapper.Section{},
 			PathNode: navigation.PathNode{},
 		}},
 		Color:     "",
