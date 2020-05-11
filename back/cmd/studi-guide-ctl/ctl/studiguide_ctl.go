@@ -2,13 +2,13 @@ package ctl
 
 import (
 	"github.com/urfave/cli/v2"
-	"studi-guide/pkg/entityservice"
-	"studi-guide/pkg/room/models"
+	"studi-guide/pkg/building/db/entitymapper"
+	"studi-guide/pkg/building/room/models"
 )
 
 //StudiGuideCtlCli
 // get the CLI to run control commands on the studi guide server
-func StudiGuideCtlCli(dbService *entityservice.EntityService) *cli.App {
+func StudiGuideCtlCli(dbService *entitymapper.EntityMapper) *cli.App {
 
 	app := cli.App{
 		Name:  "studi-guide-ctl",

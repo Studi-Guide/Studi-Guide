@@ -10,21 +10,24 @@ import (
 	"net/http"
 	"net/url"
 	"os"
-	"studi-guide/pkg/building"
-	"studi-guide/pkg/entityservice"
+	buildingInfo "studi-guide/pkg/building/info"
+	buildingLocation"studi-guide/pkg/building/location"
+	buildingMap "studi-guide/pkg/building/map"
+	"studi-guide/pkg/building/room/controllers"
+	buildingRoom "studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/env"
-	"studi-guide/pkg/location"
-	maps "studi-guide/pkg/map"
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
-	"studi-guide/pkg/room/controllers"
 )
 
 type StudiGuideServer struct {
 	router *gin.Engine
 }
 
-func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityService, navigationprovider services.NavigationServiceProvider) *StudiGuideServer {
+func NewStudiGuideServer(env *env.Env,
+	buildingProvider buildingInfo.BuildingProvider, roomProvider buildingRoom.RoomServiceProvider,
+	locationProvider buildingLocation.LocationProvider,	mapProvider buildingMap.MapServiceProvider,
+	navigationProvider services.NavigationServiceProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -56,7 +59,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 	roomRouter := router.Group("/rooms")
 	{
 		log.Print("Creating room controllers")
-		err := controllers.NewRoomController(roomRouter, entityService)
+		err := controllers.NewRoomController(roomRouter, roomProvider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -68,7 +71,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 	navigationRouter := router.Group("/navigation")
 	{
 		log.Print("Creating navigation controllers")
-		err := navigation.NewNavigationController(navigationRouter, navigationprovider)
+		err := navigation.NewNavigationController(navigationRouter, navigationProvider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -79,7 +82,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 	mapRouter := router.Group("/maps")
 	{
 		log.Print("Creating map controllers")
-		err := maps.NewMapController(mapRouter, entityService)
+		err := buildingMap.NewMapController(mapRouter, mapProvider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -90,7 +93,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 	locationRouter := router.Group("/locations")
 	{
 		log.Println("Creating location controller")
-		err := location.NewLocationController(locationRouter, entityService)
+		err := buildingLocation.NewLocationController(locationRouter, locationProvider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -101,7 +104,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 	buildingRouter := router.Group("/buildings")
 	{
 		log.Println("Creating building controller")
-		err := building.NewBuildingController(buildingRouter, entityService, entityService, entityService, entityService)
+		err := buildingInfo.NewBuildingController(buildingRouter, buildingProvider, roomProvider, locationProvider, mapProvider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
@@ -112,6 +115,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 	router.NoRoute(func(c *gin.Context) {
 		if env.Develop() {
 			type ErrInfo struct{
+				Status int
 				Url url.URL
 				Header http.Header
 				Proto string
@@ -119,6 +123,7 @@ func NewStudiGuideServer(env *env.Env, entityService *entityservice.EntityServic
 				Err error
 			}
 			c.JSON(http.StatusNotFound, ErrInfo{
+				Status: http.StatusNotFound,
 				Url: *c.Request.URL,
 				Header: c.Request.Header,
 				Proto: c.Request.Proto,

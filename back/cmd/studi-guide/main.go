@@ -4,13 +4,14 @@ import (
 	"log"
 	"studi-guide/cmd/studi-guide/server"
 	"studi-guide/docs"
-	"studi-guide/pkg/config"
-	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
+	"studi-guide/pkg/building/info"
+	"studi-guide/pkg/building/location"
+	maps "studi-guide/pkg/building/map"
+	"studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/env"
-	"studi-guide/pkg/location"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/navigation/services"
-	"studi-guide/pkg/room/models"
 
 	"go.uber.org/dig"
 )
@@ -43,13 +44,12 @@ func BuildContainer() *dig.Container {
 
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
-	container.Provide(config.NewConfig)
-	container.Provide(entityservice.NewEntityService)
+	container.Provide(entitymapper.NewEntityMapper)
 	container.Provide(server.NewStudiGuideServer)
 
 	// Register entity service for multiple interfaces
-	container.Invoke(func(entityserver *entityservice.EntityService) {
-		container.Provide(func() services.LocationProvider {
+	container.Invoke(func(entityserver *entitymapper.EntityMapper) {
+		container.Provide(func() services.PathNodeProvider {
 			return entityserver
 		})
 
@@ -60,10 +60,18 @@ func BuildContainer() *dig.Container {
 		container.Provide(func() location.LocationProvider {
 			return entityserver
 		})
+
+		container.Provide(func() maps.MapServiceProvider {
+			return entityserver
+		})
+
+		container.Provide(func() info.BuildingProvider {
+			return entityserver
+		})
 	})
 
 	// container.Provide(container.Provide(func() services.LocationProvider {
-	// 	return entityservice.NewEntityService()
+	// 	return entitymapper.NewEntityMapper()
 	// }))
 
 	container.Provide(navigation.NewDijkstraNavigation)

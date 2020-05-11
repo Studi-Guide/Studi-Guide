@@ -1,45 +1,38 @@
 package services
 
 import (
-	"studi-guide/pkg/entityservice"
 	"studi-guide/pkg/navigation"
 )
 
 type NavigationService struct {
 	routeCalc        navigation.RouteCalculator
-	locationProvider LocationProvider
+	pathNodeProvider PathNodeProvider
 }
 
-func NewNavigationService(routeCalculator navigation.RouteCalculator, locationProvider LocationProvider) (NavigationServiceProvider, error) {
+func NewNavigationService(routeCalculator navigation.RouteCalculator, pathNodeProvider PathNodeProvider) (NavigationServiceProvider, error) {
 
-	nodes, err := locationProvider.GetAllPathNodes()
+	nodes, err := pathNodeProvider.GetAllPathNodes()
 	if err != nil {
 		panic(err)
 	}
 
 	routeCalculator.Initialize(nodes)
-	return &NavigationService{routeCalc: routeCalculator, locationProvider: locationProvider}, nil
+	return &NavigationService{routeCalc: routeCalculator, pathNodeProvider: pathNodeProvider}, nil
 }
 
 func (n *NavigationService) CalculateFromString(startLocationName string, endLocationName string) (*navigation.NavigationRoute, error) {
 
-	startLocation, err := n.locationProvider.GetLocation(startLocationName, "", "")
+	start, err := n.pathNodeProvider.GetPathNode(startLocationName)
 	if err != nil {
 		return nil, err
 	}
 
-	endLocation, err := n.locationProvider.GetLocation(endLocationName, "", "")
+	end, err := n.pathNodeProvider.GetPathNode(endLocationName)
 	if err != nil {
 		return nil, err
 	}
 
-	return n.Calculate(startLocation, endLocation)
-}
-
-func (n *NavigationService) Calculate(startLocation entityservice.Location, endLocation entityservice.Location) (*navigation.NavigationRoute, error) {
-	startNode := startLocation.PathNode
-	endNode := endLocation.PathNode
-	nodes, distance, err := n.routeCalc.GetRoute(startNode, endNode)
+	nodes, distance, err := n.routeCalc.GetRoute(start, end)
 	return &navigation.NavigationRoute{Route: nodes, Distance: distance}, err
 }
 

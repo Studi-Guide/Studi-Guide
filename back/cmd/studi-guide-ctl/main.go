@@ -6,8 +6,7 @@ import (
 	"log"
 	"os"
 	"studi-guide/cmd/studi-guide-ctl/ctl"
-	"studi-guide/pkg/config"
-	"studi-guide/pkg/entityservice"
+	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/env"
 )
 
@@ -27,8 +26,7 @@ func BuildContainer() *dig.Container {
 
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
-	container.Provide(config.NewConfig)
-	container.Provide(entityservice.NewEntityService)
+	container.Provide(entitymapper.NewEntityMapper)
 	container.Provide(ctl.StudiGuideCtlCli)
 	return container
 }
