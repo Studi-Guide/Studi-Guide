@@ -1,6 +1,6 @@
 package navigation
 
 type NavigationRoute struct {
-	Route []PathNode
+	RouteSections []RouteSection
 	Distance int64
 }

@@ -1,6 +1,7 @@
 package services
 
 import (
+	"log"
 	"studi-guide/pkg/navigation"
 )
 
@@ -33,11 +34,60 @@ func (n *NavigationService) CalculateFromString(startLocationName string, endLoc
 	}
 
 	nodes, distance, err := n.routeCalc.GetRoute(start, end)
-	return &navigation.NavigationRoute{Route: nodes, Distance: distance}, err
+	route := GenerateNavigationRoute(nodes, distance, n.pathNodeProvider)
+	return &route, err
 }
 
 func (n *NavigationService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) (*navigation.NavigationRoute, error) {
 
 	//TODO implement
 	return nil, nil
+}
+
+func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provider PathNodeProvider) navigation.NavigationRoute {
+	var routeSections []navigation.RouteSection
+	var routeSection navigation.RouteSection
+
+	for _, node := range nodes {
+		// Try to get the linked building and floor
+		locationData, error := provider.GetPathNodeLocationData(node)
+		if error != nil {
+			log.Printf("no location or mapitem found for pathnode %+v", node)
+			// TODO maybe insert into current route section
+		} else {
+
+			// go here when route section is empty
+			if len(routeSection.Building) == 0 && len(routeSection.Floor) == 0 {
+				routeSection.Floor = locationData.Floor
+				routeSection.Building = locationData.Building
+				routeSection.Route = append(routeSection.Route, node)
+			} else {
+
+				// go here when node fits the route section
+				if routeSection.Building == locationData.Building && routeSection.Floor == locationData.Floor {
+					routeSection.Route = append(routeSection.Route, node)
+
+					// add distance to last coordinate
+					routeSection.Distance += int64(node.Coordinate.DistanceTo(routeSection.Route[len(routeSection.Route) - 2].Coordinate))
+				} else {
+					// go here to finalize the old route
+					routeSections = append(routeSections, routeSection)
+
+					// and create a new route section
+					routeSection = navigation.RouteSection{
+						Route:       []navigation.PathNode{node},
+						Description: "",
+						Distance:    0,
+						Building:    locationData.Building,
+						Floor:       locationData.Floor,
+					}
+				}
+			}
+		}
+	}
+
+	return navigation.NavigationRoute{
+		RouteSections: routeSections,
+		Distance: distance,
+	}
 }

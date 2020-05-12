@@ -111,6 +111,28 @@ func (r *EntityMapper) GetAllPathNodes() ([]navigation.PathNode, error) {
 	return nodes, nil
 }
 
+func (r *EntityMapper) GetPathNodeLocationData(node navigation.PathNode) (navigation.LocationData, error) {
+	entityNode, err := r.client.PathNode.Get(r.context, node.Id)
+	if err != nil {
+		return navigation.LocationData{}, err
+	}
+
+	// look for linked location
+	location := entityNode.Edges.Location
+	if location != nil && location.Edges.Building != nil {
+		return navigation.LocationData{Building: location.Edges.Building.Name, Floor: location.Floor}, nil
+	}
+
+	// look for linked mapitem
+	mapitem := entityNode.Edges.Mapitem
+	if mapitem != nil && mapitem.Edges.Building != nil {
+		return navigation.LocationData{Building: mapitem.Edges.Building.Name, Floor: mapitem.Floor}, nil
+	}
+
+
+	return navigation.LocationData{}, errors.New("no linked data found")
+}
+
 func (r *EntityMapper) linkPathNode(pathNode *navigation.PathNode) error {
 
 	var connectedIDs []int
