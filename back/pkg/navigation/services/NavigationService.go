@@ -1,7 +1,6 @@
 package services
 
 import (
-	"log"
 	"studi-guide/pkg/navigation"
 )
 
@@ -55,37 +54,31 @@ func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provid
 
 		// Try to get the linked building and floor
 		locationData, error := provider.GetPathNodeLocationData(node)
-		if error != nil {
-			log.Printf("no location or mapitem found for pathnode %+v", node)
-			// TODO maybe insert into current route section
+		// go here for initialization
+		if idx == 0{
+			routeSection.Floor = locationData.Floor
+			routeSection.Building = locationData.Building
+			routeSection.Route = append(routeSection.Route, node)
 		} else {
 
-			// go here for initialization
-			if idx == 0{
-				routeSection.Floor = locationData.Floor
-				routeSection.Building = locationData.Building
+			// go here when node fits the route section or no information is found
+			if (routeSection.Building == locationData.Building && routeSection.Floor == locationData.Floor) || error != nil {
 				routeSection.Route = append(routeSection.Route, node)
+
+				// add distance to last coordinate
+				routeSection.Distance += int64(node.Coordinate.DistanceTo(routeSection.Route[len(routeSection.Route) - 2].Coordinate))
 			} else {
-
-				// go here when node fits the route section
-				if routeSection.Building == locationData.Building && routeSection.Floor == locationData.Floor {
-					routeSection.Route = append(routeSection.Route, node)
-
-					// add distance to last coordinate
-					routeSection.Distance += int64(node.Coordinate.DistanceTo(routeSection.Route[len(routeSection.Route) - 2].Coordinate))
-				} else {
-					// create a new route section and add it
-					var newRouteSection = navigation.RouteSection{
-						Route:       []navigation.PathNode{node},
-						Description: "",
-						Distance:    0,
-						Building:    locationData.Building,
-						Floor:       locationData.Floor,
-					}
-
-					routeSections = append(routeSections, newRouteSection)
-					routeSectionCnt++
+				// create a new route section and add it
+				var newRouteSection = navigation.RouteSection{
+					Route:       []navigation.PathNode{node},
+					Description: "",
+					Distance:    0,
+					Building:    locationData.Building,
+					Floor:       locationData.Floor,
 				}
+
+				routeSections = append(routeSections, newRouteSection)
+				routeSectionCnt++
 			}
 		}
 	}
