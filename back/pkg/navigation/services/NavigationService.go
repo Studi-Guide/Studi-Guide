@@ -45,10 +45,14 @@ func (n *NavigationService) CalculateFromCoordinate(startCoordinate navigation.C
 }
 
 func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provider PathNodeProvider) navigation.NavigationRoute {
-	var routeSections []navigation.RouteSection
-	var routeSection navigation.RouteSection
 
-	for _, node := range nodes {
+	// Create array with at least one element
+	var routeSections = []navigation.RouteSection{{}}
+	var routeSectionCnt = 0
+	for idx, node := range nodes {
+
+		var routeSection = &routeSections[routeSectionCnt]
+
 		// Try to get the linked building and floor
 		locationData, error := provider.GetPathNodeLocationData(node)
 		if error != nil {
@@ -56,8 +60,8 @@ func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provid
 			// TODO maybe insert into current route section
 		} else {
 
-			// go here when route section is empty
-			if len(routeSection.Building) == 0 && len(routeSection.Floor) == 0 {
+			// go here for initialization
+			if idx == 0{
 				routeSection.Floor = locationData.Floor
 				routeSection.Building = locationData.Building
 				routeSection.Route = append(routeSection.Route, node)
@@ -70,17 +74,17 @@ func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provid
 					// add distance to last coordinate
 					routeSection.Distance += int64(node.Coordinate.DistanceTo(routeSection.Route[len(routeSection.Route) - 2].Coordinate))
 				} else {
-					// go here to finalize the old route
-					routeSections = append(routeSections, routeSection)
-
-					// and create a new route section
-					routeSection = navigation.RouteSection{
+					// create a new route section and add it
+					var newRouteSection = navigation.RouteSection{
 						Route:       []navigation.PathNode{node},
 						Description: "",
 						Distance:    0,
 						Building:    locationData.Building,
 						Floor:       locationData.Floor,
 					}
+
+					routeSections = append(routeSections, newRouteSection)
+					routeSectionCnt++
 				}
 			}
 		}

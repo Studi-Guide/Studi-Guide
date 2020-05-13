@@ -33,7 +33,14 @@ func (m MockNavigationService) CalculateFromString(startRoomName string, endRoom
 	}
 
 	return &navigation.NavigationRoute{
-		Route:    m.nodes,
+		RouteSections:  []navigation.RouteSection{{
+			Route:       m.nodes,
+			Description: "",
+			Distance:    0,
+			Building:    "",
+			Floor:       "",
+		}},
+
 		Distance: int64(m.nodes[1].Coordinate.DistanceTo(m.nodes[0].Coordinate)),
 	}, nil
 }
@@ -44,14 +51,26 @@ func (m MockNavigationService) Calculate(startRoom entitymapper.Location, endRoo
 	}
 
 	return &navigation.NavigationRoute{
-		Route:    m.nodes,
+		RouteSections:  []navigation.RouteSection{{
+			Route:       m.nodes,
+			Description: "",
+			Distance:    0,
+			Building:    "",
+			Floor:       "",
+		}},
 		Distance: int64(m.nodes[1].Coordinate.DistanceTo(m.nodes[0].Coordinate)),
 	}, nil
 }
 
 func (m MockNavigationService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) (*navigation.NavigationRoute, error) {
 	return &navigation.NavigationRoute{
-		Route:    m.nodes,
+		RouteSections:  []navigation.RouteSection{{
+			Route:       m.nodes,
+			Description: "",
+			Distance:    0,
+			Building:    "",
+			Floor:       "",
+		}},
 		Distance: int64(m.nodes[1].Coordinate.DistanceTo(m.nodes[0].Coordinate)),
 	}, nil
 }
@@ -104,7 +123,13 @@ func TestNavigationCalculatefromString_NoRooms(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expectedRoute := navigation.NavigationRoute{
-		Route: provider.nodes,
+		RouteSections:  []navigation.RouteSection{{
+			Route:       provider.nodes,
+			Description: "",
+			Distance:    0,
+			Building:    "",
+			Floor:       "",
+		}},
 		Distance: 2,
 	}
 
@@ -138,7 +163,13 @@ rec.Body.String()
 	router.ServeHTTP(rec, req)
 
 	expectedRoute := navigation.NavigationRoute{
-		Route: provider.nodes,
+		RouteSections:  []navigation.RouteSection{{
+			Route:       provider.nodes,
+			Description: "",
+			Distance:    0,
+			Building:    "",
+			Floor:       "",
+		}},
 		Distance: 2,
 	}
 
