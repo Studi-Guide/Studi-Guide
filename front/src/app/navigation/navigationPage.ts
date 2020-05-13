@@ -68,7 +68,6 @@ export class NavigationPage {
     } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput != null) {
       await this.fetchFloorByLocation(this.startInput);
       this.routeIsVisible = false;
-      this.startPinIsVisible = false;
       this.mapIsVisible = true;
     }
   }
