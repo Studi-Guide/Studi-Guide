@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {PathNode} from '../building-objects-if';
+import {Route} from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
@@ -7,7 +8,15 @@ import {PathNode} from '../building-objects-if';
 
 export class ReceivedRoute {
     Distance: number;
-    Route: PathNode[];
+    RouteSections: RouteSection[];
+}
+
+export class RouteSection {
+    Route: 		PathNode[];
+    Description: string;
+    Distance: 	 number;
+    Building: 	string;
+    Floor: 		string;
 }
 
 export class DistanceToBeDisplayed {
@@ -18,36 +27,46 @@ export class DistanceToBeDisplayed {
 
 export class NaviRoute {
 
-    private pathNodesToGo:PathNode[] = [{'Coordinate': { 'X': 0, 'Y': 0, 'Z': 0 }}];
-    public distance: DistanceToBeDisplayed = { 'Value':0, 'X': 0, 'Y': 0 };
-    public svgRoute: string;
+    private routeSections:RouteSection[];
+    public distance: number;
 
     constructor(response:ReceivedRoute) {
-        this.distance.Value = response.Distance;
-        this.pathNodesToGo = response.Route;
-        this.calculateSvgPositionForDistance();
-        this.calculateSvgPathForRoute();
+        this.distance = response.Distance;
+        this.routeSections = response.RouteSections;
+        // this.calculateSvgPositionForDistance();
+        // this.calculateSvgPathForRoute();
     }
 
-    private calculateSvgPositionForDistance() {
-        const numberOfPathNodes:number = this.pathNodesToGo.length;
-        this.distance.X = this.pathNodesToGo[Math.round((numberOfPathNodes-1)/2)].Coordinate.X;
-        this.distance.Y = this.pathNodesToGo[Math.round((numberOfPathNodes-1)/2)].Coordinate.Y;
-    }
-
-    private calculateSvgPathForRoute() {
-        let points = '';
-        for (const pathNode of this.pathNodesToGo) {
-            points += pathNode.Coordinate.X + ',' + pathNode.Coordinate.Y + ' ';
+    public calculateSvgPositionForDistance(building: string,  floor :string) {
+        const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
+        const rtnDistance = new DistanceToBeDisplayed();
+        if (routeSection != null){
+            const numberOfPathNodes:number = routeSection.Route.length;
+            rtnDistance.Value = this.distance;
+            rtnDistance.X = routeSection.Route[Math.round((numberOfPathNodes-1)/2)].Coordinate.X;
+            rtnDistance.Y = routeSection.Route[Math.round((numberOfPathNodes-1)/2)].Coordinate.Y;
         }
-        this.svgRoute = points;
+
+        return rtnDistance;
+    }
+
+    public calculateSvgPathForRoute(building: string,  floor:string) {
+        const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
+        let points = '';
+        if (routeSection != null) {
+            for (const pathNode of routeSection.Route) {
+                points += pathNode.Coordinate.X + ',' + pathNode.Coordinate.Y + ' ';
+            }
+        }
+        return points;
     }
 
     public getRouteStart() {
-        return this.pathNodesToGo[0];
+        return this.routeSections[0].Route[0];
     }
 
     public getRouteEnd() {
-        return this.pathNodesToGo[this.pathNodesToGo.length-1];
+        const lastroutesection = this.routeSections[this.routeSections.length-1];
+        return lastroutesection.Route[lastroutesection.Route.length-1];
     }
 }
