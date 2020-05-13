@@ -23,7 +23,7 @@ jobs:
       - name: install Node.js and angular
         uses: actions/setup-node@v1 #this installs node and npm for us
 
-      - run: npm install -g ionic
+      - run: npm i -g @ionic/cli
 
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
