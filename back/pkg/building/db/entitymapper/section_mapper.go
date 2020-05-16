@@ -44,4 +44,3 @@ func (r *EntityMapper) mapSection(s *Section) (*ent.Section, error) {
 		SetZStart(s.Start.Z).SetZEnd(s.End.Z).
 		Save(r.context)
 }
-

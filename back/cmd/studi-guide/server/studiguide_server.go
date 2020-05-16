@@ -11,7 +11,7 @@ import (
 	"net/url"
 	"os"
 	buildingInfo "studi-guide/pkg/building/info"
-	buildingLocation"studi-guide/pkg/building/location"
+	buildingLocation "studi-guide/pkg/building/location"
 	buildingMap "studi-guide/pkg/building/map"
 	"studi-guide/pkg/building/room/controllers"
 	buildingRoom "studi-guide/pkg/building/room/models"
@@ -26,7 +26,7 @@ type StudiGuideServer struct {
 
 func NewStudiGuideServer(env *env.Env,
 	buildingProvider buildingInfo.BuildingProvider, roomProvider buildingRoom.RoomServiceProvider,
-	locationProvider buildingLocation.LocationProvider,	mapProvider buildingMap.MapServiceProvider,
+	locationProvider buildingLocation.LocationProvider, mapProvider buildingMap.MapServiceProvider,
 	navigationProvider services.NavigationServiceProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
@@ -34,7 +34,7 @@ func NewStudiGuideServer(env *env.Env,
 	if env.Develop() {
 		log.Println("allowing all origins in develop mode")
 		router.Use(cors.New(cors.Config{
-			AllowAllOrigins:        true,
+			AllowAllOrigins: true,
 		}))
 	}
 
@@ -114,21 +114,21 @@ func NewStudiGuideServer(env *env.Env,
 
 	router.NoRoute(func(c *gin.Context) {
 		if env.Develop() {
-			type ErrInfo struct{
+			type ErrInfo struct {
 				Status int
-				Url url.URL
+				Url    url.URL
 				Header http.Header
-				Proto string
-				Host string
-				Err error
+				Proto  string
+				Host   string
+				Err    error
 			}
 			c.JSON(http.StatusNotFound, ErrInfo{
 				Status: http.StatusNotFound,
-				Url: *c.Request.URL,
+				Url:    *c.Request.URL,
 				Header: c.Request.Header,
-				Proto: c.Request.Proto,
-				Host: c.Request.Host,
-				Err: c.Err(),
+				Proto:  c.Request.Proto,
+				Host:   c.Request.Host,
+				Err:    c.Err(),
 			})
 		} else {
 			_, _ = c.Writer.WriteString(c.Request.URL.Path + " not found")
@@ -142,7 +142,7 @@ func NewStudiGuideServer(env *env.Env,
 
 func (server *StudiGuideServer) Start(port string) error {
 	error := http.ListenAndServe(port, server.router)
-	if error != nil{
+	if error != nil {
 		return error
 	}
 	return nil

@@ -92,4 +92,3 @@ func (r *EntityMapper) FilterMapItems(floor, buildingFilter, campus string) ([]M
 	}
 	return r.mapItemArrayMapper(entMapItems), nil
 }
-

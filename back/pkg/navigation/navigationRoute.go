@@ -2,5 +2,5 @@ package navigation
 
 type NavigationRoute struct {
 	RouteSections []RouteSection
-	Distance int64
+	Distance      int64
 }

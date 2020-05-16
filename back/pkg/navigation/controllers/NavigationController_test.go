@@ -33,7 +33,7 @@ func (m MockNavigationService) CalculateFromString(startRoomName string, endRoom
 	}
 
 	return &navigation.NavigationRoute{
-		RouteSections:  []navigation.RouteSection{{
+		RouteSections: []navigation.RouteSection{{
 			Route:       m.nodes,
 			Description: "",
 			Distance:    0,
@@ -45,13 +45,13 @@ func (m MockNavigationService) CalculateFromString(startRoomName string, endRoom
 	}, nil
 }
 
-func (m MockNavigationService) Calculate(startRoom entitymapper.Location, endRoom entitymapper.Location)(*navigation.NavigationRoute, error) {
+func (m MockNavigationService) Calculate(startRoom entitymapper.Location, endRoom entitymapper.Location) (*navigation.NavigationRoute, error) {
 	if !(startRoom.Name == m.startroom) || !(endRoom.Name == m.endroom) {
 		return nil, errors.New("wrong rooms")
 	}
 
 	return &navigation.NavigationRoute{
-		RouteSections:  []navigation.RouteSection{{
+		RouteSections: []navigation.RouteSection{{
 			Route:       m.nodes,
 			Description: "",
 			Distance:    0,
@@ -64,7 +64,7 @@ func (m MockNavigationService) Calculate(startRoom entitymapper.Location, endRoo
 
 func (m MockNavigationService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) (*navigation.NavigationRoute, error) {
 	return &navigation.NavigationRoute{
-		RouteSections:  []navigation.RouteSection{{
+		RouteSections: []navigation.RouteSection{{
 			Route:       m.nodes,
 			Description: "",
 			Distance:    0,
@@ -123,7 +123,7 @@ func TestNavigationCalculatefromString_NoRooms(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expectedRoute := navigation.NavigationRoute{
-		RouteSections:  []navigation.RouteSection{{
+		RouteSections: []navigation.RouteSection{{
 			Route:       provider.nodes,
 			Description: "",
 			Distance:    0,
@@ -159,11 +159,11 @@ func TestNavigationCalculatefromString(t *testing.T) {
 	router := gin.Default()
 	roomRouter := router.Group("/navigation")
 	NewNavigationController(roomRouter, provider)
-rec.Body.String()
+	rec.Body.String()
 	router.ServeHTTP(rec, req)
 
 	expectedRoute := navigation.NavigationRoute{
-		RouteSections:  []navigation.RouteSection{{
+		RouteSections: []navigation.RouteSection{{
 			Route:       provider.nodes,
 			Description: "",
 			Distance:    0,

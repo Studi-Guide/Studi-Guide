@@ -244,4 +244,3 @@ func (r *EntityMapper) storeRooms(rooms []Room) error {
 
 	return err
 }
-

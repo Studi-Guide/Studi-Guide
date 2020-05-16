@@ -123,7 +123,7 @@ func (r *EntityMapper) GetPathNodeLocationData(node navigation.PathNode) (naviga
 	}
 
 	// look for linked location
-	location:= entityNode.Edges.Location
+	location := entityNode.Edges.Location
 	if location != nil && location.Edges.Building != nil {
 		return navigation.LocationData{Building: location.Edges.Building.Name, Floor: location.Floor}, nil
 	}
@@ -133,7 +133,6 @@ func (r *EntityMapper) GetPathNodeLocationData(node navigation.PathNode) (naviga
 	if mapitem != nil && mapitem.Edges.Building != nil {
 		return navigation.LocationData{Building: mapitem.Edges.Building.Name, Floor: mapitem.Floor}, nil
 	}
-
 
 	return navigation.LocationData{}, errors.New("no linked data found")
 }
@@ -160,4 +159,3 @@ func (r *EntityMapper) linkPathNode(pathNode *navigation.PathNode) error {
 	entityNode, err := update.Save(r.context)
 	return err
 }
-

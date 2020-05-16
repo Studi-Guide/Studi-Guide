@@ -44,7 +44,7 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
-	building,_ := client.Building.Create().SetName("main").Save(ctx)
+	building, _ := client.Building.Create().SetName("main").Save(ctx)
 	testRooms = []Room{}
 	for i := 1; i < 4; i++ {
 
@@ -99,34 +99,34 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 		}
 
 		patnode := navigation.PathNode{
-			Id:             pathNode.ID,
-			Coordinate:navigation.Coordinate{
+			Id: pathNode.ID,
+			Coordinate: navigation.Coordinate{
 				X: pathNode.XCoordinate,
 				Y: pathNode.YCoordinate,
 				Z: pathNode.ZCoordinate,
 			}}
 
 		testRooms = append(testRooms, Room{
-			Id:          entRoom.ID,
+			Id: entRoom.ID,
 			MapItem: MapItem{
 				Doors: []Door{{
 					Id:       door.ID,
 					Section:  Section{Id: sequence.ID},
 					PathNode: patnode,
 				}},
-				Color:    "",
-				Sections: nil,
-				Floor:    strconv.Itoa(i),
-				Building: "main",
+				Color:     "",
+				Sections:  nil,
+				Floor:     strconv.Itoa(i),
+				Building:  "main",
 				PathNodes: []*navigation.PathNode{&patnode},
 			},
 			Location: Location{
-				Id: entLocation.ID,
+				Id:          entLocation.ID,
 				Name:        entLocation.Name,
 				Description: entLocation.Description,
-				Tags:       nil,
-				PathNode: patnode,
-				Floor: strconv.Itoa(i),
+				Tags:        nil,
+				PathNode:    patnode,
+				Floor:       strconv.Itoa(i),
 			},
 		})
 	}
@@ -230,15 +230,14 @@ func TestAddRoom(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
 	testRoom := Room{
-		Id: 4,
-		MapItem: MapItem{
-		},
+		Id:      4,
+		MapItem: MapItem{},
 		Location: Location{
 			Name:        "04",
 			Description: "description",
 		},
 	}
-	
+
 	err := dbService.AddRoom(testRoom)
 	if err == nil {
 		t.Error("expected: error", "; got: ", err)
@@ -255,20 +254,8 @@ func TestAddRooms(t *testing.T) {
 
 	var newRooms []Room
 	newRooms = append(newRooms, Room{
-		Id: 4,
-		MapItem: MapItem{
-		},
-		Location: Location{
-			Name:        "04",
-			Description: "d",
-		},
-		
-	})
-	
-	newRooms = append(newRooms, Room{
-		Id: 4, 
-		MapItem: MapItem{
-		},
+		Id:      4,
+		MapItem: MapItem{},
 		Location: Location{
 			Name:        "04",
 			Description: "d",
@@ -276,9 +263,17 @@ func TestAddRooms(t *testing.T) {
 	})
 
 	newRooms = append(newRooms, Room{
-		Id: 5,
-		MapItem: MapItem{
+		Id:      4,
+		MapItem: MapItem{},
+		Location: Location{
+			Name:        "04",
+			Description: "d",
 		},
+	})
+
+	newRooms = append(newRooms, Room{
+		Id:      5,
+		MapItem: MapItem{},
 		Location: Location{
 			Name:        "05",
 			Description: "d",
@@ -292,29 +287,26 @@ func TestAddRooms(t *testing.T) {
 
 	newRooms = newRooms[:0]
 	newRooms = append(newRooms, Room{
-		Id: 6,
-		MapItem: MapItem{
-		},
+		Id:      6,
+		MapItem: MapItem{},
 		Location: Location{
 			Name:        "06",
 			Description: "d",
 		},
 	})
-	
+
 	newRooms = append(newRooms, Room{
-		Id: 7, 
-		MapItem: MapItem{
-		},
+		Id:      7,
+		MapItem: MapItem{},
 		Location: Location{
 			Name:        "07",
 			Description: "d",
 		},
 	})
-	
+
 	newRooms = append(newRooms, Room{
-		Id: 8, 
-		MapItem: MapItem{
-		},
+		Id:      8,
+		MapItem: MapItem{},
 		Location: Location{
 			Name:        "08",
 			Description: "d",
@@ -383,7 +375,7 @@ func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
 	}
 
 	var expected []Room
-	linq.From(testRooms).Where(func(p interface{}) bool { return p.(Room).MapItem.Floor == "1"}).ToSlice(&expected)
+	linq.From(testRooms).Where(func(p interface{}) bool { return p.(Room).MapItem.Floor == "1" }).ToSlice(&expected)
 
 	if !compare(expected, getConnectors) {
 		t.Error("expected: ", expected, "; got: ", getConnectors)
@@ -391,7 +383,7 @@ func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
 
 	db.Exec("drop table rooms")
 
-	getConnectors, err = dbService.FilterRooms("1", "", "", "", "","")
+	getConnectors, err = dbService.FilterRooms("1", "", "", "", "", "")
 	if err == nil {
 		t.Error("expected error; got: ", err)
 	}
@@ -453,10 +445,9 @@ func TestRoomEntityService_FilterRooms_NameFilterParam(t *testing.T) {
 		t.Error("expect room array but is nil")
 	}
 
-	if !linq.From(rooms).All(func (p interface{}) bool { return p.(Room).Location.Name == "1"}) {
+	if !linq.From(rooms).All(func(p interface{}) bool { return p.(Room).Location.Name == "1" }) {
 		t.Error("expect room array with name == 1 and not anything else")
 	}
-
 
 	rooms, err = dbService.FilterRooms("", "foobar", "", "", "", "")
 	if err != nil {
@@ -475,7 +466,7 @@ func TestRoomEntityService_FilterRooms_RoomFilterParam_FloorFilterParam(t *testi
 	if err != nil {
 		t.Error("expect no error, got:", err)
 
-	rooms, err = dbService.FilterRooms("abcd", "", "", "", "", "")
+		rooms, err = dbService.FilterRooms("abcd", "", "", "", "", "")
 	}
 	if rooms == nil {
 		t.Error("expect room array but is nil")

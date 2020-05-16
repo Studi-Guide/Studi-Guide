@@ -8,7 +8,7 @@ import (
 
 type Env struct {
 	dbDriverName, dbDataSource, frontendPath string
-	develop bool
+	develop                                  bool
 }
 
 var dBDriverNameKey string = "DB_DRIVER_NAME"
@@ -32,7 +32,7 @@ func NewEnv() *Env {
 		env.frontendPath = "./ionic"
 	}
 
-	if (os.Getenv(develop) == "TRUE") {
+	if os.Getenv(develop) == "TRUE" {
 		log.Println("Running in development mode now. Make sure to disable this in production.")
 		env.develop = true
 		gin.SetMode(gin.DebugMode)

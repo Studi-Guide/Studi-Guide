@@ -32,14 +32,14 @@ func TestBuildingController_GetAllBuildings(t *testing.T) {
 	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider, mapsProvider)
 
 	building := []entitymapper.Building{{
-		Id:   1,
-		Name: "main",
-		Floors: []string {"1", "3"},
+		Id:     1,
+		Name:   "main",
+		Floors: []string{"1", "3"},
 	},
 		{
-			Id: 2,
-			Name: "sub",
-			Floors: []string {"1", "3"},
+			Id:     2,
+			Name:   "sub",
+			Floors: []string{"1", "3"},
 		},
 	}
 
@@ -94,14 +94,13 @@ func TestBuildingController_GetBuildings_Filter(t *testing.T) {
 	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider, mapsProvider)
 
 	building := entitymapper.Building{
-		Id:   1,
-		Name: "main",
-		Floors: []string {"1", "3"},
+		Id:     1,
+		Name:   "main",
+		Floors: []string{"1", "3"},
 	}
 	buildingprovider.EXPECT().GetBuilding("main").Return(building, nil)
 
 	router.ServeHTTP(rec, req)
-
 
 	expected, _ := json.Marshal(building)
 	expected = append(expected, '\n')
@@ -195,9 +194,9 @@ func TestBuildingController_GetRoomsFromBuildingFloor(t *testing.T) {
 	mapRouter := router.Group("/buildings")
 	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
 	testbuilding := entitymapper.Building{
-		Id:   1,
-		Name: "main",
-		Floors: []string {"1", "3"},
+		Id:     1,
+		Name:   "main",
+		Floors: []string{"1", "3"},
 	}
 
 	router.ServeHTTP(rec, req)

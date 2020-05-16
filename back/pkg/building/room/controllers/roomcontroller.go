@@ -52,7 +52,7 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 	var rooms []entitymapper.Room
 	var err error
 
-	if len(nameFilter) == 0 && len(floorFilter) == 0 && len(aliasFilter) == 0 && len(roomFilter) == 0 && len(buildingFilter) == 0 && len(campusFilter) == 0{
+	if len(nameFilter) == 0 && len(floorFilter) == 0 && len(aliasFilter) == 0 && len(roomFilter) == 0 && len(buildingFilter) == 0 && len(campusFilter) == 0 {
 		rooms, err = l.provider.GetAllRooms()
 	} else {
 		rooms, err = l.provider.FilterRooms(floorFilter, nameFilter, aliasFilter, roomFilter, buildingFilter, campusFilter)
@@ -74,7 +74,6 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 	fmt.Println(c.Request.URL.Query())
 	fmt.Println("c.Query(\"room\"): ", c.Query("room"))
 
-
 }
 
 // GetRoom godoc
@@ -92,7 +91,6 @@ func (l *RoomController) GetRoom(c *gin.Context) {
 	room := c.Param("room")
 	building := c.Param("building")
 	campus := c.Param("campus")
-
 
 	r, err := l.provider.GetRoom(room, building, campus)
 

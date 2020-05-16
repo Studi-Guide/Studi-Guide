@@ -54,4 +54,3 @@ func openDB(dbDriverName string, dbSourceName string) (*ent.Client, context.Cont
 
 	return client, ctx, err
 }
-

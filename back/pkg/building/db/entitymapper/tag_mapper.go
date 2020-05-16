@@ -65,4 +65,3 @@ func (r *EntityMapper) mapColor(c string) (*ent.Color, error) {
 
 	return col, nil
 }
-

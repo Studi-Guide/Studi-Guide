@@ -55,7 +55,7 @@ func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provid
 		// Try to get the linked building and floor
 		locationData, error := provider.GetPathNodeLocationData(node)
 		// go here for initialization
-		if idx == 0{
+		if idx == 0 {
 			routeSection.Floor = locationData.Floor
 			routeSection.Building = locationData.Building
 			routeSection.Route = append(routeSection.Route, node)
@@ -66,7 +66,7 @@ func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provid
 				routeSection.Route = append(routeSection.Route, node)
 
 				// add distance to last coordinate
-				routeSection.Distance += int64(node.Coordinate.DistanceTo(routeSection.Route[len(routeSection.Route) - 2].Coordinate))
+				routeSection.Distance += int64(node.Coordinate.DistanceTo(routeSection.Route[len(routeSection.Route)-2].Coordinate))
 			} else {
 				// create a new route section and add it
 				var newRouteSection = navigation.RouteSection{
@@ -85,6 +85,6 @@ func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provid
 
 	return navigation.NavigationRoute{
 		RouteSections: routeSections,
-		Distance: distance,
+		Distance:      distance,
 	}
 }

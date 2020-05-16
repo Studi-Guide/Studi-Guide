@@ -75,4 +75,3 @@ func (r *EntityMapper) mapDoor(d *Door) (*ent.Door, error) {
 		SetSectionID(sec.ID).
 		Save(r.context)
 }
-

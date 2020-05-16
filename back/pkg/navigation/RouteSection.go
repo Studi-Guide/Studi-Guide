@@ -1,9 +1,9 @@
 package navigation
 
 type RouteSection struct {
-	Route 		[]PathNode
+	Route       []PathNode
 	Description string
-	Distance 	int64
-	Building 	string
-	Floor 		string
+	Distance    int64
+	Building    string
+	Floor       string
 }

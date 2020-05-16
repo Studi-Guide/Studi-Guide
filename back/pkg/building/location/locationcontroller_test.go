@@ -159,5 +159,4 @@ func TestLocationController_GetLocationByName2(t *testing.T) {
 		t.Error("expected ", http.StatusOK)
 	}
 
-
 }

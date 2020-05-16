@@ -32,7 +32,7 @@ func (r *RoomJsonImporter) RunImport() error {
 		return err
 	}
 
-	rooms, err2 :=  r.CreateMapItems(items)
+	rooms, err2 := r.CreateMapItems(items)
 	if err2 != nil {
 		return err2
 	}
@@ -77,7 +77,7 @@ func NewRoomImporter(file string, dbService RoomServiceProvider) (RoomImporter, 
 	return i, nil
 }
 
-func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems) ([]entitymapper.Room, error) {
+func (r *RoomJsonImporter) CreateMapItems(importItems []ImportMapItems) ([]entitymapper.Room, error) {
 	var rooms []entitymapper.Room
 
 	for _, item := range importItems {
@@ -88,7 +88,7 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems) ([]enti
 
 			// extract connected nodes
 			var connectedNodes []*navigation.PathNode
-			for _,connectedNodeId := range importDoor.PathNode.ConnectedPathNodes {
+			for _, connectedNodeId := range importDoor.PathNode.ConnectedPathNodes {
 
 				// create empty pothnode with ID
 				connectedNodes = append(connectedNodes, &navigation.PathNode{
@@ -100,15 +100,15 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems) ([]enti
 			}
 
 			doors = append(doors, entitymapper.Door{
-				Section:  entitymapper.Section{
+				Section: entitymapper.Section{
 					Id:    0,
 					Start: importDoor.Start,
 					End:   importDoor.End,
 				},
 
 				PathNode: navigation.PathNode{
-					Id:             importDoor.PathNode.Id,
-					Coordinate:     navigation.Coordinate{
+					Id: importDoor.PathNode.Id,
+					Coordinate: navigation.Coordinate{
 						X: importDoor.PathNode.X,
 						Y: importDoor.PathNode.Y,
 						Z: importDoor.PathNode.Z,
@@ -122,7 +122,7 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems) ([]enti
 
 			// extract connected nodes
 			var connectedNodes []*navigation.PathNode
-			for _,connectedNodeId := range node.ConnectedPathNodes {
+			for _, connectedNodeId := range node.ConnectedPathNodes {
 
 				// create empty pothnode with ID
 				connectedNodes = append(connectedNodes, &navigation.PathNode{
@@ -142,33 +142,32 @@ func (r *RoomJsonImporter) CreateMapItems (importItems []ImportMapItems) ([]enti
 		}
 
 		var locationNode navigation.PathNode
-		if len(item.PathNodes) < 1{
+		if len(item.PathNodes) < 1 {
 			locationNode = navigation.PathNode{}
 			log.Printf("No pathnode found for room room %s!", item.Name)
 		} else {
-			locationNode =  *roomNodes[0]
+			locationNode = *roomNodes[0]
 		}
-
 
 		room := entitymapper.Room{
 			MapItem: entitymapper.MapItem{
-				Color:       item.Color,
-				Floor:       item.Floor,
-				Sections:    item.Sections,
-				Campus:      item.Campus,
-				Building:    item.Building,
-				Doors: 		 doors,
-				PathNodes:   roomNodes,
+				Color:     item.Color,
+				Floor:     item.Floor,
+				Sections:  item.Sections,
+				Campus:    item.Campus,
+				Building:  item.Building,
+				Doors:     doors,
+				PathNodes: roomNodes,
 			},
 
 			// Id should be set be DB
 			Location: entitymapper.Location{
-				Name:			item.Name,
-				Description:	item.Description,
-				Tags: 			item.Tags,
-				Floor: 			item.Floor,
-				PathNode:		locationNode,
-				Building:       item.Building,
+				Name:        item.Name,
+				Description: item.Description,
+				Tags:        item.Tags,
+				Floor:       item.Floor,
+				PathNode:    locationNode,
+				Building:    item.Building,
 			},
 		}
 

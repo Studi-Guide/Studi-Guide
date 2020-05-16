@@ -17,7 +17,7 @@ func TestMapController_GetMapItems(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/maps", nil)
 
 	expectedMapItems := []entitymapper.MapItem{{
-		Doors:     []entitymapper.Door{entitymapper.Door{
+		Doors: []entitymapper.Door{entitymapper.Door{
 			Id:       1,
 			Section:  entitymapper.Section{},
 			PathNode: navigation.PathNode{},
@@ -89,7 +89,7 @@ func TestMapController_GetMapItemsFromFloor_Filter(t *testing.T) {
 	req, _ := http.NewRequest("GET", "/maps?floor=1", nil)
 
 	expectedMapItems := []entitymapper.MapItem{{
-		Doors:     []entitymapper.Door{entitymapper.Door{
+		Doors: []entitymapper.Door{entitymapper.Door{
 			Id:       1,
 			Section:  entitymapper.Section{},
 			PathNode: navigation.PathNode{},

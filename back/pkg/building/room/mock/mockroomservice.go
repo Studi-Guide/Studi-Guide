@@ -14,9 +14,9 @@ func NewRoomMockService() *RoomMockService {
 	var rms RoomMockService
 
 	rms.RoomList = append(rms.RoomList, entitymapper.Room{MapItem: entitymapper.MapItem{
-		Floor: "1",
+		Floor:    "1",
 		Building: "main",
-		},
+	},
 		Location: entitymapper.Location{PathNode: navigation.PathNode{
 			Id:             0,
 			Coordinate:     navigation.Coordinate{},
@@ -25,54 +25,53 @@ func NewRoomMockService() *RoomMockService {
 		},
 			Name:        "RoomN01",
 			Description: "Dummy",
-			Floor: "1",
+			Floor:       "1",
 		}})
 
 	rms.RoomList = append(rms.RoomList, entitymapper.Room{MapItem: entitymapper.MapItem{
 		Building: "main",
-		Floor: "2",
+		Floor:    "2",
 	},
-	Location: entitymapper.Location{PathNode:navigation.PathNode{
-		Id:             3,
-		Coordinate:     navigation.Coordinate{},
-		Group:          nil,
-		ConnectedNodes: nil,
+		Location: entitymapper.Location{PathNode: navigation.PathNode{
+			Id:             3,
+			Coordinate:     navigation.Coordinate{},
+			Group:          nil,
+			ConnectedNodes: nil,
 		},
-		Name:        "RoomN02",
-		Description: "Dummy",
-		Floor: "2",
-	}})
+			Name:        "RoomN02",
+			Description: "Dummy",
+			Floor:       "2",
+		}})
 
 	rms.RoomList = append(rms.RoomList, entitymapper.Room{MapItem: entitymapper.MapItem{
 		Building: "main",
-		Floor: "1",
+		Floor:    "1",
 	},
-		Location: entitymapper.Location{PathNode:navigation.PathNode{
-		Id:             2,
-		Coordinate:     navigation.Coordinate{},
-		Group:          nil,
-		ConnectedNodes: nil,
+		Location: entitymapper.Location{PathNode: navigation.PathNode{
+			Id:             2,
+			Coordinate:     navigation.Coordinate{},
+			Group:          nil,
+			ConnectedNodes: nil,
 		},
-		Name:        "RoomN03",
-		Description: "Dummy",
-		Floor: "1",
+			Name:        "RoomN03",
+			Description: "Dummy",
+			Floor:       "1",
 		}})
 
-
-rms.RoomList = append(rms.RoomList, entitymapper.Room{MapItem: entitymapper.MapItem{
-		Floor: "2",
+	rms.RoomList = append(rms.RoomList, entitymapper.Room{MapItem: entitymapper.MapItem{
+		Floor:    "2",
 		Building: "main",
 	},
-	Location: entitymapper.Location{PathNode:navigation.PathNode{
-		Id:             1,
-		Coordinate:     navigation.Coordinate{},
-		Group:          nil,
-		ConnectedNodes: nil,
+		Location: entitymapper.Location{PathNode: navigation.PathNode{
+			Id:             1,
+			Coordinate:     navigation.Coordinate{},
+			Group:          nil,
+			ConnectedNodes: nil,
 		},
-		Name:        "RoomN04",
-		Description: "Dummy",
-		Floor: "2",
-	}})
+			Name:        "RoomN04",
+			Description: "Dummy",
+			Floor:       "2",
+		}})
 
 	return &rms
 }

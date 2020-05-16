@@ -55,17 +55,16 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 	startroomname := "RoomN01"
 	endroomname := "RoomN02"
 
-
 	loc1 := entitymapper.Location{
 		Id:          1,
 		Name:        "RoomN01",
 		Description: "",
 		Tags:        nil,
-		Building: 	"TestBuilding",
-		Floor: 		"2",
-		PathNode:    navigation.PathNode{
-			Id:             1,
-			Coordinate:     navigation.Coordinate{
+		Building:    "TestBuilding",
+		Floor:       "2",
+		PathNode: navigation.PathNode{
+			Id: 1,
+			Coordinate: navigation.Coordinate{
 				X: 200,
 				Y: 300,
 				Z: 2,
@@ -75,15 +74,15 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 		},
 	}
 	loc2 := entitymapper.Location{
-		Id:         	2,
-		Name:       	"RoomN02",
-		Building: 		"TestBuilding",
-		Description: 	"",
-		Tags:        	nil,
-		Floor: 			"2",
-		PathNode:    	navigation.PathNode{
-			Id:             2,
-			Coordinate:     navigation.Coordinate{
+		Id:          2,
+		Name:        "RoomN02",
+		Building:    "TestBuilding",
+		Description: "",
+		Tags:        nil,
+		Floor:       "2",
+		PathNode: navigation.PathNode{
+			Id: 2,
+			Coordinate: navigation.Coordinate{
 				X: 2,
 				Y: 3,
 				Z: 2,
@@ -95,7 +94,7 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 
 	loc1.PathNode.ConnectedNodes = []*navigation.PathNode{&loc2.PathNode}
 
-	expecteddistance :=	loc1.PathNode.Coordinate.DistanceTo(loc2.PathNode.Coordinate)
+	expecteddistance := loc1.PathNode.Coordinate.DistanceTo(loc2.PathNode.Coordinate)
 	node2 := navigation.PathNode{
 		Id: 0,
 		Coordinate: navigation.Coordinate{
@@ -117,7 +116,6 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 		Group:          nil,
 		ConnectedNodes: nil,
 	}
-
 
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
@@ -144,7 +142,6 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 		Campus:   "",
 	}, nil)
 
-
 	mock.EXPECT().GetPathNodeLocationData(node3).Return(navigation.LocationData{
 		Building: loc2.Building,
 		Floor:    loc2.Floor,
@@ -160,10 +157,9 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 		t.Error(err)
 	}
 
-
 	expected, distance, _ := calculator.GetRoute(loc1.PathNode, loc2.PathNode)
 	expectedRoute := navigation.NavigationRoute{
-		RouteSections:  []navigation.RouteSection{{
+		RouteSections: []navigation.RouteSection{{
 			Route:       expected,
 			Description: "",
 			Distance:    distance,
@@ -260,7 +256,7 @@ func TestNavigationService_Calculate(t *testing.T) {
 
 	expected, distance, _ := calculator.GetRoute(loc1.PathNode, loc2.PathNode)
 	expectedRoute := navigation.NavigationRoute{
-		RouteSections:  []navigation.RouteSection{{
+		RouteSections: []navigation.RouteSection{{
 			Route:       expected,
 			Description: "",
 			Distance:    0,
@@ -295,7 +291,6 @@ func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
 	mock.EXPECT().GetPathNode("RoomN01").Return(loc1.PathNode, nil)
 	mock.EXPECT().GetPathNode("RoomN0001").Return(navigation.PathNode{}, errors.New("error text"))
 
-
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, mock)
 
@@ -326,7 +321,6 @@ func TestNavigationService_CalculateFromCoordinate(t *testing.T) {
 	defer ctrl.Finish()
 	mock := NewMockPathNodeProvider(ctrl)
 	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
-
 
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, mock)

@@ -49,7 +49,7 @@ func (l MapController) GetMapItems(c *gin.Context) {
 
 	var useFilterApi bool
 
-	if len(coordinate) == 0 && len(floor) == 0 && len(coordinateDelta) == 0 && len(building) == 0 && len(campus) == 0  {
+	if len(coordinate) == 0 && len(floor) == 0 && len(coordinateDelta) == 0 && len(building) == 0 && len(campus) == 0 {
 		//rooms, err = l.provider.GetAllRooms()
 		useFilterApi = false
 	} else {

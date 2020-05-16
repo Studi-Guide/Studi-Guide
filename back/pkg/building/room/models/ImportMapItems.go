@@ -11,13 +11,12 @@ type ImportDoor struct {
 	PathNode ImportPathNode
 }
 
-
 type ImportPathNode struct {
-	Id 				int
-	X 				int
-	Y 				int
-	Z 				int
-	ConnectedPathNodes 	[]int
+	Id                 int
+	X                  int
+	Y                  int
+	Z                  int
+	ConnectedPathNodes []int
 }
 
 type ImportMapItems struct {
@@ -26,10 +25,9 @@ type ImportMapItems struct {
 	Tags        []string
 	Doors       []ImportDoor
 	Color       string
-	Floor 		string
+	Floor       string
 	Sections    []entitymapper.Section
 	Campus      string
-	Building 	string
-	PathNodes 	[]ImportPathNode
+	Building    string
+	PathNodes   []ImportPathNode
 }
-
