@@ -7,6 +7,9 @@
             (route)="onRoute($event)">
     </app-search-input>
 
+    <div id="error-message" *ngIf="errorOccured">
+      Zu deiner Suchanfrage {{startInput}} wurde nichts gefunden
+    </div>
     <div id="canvas-wrapper">
       <app-map-view></app-map-view>
     </div>
@@ -17,5 +20,4 @@
       <ion-icon name="layers"></ion-icon>
     </ion-fab-button>
   </ion-fab>
-
 </ion-content>
