@@ -42,7 +42,7 @@ export class NaviRoute {
         const rtnDistance = new DistanceToBeDisplayed();
         if (routeSection != null){
             const numberOfPathNodes:number = routeSection.Route.length;
-            rtnDistance.Value = this.distance;
+            rtnDistance.Value = routeSection.Distance;
             rtnDistance.X = routeSection.Route[Math.round((numberOfPathNodes-1)/2)].Coordinate.X;
             rtnDistance.Y = routeSection.Route[Math.round((numberOfPathNodes-1)/2)].Coordinate.Y;
         }
