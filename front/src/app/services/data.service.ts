@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
+import {Location, MapItem, PathNode, SvgLocationName, SvgPath} from '../building-objects-if';
 
 @Injectable({
     providedIn: 'root'
@@ -14,7 +15,7 @@ export class DataService {
     }
 
     get_map_floor(building:string, floor:string){
-        return this.httpClient.get(this.baseUrl + '/buildings/' + building + '/floors/'+ floor + '/maps');
+        return this.httpClient.get<MapItem[]>(this.baseUrl + '/buildings/' + building + '/floors/'+ floor + '/maps');
     }
 
     get_route(start:string, end:string){
@@ -22,11 +23,11 @@ export class DataService {
     }
 
     get_location_search(name:string) {
-        return this.httpClient.get(this.baseUrl + '/locations/' + name );
+        return this.httpClient.get<Location>(this.baseUrl + '/locations/' + name );
     }
 
     get_locations(building:string, floor:string) {
-        return this.httpClient.get(this.baseUrl + '/buildings/'+ building +'/floors/' + floor + '/locations');
+        return this.httpClient.get<Location[]>(this.baseUrl + '/buildings/'+ building +'/floors/' + floor + '/locations');
     }
 
     get_building(name:string) {
