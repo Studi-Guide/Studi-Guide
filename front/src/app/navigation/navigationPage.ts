@@ -127,8 +127,8 @@ export class NavigationPage {
       this.distanceToDisplay = this.route.calculateSvgPositionForDistance(building, floor);
       this.calculatedRoute = this.route.calculateSvgPathForRoute(building, floor);
 
-      this.startPin = this.route.getRouteStart();
-      this.routeEnd = this.route.getRouteEnd();
+      this.startPin = this.route.getRouteStart(building, floor);
+      this.routeEnd = this.route.getRouteEnd(building, floor);
     }
   }
 

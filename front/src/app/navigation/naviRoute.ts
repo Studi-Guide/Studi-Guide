@@ -61,12 +61,20 @@ export class NaviRoute {
         return points;
     }
 
-    public getRouteStart() {
-        return this.routeSections[0].Route[0];
+    public getRouteStart(building:string, floor:string) {
+        const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
+        if (routeSection === this.routeSections[0]) {
+            return routeSection.Route[0];
+        }
+        return null;
     }
 
-    public getRouteEnd() {
+    public getRouteEnd(building:string, floor:string) {
+        const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
         const lastroutesection = this.routeSections[this.routeSections.length-1];
-        return lastroutesection.Route[lastroutesection.Route.length-1];
+        if (routeSection === lastroutesection) {
+            return lastroutesection.Route[lastroutesection.Route.length-1];
+        }
+        return null;
     }
 }
