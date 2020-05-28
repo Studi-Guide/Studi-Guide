@@ -24,14 +24,12 @@ export class NavigationPage {
   public startInput: string;
   public destinationInput: string;
 
-  private route: NaviRoute;
-  public startPin: PathNode;
-  public routeEnd: PathNode;
-
   public startPinIsVisible = false;
-  public distanceIsVisible = false;
 
   private floor: FloorMap;
+  private route: NaviRoute;
+  public startPin: PathNode;
+
   public availableFloorsBtnIsVisible = false;
 
 //  public testRooms:Room[] = [];
@@ -99,7 +97,6 @@ export class NavigationPage {
       this.displayNavigationRoute(res2[0].Building, res2[0].Floor);
       this.progressIsVisible = false;
       this.startPinIsVisible = true;
-      this.distanceIsVisible = true;
     });
   }
 
@@ -121,7 +118,6 @@ export class NavigationPage {
     this.floor.renderFloorMap();
     this.progressIsVisible = false;
     this.availableFloorsBtnIsVisible = true;
-    this.distanceIsVisible = false;
   }
 
   public async checkWhatIsRequestedByEnterKey() {
@@ -185,7 +181,6 @@ export class NavigationPage {
               this.displayFloor();
               this.progressIsVisible = false;
               this.startPinIsVisible = isRouteAvailable;
-              this.distanceIsVisible = isRouteAvailable;
             }
           })
 
