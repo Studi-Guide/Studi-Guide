@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {PathNode} from '../building-objects-if';
-import {Route} from "@angular/router";
 
 @Injectable({
     providedIn: 'root'
@@ -19,49 +18,72 @@ export class RouteSection {
     Floor: 		string;
 }
 
-export class DistanceToBeDisplayed {
-    Value: number;
-    X: number;
-    Y: number;
-}
-
 export class NaviRoute {
 
-    private routeSections:RouteSection[];
+    private mapCanvas: HTMLCanvasElement;
+    private map: CanvasRenderingContext2D;
+
+    private readonly routeSections:RouteSection[];
     public distance: number;
 
     constructor(response:ReceivedRoute) {
+        this.mapCanvas = document.getElementById('map') as HTMLCanvasElement;
+        this.map = this.mapCanvas.getContext('2d');
         this.distance = response.Distance;
         this.routeSections = response.RouteSections;
         // this.calculateSvgPositionForDistance();
         // this.calculateSvgPathForRoute();
     }
 
-    public calculateSvgPositionForDistance(building: string,  floor :string) {
+    public render(building: string, floor :string) {
+        this.renderRoute(building, floor);
+        this.renderDistanceOfRoute(building, floor);
+        this.renderPinAtRouteStart(building, floor);
+    }
+
+    private renderDistanceOfRoute(building: string, floor :string) {
         const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
-        const rtnDistance = new DistanceToBeDisplayed();
         if (routeSection != null){
             const numberOfPathNodes:number = routeSection.Route.length;
-            rtnDistance.Value = routeSection.Distance;
-            rtnDistance.X = routeSection.Route[Math.round((numberOfPathNodes-1)/2)].Coordinate.X;
-            rtnDistance.Y = routeSection.Route[Math.round((numberOfPathNodes-1)/2)].Coordinate.Y;
+            const value:number = routeSection.Distance;
+            const x:number = routeSection.Route[Math.round((numberOfPathNodes-1)/2)].Coordinate.X;
+            const y:number = routeSection.Route[Math.round((numberOfPathNodes-1)/2)].Coordinate.Y;
+            const font = '14px Arial';
+            const width = this.map.measureText(value.toString()).width+14;
+            const height = parseInt('14px Arial', 10)+14;
+            this.map.fillStyle = '#A00';
+            this.map.fillRect(x-width/2, y-height/2, width, 20);
+            this.map.font = font;
+            this.map.fillStyle = '#FFF';
+            this.map.fillText(value.toString(), x, y);
         }
-
-        return rtnDistance;
     }
 
-    public calculateSvgPathForRoute(building: string,  floor:string) {
+    private renderRoute(building: string, floor:string) {
         const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
-        let points = '';
         if (routeSection != null) {
-            for (const pathNode of routeSection.Route) {
-                points += pathNode.Coordinate.X + ',' + pathNode.Coordinate.Y + ' ';
+            this.map.strokeStyle = '#A00';
+            this.map.lineWidth = 3;
+            this.map.beginPath();
+            this.map.moveTo(routeSection.Route[0].Coordinate.X,routeSection.Route[0].Coordinate.Y);
+            for (let i = 1; i < routeSection.Route.length; i++) {
+                this.map.lineTo(routeSection.Route[i].Coordinate.X,routeSection.Route[i].Coordinate.Y);
             }
+            this.map.stroke();
+            this.map.closePath();
         }
-        return points;
     }
 
-    public getRouteStart(building:string, floor:string) {
+    private renderPinAtRouteStart(building: string, floor :string) {
+        const routeStart = this.getRouteStart(building, floor);
+        const x = routeStart.Coordinate.X;
+        const y = routeStart.Coordinate.Y;
+        const image = new Image(0,0);
+        image.src = 'assets/pin-outline.png';
+        this.map.drawImage(image, x, y,30,30);
+    }
+
+    private getRouteStart(building:string, floor:string) {
         const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
         if (routeSection === this.routeSections[0]) {
             return routeSection.Route[0];
@@ -69,11 +91,11 @@ export class NaviRoute {
         return null;
     }
 
-    public getRouteEnd(building:string, floor:string) {
+    private getRouteEnd(building:string, floor:string) {
         const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
-        const lastroutesection = this.routeSections[this.routeSections.length-1];
-        if (routeSection === lastroutesection) {
-            return lastroutesection.Route[lastroutesection.Route.length-1];
+        const lastRouteSection = this.routeSections[this.routeSections.length-1];
+        if (routeSection === lastRouteSection) {
+            return lastRouteSection.Route[lastRouteSection.Route.length-1];
         }
         return null;
     }

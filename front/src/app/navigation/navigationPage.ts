@@ -1,10 +1,10 @@
-import {Location, MapItem, PathNode, SvgLocationName, SvgPath} from '../building-objects-if';
+import {Location, MapItem, PathNode} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component, ViewChild} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {FloorMap} from './floorMap';
-import {DistanceToBeDisplayed, NaviRoute, ReceivedRoute} from './naviRoute';
+import {NaviRoute, ReceivedRoute} from './naviRoute';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 
 @Component({
@@ -25,9 +25,6 @@ export class NavigationPage {
   public destinationInput: string;
 
   private route: NaviRoute;
-  public distanceToDisplay: DistanceToBeDisplayed;
-  public calculatedRoute: string;
-  public routeIsVisible = false;
   public startPin: PathNode;
   public routeEnd: PathNode;
 
@@ -35,12 +32,7 @@ export class NavigationPage {
   public distanceIsVisible = false;
 
   private floor: FloorMap;
-  public calculatedRoomPaths: SvgPath[];
-  public calculatedDoorLines: SvgPath[];
-  public mapSvgWidth: number;
-  public mapSvgHeight: number;
-  public locations: SvgLocationName[];
-  public mapIsVisible = false;
+  public availableFloorsBtnIsVisible = false;
 
 //  public testRooms:Room[] = [];
 //  public testRoute:PathNode[];
@@ -48,14 +40,6 @@ export class NavigationPage {
   constructor(private dataService: DataService,
               private modalCtrl: ModalController) {
     this.dataService = dataService;
-
-    this.calculatedRoute = '';
-
-    this.calculatedRoomPaths = [];
-    this.calculatedDoorLines = [];
-    this.mapSvgWidth = 0;
-    this.mapSvgHeight = 0;
-    this.locations = [];
 
     // this.testRooms = testDataRooms;
     // this.testRoute = testDataPathNodes;
@@ -67,8 +51,7 @@ export class NavigationPage {
       this.hideRouteSearchbar();
     } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput != null) {
       await this.fetchFloorByLocation(this.startInput);
-      this.routeIsVisible = false;
-      this.mapIsVisible = true;
+      this.availableFloorsBtnIsVisible = true;
     }
   }
 
@@ -78,14 +61,13 @@ export class NavigationPage {
     this.startPin = res.PathNode;
     this.startPinIsVisible = true;
     await this.fetchFloorByItsNumber(res.Building, res.Floor);
-    this.displayFloor();
     await this.fetchLocations(res.Building, res.Floor);
+    this.displayFloor();
   }
 
   public async showRoute() {
     if (!this.routeInputIsVisible) {
       this.routeInputIsVisible = true;
-      // TODO set #discoverySearchbar color blue
       const searchbars = document.querySelector('ion-item');
       searchbars.setAttribute('color', 'primary');
       this.searchBtnIsVisible = false;
@@ -94,7 +76,7 @@ export class NavigationPage {
         && this.startInput !== '' && this.destinationInput !== ''
         && this.startInput != null && this.destinationInput != null
     ) {
-      this.mapIsVisible = true;
+      this.availableFloorsBtnIsVisible = true;
       await this.fetchRouteToDisplay(this.startInput, this.destinationInput);
     }
   }
@@ -109,47 +91,36 @@ export class NavigationPage {
     this.progressIsVisible = true;
     const res1 = await this.dataService.get_location_search(start).toPromise<Location>();
     const res2 = await this.dataService.get_map_floor(res1.Building, res1.Floor).toPromise<MapItem[]>();
-    await this.fetchLocations(res2[0].Building, res2[0].Floor);
     this.floor = new FloorMap(res2);
+    await this.fetchLocations(res2[0].Building, res2[0].Floor);
     this.dataService.get_route(start, end).subscribe((res3 : ReceivedRoute)=>{
-          this.route = new NaviRoute(res3);
-          this.displayNavigationRoute(res2[0].Building, res2[0].Floor);
-          this.displayFloor();
-          this.progressIsVisible = false;
-          this.routeIsVisible = true;
-          this.startPinIsVisible = true;
-          this.distanceIsVisible = true;
-        });
-    }
+      this.route = new NaviRoute(res3);
+      this.displayFloor();
+      this.displayNavigationRoute(res2[0].Building, res2[0].Floor);
+      this.progressIsVisible = false;
+      this.startPinIsVisible = true;
+      this.distanceIsVisible = true;
+    });
+  }
 
   private displayNavigationRoute(building: string, floor: string){
     if (this.route !=null) {
-      this.distanceToDisplay = this.route.calculateSvgPositionForDistance(building, floor);
-      this.calculatedRoute = this.route.calculateSvgPathForRoute(building, floor);
-
-      this.startPin = this.route.getRouteStart(building, floor);
-      this.routeEnd = this.route.getRouteEnd(building, floor);
+      this.route.render(building, floor);
     }
   }
 
   private async fetchLocations(building:string, floor:string) {
     const res = await this.dataService.get_locations(building, floor).toPromise<Location[]>();
-    this.locations = [];
+    this.floor.locationNames = [];
     for(const l of res) {
-        this.locations.push({name: l.Name, x: l.PathNode.Coordinate.X, y: l.PathNode.Coordinate.Y})
+      this.floor.locationNames.push({name: l.Name, x: l.PathNode.Coordinate.X, y: l.PathNode.Coordinate.Y});
     }
   }
 
   private displayFloor() {
-    this.floor.calculateSvgPathsAndSvgWidthHeight();
-    this.mapSvgHeight = this.floor.svgHeight;
-    this.mapSvgWidth = this.floor.svgWidth;
-    this.calculatedRoomPaths = this.floor.calculatedRoomPaths;
-    this.calculatedDoorLines = this.floor.calculatedDoorLines;
-
+    this.floor.renderFloorMap();
     this.progressIsVisible = false;
-    this.mapIsVisible = true;
-    this.routeIsVisible = false;
+    this.availableFloorsBtnIsVisible = true;
     this.distanceIsVisible = false;
   }
 
@@ -213,7 +184,6 @@ export class NavigationPage {
 
               this.displayFloor();
               this.progressIsVisible = false;
-              this.routeIsVisible = isRouteAvailable && !this.isEmptyOrSpaces(this.calculatedRoute);
               this.startPinIsVisible = isRouteAvailable;
               this.distanceIsVisible = isRouteAvailable;
             }
