@@ -78,9 +78,12 @@ export class NaviRoute {
         const routeStart = this.getRouteStart(building, floor);
         const x = routeStart.Coordinate.X;
         const y = routeStart.Coordinate.Y;
-        const image = new Image(0,0);
+        const image = new Image();
+        image.onload = () => {
+            this.map.drawImage(image, x, y, 30, 30);
+        };
         image.src = 'assets/pin-outline.png';
-        this.map.drawImage(image, x, y,30,30);
+
     }
 
     private getRouteStart(building:string, floor:string) {
