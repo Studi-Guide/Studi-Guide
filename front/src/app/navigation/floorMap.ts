@@ -1,11 +1,12 @@
 import {Door, MapItem, SvgLocationName} from '../building-objects-if';
+import {CanvasResolutionConfigurator} from '../services/CanvasResolutionConfigurator';
 
 // @Injectable({
 //   providedIn: 'root'
 // })
 export class FloorMap {
 
-    private mapCanvas: HTMLCanvasElement;
+    private readonly mapCanvas: HTMLCanvasElement;
     private map: CanvasRenderingContext2D;
 
     public objectsToBeVisualized: MapItem[];
@@ -13,7 +14,7 @@ export class FloorMap {
 
     constructor(objectsToBeVisualized: MapItem[]) {
         this.mapCanvas = document.getElementById('map') as HTMLCanvasElement;
-        this.map = this.mapCanvas.getContext('2d');
+        this.map = CanvasResolutionConfigurator.setup(this.mapCanvas);
         this.objectsToBeVisualized = objectsToBeVisualized;
     }
 
@@ -65,7 +66,7 @@ export class FloorMap {
             }
         }
         this.mapCanvas.height = mapHeightNeeded;
-        this.mapCanvas.width = mapWidthNeeded;
+        this.mapCanvas.width = mapWidthNeeded+2;
     }
 
 

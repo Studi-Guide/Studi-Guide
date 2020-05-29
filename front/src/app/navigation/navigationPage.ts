@@ -70,6 +70,7 @@ export class NavigationPage {
       searchbars.setAttribute('color', 'primary');
       this.searchBtnIsVisible = false;
       this.closeRouteBtnIsVisible = true;
+      document.getElementById('map-wrapper').setAttribute('style', 'height: calc(100% - 120px);');
     } else if (this.startInput !== undefined && this.destinationInput !== undefined
         && this.startInput !== '' && this.destinationInput !== ''
         && this.startInput != null && this.destinationInput != null
@@ -146,6 +147,7 @@ export class NavigationPage {
     searchbars.setAttribute('color', 'light-tint');
     this.searchBtnIsVisible = true;
     this.closeRouteBtnIsVisible = false;
+    document.getElementById('map-wrapper').setAttribute('style', '');
   }
 
   private isEmptyOrSpaces(str){

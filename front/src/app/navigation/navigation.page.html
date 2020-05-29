@@ -27,9 +27,10 @@
     <canvas id="map"></canvas>
   </div>
 
-  <ion-button size="default" mode="ios" color="light" id="available-floors-btn"
-              *ngIf="availableFloorsBtnIsVisible" (click)="presentAvailableFloorModal()">
-    <ion-icon size="large" slot="icon-only" name="layers"></ion-icon>
-  </ion-button>
+  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
+    <ion-fab-button *ngIf="availableFloorsBtnIsVisible" (click)="presentAvailableFloorModal()" color="dark">
+      <ion-icon name="layers"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 
 </ion-content>

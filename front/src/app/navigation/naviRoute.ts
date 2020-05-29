@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import {PathNode} from '../building-objects-if';
+import {CanvasResolutionConfigurator} from '../services/CanvasResolutionConfigurator';
 
 @Injectable({
     providedIn: 'root'
@@ -28,11 +29,9 @@ export class NaviRoute {
 
     constructor(response:ReceivedRoute) {
         this.mapCanvas = document.getElementById('map') as HTMLCanvasElement;
-        this.map = this.mapCanvas.getContext('2d');
+        this.map = CanvasResolutionConfigurator.setup(this.mapCanvas);
         this.distance = response.Distance;
         this.routeSections = response.RouteSections;
-        // this.calculateSvgPositionForDistance();
-        // this.calculateSvgPathForRoute();
     }
 
     public render(building: string, floor :string) {
@@ -80,7 +79,7 @@ export class NaviRoute {
         const y = routeStart.Coordinate.Y;
         const image = new Image();
         image.onload = () => {
-            this.map.drawImage(image, x, y, 30, 30);
+            this.map.drawImage(image, x-15, y-30, 30, 30);
         };
         image.src = 'assets/pin-outline.png';
 
