@@ -38,6 +38,7 @@ export class NaviRoute {
         this.renderRoute(building, floor);
         this.renderDistanceOfRoute(building, floor);
         this.renderPinAtRouteStart(building, floor);
+        this.renderFlagAtRouteEnd(building, floor);
     }
 
     private renderDistanceOfRoute(building: string, floor :string) {
@@ -81,7 +82,7 @@ export class NaviRoute {
         image.onload = () => {
             this.map.drawImage(image, x-15, y-30, 30, 30);
         };
-        image.src = 'assets/pin-outline.png';
+        image.src = 'assets/pin-sharp.png';
 
     }
 
@@ -91,6 +92,17 @@ export class NaviRoute {
             return routeSection.Route[0];
         }
         return null;
+    }
+
+    private renderFlagAtRouteEnd(building: string, floor :string) {
+        const routeEnd = this.getRouteEnd(building, floor);
+        const x = routeEnd.Coordinate.X;
+        const y = routeEnd.Coordinate.Y;
+        const image = new Image();
+        image.onload = () => {
+            this.map.drawImage(image, x-5, y-30, 30, 30);
+        };
+        image.src = 'assets/flag-sharp.png';
     }
 
     private getRouteEnd(building:string, floor:string) {
