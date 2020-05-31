@@ -27,6 +27,7 @@ export class SearchInputComponent implements OnInit {
       searchbars.setAttribute('color', 'primary');
       this.searchBtnIsVisible = false;
       this.closeRouteBtnIsVisible = true;
+      document.getElementById('map-wrapper').setAttribute('style', 'height: calc(100% - 121px);');
   }
 
   public hideRouteSearchBar() {
@@ -36,6 +37,7 @@ export class SearchInputComponent implements OnInit {
       searchbars.setAttribute('color', 'light-tint');
       this.searchBtnIsVisible = true;
       this.closeRouteBtnIsVisible = false;
+      document.getElementById('map-wrapper').setAttribute('style', '');
     }
   }
 
