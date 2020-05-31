@@ -1,6 +1,6 @@
 import {Location, MapItem, PathNode} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
-import {Component, ViewChild} from '@angular/core';
+import {Component} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {FloorMap} from './floorMap';
@@ -16,17 +16,14 @@ import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 export class NavigationPage {
 
   public progressIsVisible = false;
+  public availableFloorsBtnIsVisible = false;
 
   public currentBuilding: string;
 
   private floor: FloorMap;
   private route: NaviRoute;
 
-  // TODO remove attributes
   public startPin: PathNode;
-  public startPinIsVisible = false;
-
-  public availableFloorsBtnIsVisible = false;
 
 //  public testRooms:Room[] = [];
 //  public testRoute:PathNode[];
@@ -44,7 +41,6 @@ export class NavigationPage {
     this.progressIsVisible = true;
     const res = await this.dataService.get_location_search(room).toPromise();
     this.startPin = res.PathNode;
-    // TODO remove this.startPinIsVisible = true;
     this.currentBuilding = res.Building;
     await this.fetchFloorByItsNumber(res.Building, res.Floor);
     await this.fetchLocations(res.Building, res.Floor);
@@ -70,7 +66,6 @@ export class NavigationPage {
       this.displayFloor();
       this.displayNavigationRoute(res2[0].Building, res2[0].Floor);
       this.progressIsVisible = false;
-      this.startPinIsVisible = true;
     });
   }
 
@@ -114,7 +109,6 @@ export class NavigationPage {
   }
 
   async presentAvailableFloorModal() {
-    this.startPinIsVisible = false;
     this.dataService.get_building(this.currentBuilding).subscribe(async (res: JSON) => {
       // @ts-ignore
       const {Floors} = res;
@@ -141,11 +135,8 @@ export class NavigationPage {
               }
 
               this.progressIsVisible = false;
-              this.startPinIsVisible = isRouteAvailable;
             }
           })
-
-
     });
   }
 
