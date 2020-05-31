@@ -82,6 +82,9 @@ export class NaviRoute {
 
     private renderPinAtRouteStart(building: string, floor :string) {
         const routeStart = this.getRouteStart(building, floor);
+        if (routeStart == null) {
+            return;
+        }
         const x = routeStart.Coordinate.X;
         const y = routeStart.Coordinate.Y;
         this.pin.render(x-15, y-30, 30, 30);
@@ -97,6 +100,9 @@ export class NaviRoute {
 
     private renderFlagAtRouteEnd(building: string, floor :string) {
         const routeEnd = this.getRouteEnd(building, floor);
+        if (routeEnd == null) {
+            return;
+        }
         const x = routeEnd.Coordinate.X;
         const y = routeEnd.Coordinate.Y;
         this.flag.render(x-5, y-30, 30, 30);

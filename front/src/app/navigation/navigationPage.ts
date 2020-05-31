@@ -14,15 +14,10 @@ import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 })
 
 export class NavigationPage {
-  @ViewChild('discoverySearchbar') discoverySearchbarRef;
 
   public progressIsVisible = false;
-  public routeInputIsVisible = false;
-  public searchBtnIsVisible = true;
-  public closeRouteBtnIsVisible = false;
 
-  public startInput: string;
-  public destinationInput: string;
+  public currentBuilding: string;
 
   public startPinIsVisible = false;
 
@@ -44,40 +39,16 @@ export class NavigationPage {
     // this.testRoute = NavigationPage.testRenderPathNodes();
   }
 
-  public async showFloorForSearch() {
-    if (this.routeInputIsVisible) {
-      this.hideRouteSearchbar();
-    } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput != null) {
-      await this.fetchFloorByLocation(this.startInput);
-      this.availableFloorsBtnIsVisible = true;
-    }
-  }
 
   private async fetchFloorByLocation(room: string) {
     this.progressIsVisible = true;
     const res = await this.dataService.get_location_search(room).toPromise();
     this.startPin = res.PathNode;
     this.startPinIsVisible = true;
+    this.currentBuilding = res.Building;
     await this.fetchFloorByItsNumber(res.Building, res.Floor);
     await this.fetchLocations(res.Building, res.Floor);
     this.displayFloor();
-  }
-
-  public async showRoute() {
-    if (!this.routeInputIsVisible) {
-      this.routeInputIsVisible = true;
-      const searchbars = document.querySelector('ion-item');
-      searchbars.setAttribute('color', 'primary');
-      this.searchBtnIsVisible = false;
-      this.closeRouteBtnIsVisible = true;
-      document.getElementById('map-wrapper').setAttribute('style', 'height: calc(100% - 120px);');
-    } else if (this.startInput !== undefined && this.destinationInput !== undefined
-        && this.startInput !== '' && this.destinationInput !== ''
-        && this.startInput != null && this.destinationInput != null
-    ) {
-      this.availableFloorsBtnIsVisible = true;
-      await this.fetchRouteToDisplay(this.startInput, this.destinationInput);
-    }
   }
 
   private async fetchFloorByItsNumber(building:string, floor:string) {
@@ -90,6 +61,7 @@ export class NavigationPage {
     this.progressIsVisible = true;
     const res1 = await this.dataService.get_location_search(start).toPromise<Location>();
     const res2 = await this.dataService.get_map_floor(res1.Building, res1.Floor).toPromise<MapItem[]>();
+    this.currentBuilding = res1.Building;
     this.floor = new FloorMap(res2);
     await this.fetchLocations(res2[0].Building, res2[0].Floor);
     this.dataService.get_route(start, end).subscribe((res3 : ReceivedRoute)=>{
@@ -121,33 +93,13 @@ export class NavigationPage {
     this.availableFloorsBtnIsVisible = true;
   }
 
-  public async checkWhatIsRequestedByEnterKey() {
-    if (this.startInput !== undefined && this.startInput !== '' && this.startInput !== null &&
-        !this.routeInputIsVisible
-    ) {
-      await this.showFloorForSearch();
-    } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput !== null &&
-        this.routeInputIsVisible &&
-        (this.destinationInput === undefined || this.destinationInput === '' || this.destinationInput === null)
-    ) {
-      // TODO check setFocus on Android, iOS, etc.
-      this.discoverySearchbarRef.setFocus();
-      await this.showFloorForSearch();
-    } else if (this.startInput !== undefined && this.startInput !== '' && this.startInput != null &&
-        this.routeInputIsVisible &&
-        this.destinationInput !== undefined && this.destinationInput !== '' && this.destinationInput !== null
-    ) {
-      await this.showRoute();
-    }
+  public async onSearch(searchInput:string) {
+    await this.fetchFloorByLocation(searchInput);
+    this.availableFloorsBtnIsVisible = true;
   }
 
-  public hideRouteSearchbar() {
-    this.routeInputIsVisible = false;
-    const searchbars = document.querySelector('ion-item');
-    searchbars.setAttribute('color', 'light-tint');
-    this.searchBtnIsVisible = true;
-    this.closeRouteBtnIsVisible = false;
-    document.getElementById('map-wrapper').setAttribute('style', '');
+  public async onRoute(routeInput:string[]) {
+    await this.fetchRouteToDisplay(routeInput[0], routeInput[1]);
   }
 
   private isEmptyOrSpaces(str){
@@ -156,7 +108,7 @@ export class NavigationPage {
 
   async presentAvailableFloorModal() {
     this.startPinIsVisible = false;
-    this.dataService.get_building(this.startInput.slice(0, 2)).subscribe(async (res: JSON) => {
+    this.dataService.get_building(this.currentBuilding).subscribe(async (res: JSON) => {
       // @ts-ignore
       const {Floors} = res;
       const availableFloorModal = await this.modalCtrl.create({
@@ -171,16 +123,16 @@ export class NavigationPage {
       availableFloorModal.onDidDismiss()
           .then(async (data) => {
             if (data['data']) {
-              const building = this.startInput.slice(0, 2);
-              await this.fetchFloorByItsNumber(building, data['data']);
-              await this.fetchLocations(building, data['data']);
+              await this.fetchFloorByItsNumber(this.currentBuilding, data['data']);
+              await this.fetchLocations(this.currentBuilding, data['data']);
+
+              this.displayFloor();
               // display route if needed
               const isRouteAvailable = this.route != null;
               if (isRouteAvailable) {
-                this.displayNavigationRoute(building, data['data']);
+                this.displayNavigationRoute(this.currentBuilding, data['data']);
               }
 
-              this.displayFloor();
               this.progressIsVisible = false;
               this.startPinIsVisible = isRouteAvailable;
             }
