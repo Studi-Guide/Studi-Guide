@@ -21,7 +21,7 @@ export class SearchInputComponent implements OnInit {
 
   ngOnInit() {}
 
-  private showRouteSearchBar() {
+  protected showRouteSearchBar() {
       this.routeInputIsVisible = true;
       const searchbars = document.querySelector('ion-item');
       searchbars.setAttribute('color', 'primary');
@@ -29,7 +29,7 @@ export class SearchInputComponent implements OnInit {
       this.closeRouteBtnIsVisible = true;
   }
 
-  private hideRouteSearchBar() {
+  protected hideRouteSearchBar() {
     if (this.routeInputIsVisible) {
       this.routeInputIsVisible = false;
       const searchbars = document.querySelector('ion-item');
@@ -39,7 +39,7 @@ export class SearchInputComponent implements OnInit {
     }
   }
 
-  private routeBtnClick() {
+  protected routeBtnClick() {
     if (!this.routeInputIsVisible) {
       this.showRouteSearchBar();
     } else {
@@ -47,11 +47,11 @@ export class SearchInputComponent implements OnInit {
     }
   }
 
-  private emitSearchEvent() {
+  protected emitSearchEvent() {
     this.search.emit(this.discoverySearchbar.value);
   }
 
-  private emitRouteEvent() {
+  protected emitRouteEvent() {
     const route:string[] = [this.discoverySearchbar.value, this.routeSearchBar.value];
     this.route.emit(route);
   }
