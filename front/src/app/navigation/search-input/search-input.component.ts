@@ -49,13 +49,11 @@ export class SearchInputComponent implements OnInit {
 
   private emitSearchEvent() {
     this.search.emit(this.discoverySearchbar.value);
-    console.log('search event emitted', this.discoverySearchbar.value);
   }
 
   private emitRouteEvent() {
     const route:string[] = [this.routeSearchBar.value, this.routeSearchBar.value];
     this.route.emit(route);
-    console.log('route event emitted', this.discoverySearchbar.value, this.routeSearchBar.value);
   }
 
 }
