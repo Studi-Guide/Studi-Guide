@@ -93,12 +93,12 @@ export class NavigationPage {
     this.availableFloorsBtnIsVisible = true;
   }
 
-  private async onSearch(searchInput:string) {
+  public async onSearch(searchInput:string) {
     await this.fetchFloorByLocation(searchInput);
     this.availableFloorsBtnIsVisible = true;
   }
 
-  private async onRoute(routeInput:string[]) {
+  public async onRoute(routeInput:string[]) {
     await this.fetchRouteToDisplay(routeInput[0], routeInput[1]);
   }
 
