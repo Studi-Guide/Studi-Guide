@@ -61,6 +61,7 @@ export class NavigationPage {
     this.progressIsVisible = true;
     const res1 = await this.dataService.get_location_search(start).toPromise<Location>();
     const res2 = await this.dataService.get_map_floor(res1.Building, res1.Floor).toPromise<MapItem[]>();
+    this.currentBuilding = res1.Building;
     this.floor = new FloorMap(res2);
     await this.fetchLocations(res2[0].Building, res2[0].Floor);
     this.dataService.get_route(start, end).subscribe((res3 : ReceivedRoute)=>{
