@@ -19,11 +19,12 @@ export class NavigationPage {
 
   public currentBuilding: string;
 
-  public startPinIsVisible = false;
-
   private floor: FloorMap;
   private route: NaviRoute;
+
+  // TODO remove attributes
   public startPin: PathNode;
+  public startPinIsVisible = false;
 
   public availableFloorsBtnIsVisible = false;
 
@@ -39,16 +40,16 @@ export class NavigationPage {
     // this.testRoute = NavigationPage.testRenderPathNodes();
   }
 
-
   private async fetchFloorByLocation(room: string) {
     this.progressIsVisible = true;
     const res = await this.dataService.get_location_search(room).toPromise();
     this.startPin = res.PathNode;
-    this.startPinIsVisible = true;
+    // TODO remove this.startPinIsVisible = true;
     this.currentBuilding = res.Building;
     await this.fetchFloorByItsNumber(res.Building, res.Floor);
     await this.fetchLocations(res.Building, res.Floor);
     this.displayFloor();
+    this.displayPin();
   }
 
   private async fetchFloorByItsNumber(building:string, floor:string) {
@@ -71,6 +72,12 @@ export class NavigationPage {
       this.progressIsVisible = false;
       this.startPinIsVisible = true;
     });
+  }
+
+  private displayPin() {
+    const x = this.startPin.Coordinate.X-15;
+    const y = this.startPin.Coordinate.Y-30;
+    this.floor.pin.render(x,y,30,30);
   }
 
   private displayNavigationRoute(building: string, floor: string){

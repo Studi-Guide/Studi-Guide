@@ -10,7 +10,7 @@ export class FloorMap {
     private readonly mapCanvas: HTMLCanvasElement;
     private map: CanvasRenderingContext2D;
 
-    private pin: IconOnMapRenderer;
+    public readonly pin: IconOnMapRenderer;
 
     public objectsToBeVisualized: MapItem[];
     public locationNames: SvgLocationName[];
