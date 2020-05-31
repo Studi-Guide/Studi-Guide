@@ -125,13 +125,14 @@ export class NavigationPage {
             if (data['data']) {
               await this.fetchFloorByItsNumber(this.currentBuilding, data['data']);
               await this.fetchLocations(this.currentBuilding, data['data']);
+
+              this.displayFloor();
               // display route if needed
               const isRouteAvailable = this.route != null;
               if (isRouteAvailable) {
                 this.displayNavigationRoute(this.currentBuilding, data['data']);
               }
 
-              this.displayFloor();
               this.progressIsVisible = false;
               this.startPinIsVisible = isRouteAvailable;
             }
