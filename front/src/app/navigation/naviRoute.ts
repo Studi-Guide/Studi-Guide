@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {PathNode} from '../building-objects-if';
 import {CanvasResolutionConfigurator} from '../services/CanvasResolutionConfigurator';
+import {IconOnMapRenderer} from '../services/IconOnMapRenderer';
 
 @Injectable({
     providedIn: 'root'
@@ -21,8 +22,11 @@ export class RouteSection {
 
 export class NaviRoute {
 
-    private mapCanvas: HTMLCanvasElement;
-    private map: CanvasRenderingContext2D;
+    private readonly mapCanvas: HTMLCanvasElement;
+    private readonly map: CanvasRenderingContext2D;
+
+    private pin: IconOnMapRenderer;
+    private flag: IconOnMapRenderer;
 
     private readonly routeSections:RouteSection[];
     public distance: number;
@@ -30,6 +34,8 @@ export class NaviRoute {
     constructor(response:ReceivedRoute) {
         this.mapCanvas = document.getElementById('map') as HTMLCanvasElement;
         this.map = CanvasResolutionConfigurator.setup(this.mapCanvas);
+        this.pin = new IconOnMapRenderer(this.map,'pin-sharp.png');
+        this.flag = new IconOnMapRenderer(this.map,'flag-sharp.png');
         this.distance = response.Distance;
         this.routeSections = response.RouteSections;
     }
@@ -78,12 +84,7 @@ export class NaviRoute {
         const routeStart = this.getRouteStart(building, floor);
         const x = routeStart.Coordinate.X;
         const y = routeStart.Coordinate.Y;
-        const image = new Image();
-        image.onload = () => {
-            this.map.drawImage(image, x-15, y-30, 30, 30);
-        };
-        image.src = 'assets/pin-sharp.png';
-
+        this.pin.render(x-15, y-30, 30, 30);
     }
 
     private getRouteStart(building:string, floor:string) {
@@ -98,11 +99,7 @@ export class NaviRoute {
         const routeEnd = this.getRouteEnd(building, floor);
         const x = routeEnd.Coordinate.X;
         const y = routeEnd.Coordinate.Y;
-        const image = new Image();
-        image.onload = () => {
-            this.map.drawImage(image, x-5, y-30, 30, 30);
-        };
-        image.src = 'assets/flag-sharp.png';
+        this.flag.render(x-5, y-30, 30, 30);
     }
 
     private getRouteEnd(building:string, floor:string) {

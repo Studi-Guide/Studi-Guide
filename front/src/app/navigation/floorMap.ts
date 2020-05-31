@@ -1,5 +1,6 @@
 import {Door, MapItem, SvgLocationName} from '../building-objects-if';
 import {CanvasResolutionConfigurator} from '../services/CanvasResolutionConfigurator';
+import {IconOnMapRenderer} from '../services/IconOnMapRenderer';
 
 // @Injectable({
 //   providedIn: 'root'
@@ -9,6 +10,8 @@ export class FloorMap {
     private readonly mapCanvas: HTMLCanvasElement;
     private map: CanvasRenderingContext2D;
 
+    private pin: IconOnMapRenderer;
+
     public objectsToBeVisualized: MapItem[];
     public locationNames: SvgLocationName[];
 
@@ -16,6 +19,8 @@ export class FloorMap {
         this.mapCanvas = document.getElementById('map') as HTMLCanvasElement;
         this.map = CanvasResolutionConfigurator.setup(this.mapCanvas);
         this.objectsToBeVisualized = objectsToBeVisualized;
+        this.pin = new IconOnMapRenderer(this.map,'pin-sharp.png');
+        // TODO render pin on searched location
     }
 
     private renderDoor(door:Door, color:string) {
@@ -69,9 +74,8 @@ export class FloorMap {
         this.mapCanvas.width = mapWidthNeeded+2;
     }
 
-
     private renderLocationNames() {
-        this.map.font = 'bold 11px Arial';
+        this.map.font = '12px Arial';
         this.map.textAlign = 'center';
         this.map.fillStyle = '#000';
         for (const location of this.locationNames) {
