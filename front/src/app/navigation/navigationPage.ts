@@ -100,7 +100,7 @@ export class NavigationPage {
     this.availableFloorsBtnIsVisible = true;
   }
 
-  public async onSearch(searchInput:string) {
+  public async onDiscovery(searchInput:string) {
     await this.fetchFloorByLocation(searchInput);
     this.availableFloorsBtnIsVisible = true;
   }

@@ -7,7 +7,7 @@ import {Component, Output, EventEmitter, OnInit, ViewChild} from '@angular/core'
 })
 export class SearchInputComponent implements OnInit {
 
-  @Output() search = new EventEmitter<string>();
+  @Output() discovery = new EventEmitter<string>();
   @Output() route = new EventEmitter<string[]>();
 
   @ViewChild('discoverySearchbar') discoverySearchbar;
@@ -47,8 +47,8 @@ export class SearchInputComponent implements OnInit {
     }
   }
 
-  public emitSearchEvent() {
-    this.search.emit(this.discoverySearchbar.value);
+  public emitDiscoveryEvent() {
+    this.discovery.emit(this.discoverySearchbar.value);
   }
 
   public emitRouteEvent() {
