@@ -52,7 +52,7 @@ export class SearchInputComponent implements OnInit {
   }
 
   private emitRouteEvent() {
-    const route:string[] = [this.routeSearchBar.value, this.routeSearchBar.value];
+    const route:string[] = [this.discoverySearchbar.value, this.routeSearchBar.value];
     this.route.emit(route);
   }
 
