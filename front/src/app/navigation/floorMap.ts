@@ -20,7 +20,6 @@ export class FloorMap {
         this.map = CanvasResolutionConfigurator.setup(this.mapCanvas);
         this.objectsToBeVisualized = objectsToBeVisualized;
         this.pin = new IconOnMapRenderer(this.map,'pin-sharp.png');
-        // TODO render pin on searched location
     }
 
     private renderDoor(door:Door, color:string) {
