@@ -1,19 +1,21 @@
-.welcome-card img {
-  max-height: 35vh;
-  overflow: hidden;
-}
-
-#building-map {
+#map-wrapper {
     padding: 2px;
     overflow-y: scroll;
     overflow-x: scroll;
-    height: calc(100% - 62px);
+    height: calc(100% - 60px);
     scrollbar-width: none; // FF
     -ms-overflow-style: none; // IE
 }
 
-#building-map::-webkit-scrollbar {
+#map-wrapper::-webkit-scrollbar {
     display: none; // Chrome, Safari, Opera
+}
+
+#available-floors-btn {
+    position: fixed;
+    bottom: 0;
+    display: block;
+    z-index: 10;
 }
 
 .center {
@@ -25,10 +27,6 @@
 ion-progress-bar {
     position: absolute;
     z-index: 9999;
-}
-
-ion-searchbar {
-    max-width: 300px;
 }
 
 .vertical-line {
