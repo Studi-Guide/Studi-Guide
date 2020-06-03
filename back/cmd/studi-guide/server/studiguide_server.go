@@ -51,7 +51,8 @@ func NewStudiGuideServer(env *env.Env,
 	//router.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir("static/"))))
 
 	// TODO verify IONIC input
-	if _, err := os.Stat(env.FrontendPath()); err == nil {
+	_, err := os.Stat(env.FrontendPath())
+	if err == nil {
 		log.Print("IONIC found! Serving files ....")
 		router.Use(static.Serve("/", static.LocalFile(env.FrontendPath(), true)))
 	}
@@ -111,6 +112,11 @@ func NewStudiGuideServer(env *env.Env,
 			log.Println("Successfully initialized building controller")
 		}
 	}
+
+	// redirect refresh to startpage
+	router.GET("/tabs/navigation", func(c *gin.Context) {
+		c.Redirect(http.StatusPermanentRedirect, "/")
+	})
 
 	router.NoRoute(func(c *gin.Context) {
 		if env.Develop() {
