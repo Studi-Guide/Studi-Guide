@@ -49,7 +49,7 @@
           "Id": 9041,
           "ConnectedPathNodes" : [
             904,
-            901
+            900001
           ],
           "X": 128,
           "Y": 100,
@@ -1782,7 +1782,7 @@
       {
         "Start": { "X": 240, "Y": 665, "Z": 0 },
         "End": { "X": 240, "Y": 680, "Z": 0 },
-        "pathNode": { "Id": 1341,
+        "pathNode": { "Id": 9341,
           "ConnectedPathNodes" : [
             934,
             900032
