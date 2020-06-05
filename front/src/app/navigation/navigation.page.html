@@ -1,13 +1,13 @@
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
 
-  <div style="height: 100%; display: flex; flex-flow: column;">
+  <div id="map-content">
     <app-search-input
             (discovery)="onDiscovery($event)"
             (route)="onRoute($event)">
     </app-search-input>
 
-    <div id="map-wrapper" style="flex-grow: 1;">
+    <div id="canvas-wrapper">
       <canvas id="map"></canvas>
     </div>
   </div>
