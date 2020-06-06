@@ -49,7 +49,7 @@
           "Id": 9041,
           "ConnectedPathNodes" : [
             904,
-            900001
+            900000
           ],
           "X": 128,
           "Y": 100,
@@ -97,7 +97,8 @@
         "pathNode": {
           "Id": 9021,
           "ConnectedPathNodes" : [
-            902
+            902,
+            900001
           ],
           "X": 173, "Y": 100, "Z": 0 }
       }
@@ -129,9 +130,10 @@
     "tags": [],
     "pathNodes": [
       {
-        "Id": 20490,
+        "Id": 920490,
         "ConnectedPathNodes" : [
-          120490
+          120490,
+          900002
         ],
         "X": 380, "Y": 50, "Z": 0 }
     ],
@@ -186,7 +188,7 @@
     "floor": "EG"
   },
   {
-    "name": "corridor01-2",
+    "name": "corridor0-2",
     "building": "KA",
     "sections": [
       {
@@ -328,7 +330,7 @@
       {
         "Start": { "X": 225, "Y": 190, "Z": 0 },
         "End": { "X": 225, "Y": 205, "Z": 0 },
-        "pathNode": { "Id": 1081,
+        "pathNode": { "Id": 9081,
           "ConnectedPathNodes" : [
             908,
             900014
@@ -2288,6 +2290,7 @@
       {
         "Id": 120490,
         "ConnectedPathNodes" : [
+          920490,
           220490
         ],
         "X": 380, "Y": 50, "Z": 1 }
