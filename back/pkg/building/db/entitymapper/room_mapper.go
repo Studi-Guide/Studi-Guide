@@ -198,6 +198,11 @@ func (r *EntityMapper) storeRooms(rooms []Room) error {
 			SetFloor(rm.Location.Floor).
 			Save(r.context)
 
+		if err != nil {
+			log.Fatal("Error adding room:", rm.Name, " Error:", err)
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+		}
+
 		entRoom, err := r.client.Room.Create().
 			SetMapitem(entMapItem).
 			SetLocation(entLocation).
@@ -226,13 +231,13 @@ func (r *EntityMapper) storeRooms(rooms []Room) error {
 		for _, node := range rm.PathNodes {
 			err := r.linkPathNode(node)
 			if err != nil {
-				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+				errorStr = append(errorStr, err.Error()+" Room: "+rm.Name+" PathNode:"+strconv.Itoa(node.Id))
 			}
 		}
 		for _, door := range rm.MapItem.Doors {
 			err := r.linkPathNode(&door.PathNode)
 			if err != nil {
-				errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+				errorStr = append(errorStr, err.Error()+" Room: "+rm.Name+" PathNode:"+strconv.Itoa(door.PathNode.Id))
 			}
 		}
 	}

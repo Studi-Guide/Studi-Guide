@@ -84,6 +84,7 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 			SetName(strconv.Itoa(i)).
 			SetPathnode(pathNode).
 			SetFloor(strconv.Itoa(i)).
+			SetBuilding(building).
 			Save(ctx)
 
 		if err != nil {
@@ -126,6 +127,7 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 				Description: entLocation.Description,
 				Tags:        nil,
 				PathNode:    patnode,
+				Building:    "main",
 				Floor:       strconv.Itoa(i),
 			},
 		})
@@ -523,7 +525,7 @@ func TestEntityService_GetAllLocations(t *testing.T) {
 func TestEntityService_FilterLocations(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	getLocations, err := dbService.FilterLocations("1", "", "1", "2", "3")
+	getLocations, err := dbService.FilterLocations("1", "", "1", "main", "3")
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}

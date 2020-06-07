@@ -15,6 +15,7 @@
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
+*.DS_Store
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
@@ -346,3 +347,4 @@ back/pkg/building/room/models/tmp/test.xml
 back/pkg/building/room/models/tmp/test.json
 .vscode/studiguide.code-workspace
 .gitignore
+/front/www/
