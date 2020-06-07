@@ -43,6 +43,12 @@ export interface MapItem {
   PathNodes: PathNode[];
 }
 
+export interface BuildingData {
+  Id: number;
+  Name: string;
+  Floors: string[];
+}
+
 export interface Location {
   Id: number;
   Name: string;
@@ -56,6 +62,7 @@ export interface Location {
 export interface Room extends MapItem, Location{
 
 }
+
 
 export class SvgPath {
   d: string;

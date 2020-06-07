@@ -9,7 +9,7 @@ import {Components} from '@ionic/core';
 })
 export class AvailableFloorsPage implements OnInit {
 
-  public floors:Array<string>;
+  public floors:string[];
   modal: Components.IonModal;
   constructor(navParams: NavParams) {
     this.floors = navParams.get('floors');
