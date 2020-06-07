@@ -1,6 +1,6 @@
 import {Location, MapItem, PathNode} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {FloorMap} from './floorMap';
@@ -13,7 +13,7 @@ import {AvailableFloorsPage} from '../available-floors/available-floors.page';
   styleUrls: ['navigation.page.scss']
 })
 
-export class NavigationPage {
+export class NavigationPage implements OnInit {
 
   public progressIsVisible = false;
   public availableFloorsBtnIsVisible = false;
@@ -35,6 +35,10 @@ export class NavigationPage {
     // this.testRooms = testDataRooms;
     // this.testRoute = testDataPathNodes;
     // this.testRoute = NavigationPage.testRenderPathNodes();
+  }
+
+  ngOnInit(): void {
+    this.fetchFloorByLocation('KA.200');
   }
 
   private async fetchFloorByLocation(room: string) {
