@@ -23,7 +23,6 @@ func (r *EntityMapper) locationMapper(entLocation *ent.Location) *Location {
 		Description: entLocation.Description,
 		Tags:        nil,
 		Floor:       entLocation.Floor,
-		Building:    entLocation.Edges.Building.Name,
 		PathNode:    navigation.PathNode{},
 	}
 
@@ -96,7 +95,7 @@ func (r *EntityMapper) GetLocation(name, building, campus string) (Location, err
 func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusStr string) ([]Location, error) {
 
 	query := r.client.Location.Query().
-		WithPathnode().WithTags().WithBuilding()
+		WithPathnode().WithBuilding().WithTags()
 
 	if len(name) > 0 {
 		query = query.Where(location.NameContains(name))
@@ -111,7 +110,7 @@ func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusS
 	}
 
 	if len(buildingStr) > 0 {
-		query = query.Where(location.HasBuildingWith(building.Name(buildingStr)))
+		query = query.Where(location.HasBuildingWith(building.NameEqualFold(buildingStr)))
 	}
 
 	if len(campusStr) > 0 {

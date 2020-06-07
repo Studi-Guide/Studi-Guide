@@ -15,7 +15,7 @@ func (r *EntityMapper) GetAllBuildings() ([]Building, error) {
 }
 
 func (r *EntityMapper) GetBuilding(name string) (Building, error) {
-	b, err := r.client.Building.Query().Where(entbuilding.NameEQ(name)).First(r.context)
+	b, err := r.client.Building.Query().Where(entbuilding.NameEqualFold(name)).First(r.context)
 	if err != nil {
 		return Building{}, err
 	}
@@ -27,7 +27,7 @@ func (r *EntityMapper) GetBuilding(name string) (Building, error) {
 }
 
 func (r *EntityMapper) FilterBuildings(name string) ([]Building, error) {
-	buildings, err := r.client.Building.Query().Where(entbuilding.NameContains(name)).All(r.context)
+	buildings, err := r.client.Building.Query().Where(entbuilding.NameEqualFold(name)).All(r.context)
 	if err != nil {
 		return nil, err
 	}
