@@ -63,10 +63,10 @@ func (r *EntityMapper) GetAllRooms() ([]Room, error) {
 
 func (r *EntityMapper) GetRoom(roomName, buildingName, campusName string) (Room, error) {
 
-	q := r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(roomName)))
+	q := r.client.Room.Query().Where(room.HasLocationWith(location.NameEqualFold(roomName)))
 
 	if len(buildingName) > 0 {
-		q = q.Where(room.HasMapitemWith(mapitem.HasBuildingWith(building.NameEQ(buildingName))))
+		q = q.Where(room.HasMapitemWith(mapitem.HasBuildingWith(building.NameEqualFold(buildingName))))
 	}
 
 	if len(campusName) > 0 {
@@ -100,16 +100,16 @@ func (r *EntityMapper) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFil
 	if len(roomFilter) > 0 {
 		q = q.Where(
 			room.Or(
-				room.HasLocationWith(location.NameContains(roomFilter)),
+				room.HasLocationWith(location.NameEqualFold(roomFilter)),
 				room.HasLocationWith(location.DescriptionContains(roomFilter))))
 	} else {
 
 		if len(nameFilter) > 0 {
-			q = q.Where(room.HasLocationWith(location.NameContains(nameFilter)))
+			q = q.Where(room.HasLocationWith(location.NameEqualFold(nameFilter)))
 		}
 
 		if len(buildingFilter) > 0 {
-			q = q.Where(room.HasMapitemWith(mapitem.HasBuildingWith(building.NameContains(buildingFilter))))
+			q = q.Where(room.HasMapitemWith(mapitem.HasBuildingWith(building.NameEqualFold(buildingFilter))))
 		}
 	}
 
