@@ -126,38 +126,49 @@ export class NavigationPage {
   }
 
   async presentAvailableFloorModal() {
-    this.dataService.get_building(this.currentBuilding).subscribe(async (res: JSON) => {
-      // @ts-ignore
-      const {Floors} = res;
-      const availableFloorModal = await this.modalCtrl.create({
-        component: AvailableFloorsPage,
-        cssClass: 'floor-modal',
-        componentProps: {
-          floors: Floors
-        }
-      });
-      await availableFloorModal.present();
-
-      const data = await availableFloorModal.onDidDismiss()
-      if (data.data) {
-        if (this.route == null) {
-          await this.fetchFloorByItsNumber(this.currentBuilding, data.data);
-          const locations = await this.dataService.get_locations(this.currentBuilding, data.data).toPromise<Location[]>();
-          await this.displayLocations(locations);
-
-          this.displayFloor();
-          // display route if needed
-          const isRouteAvailable = this.route != null;
-          if (isRouteAvailable) {
-            this.displayNavigationRoute(data.data);
-          }
-        } else {
-           await this.RenderNavigationPage(this.route, this.currentBuilding, data.data);
-        }
-
-        this.progressIsVisible = false;
+    let floors = new Array<string>();
+    if (this.route == null) {
+      const building =  await this.dataService.get_building(this.currentBuilding).toPromise();
+      floors = floors.concat(building.Floors);
+    } else {
+      // get all floors from all buildings on the route
+      for (const routeSection of this.route.routeSections) {
+          const building =  await this.dataService.get_building(routeSection.Building).toPromise();
+          floors = floors.concat(building.Floors);
       }
-    });
+
+      // distinct array
+      floors = floors.filter((n, i) => floors.indexOf(n) === i);
+    }
+
+    const availableFloorModal = await this.modalCtrl.create({
+      component: AvailableFloorsPage,
+      cssClass: 'floor-modal',
+      componentProps: {
+        floors: {floors}
+      }
+    })
+    await availableFloorModal.present();
+
+    const data = await availableFloorModal.onDidDismiss()
+    if (data.data) {
+      if (this.route == null) {
+        await this.fetchFloorByItsNumber(this.currentBuilding, data.data);
+        const locations = await this.dataService.get_locations(this.currentBuilding, data.data).toPromise<Location[]>();
+        await this.displayLocations(locations);
+
+        this.displayFloor();
+        // display route if needed
+        const isRouteAvailable = this.route != null;
+        if (isRouteAvailable) {
+          this.displayNavigationRoute(data.data);
+        }
+      } else {
+        await this.RenderNavigationPage(this.route, this.currentBuilding, data.data);
+      }
+
+      this.progressIsVisible = false;
+    }
   }
 
   /*  private static testRenderPathNodes() : Coordinate[] {

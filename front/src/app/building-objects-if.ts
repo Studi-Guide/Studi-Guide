@@ -57,6 +57,14 @@ export interface Room extends MapItem, Location{
 
 }
 
+
+export interface Building {
+  Id: number;
+  Name:  string;
+  Floors: string[];
+}
+
+
 export class SvgPath {
   d: string;
   fill: string;
