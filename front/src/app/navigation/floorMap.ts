@@ -43,29 +43,33 @@ export class FloorMap {
     }
 
     private renderRoomFrom(mapItem:MapItem){
-        this.map.beginPath();
-        this.map.moveTo(mapItem.Sections[0].Start.X,mapItem.Sections[0].Start.Y);
-        for (let i = 1; i < mapItem.Sections.length; i++) {
-            this.map.lineTo(mapItem.Sections[i].Start.X,mapItem.Sections[i].Start.Y);
+        if (mapItem.Sections != null && mapItem.Sections.length > 0) {
+            this.map.beginPath();
+            this.map.moveTo(mapItem.Sections[0].Start.X, mapItem.Sections[0].Start.Y);
+            for (let i = 1; i < mapItem.Sections.length; i++) {
+                this.map.lineTo(mapItem.Sections[i].Start.X, mapItem.Sections[i].Start.Y);
+            }
+            this.map.lineTo(mapItem.Sections[0].Start.X, mapItem.Sections[0].Start.Y);
+            this.map.strokeStyle = '#FFF';
+            this.map.fillStyle = mapItem.Color;
+            this.map.stroke();
+            this.map.fill();
+            this.map.closePath();
         }
-        this.map.lineTo(mapItem.Sections[0].Start.X,mapItem.Sections[0].Start.Y);
-        this.map.strokeStyle = '#FFF';
-        this.map.fillStyle = mapItem.Color;
-        this.map.stroke();
-        this.map.fill();
-        this.map.closePath();
     }
 
     private calcMapWidthHeight() {
         let mapHeightNeeded = 0;
         let mapWidthNeeded = 0;
         for (const mapItem of this.objectsToBeVisualized) {
-            for (const section of mapItem.Sections) {
-                if (section.End.X > mapWidthNeeded) {
-                    mapWidthNeeded = section.End.X;
-                }
-                if (section.End.Y > mapHeightNeeded) {
-                    mapHeightNeeded = section.End.Y;
+            if (mapItem.Sections != null) {
+                for (const section of mapItem.Sections) {
+                    if (section.End.X > mapWidthNeeded) {
+                        mapWidthNeeded = section.End.X;
+                    }
+                    if (section.End.Y > mapHeightNeeded) {
+                        mapHeightNeeded = section.End.Y;
+                    }
                 }
             }
         }

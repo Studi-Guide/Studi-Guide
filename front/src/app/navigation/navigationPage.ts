@@ -43,7 +43,9 @@ export class NavigationPage {
     this.startPin = res.PathNode;
     this.currentBuilding = res.Building;
     await this.fetchFloorByItsNumber(res.Building, res.Floor);
-    await this.fetchLocations(res.Building, res.Floor);
+
+    const locations = await this.dataService.get_locations(res.Building, res.Floor).toPromise<Location[]>();
+    this.displayLocations(locations);
     this.displayFloor();
     this.displayPin();
   }
@@ -56,16 +58,33 @@ export class NavigationPage {
 
   private async fetchRouteToDisplay(start:string, end:string) {
     this.progressIsVisible = true;
-    const res1 = await this.dataService.get_location_search(start).toPromise<Location>();
-    const res2 = await this.dataService.get_map_floor(res1.Building, res1.Floor).toPromise<MapItem[]>();
-    this.currentBuilding = res1.Building;
-    this.floor = new FloorMap(res2);
-    await this.fetchLocations(res2[0].Building, res2[0].Floor);
-    const res3 =  await this.dataService.get_route(start, end).toPromise()
-    this.route = new NaviRoute(res3);
-    this.displayFloor();
-    this.displayNavigationRoute(res2[0].Building, res2[0].Floor);
+    // Get target location
+    const endLocation = await this.dataService.get_location_search(end).toPromise<Location>();
+    this.route = new NaviRoute(await this.dataService.get_route(start, end).toPromise());
+
+    await this.RenderNavigationPage(this.route, endLocation.Building, endLocation.Floor);
     this.progressIsVisible = false;
+  }
+
+  private async RenderNavigationPage(route: NaviRoute, building: string, floor: string) {
+    // TODO allow passing a regex to backend to filter map items
+    let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<MapItem[]>();
+    let locations = await this.dataService.get_locations(building, floor).toPromise<Location[]>();
+    for (const routeSection of route.routeSections) {
+      if (routeSection.Floor === floor && routeSection.Building !== building) {
+        const items = await this.dataService.get_map_floor(routeSection.Building, routeSection.Floor).toPromise<MapItem[]>();
+        mapItems = mapItems.concat(items);
+
+        const locationItems = await this.dataService.get_locations(routeSection.Building, routeSection.Floor).toPromise<Location[]>();
+        locations = locations.concat(locationItems);
+      }
+    }
+
+    this.currentBuilding = building;
+    this.floor = new FloorMap(mapItems);
+    this.displayLocations(locations);
+    this.displayFloor();
+    this.displayNavigationRoute(floor);
   }
 
   private displayPin() {
@@ -74,16 +93,15 @@ export class NavigationPage {
     this.floor.pin.render(x,y,30,30);
   }
 
-  private displayNavigationRoute(building: string, floor: string){
+  private displayNavigationRoute(floor: string){
     if (this.route !=null) {
-      this.route.render(building, floor);
+      this.route.render(floor);
     }
   }
 
-  private async fetchLocations(building: string, floor: string) {
-    const res = await this.dataService.get_locations(building, floor).toPromise<Location[]>();
+  private displayLocations(locations: Location[]) {
     this.floor.locationNames = [];
-    for (const l of res) {
+    for (const l of locations) {
       this.floor.locationNames.push({name: l.Name, x: l.PathNode.Coordinate.X, y: l.PathNode.Coordinate.Y});
     }
   }
@@ -121,15 +139,21 @@ export class NavigationPage {
       await availableFloorModal.present();
 
       const data = await availableFloorModal.onDidDismiss()
-      if (data['data']) {
-        await this.fetchFloorByItsNumber(this.currentBuilding, data['data']);
-        await this.fetchLocations(this.currentBuilding, data['data']);
+      if (data.data) {
+        if (this.route == null) {
+          await this.fetchFloorByItsNumber(this.currentBuilding, data.data);
+          const locations = await this.dataService.get_locations(this.currentBuilding, data.data).toPromise<Location[]>();
+          await this.displayLocations(locations);
 
-        this.displayFloor();
-        // display route if needed
-        const isRouteAvailable = this.route != null;
-        if (isRouteAvailable) {
-          this.displayNavigationRoute(this.currentBuilding, data['data']);
+          this.displayFloor();
+          // display route if needed
+          const isRouteAvailable = this.route != null;
+          if (isRouteAvailable) {
+            this.displayNavigationRoute(data.data);
+          }
+        } else {
+          const endsection = this.route.routeSections[this.route.routeSections.length -1];
+           await this.RenderNavigationPage(this.route, endsection.Building, endsection.Floor);
         }
 
         this.progressIsVisible = false;
@@ -137,16 +161,16 @@ export class NavigationPage {
     });
   }
 
-/*  private static testRenderPathNodes() : Coordinate[] {
-    let pathNodes:Coordinate[] = [];
-        for (const room of testDataRooms) {
-          for (const pathNode of room.PathNodes) {
-            pathNodes.push(pathNode.Coordinate);
+  /*  private static testRenderPathNodes() : Coordinate[] {
+      let pathNodes:Coordinate[] = [];
+          for (const room of testDataRooms) {
+            for (const pathNode of room.PathNodes) {
+              pathNodes.push(pathNode.Coordinate);
+            }
+            for (const door of room.Doors) {
+              pathNodes.push(door.pathNode.Coordinate);
+            }
           }
-          for (const door of room.Doors) {
-            pathNodes.push(door.pathNode.Coordinate);
-          }
-        }
-    return pathNodes;
-  }*/
+      return pathNodes;
+    }*/
 }
