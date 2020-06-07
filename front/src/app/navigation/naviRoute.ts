@@ -45,6 +45,7 @@ export class NaviRoute {
         this.renderDistanceOfRoute(floor);
         this.renderPinAtRouteStart(floor);
         this.renderFlagAtRouteEnd(floor);
+        this.renderFlashingStairWell(floor);
     }
 
     private renderDistanceOfRoute(floor :string) {
@@ -92,6 +93,10 @@ export class NaviRoute {
         const x = routeStart.Coordinate.X;
         const y = routeStart.Coordinate.Y;
         this.pin.render(x-15, y-30, 30, 30);
+    }
+
+    private renderFlashingStairWell(building, floor): void {
+        ;
     }
 
     private getRouteStart(floor:string) {

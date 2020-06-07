@@ -35,4 +35,8 @@ export class DataService {
         return this.httpClient.get(this.baseUrl + '/buildings/' + name );
     }
 
+    get_map_item(pathnodeid:bigint) {
+        return this.httpClient.get<MapItem>(this.baseUrl + '/map?pathnodeid=' + pathnodeid);
+    }
+
 }
