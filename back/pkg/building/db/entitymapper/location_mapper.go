@@ -2,6 +2,7 @@ package entitymapper
 
 import (
 	"studi-guide/pkg/building/db/ent"
+	"studi-guide/pkg/building/db/ent/building"
 	"studi-guide/pkg/building/db/ent/location"
 	"studi-guide/pkg/building/db/ent/tag"
 	"studi-guide/pkg/navigation"
@@ -109,7 +110,7 @@ func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusS
 	}
 
 	if len(buildingStr) > 0 {
-		query = query.Where(location.HasBuildingWith(buildingStr.NameEqualFold(buildingStr)))
+		query = query.Where(location.HasBuildingWith(building.NameEqualFold(buildingStr)))
 	}
 
 	if len(campusStr) > 0 {
