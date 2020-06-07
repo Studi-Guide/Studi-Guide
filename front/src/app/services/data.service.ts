@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
-import {Building, Location, MapItem, PathNode, SvgLocationName, SvgPath} from '../building-objects-if';
+import {BuildingData, Location, MapItem, PathNode, SvgLocationName, SvgPath} from '../building-objects-if';
 import {ReceivedRoute} from '../navigation/naviRoute';
 
 @Injectable({
@@ -32,7 +32,7 @@ export class DataService {
     }
 
     get_building(name:string) {
-        return this.httpClient.get<Building>(this.baseUrl + '/buildings/' + name );
+        return this.httpClient.get<BuildingData>(this.baseUrl + '/buildings/' + name);
     }
 
 }

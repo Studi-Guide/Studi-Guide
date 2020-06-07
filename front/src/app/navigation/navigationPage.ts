@@ -1,4 +1,4 @@
-import {Location, MapItem, PathNode} from '../building-objects-if';
+import {BuildingData, Location, MapItem, PathNode} from '../building-objects-if';
 // import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component} from '@angular/core';
 import {ModalController} from '@ionic/angular';
@@ -68,8 +68,8 @@ export class NavigationPage {
 
   private async RenderNavigationPage(route: NaviRoute, building: string, floor: string) {
     // TODO allow passing a regex to backend to filter map items
-    let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<MapItem[]>();
-    let locations = await this.dataService.get_locations(building, floor).toPromise<Location[]>();
+    let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<MapItem[]>() ?? new Array<MapItem>();
+    let locations = await this.dataService.get_locations(building, floor).toPromise<Location[]>() ?? new Array<Location>();
     for (const routeSection of route.routeSections) {
       if (routeSection.Floor === floor && routeSection.Building !== building) {
         const items = await this.dataService.get_map_floor(routeSection.Building, routeSection.Floor).toPromise<MapItem[]>();
@@ -128,12 +128,12 @@ export class NavigationPage {
   async presentAvailableFloorModal() {
     let floors = new Array<string>();
     if (this.route == null) {
-      const building =  await this.dataService.get_building(this.currentBuilding).toPromise();
+      const building =  await this.dataService.get_building(this.currentBuilding).toPromise<BuildingData>();
       floors = floors.concat(building.Floors);
     } else {
       // get all floors from all buildings on the route
       for (const routeSection of this.route.routeSections) {
-          const building =  await this.dataService.get_building(routeSection.Building).toPromise();
+          const building =  await this.dataService.get_building(routeSection.Building).toPromise<BuildingData>();
           floors = floors.concat(building.Floors);
       }
 
@@ -145,7 +145,7 @@ export class NavigationPage {
       component: AvailableFloorsPage,
       cssClass: 'floor-modal',
       componentProps: {
-        floors: {floors}
+        floors
       }
     })
     await availableFloorModal.present();
