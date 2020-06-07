@@ -75,7 +75,7 @@ func (r *EntityMapper) GetAllLocations() ([]Location, error) {
 
 func (r *EntityMapper) GetLocation(name, building, campus string) (Location, error) {
 
-	q := r.client.Location.Query().WithPathnode().WithBuilding().WithTags().Where(location.NameEQ(name))
+	q := r.client.Location.Query().WithPathnode().WithBuilding().WithTags().Where(location.NameEqualFold(name))
 
 	if len(building) > 0 {
 		// TODO implement building
@@ -98,11 +98,11 @@ func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusS
 		WithPathnode().WithBuilding().WithTags()
 
 	if len(name) > 0 {
-		query = query.Where(location.NameContains(name))
+		query = query.Where(location.NameEqualFold(name))
 	}
 
 	if len(tagStr) > 0 {
-		query = query.Where(location.HasTagsWith(tag.NameContains(tagStr)))
+		query = query.Where(location.HasTagsWith(tag.NameEqualFold(tagStr)))
 	}
 
 	if len(floor) > 0 {
