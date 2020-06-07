@@ -94,7 +94,7 @@ func (r *EntityMapper) GetLocation(name, building, campus string) (Location, err
 func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusStr string) ([]Location, error) {
 
 	query := r.client.Location.Query().
-		WithPathnode().WithTags()
+		WithPathnode().WithBuilding().WithTags()
 
 	if len(name) > 0 {
 		query = query.Where(location.NameContains(name))
