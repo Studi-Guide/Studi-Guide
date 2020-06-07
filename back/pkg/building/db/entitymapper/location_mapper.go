@@ -2,6 +2,7 @@ package entitymapper
 
 import (
 	"studi-guide/pkg/building/db/ent"
+	"studi-guide/pkg/building/db/ent/building"
 	"studi-guide/pkg/building/db/ent/location"
 	"studi-guide/pkg/building/db/ent/tag"
 	"studi-guide/pkg/navigation"
@@ -22,6 +23,7 @@ func (r *EntityMapper) locationMapper(entLocation *ent.Location) *Location {
 		Description: entLocation.Description,
 		Tags:        nil,
 		Floor:       entLocation.Floor,
+		Building:    entLocation.Edges.Building.Name,
 		PathNode:    navigation.PathNode{},
 	}
 
@@ -91,10 +93,10 @@ func (r *EntityMapper) GetLocation(name, building, campus string) (Location, err
 	return *r.locationMapper(entLocation), nil
 }
 
-func (r *EntityMapper) FilterLocations(name, tagStr, floor, building, campus string) ([]Location, error) {
+func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusStr string) ([]Location, error) {
 
 	query := r.client.Location.Query().
-		WithPathnode().WithTags()
+		WithPathnode().WithTags().WithBuilding()
 
 	if len(name) > 0 {
 		query = query.Where(location.NameContains(name))
@@ -108,11 +110,11 @@ func (r *EntityMapper) FilterLocations(name, tagStr, floor, building, campus str
 		query = query.Where(location.FloorContains(floor))
 	}
 
-	if len(building) > 0 {
-		// Todo query building
+	if len(buildingStr) > 0 {
+		query = query.Where(location.HasBuildingWith(building.Name(buildingStr)))
 	}
 
-	if len(campus) > 0 {
+	if len(campusStr) > 0 {
 		// Todo query campus
 	}
 

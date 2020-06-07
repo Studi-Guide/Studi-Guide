@@ -28,7 +28,7 @@ export class NaviRoute {
     private pin: IconOnMapRenderer;
     private flag: IconOnMapRenderer;
 
-    private readonly routeSections:RouteSection[];
+    public readonly routeSections:RouteSection[];
     public distance: number;
 
     constructor(response:ReceivedRoute) {
@@ -40,48 +40,52 @@ export class NaviRoute {
         this.routeSections = response.RouteSections;
     }
 
-    public render(building: string, floor :string) {
-        this.renderRoute(building, floor);
-        this.renderDistanceOfRoute(building, floor);
-        this.renderPinAtRouteStart(building, floor);
-        this.renderFlagAtRouteEnd(building, floor);
+    public render(floor :string) {
+        this.renderRoute(floor);
+        this.renderDistanceOfRoute(floor);
+        this.renderPinAtRouteStart(floor);
+        this.renderFlagAtRouteEnd(floor);
     }
 
-    private renderDistanceOfRoute(building: string, floor :string) {
-        const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
-        if (routeSection != null){
-            const numberOfPathNodes:number = routeSection.Route.length;
-            const value:number = routeSection.Distance;
-            const x:number = routeSection.Route[Math.round((numberOfPathNodes-1)/2)].Coordinate.X;
-            const y:number = routeSection.Route[Math.round((numberOfPathNodes-1)/2)].Coordinate.Y;
-            const font = '14px Arial';
-            const width = this.map.measureText(value.toString()).width+14;
-            const height = parseInt('14px Arial', 10)+14;
-            this.map.fillStyle = '#A00';
-            this.map.fillRect(x-width/2, y-height/2, width, 20);
-            this.map.font = font;
-            this.map.fillStyle = '#FFF';
-            this.map.fillText(value.toString(), x, y);
-        }
-    }
-
-    private renderRoute(building: string, floor:string) {
-        const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
-        if (routeSection != null) {
-            this.map.strokeStyle = '#A00';
-            this.map.lineWidth = 3;
-            this.map.beginPath();
-            this.map.moveTo(routeSection.Route[0].Coordinate.X,routeSection.Route[0].Coordinate.Y);
-            for (let i = 1; i < routeSection.Route.length; i++) {
-                this.map.lineTo(routeSection.Route[i].Coordinate.X,routeSection.Route[i].Coordinate.Y);
+    private renderDistanceOfRoute(floor :string) {
+        const routeSections = this.routeSections.filter(section => section.Floor === floor);
+        if (routeSections != null && routeSections.length > 0){
+            for (const routeSection of routeSections) {
+                const numberOfPathNodes: number = routeSection.Route.length;
+                const value: number = routeSection.Distance;
+                const x: number = routeSection.Route[Math.round((numberOfPathNodes - 1) / 2)].Coordinate.X;
+                const y: number = routeSection.Route[Math.round((numberOfPathNodes - 1) / 2)].Coordinate.Y;
+                const font = '14px Arial';
+                const width = this.map.measureText(value.toString()).width + 14;
+                const height = parseInt('14px Arial', 10) + 14;
+                this.map.fillStyle = '#A00';
+                this.map.fillRect(x - width / 2, y - height / 2, width, 20);
+                this.map.font = font;
+                this.map.fillStyle = '#FFF';
+                this.map.fillText(value.toString(), x, y);
             }
-            this.map.stroke();
-            this.map.closePath();
         }
     }
 
-    private renderPinAtRouteStart(building: string, floor :string) {
-        const routeStart = this.getRouteStart(building, floor);
+    private renderRoute(floor:string) {
+        const routeSections = this.routeSections.filter(section => section.Floor === floor);
+        if (routeSections != null) {
+            for (const routeSection of routeSections) {
+                this.map.strokeStyle = '#A00';
+                this.map.lineWidth = 3;
+                this.map.beginPath();
+                this.map.moveTo(routeSection.Route[0].Coordinate.X,routeSection.Route[0].Coordinate.Y);
+                for (let i = 1; i < routeSection.Route.length; i++) {
+                    this.map.lineTo(routeSection.Route[i].Coordinate.X,routeSection.Route[i].Coordinate.Y);
+                }
+                this.map.stroke();
+                this.map.closePath();
+            }
+        }
+    }
+
+    private renderPinAtRouteStart(floor :string) {
+        const routeStart = this.getRouteStart(floor);
         if (routeStart == null) {
             return;
         }
@@ -90,16 +94,16 @@ export class NaviRoute {
         this.pin.render(x-15, y-30, 30, 30);
     }
 
-    private getRouteStart(building:string, floor:string) {
-        const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
+    private getRouteStart(floor:string) {
+        const routeSection = this.routeSections.find(section =>section.Floor === floor);
         if (routeSection === this.routeSections[0]) {
             return routeSection.Route[0];
         }
         return null;
     }
 
-    private renderFlagAtRouteEnd(building: string, floor :string) {
-        const routeEnd = this.getRouteEnd(building, floor);
+    private renderFlagAtRouteEnd(floor :string) {
+        const routeEnd = this.getRouteEnd(floor);
         if (routeEnd == null) {
             return;
         }
@@ -108,11 +112,13 @@ export class NaviRoute {
         this.flag.render(x-5, y-30, 30, 30);
     }
 
-    private getRouteEnd(building:string, floor:string) {
-        const routeSection = this.routeSections.find(section => section.Building === building && section.Floor === floor);
-        const lastRouteSection = this.routeSections[this.routeSections.length-1];
-        if (routeSection === lastRouteSection) {
-            return lastRouteSection.Route[lastRouteSection.Route.length-1];
+    private getRouteEnd(floor:string) {
+        const filtered = this.routeSections.filter(section => section.Floor === floor);
+        if (filtered != null && filtered.length > 0) {
+            const lastRouteSection = filtered[filtered.length-1];
+             if (lastRouteSection === this.routeSections[this.routeSections.length - 1]) {
+                return lastRouteSection.Route[lastRouteSection.Route.length - 1];
+            }
         }
         return null;
     }
