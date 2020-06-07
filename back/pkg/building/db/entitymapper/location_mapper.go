@@ -2,7 +2,6 @@ package entitymapper
 
 import (
 	"studi-guide/pkg/building/db/ent"
-	"studi-guide/pkg/building/db/ent/building"
 	"studi-guide/pkg/building/db/ent/location"
 	"studi-guide/pkg/building/db/ent/tag"
 	"studi-guide/pkg/navigation"
@@ -75,11 +74,7 @@ func (r *EntityMapper) GetAllLocations() ([]Location, error) {
 
 func (r *EntityMapper) GetLocation(name, building, campus string) (Location, error) {
 
-	q := r.client.Location.Query().
-		WithPathnode().
-		WithBuilding().
-		WithTags().
-		Where(location.NameEqualFold(name))
+	q := r.client.Location.Query().WithPathnode().WithBuilding().WithTags().Where(location.NameEQ(name))
 
 	if len(building) > 0 {
 		// TODO implement building
@@ -96,28 +91,28 @@ func (r *EntityMapper) GetLocation(name, building, campus string) (Location, err
 	return *r.locationMapper(entLocation), nil
 }
 
-func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campus string) ([]Location, error) {
+func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusStr string) ([]Location, error) {
 
 	query := r.client.Location.Query().
 		WithPathnode().WithTags()
 
 	if len(name) > 0 {
-		query = query.Where(location.NameEqualFold(name))
+		query = query.Where(location.NameContains(name))
 	}
 
 	if len(tagStr) > 0 {
-		query = query.Where(location.HasTagsWith(tag.NameEqualFold(tagStr)))
+		query = query.Where(location.HasTagsWith(tag.NameContains(tagStr)))
 	}
 
 	if len(floor) > 0 {
-		query = query.Where(location.FloorEqualFold(floor))
+		query = query.Where(location.FloorContains(floor))
 	}
 
 	if len(buildingStr) > 0 {
 		query = query.Where(location.HasBuildingWith(building.NameEqualFold(buildingStr)))
 	}
 
-	if len(campus) > 0 {
+	if len(campusStr) > 0 {
 		// Todo query campus
 	}
 
