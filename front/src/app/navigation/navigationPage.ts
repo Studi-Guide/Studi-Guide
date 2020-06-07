@@ -61,12 +61,11 @@ export class NavigationPage {
     this.currentBuilding = res1.Building;
     this.floor = new FloorMap(res2);
     await this.fetchLocations(res2[0].Building, res2[0].Floor);
-    this.dataService.get_route(start, end).subscribe((res3 : ReceivedRoute)=>{
-      this.route = new NaviRoute(res3);
-      this.displayFloor();
-      this.displayNavigationRoute(res2[0].Building, res2[0].Floor);
-      this.progressIsVisible = false;
-    });
+    const res3 =  await this.dataService.get_route(start, end).toPromise()
+    this.route = new NaviRoute(res3);
+    this.displayFloor();
+    this.displayNavigationRoute(res2[0].Building, res2[0].Floor);
+    this.progressIsVisible = false;
   }
 
   private displayPin() {
@@ -81,10 +80,10 @@ export class NavigationPage {
     }
   }
 
-  private async fetchLocations(building:string, floor:string) {
+  private async fetchLocations(building: string, floor: string) {
     const res = await this.dataService.get_locations(building, floor).toPromise<Location[]>();
     this.floor.locationNames = [];
-    for(const l of res) {
+    for (const l of res) {
       this.floor.locationNames.push({name: l.Name, x: l.PathNode.Coordinate.X, y: l.PathNode.Coordinate.Y});
     }
   }
@@ -121,22 +120,20 @@ export class NavigationPage {
       });
       await availableFloorModal.present();
 
-      availableFloorModal.onDidDismiss()
-          .then(async (data) => {
-            if (data['data']) {
-              await this.fetchFloorByItsNumber(this.currentBuilding, data['data']);
-              await this.fetchLocations(this.currentBuilding, data['data']);
+      const data = await availableFloorModal.onDidDismiss()
+      if (data['data']) {
+        await this.fetchFloorByItsNumber(this.currentBuilding, data['data']);
+        await this.fetchLocations(this.currentBuilding, data['data']);
 
-              this.displayFloor();
-              // display route if needed
-              const isRouteAvailable = this.route != null;
-              if (isRouteAvailable) {
-                this.displayNavigationRoute(this.currentBuilding, data['data']);
-              }
+        this.displayFloor();
+        // display route if needed
+        const isRouteAvailable = this.route != null;
+        if (isRouteAvailable) {
+          this.displayNavigationRoute(this.currentBuilding, data['data']);
+        }
 
-              this.progressIsVisible = false;
-            }
-          })
+        this.progressIsVisible = false;
+      }
     });
   }
 

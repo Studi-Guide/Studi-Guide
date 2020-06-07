@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
 import {Location, MapItem, PathNode, SvgLocationName, SvgPath} from '../building-objects-if';
+import {ReceivedRoute} from "../navigation/naviRoute";
 
 @Injectable({
     providedIn: 'root'
@@ -19,7 +20,7 @@ export class DataService {
     }
 
     get_route(start:string, end:string){
-        return this.httpClient.get(this.baseUrl + '/navigation/dir?start=' + start + '&end=' + end );
+        return this.httpClient.get<ReceivedRoute>(this.baseUrl + '/navigation/dir?start=' + start + '&end=' + end );
     }
 
     get_location_search(name:string) {
