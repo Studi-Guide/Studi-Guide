@@ -152,8 +152,7 @@ export class NavigationPage {
             this.displayNavigationRoute(data.data);
           }
         } else {
-          const endsection = this.route.routeSections[this.route.routeSections.length -1];
-           await this.RenderNavigationPage(this.route, endsection.Building, endsection.Floor);
+           await this.RenderNavigationPage(this.route, this.currentBuilding, data.data);
         }
 
         this.progressIsVisible = false;

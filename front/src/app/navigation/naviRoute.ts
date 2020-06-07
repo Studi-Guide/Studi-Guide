@@ -116,7 +116,9 @@ export class NaviRoute {
         const filtered = this.routeSections.filter(section => section.Floor === floor);
         if (filtered != null && filtered.length > 0) {
             const lastRouteSection = filtered[filtered.length-1];
-            return lastRouteSection.Route[lastRouteSection.Route.length-1];
+             if (lastRouteSection === this.routeSections[this.routeSections.length - 1]) {
+                return lastRouteSection.Route[lastRouteSection.Route.length - 1];
+            }
         }
         return null;
     }
