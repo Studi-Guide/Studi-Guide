@@ -109,7 +109,7 @@ func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusS
 	}
 
 	if len(buildingStr) > 0 {
-		query = query.Where(location.HasBuildingWith(building.NameEqualFold(buildingStr)))
+		query = query.Where(location.HasBuildingWith(buildingStr.NameEqualFold(buildingStr)))
 	}
 
 	if len(campusStr) > 0 {
