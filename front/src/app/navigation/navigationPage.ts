@@ -64,7 +64,7 @@ export class NavigationPage implements OnInit {
     this.progressIsVisible = true;
     // Get target location
     const endLocation = await this.dataService.get_location_search(end).toPromise<Location>();
-    this.route = new NaviRoute(await this.dataService.get_route(start, end).toPromise());
+    this.route = new NaviRoute(this.dataService, await this.dataService.get_route(start, end).toPromise());
 
     await this.RenderNavigationPage(this.route, endLocation.Building, endLocation.Floor);
     this.progressIsVisible = false;

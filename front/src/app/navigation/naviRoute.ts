@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import {PathNode} from '../building-objects-if';
+import {MapItem, PathNode} from '../building-objects-if';
 import {CanvasResolutionConfigurator} from '../services/CanvasResolutionConfigurator';
 import {IconOnMapRenderer} from '../services/IconOnMapRenderer';
+import {DataService} from "../services/data.service";
 
 @Injectable({
     providedIn: 'root'
@@ -31,7 +32,8 @@ export class NaviRoute {
     public readonly routeSections:RouteSection[];
     public distance: number;
 
-    constructor(response:ReceivedRoute) {
+    constructor(private dataService:DataService,
+        response:ReceivedRoute) {
         this.mapCanvas = document.getElementById('map') as HTMLCanvasElement;
         this.map = CanvasResolutionConfigurator.setup(this.mapCanvas);
         this.pin = new IconOnMapRenderer(this.map,'pin-sharp.png');
@@ -95,8 +97,46 @@ export class NaviRoute {
         this.pin.render(x-15, y-30, 30, 30);
     }
 
-    private renderFlashingStairWell(building, floor): void {
-        ;
+    private async renderFlashingStairWell(floor:string) {
+        const pNodes:PathNode[] = [];
+        for (let i = 0; i < this.routeSections.length-1; i++) {
+            pNodes.push(this.routeSections[i].Route[this.routeSections[i].Route.length-1]);
+        }
+
+        const mItemss:MapItem[][] = [];
+        for (const pNode of pNodes) {
+            mItemss.push(await this.dataService.get_map_item(pNode.Id).toPromise<MapItem[]>());
+        }
+
+        if (mItemss.length === 0) {
+            return;
+        }
+
+        const animationCallback = () => {
+            this.map.save();
+            const date = new Date();
+            for (const mapItems of mItemss) {
+                for (const mapItem of mapItems) {
+                    this.map.beginPath();
+                    this.map.moveTo(mapItem.Sections[0].Start.X, mapItem.Sections[0].Start.Y);
+                    for (let i = 1; i < mapItem.Sections.length; i++) {
+                        this.map.lineTo(mapItem.Sections[i].Start.X, mapItem.Sections[i].Start.Y);
+                    }
+                    this.map.lineTo(mapItem.Sections[0].Start.X, mapItem.Sections[0].Start.Y);
+                    this.map.lineWidth = 1;
+                    this.map.strokeStyle = (date.getSeconds() % 2 === 0) ? '#FFF' : '#000';
+                    this.map.stroke();
+                    this.map.closePath();
+                }
+            }
+            this.map.restore();
+
+            window.requestAnimationFrame(animationCallback);
+
+        };
+
+        window.requestAnimationFrame(animationCallback);
+
     }
 
     private getRouteStart(floor:string) {

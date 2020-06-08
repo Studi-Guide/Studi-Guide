@@ -19,6 +19,7 @@ export class Coordinate {
 }
 
 export interface PathNode {
+  Id: number;
   Coordinate: Coordinate;
 }
 
