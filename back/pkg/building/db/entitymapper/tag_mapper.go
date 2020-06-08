@@ -9,7 +9,7 @@ import (
 )
 
 func (r *EntityMapper) mapTag(t string, entLocation *ent.Location) (*ent.Tag, error) {
-	entTag, err := r.client.Tag.Query().Where(tag.Name(t)).First(r.context)
+	entTag, err := r.client.Tag.Query().Where(tag.NameEqualFold(t)).First(r.context)
 	if err != nil && entTag == nil {
 		entTag, err = r.client.Tag.Create().SetName(t).AddLocations(entLocation).Save(r.context)
 		if err != nil {

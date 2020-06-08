@@ -84,7 +84,7 @@ func (r *EntityMapper) FilterMapItems(floor, buildingFilter, campus string) ([]M
 	mapQuery := r.client.MapItem.Query()
 
 	if len(buildingFilter) > 0 {
-		mapQuery.Where(mapitem.HasBuildingWith(building.Name(buildingFilter)))
+		mapQuery.Where(mapitem.HasBuildingWith(building.NameEqualFold(buildingFilter)))
 	}
 
 	if len(floor) > 0 {
