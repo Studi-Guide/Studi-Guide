@@ -71,7 +71,13 @@ func (r *EntityMapper) GetAllMapItems() ([]MapItem, error) {
 func (r *EntityMapper) GetMapItemByPathNodeID(pathNodeID int) (MapItem, error) {
 
 	mapQuery := r.client.MapItem.Query()
-	entMapItem, err := mapQuery.Where(mapitem.HasPathNodesWith(pathnode.ID(pathNodeID))).First(r.context)
+	entMapItem, err := mapQuery.Where(mapitem.HasPathNodesWith(pathnode.ID(pathNodeID))).
+		WithPathNodes().
+		WithColor().
+		WithBuilding().
+		WithDoors().
+		WithSections().
+		First(r.context)
 	if err != nil {
 		return MapItem{}, err
 	}
