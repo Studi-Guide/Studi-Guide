@@ -22,18 +22,20 @@ func NewNavigationService(routeCalculator navigation.RouteCalculator, pathNodePr
 
 func (n *NavigationService) CalculateFromString(startLocationName string, endLocationName string) (*navigation.NavigationRoute, error) {
 
-	start, err := n.pathNodeProvider.GetPathNode(startLocationName)
+	start, err := n.pathNodeProvider.GetRoutePoint(startLocationName)
 	if err != nil {
 		return nil, err
 	}
 
-	end, err := n.pathNodeProvider.GetPathNode(endLocationName)
+	end, err := n.pathNodeProvider.GetRoutePoint(endLocationName)
 	if err != nil {
 		return nil, err
 	}
 
-	nodes, distance, err := n.routeCalc.GetRoute(start, end)
+	nodes, distance, err := n.routeCalc.GetRoute(start.Node, end.Node)
 	route := GenerateNavigationRoute(nodes, distance, n.pathNodeProvider)
+	route.End = end
+	route.Start = start
 	return &route, err
 }
 

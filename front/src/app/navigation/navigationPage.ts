@@ -54,13 +54,13 @@ export class NavigationPage implements OnInit {
     this.displayPin();
   }
 
-  private async fetchFloorByItsNumber(building:string, floor:string) {
+  private async fetchFloorByItsNumber(building: string, floor: string) {
     this.progressIsVisible = true;
     const res = await this.dataService.get_map_floor(building, floor).toPromise();
     this.floor = new FloorMap(res);
   }
 
-  private async fetchRouteToDisplay(start:string, end:string) {
+  private async fetchRouteToDisplay(start: string, end: string) {
     this.progressIsVisible = true;
     // Get target location
     const endLocation = await this.dataService.get_location_search(end).toPromise<Location>();
@@ -92,13 +92,13 @@ export class NavigationPage implements OnInit {
   }
 
   private displayPin() {
-    const x = this.startPin.Coordinate.X-15;
-    const y = this.startPin.Coordinate.Y-30;
-    this.floor.pin.render(x,y,30,30);
+    const x = this.startPin.Coordinate.X - 15;
+    const y = this.startPin.Coordinate.Y - 30;
+    this.floor.pin.render(x, y, 30, 30);
   }
 
-  private displayNavigationRoute(floor: string){
-    if (this.route !=null) {
+  private displayNavigationRoute(floor: string) {
+    if (this.route != null) {
       this.route.render(floor);
     }
   }
@@ -116,29 +116,29 @@ export class NavigationPage implements OnInit {
     this.availableFloorsBtnIsVisible = true;
   }
 
-  public async onDiscovery(searchInput:string) {
+  public async onDiscovery(searchInput: string) {
     await this.fetchFloorByLocation(searchInput);
     this.availableFloorsBtnIsVisible = true;
   }
 
-  public async onRoute(routeInput:string[]) {
+  public async onRoute(routeInput: string[]) {
     await this.fetchRouteToDisplay(routeInput[0], routeInput[1]);
   }
 
-  private isEmptyOrSpaces(str){
+  private isEmptyOrSpaces(str) {
     return str === null || str.match(/^ *$/) !== null;
   }
 
   async presentAvailableFloorModal() {
     let floors = new Array<string>();
     if (this.route == null) {
-      const building =  await this.dataService.get_building(this.currentBuilding).toPromise<BuildingData>();
+      const building = await this.dataService.get_building(this.currentBuilding).toPromise<BuildingData>();
       floors = floors.concat(building.Floors);
     } else {
       // get all floors from all buildings on the route
       for (const routeSection of this.route.routeSections) {
-          const building =  await this.dataService.get_building(routeSection.Building).toPromise<BuildingData>();
-          floors = floors.concat(building.Floors);
+        const building = await this.dataService.get_building(routeSection.Building).toPromise<BuildingData>();
+        floors = floors.concat(building.Floors);
       }
 
       // distinct array
@@ -174,17 +174,4 @@ export class NavigationPage implements OnInit {
       this.progressIsVisible = false;
     }
   }
-
-  /*  private static testRenderPathNodes() : Coordinate[] {
-      let pathNodes:Coordinate[] = [];
-          for (const room of testDataRooms) {
-            for (const pathNode of room.PathNodes) {
-              pathNodes.push(pathNode.Coordinate);
-            }
-            for (const door of room.Doors) {
-              pathNodes.push(door.pathNode.Coordinate);
-            }
-          }
-      return pathNodes;
-    }*/
 }

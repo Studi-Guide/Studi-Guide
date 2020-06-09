@@ -6,7 +6,7 @@ import (
 
 type PathNodeProvider interface {
 	GetAllPathNodes() ([]navigation.PathNode, error)
-	GetPathNode(name string) (navigation.PathNode, error)
+	GetRoutePoint(name string) (navigation.RoutePoint, error)
 
 	GetPathNodeLocationData(node navigation.PathNode) (navigation.LocationData, error)
 }

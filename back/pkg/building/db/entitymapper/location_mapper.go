@@ -124,10 +124,12 @@ func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusS
 	return r.locationArrayMapper(entLocations), nil
 }
 
-func (r *EntityMapper) GetPathNode(name string) (navigation.PathNode, error) {
+func (r *EntityMapper) GetRoutePoint(name string) (navigation.RoutePoint, error) {
 	loc, err := r.GetLocation(name, "", "")
 	if err != nil {
-		return navigation.PathNode{}, err
+		return navigation.RoutePoint{}, err
 	}
-	return loc.PathNode, err
+	return navigation.RoutePoint{
+		Node:  loc.PathNode,
+		Floor: loc.Floor}, err
 }
