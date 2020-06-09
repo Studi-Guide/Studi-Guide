@@ -121,8 +121,14 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 	defer ctrl.Finish()
 	mock := NewMockPathNodeProvider(ctrl)
 	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
-	mock.EXPECT().GetPathNode("RoomN01").Return(loc1.PathNode, nil)
-	mock.EXPECT().GetPathNode("RoomN02").Return(loc2.PathNode, nil)
+	mock.EXPECT().GetRoutePoint("RoomN01").Return(navigation.RoutePoint{
+		Node:  loc1.PathNode,
+		Floor: loc1.Floor,
+	}, nil)
+	mock.EXPECT().GetRoutePoint("RoomN02").Return(navigation.RoutePoint{
+		Node:  loc2.PathNode,
+		Floor: loc2.Floor,
+	}, nil)
 
 	mock.EXPECT().GetPathNodeLocationData(loc1.PathNode).Times(1).Return(navigation.LocationData{
 		Building: loc1.Building,
@@ -166,6 +172,14 @@ func TestNavigationService_CalculateFromString(t *testing.T) {
 			Building:    loc2.Building,
 			Floor:       loc2.Floor,
 		}},
+		Start: navigation.RoutePoint{
+			Node:  loc1.PathNode,
+			Floor: loc1.Floor,
+		},
+		End: navigation.RoutePoint{
+			Node:  loc2.PathNode,
+			Floor: loc2.Floor,
+		},
 		Distance: distance,
 	}
 
@@ -199,7 +213,7 @@ func TestNavigationService_CalculateFromString_Negative(t *testing.T) {
 	defer ctrl.Finish()
 	mock := NewMockPathNodeProvider(ctrl)
 	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
-	mock.EXPECT().GetPathNode("RoomN00").Return(navigation.PathNode{}, errors.New("error text"))
+	mock.EXPECT().GetRoutePoint("RoomN00").Return(navigation.RoutePoint{}, errors.New("error text"))
 
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, mock)
@@ -231,8 +245,14 @@ func TestNavigationService_Calculate(t *testing.T) {
 	defer ctrl.Finish()
 	mock := NewMockPathNodeProvider(ctrl)
 	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode, loc2.PathNode}, nil)
-	mock.EXPECT().GetPathNode("loc1").Return(loc1.PathNode, nil)
-	mock.EXPECT().GetPathNode("loc2").Return(loc2.PathNode, nil)
+	mock.EXPECT().GetRoutePoint("loc1").Return(navigation.RoutePoint{
+		Node:  loc1.PathNode,
+		Floor: loc1.Floor,
+	}, nil)
+	mock.EXPECT().GetRoutePoint("loc2").Return(navigation.RoutePoint{
+		Node:  loc2.PathNode,
+		Floor: loc2.Floor,
+	}, nil)
 	mock.EXPECT().GetPathNodeLocationData(loc1.PathNode).Times(2).Return(navigation.LocationData{
 		Building: loc1.Building,
 		Floor:    loc1.Floor,
@@ -288,8 +308,12 @@ func TestNavigationService_CalculateStromString_Negative2(t *testing.T) {
 	defer ctrl.Finish()
 	mock := NewMockPathNodeProvider(ctrl)
 	mock.EXPECT().GetAllPathNodes().Return([]navigation.PathNode{loc1.PathNode}, nil)
-	mock.EXPECT().GetPathNode("RoomN01").Return(loc1.PathNode, nil)
-	mock.EXPECT().GetPathNode("RoomN0001").Return(navigation.PathNode{}, errors.New("error text"))
+	mock.EXPECT().GetRoutePoint("RoomN01").Return(navigation.RoutePoint{
+		Node:  loc1.PathNode,
+		Floor: loc1.Floor,
+	}, nil)
+
+	mock.EXPECT().GetRoutePoint("RoomN0001").Return(navigation.RoutePoint{}, errors.New("error text"))
 
 	calculator, _ := NewMockRoutecalCulator()
 	navigationservice, _ := NewNavigationService(calculator, mock)

@@ -5,8 +5,6 @@ import (
 )
 
 type NavigationServiceProvider interface {
-	// TODO replace coordinate array with a real route object
 	CalculateFromString(startName string, endName string) (*navigation.NavigationRoute, error)
-
 	CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) (*navigation.NavigationRoute, error)
 }
