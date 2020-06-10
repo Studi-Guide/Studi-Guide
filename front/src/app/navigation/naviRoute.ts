@@ -41,7 +41,7 @@ export class NaviRoute {
     public distance: number;
 
     constructor(private dataService:DataService,
-        response:ReceivedRoute) {
+                response:ReceivedRoute) {
         this.mapCanvas = document.getElementById('map') as HTMLCanvasElement;
         this.map = CanvasResolutionConfigurator.setup(this.mapCanvas);
         this.pin = new IconOnMapRenderer(this.map,'pin-sharp.png');
