@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {PathNode} from '../building-objects-if';
+import {MapItem, PathNode} from '../building-objects-if';
 import {CanvasResolutionConfigurator} from '../services/CanvasResolutionConfigurator';
 import {IconOnMapRenderer} from '../services/IconOnMapRenderer';
 
@@ -8,8 +8,15 @@ import {IconOnMapRenderer} from '../services/IconOnMapRenderer';
 })
 
 export class ReceivedRoute {
-    Distance: number;
-    RouteSections: RouteSection[];
+    Distance:       number;
+    Start:          RoutePoint;
+    End:            RoutePoint;
+    RouteSections:  RouteSection[];
+}
+
+export class RoutePoint {
+    Node:           PathNode;
+    Floor:          string;
 }
 
 export class RouteSection {
@@ -28,28 +35,27 @@ export class NaviRoute {
     private pin: IconOnMapRenderer;
     private flag: IconOnMapRenderer;
 
-    public readonly routeSections:RouteSection[];
+    public readonly route: ReceivedRoute
     public distance: number;
 
-    constructor(response:ReceivedRoute) {
+    constructor(response: ReceivedRoute) {
         this.mapCanvas = document.getElementById('map') as HTMLCanvasElement;
         this.map = CanvasResolutionConfigurator.setup(this.mapCanvas);
-        this.pin = new IconOnMapRenderer(this.map,'pin-sharp.png');
-        this.flag = new IconOnMapRenderer(this.map,'flag-sharp.png');
-        this.distance = response.Distance;
-        this.routeSections = response.RouteSections;
+        this.pin = new IconOnMapRenderer(this.map, 'pin-sharp.png');
+        this.flag = new IconOnMapRenderer(this.map, 'flag-sharp.png');
+        this.route = response;
     }
 
-    public render(floor :string) {
+    public render(floor: string) {
         this.renderRoute(floor);
         this.renderDistanceOfRoute(floor);
         this.renderPinAtRouteStart(floor);
         this.renderFlagAtRouteEnd(floor);
     }
 
-    private renderDistanceOfRoute(floor :string) {
-        const routeSections = this.routeSections.filter(section => section.Floor === floor);
-        if (routeSections != null && routeSections.length > 0){
+    private renderDistanceOfRoute(floor: string) {
+        const routeSections = this.route.RouteSections.filter(section => section.Floor === floor);
+        if (routeSections != null && routeSections.length > 0) {
             for (const routeSection of routeSections) {
                 const numberOfPathNodes: number = routeSection.Route.length;
                 const value: number = routeSection.Distance;
@@ -67,16 +73,16 @@ export class NaviRoute {
         }
     }
 
-    private renderRoute(floor:string) {
-        const routeSections = this.routeSections.filter(section => section.Floor === floor);
+    private renderRoute(floor: string) {
+        const routeSections = this.route.RouteSections.filter(section => section.Floor === floor);
         if (routeSections != null) {
             for (const routeSection of routeSections) {
                 this.map.strokeStyle = '#A00';
                 this.map.lineWidth = 3;
                 this.map.beginPath();
-                this.map.moveTo(routeSection.Route[0].Coordinate.X,routeSection.Route[0].Coordinate.Y);
+                this.map.moveTo(routeSection.Route[0].Coordinate.X, routeSection.Route[0].Coordinate.Y);
                 for (let i = 1; i < routeSection.Route.length; i++) {
-                    this.map.lineTo(routeSection.Route[i].Coordinate.X,routeSection.Route[i].Coordinate.Y);
+                    this.map.lineTo(routeSection.Route[i].Coordinate.X, routeSection.Route[i].Coordinate.Y);
                 }
                 this.map.stroke();
                 this.map.closePath();
@@ -84,42 +90,22 @@ export class NaviRoute {
         }
     }
 
-    private renderPinAtRouteStart(floor :string) {
-        const routeStart = this.getRouteStart(floor);
-        if (routeStart == null) {
+    private renderPinAtRouteStart(floor: string) {
+        if (this.route.Start.Floor !== floor) {
             return;
         }
-        const x = routeStart.Coordinate.X;
-        const y = routeStart.Coordinate.Y;
-        this.pin.render(x-15, y-30, 30, 30);
+
+        const x = this.route.Start.Node.Coordinate.X;
+        const y = this.route.Start.Node.Coordinate.Y;
+        this.pin.render(x - 15, y - 30, 30, 30);
     }
 
-    private getRouteStart(floor:string) {
-        const routeSection = this.routeSections.find(section =>section.Floor === floor);
-        if (routeSection === this.routeSections[0]) {
-            return routeSection.Route[0];
-        }
-        return null;
-    }
-
-    private renderFlagAtRouteEnd(floor :string) {
-        const routeEnd = this.getRouteEnd(floor);
-        if (routeEnd == null) {
+    private renderFlagAtRouteEnd(floor: string) {
+        if (this.route.End.Floor !== floor) {
             return;
         }
-        const x = routeEnd.Coordinate.X;
-        const y = routeEnd.Coordinate.Y;
-        this.flag.render(x-5, y-30, 30, 30);
-    }
-
-    private getRouteEnd(floor:string) {
-        const filtered = this.routeSections.filter(section => section.Floor === floor);
-        if (filtered != null && filtered.length > 0) {
-            const lastRouteSection = filtered[filtered.length-1];
-             if (lastRouteSection === this.routeSections[this.routeSections.length - 1]) {
-                return lastRouteSection.Route[lastRouteSection.Route.length - 1];
-            }
-        }
-        return null;
+        const x = this.route.End.Node.Coordinate.X;
+        const y = this.route.End.Node.Coordinate.Y;
+        this.flag.render(x - 5, y - 30, 30, 30);
     }
 }

@@ -70,7 +70,7 @@ export class NavigationPage {
     // TODO allow passing a regex to backend to filter map items
     let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<MapItem[]>() ?? new Array<MapItem>();
     let locations = await this.dataService.get_locations(building, floor).toPromise<Location[]>() ?? new Array<Location>();
-    for (const routeSection of route.routeSections) {
+    for (const routeSection of route.route.RouteSections) {
       if (routeSection.Floor === floor && routeSection.Building !== building) {
         const items = await this.dataService.get_map_floor(routeSection.Building, routeSection.Floor).toPromise<MapItem[]>();
         mapItems = mapItems.concat(items);
@@ -132,7 +132,7 @@ export class NavigationPage {
       floors = floors.concat(building.Floors);
     } else {
       // get all floors from all buildings on the route
-      for (const routeSection of this.route.routeSections) {
+      for (const routeSection of this.route.route.RouteSections) {
         const building = await this.dataService.get_building(routeSection.Building).toPromise<BuildingData>();
         floors = floors.concat(building.Floors);
       }
