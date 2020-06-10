@@ -2,15 +2,23 @@ import { Injectable } from '@angular/core';
 import {MapItem, PathNode} from '../building-objects-if';
 import {CanvasResolutionConfigurator} from '../services/CanvasResolutionConfigurator';
 import {IconOnMapRenderer} from '../services/IconOnMapRenderer';
-import {DataService} from "../services/data.service";
+import {DataService} from '../services/data.service';
+import {resolveFileWithPostfixes} from '@angular/compiler-cli/ngcc/src/utils';
 
 @Injectable({
     providedIn: 'root'
 })
 
 export class ReceivedRoute {
-    Distance: number;
-    RouteSections: RouteSection[];
+    Distance:       number;
+    Start:          RoutePoint;
+    End:            RoutePoint;
+    RouteSections:  RouteSection[];
+}
+
+export class RoutePoint {
+    Node:           PathNode;
+    Floor:          string;
 }
 
 export class RouteSection {
@@ -29,7 +37,7 @@ export class NaviRoute {
     private pin: IconOnMapRenderer;
     private flag: IconOnMapRenderer;
 
-    public readonly routeSections:RouteSection[];
+    public readonly route: ReceivedRoute
     public distance: number;
 
     constructor(private dataService:DataService,
@@ -38,8 +46,7 @@ export class NaviRoute {
         this.map = CanvasResolutionConfigurator.setup(this.mapCanvas);
         this.pin = new IconOnMapRenderer(this.map,'pin-sharp.png');
         this.flag = new IconOnMapRenderer(this.map,'flag-sharp.png');
-        this.distance = response.Distance;
-        this.routeSections = response.RouteSections;
+        this.route = response;
     }
 
     public render(floor :string) {
@@ -51,7 +58,7 @@ export class NaviRoute {
     }
 
     private renderDistanceOfRoute(floor :string) {
-        const routeSections = this.routeSections.filter(section => section.Floor === floor);
+        const routeSections = this.route.RouteSections.filter(section => section.Floor === floor);
         if (routeSections != null && routeSections.length > 0){
             for (const routeSection of routeSections) {
                 const numberOfPathNodes: number = routeSection.Route.length;
@@ -71,7 +78,7 @@ export class NaviRoute {
     }
 
     private renderRoute(floor:string) {
-        const routeSections = this.routeSections.filter(section => section.Floor === floor);
+        const routeSections = this.route.RouteSections.filter(section => section.Floor === floor);
         if (routeSections != null) {
             for (const routeSection of routeSections) {
                 this.map.strokeStyle = '#A00';
@@ -88,19 +95,19 @@ export class NaviRoute {
     }
 
     private renderPinAtRouteStart(floor :string) {
-        const routeStart = this.getRouteStart(floor);
-        if (routeStart == null) {
+        if (this.route.Start.Floor !== floor) {
             return;
         }
-        const x = routeStart.Coordinate.X;
-        const y = routeStart.Coordinate.Y;
+
+        const x = this.route.Start.Node.Coordinate.X;
+        const y = this.route.Start.Node.Coordinate.Y;
         this.pin.render(x-15, y-30, 30, 30);
     }
 
     private async renderFlashingStairWell(floor:string) {
         const pNodes:PathNode[] = [];
-        for (let i = 0; i < this.routeSections.length-1; i++) {
-            pNodes.push(this.routeSections[i].Route[this.routeSections[i].Route.length-1]);
+        for (let i = 0; i < this.route.RouteSections.length-1; i++) {
+            pNodes.push(this.route.RouteSections[i].Route[this.route.RouteSections[i].Route.length-1]);
         }
 
         const mItemss:MapItem[][] = [];
@@ -139,32 +146,12 @@ export class NaviRoute {
 
     }
 
-    private getRouteStart(floor:string) {
-        const routeSection = this.routeSections.find(section =>section.Floor === floor);
-        if (routeSection === this.routeSections[0]) {
-            return routeSection.Route[0];
-        }
-        return null;
-    }
-
     private renderFlagAtRouteEnd(floor :string) {
-        const routeEnd = this.getRouteEnd(floor);
-        if (routeEnd == null) {
+        if (this.route.End.Floor !== floor) {
             return;
         }
-        const x = routeEnd.Coordinate.X;
-        const y = routeEnd.Coordinate.Y;
+        const x = this.route.End.Node.Coordinate.X;
+        const y = this.route.End.Node.Coordinate.Y;
         this.flag.render(x-5, y-30, 30, 30);
-    }
-
-    private getRouteEnd(floor:string) {
-        const filtered = this.routeSections.filter(section => section.Floor === floor);
-        if (filtered != null && filtered.length > 0) {
-            const lastRouteSection = filtered[filtered.length-1];
-             if (lastRouteSection === this.routeSections[this.routeSections.length - 1]) {
-                return lastRouteSection.Route[lastRouteSection.Route.length - 1];
-            }
-        }
-        return null;
     }
 }
