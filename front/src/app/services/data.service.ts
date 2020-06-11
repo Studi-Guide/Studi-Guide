@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
-import {BuildingData, Location, MapItem, PathNode, SvgLocationName, SvgPath} from '../building-objects-if';
-import {ReceivedRoute} from '../navigation/naviRoute';
+import {BuildingData, Location, MapItem} from '../building-objects-if';
+import {ReceivedRoute} from '../navigation/map-view/naviRouteRenderer';
 
 @Injectable({
     providedIn: 'root'

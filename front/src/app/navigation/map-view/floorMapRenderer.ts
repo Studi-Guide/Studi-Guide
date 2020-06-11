@@ -1,25 +1,25 @@
-import {Door, MapItem, SvgLocationName} from '../building-objects-if';
-import {CanvasResolutionConfigurator} from '../services/CanvasResolutionConfigurator';
-import {IconOnMapRenderer} from '../services/IconOnMapRenderer';
+import {Door, MapItem, Location} from '../../building-objects-if';
+import {CanvasResolutionConfigurator} from '../../services/CanvasResolutionConfigurator';
+import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 
 // @Injectable({
 //   providedIn: 'root'
 // })
-export class FloorMap {
+export class FloorMapRenderer {
 
+    private readonly map: CanvasRenderingContext2D;
     private readonly mapCanvas: HTMLCanvasElement;
-    private map: CanvasRenderingContext2D;
+    private readonly objectsToBeVisualized: MapItem[];
+    private readonly locationNames: Location[];
 
-    public readonly pin: IconOnMapRenderer;
-
-    public objectsToBeVisualized: MapItem[];
-    public locationNames: SvgLocationName[];
-
-    constructor(objectsToBeVisualized: MapItem[]) {
-        this.mapCanvas = document.getElementById('map') as HTMLCanvasElement;
-        this.map = CanvasResolutionConfigurator.setup(this.mapCanvas);
+    constructor(objectsToBeVisualized: MapItem[],
+                locationNames: Location[],
+                ctx:CanvasRenderingContext2D,
+                mapCanvas:HTMLCanvasElement) {
+        this.map = ctx;
+        this.mapCanvas = mapCanvas;
         this.objectsToBeVisualized = objectsToBeVisualized;
-        this.pin = new IconOnMapRenderer(this.map,'pin-sharp.png');
+        this.locationNames = locationNames;
     }
 
     private renderDoor(door:Door, color:string) {
@@ -82,12 +82,8 @@ export class FloorMap {
         this.map.textAlign = 'center';
         this.map.fillStyle = '#000';
         for (const location of this.locationNames) {
-            this.map.fillText(location.name,location.x,location.y);
+            this.map.fillText(location.Name,location.PathNode.Coordinate.X,location.PathNode.Coordinate.Y);
         }
-    }
-
-    private clearMapCanvas() {
-        this.map.clearRect(0, 0, this.mapCanvas.width, this.mapCanvas.height);
     }
 
     public renderFloorMap() {
