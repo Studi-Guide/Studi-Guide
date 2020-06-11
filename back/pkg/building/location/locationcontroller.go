@@ -25,7 +25,7 @@ func NewLocationController(router *gin.RouterGroup, provider LocationProvider) e
 // @Accept  json
 // @Produce  json
 // @Tags LocationController
-// @Param name query string false "name of the location"
+// @Param search query string false "general search string to look for locations in name, descriptions and tags"
 // @Param tag query string false "a tag of the location"
 // @Param floor query string false "floor of the location"
 // @Param campus query string false "campus of the location"
@@ -36,7 +36,7 @@ func (l LocationController) GetLocations(c *gin.Context) {
 
 	building := c.Param("building")
 
-	name := c.Query("name")
+	name := c.Query("search")
 	tag := c.Query("tag")
 	floor := c.Query("floor")
 	campus := c.Query("campus")
