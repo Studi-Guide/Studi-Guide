@@ -37,9 +37,8 @@ export class NavigationPage {
     // this.testRoute = NavigationPage.testRenderPathNodes();
   }
 
-  private async fetchFloorByLocation(room: string) {
+  private async fetchFloorByLocation(res: Location) {
     this.progressIsVisible = true;
-    const res = await this.dataService.get_location_search(room).toPromise();
     this.startPin = res.PathNode;
     this.currentBuilding = res.Building;
     await this.fetchFloorByItsNumber(res.Building, res.Floor);
@@ -59,7 +58,7 @@ export class NavigationPage {
   private async fetchRouteToDisplay(start: string, end: string) {
     this.progressIsVisible = true;
     // Get target location
-    const endLocation = await this.dataService.get_location_search(end).toPromise<Location>();
+    const endLocation = await this.dataService.get_location(end).toPromise<Location>();
     this.route = new NaviRoute(await this.dataService.get_route(start, end).toPromise());
 
     await this.RenderNavigationPage(this.route, endLocation.Building, endLocation.Floor);
@@ -113,7 +112,12 @@ export class NavigationPage {
   }
 
   public async onDiscovery(searchInput: string) {
-    await this.fetchFloorByLocation(searchInput);
+    const locations = await this.dataService.get_locations_search(searchInput).toPromise();
+    // TODO present all discovered locations
+    if (locations != null && locations.length === 1) {
+      await this.fetchFloorByLocation(locations[0]);
+    }
+
     this.availableFloorsBtnIsVisible = true;
   }
 

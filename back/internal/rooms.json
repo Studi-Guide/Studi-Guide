@@ -4354,7 +4354,7 @@
         "End": { "X": 0, "Y": 0, "Z": 2 }
       }
     ],
-    "tags": [],
+    "tags": ["Professor Holz"],
     "pathNodes": [
       {
         "Id": 206,
