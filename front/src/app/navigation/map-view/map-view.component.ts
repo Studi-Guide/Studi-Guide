@@ -73,20 +73,17 @@ export class MapViewComponent implements AfterViewInit {
 
   private async renderNavigationPage(building: string, floor: string) {
     // TODO allow passing a regex to backend to filter map items
-    // TODO or check in pull request review: is this code really needed????
-    //let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<MapItem[]>() ?? new Array<MapItem>();
-    //let locations = await this.dataService.get_locations(building, floor).toPromise<Location[]>() ?? new Array<Location>();
-    // for (const routeSection of this.currentRoute.RouteSections) {
-    //   if (routeSection.Floor === floor && routeSection.Building !== building) {
-    //     const items = await this.dataService.get_map_floor(routeSection.Building, routeSection.Floor).toPromise<MapItem[]>();
-    //     mapItems = mapItems.concat(items);
-    //
-    //     const locationItems = await this.dataService.get_locations(routeSection.Building, routeSection.Floor).toPromise<Location[]>();
-    //     locations = locations.concat(locationItems);
-    //   }
-    // }
-    const mapItems = await this.dataService.get_map_floor(building, floor).toPromise<MapItem[]>();
-    const locations = await this.dataService.get_locations(building, floor).toPromise<Location[]>();
+    let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<MapItem[]>() ?? new Array<MapItem>();
+    let locations = await this.dataService.get_locations(building, floor).toPromise<Location[]>() ?? new Array<Location>();
+    for (const routeSection of this.currentRoute.RouteSections) {
+      if (routeSection.Floor === floor && routeSection.Building !== building) {
+        const items = await this.dataService.get_map_floor(routeSection.Building, routeSection.Floor).toPromise<MapItem[]>();
+        mapItems = mapItems.concat(items);
+
+        const locationItems = await this.dataService.get_locations(routeSection.Building, routeSection.Floor).toPromise<Location[]>();
+        locations = locations.concat(locationItems);
+      }
+    }
 
     this.currentBuilding = building;
     this.floorMapRenderer = new FloorMapRenderer(mapItems, locations, this.map, this.canvasHtmlElement);
