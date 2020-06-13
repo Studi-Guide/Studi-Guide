@@ -111,6 +111,8 @@ export class NaviRouteRenderer {
     private async renderFlashingStairWell(route:ReceivedRoute, floor :string) {
         const pNodes:PathNode[] = [];
         for (let i = 0; i < route.RouteSections.length-1; i++) {
+            if (route.RouteSections[i].Building !== route.RouteSections[i+1].Building)
+                continue;
             pNodes.push(route.RouteSections[i].Route[route.RouteSections[i].Route.length-1]);
         }
 
