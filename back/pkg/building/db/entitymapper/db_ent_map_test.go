@@ -4,6 +4,7 @@ import (
 	"os"
 	"reflect"
 	"studi-guide/pkg/building/db/ent/location"
+	"studi-guide/pkg/building/db/ent/mapitem"
 	"studi-guide/pkg/building/db/ent/room"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
@@ -765,4 +766,55 @@ func TestMapColor(t *testing.T) {
 		t.Error("expected error, got: ", err, color)
 	}
 
+}
+
+func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
+	r, err := setupRoomEntityService()
+	if err != nil {
+		t.Error(err)
+	}
+	defer r.client.Close()
+
+	pNode, err := r.client.PathNode.Create().Save(r.context)
+	if err != nil {
+		t.Error(err)
+	}
+
+	building, err := r.client.Building.Create().SetName("building").Save(r.context);
+	if err != nil {
+		t.Error(err)
+	}
+
+	mItem, err := r.client.MapItem.Create().
+		AddPathNodes(pNode).
+		SetBuilding(building).
+		Save(r.context)
+	if err != nil {
+		t.Error(err)
+	}
+
+	mItem, err = r.client.MapItem.Query().
+		WithBuilding().
+		WithPathNodes().
+		Where(mapitem.ID(mItem.ID)).
+		First(r.context)
+	if err != nil {
+		t.Error(err)
+	}
+	mappedItem := *r.mapItemMapper(mItem)
+
+
+	checkItem, err := r.GetMapItemByPathNodeID(pNode.ID)
+	if err != nil {
+		t.Error(err)
+	}
+
+
+	if !reflect.DeepEqual(mappedItem.Building, checkItem.Building) {
+		t.Error(mappedItem.Building, checkItem.Building)
+	}
+
+	if !reflect.DeepEqual(mappedItem.PathNodes, checkItem.PathNodes) {
+		t.Error(mappedItem.PathNodes, checkItem.PathNodes)
+	}
 }
