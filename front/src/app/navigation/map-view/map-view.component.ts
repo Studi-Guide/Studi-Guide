@@ -21,6 +21,10 @@ export class MapViewComponent implements AfterViewInit {
   private routeRenderer:NaviRouteRenderer;
   private floorMapRenderer:FloorMapRenderer;
 
+  public get CurrentRoute():ReceivedRoute {
+    return this.currentRoute;
+  }
+
   public get CurrentBuilding():string {
     return this.currentBuilding;
   }

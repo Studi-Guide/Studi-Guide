@@ -48,8 +48,18 @@ export class NavigationPage {
   async presentAvailableFloorModal() {
     let floors = new Array<string>();
 
-    const building = await this.dataService.get_building(this.mapView.CurrentBuilding).toPromise<BuildingData>();
-    floors = floors.concat(building.Floors);
+    if (this.mapView.CurrentRoute == null) {
+      const building = await this.dataService.get_building(this.mapView.CurrentBuilding).toPromise<BuildingData>();
+      floors = floors.concat(building.Floors);
+    } else {
+      // get all floors from all buildings on the route
+      for (const routeSection of this.mapView.CurrentRoute.RouteSections) {
+        const building = await this.dataService.get_building(routeSection.Building).toPromise<BuildingData>();
+        floors = floors.concat(building.Floors);
+      }
+      // distinct array
+      floors = floors.filter((n, i) => floors.indexOf(n) === i);
+    }
 
     const availableFloorModal = await this.modalCtrl.create({
       component: AvailableFloorsPage,
