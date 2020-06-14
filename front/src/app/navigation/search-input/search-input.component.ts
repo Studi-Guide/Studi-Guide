@@ -48,12 +48,22 @@ export class SearchInputComponent implements OnInit {
   }
 
   public emitDiscoveryEvent() {
-    this.discovery.emit(this.discoverySearchbar.value);
+    let isInputEmpty = this.discoverySearchbar.value === '' || this.discoverySearchbar.value === undefined;
+    isInputEmpty = isInputEmpty || this.discoverySearchbar.value === null;
+    if (!isInputEmpty) {
+      this.discovery.emit(this.discoverySearchbar.value);
+    }
   }
 
   public emitRouteEvent() {
-    const route:string[] = [this.discoverySearchbar.value, this.routeSearchBar.value];
-    this.route.emit(route);
+    let isStartEmpty = this.discoverySearchbar.value === '' || this.discoverySearchbar.value === undefined;
+    isStartEmpty = isStartEmpty || this.discoverySearchbar.value === null;
+    let isDestinationEmpty = this.routeSearchBar.value === '' || this.routeSearchBar.value === undefined;
+    isDestinationEmpty = isDestinationEmpty || this.routeSearchBar.value === null;
+    if (!isStartEmpty && !isDestinationEmpty) {
+      const route:string[] = [this.discoverySearchbar.value, this.routeSearchBar.value];
+      this.route.emit(route);
+    }
   }
 
 }
