@@ -68,7 +68,7 @@ func TestLocationController_GetLocations2(t *testing.T) {
 	_ = NewLocationController(locationRouter, mock)
 
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/locations?name=abc&tag=taaaag&floor=1&building=KA&campus=KA&", nil)
+	req, _ := http.NewRequest("GET", "/locations?search=abc&tag=taaaag&floor=1&building=KA&campus=KA&", nil)
 
 	router.ServeHTTP(rec, req)
 
@@ -95,7 +95,7 @@ func TestLocationController_GetLocations3(t *testing.T) {
 	_ = NewLocationController(locationRouter, mock)
 
 	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/locations?name=abc&tag=taaaag&floor=1&building=KA&campus=KA&", nil)
+	req, _ := http.NewRequest("GET", "/locations?search=abc&tag=taaaag&floor=1&building=KA&campus=KA&", nil)
 
 	router.ServeHTTP(rec, req)
 

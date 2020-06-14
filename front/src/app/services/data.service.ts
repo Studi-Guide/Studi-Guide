@@ -23,7 +23,11 @@ export class DataService {
         return this.httpClient.get<ReceivedRoute>(this.baseUrl + '/navigation/dir?start=' + start + '&end=' + end );
     }
 
-    get_location_search(name:string) {
+    get_locations_search(name:string) {
+        return this.httpClient.get<Location[]>(this.baseUrl + '/locations?search=' + name );
+    }
+
+    get_location(name:string) {
         return this.httpClient.get<Location>(this.baseUrl + '/locations/' + name );
     }
 
