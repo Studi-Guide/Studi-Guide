@@ -61,24 +61,21 @@ func (r *EntityMapper) mapSectionArray(sections []Section) ([]*ent.Section, erro
 }
 
 func (r *EntityMapper) GetAllLocations() ([]Location, error) {
-	entLoactions, err := r.client.Location.Query().
-		WithTags().
-		WithBuilding().
-		WithPathnode().
+	entLocations, err := r.getLocationQuery().
 		All(r.context)
 	if err != nil {
 		return nil, err
 	}
 
-	return r.locationArrayMapper(entLoactions), nil
+	return r.locationArrayMapper(entLocations), nil
 }
 
-func (r *EntityMapper) GetLocation(name, building, campus string) (Location, error) {
+func (r *EntityMapper) GetLocation(name, buildingstr, campus string) (Location, error) {
 
-	q := r.client.Location.Query().WithPathnode().WithBuilding().WithTags().Where(location.NameEqualFold(name))
+	q := r.getLocationQuery().Where(location.NameEqualFold(name))
 
-	if len(building) > 0 {
-		// TODO implement building
+	if len(buildingstr) > 0 {
+		q.Where(location.HasBuildingWith(building.NameEqualFold(buildingstr)))
 	}
 
 	if len(campus) > 0 {
@@ -92,13 +89,15 @@ func (r *EntityMapper) GetLocation(name, building, campus string) (Location, err
 	return *r.locationMapper(entLocation), nil
 }
 
-func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusStr string) ([]Location, error) {
+func (r *EntityMapper) FilterLocations(searchStr, tagStr, floor, buildingStr, campusStr string) ([]Location, error) {
+	query := r.getLocationQuery()
 
-	query := r.client.Location.Query().
-		WithPathnode().WithBuilding().WithTags()
-
-	if len(name) > 0 {
-		query = query.Where(location.NameEqualFold(name))
+	if len(searchStr) > 0 {
+		query = query.Where(location.Or(
+			location.NameContainsFold(searchStr),
+			location.DescriptionContainsFold(searchStr),
+			location.HasTagsWith(tag.NameContainsFold(searchStr)),
+		))
 	}
 
 	if len(tagStr) > 0 {
@@ -117,11 +116,7 @@ func (r *EntityMapper) FilterLocations(name, tagStr, floor, buildingStr, campusS
 		// Todo query campus
 	}
 
-	entLocations, err := query.All(r.context)
-	if err != nil {
-		return nil, err
-	}
-	return r.locationArrayMapper(entLocations), nil
+	return r.queryLocations(query)
 }
 
 func (r *EntityMapper) GetRoutePoint(name string) (navigation.RoutePoint, error) {
@@ -132,4 +127,17 @@ func (r *EntityMapper) GetRoutePoint(name string) (navigation.RoutePoint, error)
 	return navigation.RoutePoint{
 		Node:  loc.PathNode,
 		Floor: loc.Floor}, err
+}
+
+func (r *EntityMapper) queryLocations(query *ent.LocationQuery) ([]Location, error) {
+	entLocations, err := query.All(r.context)
+	if err != nil {
+		return nil, err
+	}
+	return r.locationArrayMapper(entLocations), nil
+}
+
+func (r *EntityMapper) getLocationQuery() *ent.LocationQuery {
+	return r.client.Location.Query().
+		WithPathnode().WithBuilding().WithTags()
 }

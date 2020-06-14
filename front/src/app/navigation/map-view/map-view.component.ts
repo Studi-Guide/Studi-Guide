@@ -39,7 +39,7 @@ export class MapViewComponent implements AfterViewInit {
     this.routeRenderer.stopAnimation();
 
     // Get target location
-    const startLocation = await this.dataService.get_location_search(start).toPromise<Location>();
+    const startLocation = await this.dataService.get_location(start).toPromise<Location>();
     this.currentRoute = await this.dataService.get_route(start, end).toPromise();
 
     await this.renderNavigationPage(startLocation.Building, startLocation.Floor);
@@ -47,7 +47,7 @@ export class MapViewComponent implements AfterViewInit {
 
   public async showDiscoveryLocation(location:string) {
     this.routeRenderer.stopAnimation();
-    const res = await this.dataService.get_location_search(location).toPromise();
+    const res = await this.dataService.get_location(location).toPromise<Location>();
     this.currentBuilding = res.Building;
     const items = await this.dataService.get_map_floor(this.currentBuilding, res.Floor).toPromise();
     const locations = await this.dataService.get_locations(res.Building, res.Floor).toPromise<Location[]>();
