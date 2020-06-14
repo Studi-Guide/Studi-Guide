@@ -18,7 +18,7 @@ export class AvailableFloorsPage implements OnInit {
   ngOnInit() {
   }
 
-  cancel(floor: number) {
+  cancel(floor?: string) {
     this.modal.dismiss(floor);
   }
 

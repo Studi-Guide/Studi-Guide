@@ -1,6 +1,15 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-title>Verfügbare Stockwerke</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()" color="dark">
+        <ion-icon name="close" size="large"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-content>
   <ion-list>
-    <ion-list-header>Verfügbaren Stockwerke</ion-list-header>
       <ion-item *ngFor="let floor of floors" button (click)="cancel(floor)" >{{floor}}</ion-item>
   </ion-list>
 </ion-content>
