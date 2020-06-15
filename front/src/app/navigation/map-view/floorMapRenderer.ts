@@ -1,19 +1,16 @@
-import {Door, MapItem, SvgLocationName} from '../building-objects-if';
-import {CanvasResolutionConfigurator} from '../services/CanvasResolutionConfigurator';
-import {IconOnMapRenderer} from '../services/IconOnMapRenderer';
+import {Door, MapItem, Location} from '../../building-objects-if';
 
 // @Injectable({
 //   providedIn: 'root'
 // })
-export class FloorMap {
-    public readonly pin: IconOnMapRenderer;
+export class FloorMapRenderer {
+    private readonly objectsToBeVisualized: MapItem[];
+    private readonly locationNames: Location[];
 
-    public objectsToBeVisualized: MapItem[];
-    public locationNames: SvgLocationName[];
-
-    constructor(objectsToBeVisualized: MapItem[]) {
+    constructor(objectsToBeVisualized: MapItem[],
+                locationNames: Location[]) {
         this.objectsToBeVisualized = objectsToBeVisualized;
-        this.pin = new IconOnMapRenderer('pin-sharp.png');
+        this.locationNames = locationNames;
     }
 
     private renderDoor(map: CanvasRenderingContext2D, door:Door, color:string) {
@@ -57,7 +54,7 @@ export class FloorMap {
         map.textAlign = 'center';
         map.fillStyle = '#000';
         for (const location of this.locationNames) {
-            map.fillText(location.name,location.x,location.y);
+            map.fillText(location.Name,location.PathNode.Coordinate.X,location.PathNode.Coordinate.Y);
         }
     }
 
@@ -67,9 +64,5 @@ export class FloorMap {
         }
         this.renderAllDoorsOfFloor(map);
         this.renderLocationNames(map);
-    }
-
-    public renderStartPin(map: CanvasRenderingContext2D, x:number, y:number, width:number, height:number) {
-        this.pin.render(map, x, y, width, height);
     }
 }

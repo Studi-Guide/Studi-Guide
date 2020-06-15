@@ -19,6 +19,7 @@ export class Coordinate {
 }
 
 export interface PathNode {
+  Id: number;
   Coordinate: Coordinate;
 }
 
@@ -61,16 +62,4 @@ export interface Location {
 
 export interface Room extends MapItem, Location{
 
-}
-
-
-export class SvgPath {
-  d: string;
-  fill: string;
-}
-
-export class SvgLocationName {
-  name: string;
-  x: number;
-  y: number;
 }

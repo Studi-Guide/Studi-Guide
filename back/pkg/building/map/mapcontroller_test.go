@@ -118,3 +118,38 @@ func TestMapController_GetMapItemsFromFloor_Filter(t *testing.T) {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
 }
+
+func TestMapController_GetMapItems_PathNodeID(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/maps?pathnodeid=1", nil)
+
+	expectedMapItem := entitymapper.MapItem{
+		Doors: []entitymapper.Door{entitymapper.Door{
+			Id:       1,
+			Section:  entitymapper.Section{},
+			PathNode: navigation.PathNode{},
+		}},
+		Color:     "",
+		Floor:     "1",
+		Sections:  nil,
+		Campus:    "",
+		Building:  "",
+		PathNodes: nil,
+	}
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	provider := NewMockMapServiceProvider(ctrl)
+	provider.EXPECT().GetMapItemByPathNodeID(1).Return(expectedMapItem, nil)
+
+	router := gin.Default()
+	mapRouter := router.Group("/maps")
+	NewMapController(mapRouter, provider)
+	router.ServeHTTP(rec, req)
+
+	expected, _ := json.Marshal([]entitymapper.MapItem{expectedMapItem})
+	expected = append(expected, '\n')
+	actual := rec.Body.String()
+	if string(expected) != actual {
+		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
