@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"strconv"
 	"studi-guide/pkg/building/db/entitymapper"
 )
 
@@ -24,19 +25,18 @@ func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) erro
 // @Accept  json
 // @Produce  json
 // @Tags MapController
+// @Param pathnodeid query int false "get the map item linked to a certain path node"
 // @Param floor query int false "floor of the map items"
 // @Param campus query string false "map item is linked to a certain campus"
 // @Param building query string false "map item is linked to a building"
 // @Success 200 {array} entitymapper.MapItem
 // @Router /maps [get]
 func (l MapController) GetMapItems(c *gin.Context) {
-	building := c.Param("building")
 
+	pathNodeID := c.Query("pathnodeid")
 	floor := c.Query("floor")
 	campus := c.Query("campus")
-	if len(building) == 0 {
-		building = c.Query("building")
-	}
+	building := c.Query("building")
 
 	// TODO implementation of correct building, campus and floor query
 	//TODO include these filters
@@ -47,20 +47,20 @@ func (l MapController) GetMapItems(c *gin.Context) {
 	var mapItems []entitymapper.MapItem
 	var err error
 
-	var useFilterApi bool
-
-	if len(coordinate) == 0 && len(floor) == 0 && len(coordinateDelta) == 0 && len(building) == 0 && len(campus) == 0 {
-		//rooms, err = l.provider.GetAllRooms()
-		useFilterApi = false
-	} else {
-		useFilterApi = true
-	}
-
-	if useFilterApi {
-		mapItems, err = l.provider.FilterMapItems(floor, building, campus)
-	} else {
+	if len(pathNodeID) > 0 {
+		var intID int
+		var item entitymapper.MapItem
+		intID, err = strconv.Atoi(pathNodeID)
+		if err == nil {
+			item, err = l.provider.GetMapItemByPathNodeID(intID)
+			mapItems = append(mapItems, item)
+		}
+	} else if len(coordinate) == 0 && len(floor) == 0 && len(coordinateDelta) == 0 && len(building) == 0 && len(campus) == 0 {
 		mapItems, err = l.provider.GetAllMapItems()
+	} else {
+		mapItems, err = l.provider.FilterMapItems(floor, building, campus)
 	}
+
 
 	if err != nil {
 		fmt.Println("GetMapItems() failed with error", err)

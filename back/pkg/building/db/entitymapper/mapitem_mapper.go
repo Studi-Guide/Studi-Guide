@@ -4,6 +4,7 @@ import (
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/db/ent/building"
 	"studi-guide/pkg/building/db/ent/mapitem"
+	"studi-guide/pkg/building/db/ent/pathnode"
 	"studi-guide/pkg/navigation"
 )
 
@@ -65,6 +66,23 @@ func (r *EntityMapper) GetAllMapItems() ([]MapItem, error) {
 	}
 
 	return r.mapItemArrayMapper(entMapItems), nil
+}
+
+func (r *EntityMapper) GetMapItemByPathNodeID(pathNodeID int) (MapItem, error) {
+
+	mapQuery := r.client.MapItem.Query()
+	entMapItem, err := mapQuery.Where(mapitem.HasPathNodesWith(pathnode.ID(pathNodeID))).
+		WithPathNodes().
+		WithColor().
+		WithBuilding().
+		WithDoors().
+		WithSections().
+		First(r.context)
+	if err != nil {
+		return MapItem{}, err
+	}
+
+	return *r.mapItemMapper(entMapItem), nil
 }
 
 func (r *EntityMapper) FilterMapItems(floor, buildingFilter, campus string) ([]MapItem, error) {
