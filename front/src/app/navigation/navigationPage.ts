@@ -6,6 +6,7 @@ import {DataService} from '../services/data.service';
 import {FloorMap} from './floorMap';
 import {NaviRoute, ReceivedRoute} from './naviRoute';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
+import {CanvasResolutionConfigurator} from '../services/CanvasResolutionConfigurator';
 
 @Component({
   selector: 'app-navigation',
@@ -23,36 +24,24 @@ export class NavigationPage {
   private floor: FloorMap;
   private route: NaviRoute;
 
-  public startPin: PathNode;
-
-//  public testRooms:Room[] = [];
-//  public testRoute:PathNode[];
-
   constructor(private dataService: DataService,
               private modalCtrl: ModalController) {
     this.dataService = dataService;
-
-    // this.testRooms = testDataRooms;
-    // this.testRoute = testDataPathNodes;
-    // this.testRoute = NavigationPage.testRenderPathNodes();
   }
 
   private async fetchFloorByLocation(res: Location) {
-    this.progressIsVisible = true;
-    this.startPin = res.PathNode;
     this.currentBuilding = res.Building;
-    await this.fetchFloorByItsNumber(res.Building, res.Floor);
-
+    const mapItems = await this.fetchFloorByItsNumber(res.Building, res.Floor);
     const locations = await this.dataService.get_locations(res.Building, res.Floor).toPromise<Location[]>();
-    this.displayLocations(locations);
-    this.displayFloor();
-    this.displayPin();
+    const map = this.getCanvasMap(mapItems);
+
+    this.floor = this.createMap(map, mapItems, locations);
+    this.displayPin(map, this.floor, res.PathNode);
   }
 
   private async fetchFloorByItsNumber(building: string, floor: string) {
     this.progressIsVisible = true;
-    const res = await this.dataService.get_map_floor(building, floor).toPromise();
-    this.floor = new FloorMap(res);
+    return await this.dataService.get_map_floor(building, floor).toPromise();
   }
 
   private async fetchRouteToDisplay(start: string, end: string) {
@@ -78,44 +67,42 @@ export class NavigationPage {
         locations = locations.concat(locationItems);
       }
     }
-
+    const map = this.getCanvasMap(mapItems)
     this.currentBuilding = building;
-    this.floor = new FloorMap(mapItems);
-    this.displayLocations(locations);
-    this.displayFloor();
-    this.displayNavigationRoute(floor);
+    this.createMap(map, mapItems, locations);
+    this.displayNavigationRoute(map, floor);
   }
 
-  private displayPin() {
-    const x = this.startPin.Coordinate.X - 15;
-    const y = this.startPin.Coordinate.Y - 30;
-    this.floor.pin.render(x, y, 30, 30);
+  private displayPin(map: CanvasRenderingContext2D, floor: FloorMap, startPin: PathNode) {
+    const x = startPin.Coordinate.X - 15;
+    const y = startPin.Coordinate.Y - 30;
+    floor.renderStartPin(map, x, y, 30, 30);
   }
 
-  private displayNavigationRoute(floor: string) {
+  private displayNavigationRoute(map: CanvasRenderingContext2D, floor: string) {
     if (this.route != null) {
-      this.route.render(floor);
+      this.route.render(map, floor);
     }
   }
 
-  private displayLocations(locations: Location[]) {
-    this.floor.locationNames = [];
-    for (const l of locations) {
-      this.floor.locationNames.push({name: l.Name, x: l.PathNode.Coordinate.X, y: l.PathNode.Coordinate.Y});
-    }
-  }
+  private createMap(map:CanvasRenderingContext2D, mapItems: MapItem[], locations: Location[]) {
+      const page = new FloorMap(mapItems);
+      page.locationNames = [];
+      for (const l of locations) {
+        page.locationNames.push({name: l.Name, x: l.PathNode.Coordinate.X, y: l.PathNode.Coordinate.Y});
+      }
 
-  private displayFloor() {
-    this.floor.renderFloorMap();
-    this.progressIsVisible = false;
-    this.availableFloorsBtnIsVisible = true;
+      page.renderFloorMap(map);
+      return page;
   }
 
   public async onDiscovery(searchInput: string) {
     const locations = await this.dataService.get_locations_search(searchInput).toPromise();
     // TODO present all discovered locations
     if (locations != null && locations.length === 1) {
+      this.progressIsVisible = true;
       await this.fetchFloorByLocation(locations[0]);
+      this.progressIsVisible = false;
     }
 
     this.availableFloorsBtnIsVisible = true;
@@ -157,15 +144,17 @@ export class NavigationPage {
     const data = await availableFloorModal.onDidDismiss()
     if (data.data) {
       if (this.route == null) {
-        await this.fetchFloorByItsNumber(this.currentBuilding, data.data);
+        const mapItems = await this.fetchFloorByItsNumber(this.currentBuilding, data.data);
         const locations = await this.dataService.get_locations(this.currentBuilding, data.data).toPromise<Location[]>();
-        await this.displayLocations(locations);
 
-        this.displayFloor();
+        const map = this.getCanvasMap(mapItems)
+
+        this.createMap(map, mapItems, locations);
+
         // display route if needed
         const isRouteAvailable = this.route != null;
         if (isRouteAvailable) {
-          this.displayNavigationRoute(data.data);
+          this.displayNavigationRoute(map, data.data);
         }
       } else {
         await this.RenderNavigationPage(this.route, this.currentBuilding, data.data);
@@ -173,5 +162,25 @@ export class NavigationPage {
 
       this.progressIsVisible = false;
     }
+  }
+
+  private getCanvasMap(mapItems: MapItem[]) {
+    const mapCanvas = document.getElementById('map') as HTMLCanvasElement;
+    let mapHeightNeeded = 0;
+    let mapWidthNeeded = 0;
+    for (const mapItem of mapItems) {
+      if (mapItem.Sections != null) {
+        for (const section of mapItem.Sections) {
+          if (section.End.X > mapWidthNeeded) {
+            mapWidthNeeded = section.End.X;
+          }
+          if (section.End.Y > mapHeightNeeded) {
+            mapHeightNeeded = section.End.Y;
+          }
+        }
+      }
+    }
+
+    return CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
   }
 }
