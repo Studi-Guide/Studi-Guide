@@ -780,7 +780,7 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 		t.Error(err)
 	}
 
-	building, err := r.client.Building.Create().SetName("building").Save(r.context);
+	building, err := r.client.Building.Create().SetName("building").Save(r.context)
 	if err != nil {
 		t.Error(err)
 	}
@@ -803,12 +803,10 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 	}
 	mappedItem := *r.mapItemMapper(mItem)
 
-
 	checkItem, err := r.GetMapItemByPathNodeID(pNode.ID)
 	if err != nil {
 		t.Error(err)
 	}
-
 
 	if !reflect.DeepEqual(mappedItem.Building, checkItem.Building) {
 		t.Error(mappedItem.Building, checkItem.Building)

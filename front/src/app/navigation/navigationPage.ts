@@ -1,10 +1,7 @@
 import {BuildingData, Location, MapItem, PathNode} from '../building-objects-if';
-// import {testDataRooms, testDataPathNodes} from './test-building-data';
 import {Component, ViewChild} from '@angular/core';
 import {ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
-import {FloorMapRenderer} from './map-view/floorMapRenderer';
-import {NaviRouteRenderer, ReceivedRoute} from './map-view/naviRouteRenderer';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 import {MapViewComponent} from './map-view/map-view.component';
 

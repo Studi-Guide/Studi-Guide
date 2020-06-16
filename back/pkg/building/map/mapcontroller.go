@@ -61,7 +61,6 @@ func (l MapController) GetMapItems(c *gin.Context) {
 		mapItems, err = l.provider.FilterMapItems(floor, building, campus)
 	}
 
-
 	if err != nil {
 		fmt.Println("GetMapItems() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{

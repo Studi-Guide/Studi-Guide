@@ -12,9 +12,6 @@ import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
   styleUrls: ['./map-view.component.scss'],
 })
 export class MapViewComponent implements AfterViewInit {
-
-  private canvasHtmlElement: HTMLCanvasElement;
-  private map: CanvasRenderingContext2D;
   private currentBuilding: string;
   private currentRoute:ReceivedRoute;
 
@@ -33,9 +30,7 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.canvasHtmlElement = document.getElementById('map') as HTMLCanvasElement;
-    this.map = CanvasResolutionConfigurator.setup(this.canvasHtmlElement);
-    this.routeRenderer = new NaviRouteRenderer(this.dataService, this.map);
+    this.routeRenderer = new NaviRouteRenderer(this.dataService);
     // discovery init
   }
 
@@ -55,24 +50,25 @@ export class MapViewComponent implements AfterViewInit {
     this.currentBuilding = res.Building;
     const items = await this.dataService.get_map_floor(this.currentBuilding, res.Floor).toPromise();
     const locations = await this.dataService.get_locations(res.Building, res.Floor).toPromise<Location[]>();
-
-    this.floorMapRenderer = new FloorMapRenderer(items, locations, this.map, this.canvasHtmlElement);
-    this.floorMapRenderer.renderFloorMap();
-    this.displayPin(res.PathNode);
+    const map = this.getCanvasMap(items);
+    this.floorMapRenderer = new FloorMapRenderer(items, locations);
+    this.floorMapRenderer.renderFloorMap(map);
+    this.displayPin(map, res.PathNode);
 
   }
 
   public async showFloor(building:string, floor:string) {
     this.routeRenderer.stopAnimation();
-    const res = await this.dataService.get_map_floor(building, floor).toPromise();
-    const locations = await this.dataService.get_locations(this.currentBuilding, floor).toPromise<Location[]>();
-    this.floorMapRenderer = new FloorMapRenderer(res, locations, this.map, this.canvasHtmlElement);
-    this.floorMapRenderer.renderFloorMap();
-
     if (this.currentRoute != null) {
       await this.renderNavigationPage(this.currentBuilding, floor);
     }
-
+    else {
+      const res = await this.dataService.get_map_floor(building, floor).toPromise();
+      const map = this.getCanvasMap(res);
+      const locations = await this.dataService.get_locations(this.currentBuilding, floor).toPromise<Location[]>();
+      this.floorMapRenderer = new FloorMapRenderer(res, locations);
+      this.floorMapRenderer.renderFloorMap(map);
+    }
   }
 
   private async renderNavigationPage(building: string, floor: string) {
@@ -89,25 +85,45 @@ export class MapViewComponent implements AfterViewInit {
       }
     }
 
+    const map = this.getCanvasMap(mapItems);
     this.currentBuilding = building;
-    this.floorMapRenderer = new FloorMapRenderer(mapItems, locations, this.map, this.canvasHtmlElement);
-    this.floorMapRenderer.renderFloorMap();
-    await this.routeRenderer.render(this.currentRoute, floor);
+    this.floorMapRenderer = new FloorMapRenderer(mapItems, locations);
+    this.floorMapRenderer.renderFloorMap(map);
+    await this.routeRenderer.render(map, this.currentRoute, floor);
     this.routeRenderer.startAnimation();
   }
 
-  private displayPin(pathNode:PathNode) {
+  private displayPin(map: CanvasRenderingContext2D, pathNode:PathNode) {
 
     const x = pathNode.Coordinate.X - 15;
     const y = pathNode.Coordinate.Y - 30;
-    const iconOnMapRenderer = new IconOnMapRenderer(this.map, 'pin-sharp.png');
-    iconOnMapRenderer.render(x, y, 30, 30);
+    const iconOnMapRenderer = new IconOnMapRenderer( 'pin-sharp.png');
+    iconOnMapRenderer.render(map, x, y, 30, 30);
   }
 
-  private clearMapCanvas() {
-    if (this.map != null) {
-      this.map.clearRect(0, 0, this.canvasHtmlElement.width, this.canvasHtmlElement.height);
+  private clearMapCanvas(map: CanvasRenderingContext2D) {
+    if (map != null) {
+      map.clearRect(0, 0, map.canvas.width, map.canvas.height);
     }
   }
 
+  private getCanvasMap(mapItems: MapItem[]) {
+    const mapCanvas = document.getElementById('map') as HTMLCanvasElement;
+    let mapHeightNeeded = 0;
+    let mapWidthNeeded = 0;
+    for (const mapItem of mapItems) {
+      if (mapItem.Sections != null) {
+        for (const section of mapItem.Sections) {
+          if (section.End.X > mapWidthNeeded) {
+            mapWidthNeeded = section.End.X;
+          }
+          if (section.End.Y > mapHeightNeeded) {
+            mapHeightNeeded = section.End.Y;
+          }
+        }
+      }
+    }
+
+    return CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
+  }
 }
