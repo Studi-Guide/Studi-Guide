@@ -15,7 +15,7 @@ RUN ionic build --engine=browser ${ionicproduction}
 RUN ls
 
 # Start from the latest golang base image
-FROM golang:latest
+FROM golang:latest as golangbuilder
 
 COPY back /go/src/studi-guide
 WORKDIR /go/src/studi-guide
@@ -26,19 +26,24 @@ RUN go mod download
 RUN go generate ./...
 
 # build go binaries
-RUN go install ./cmd/...
+# Force the go compiler to use modules
+RUN go build  -a -tags netgo -v  -ldflags '-w -extldflags "-static"' -o /go/bin ./cmd/...
+
+# import rooms
+WORKDIR /go/bin
+RUN rm -f ./db.sqlite3
+RUN studi-guide-ctl migrate import rooms /go/src/studi-guide/internal/rooms.json;
+FROM scratch
 
 WORKDIR /go/bin/ionic
 COPY --from=ionicbuilder /www/app/www .
-#RUN ls
+
+WORKDIR /go/src
+COPY --from=golangbuilder /go/src .
 
 WORKDIR /go/bin
-RUN ls
+COPY --from=golangbuilder /go/bin .
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
-
-# Command to run the executable
-# Use shell form to import rooms and then start server
-CMD /go/bin/studi-guide-ctl migrate import rooms /go/src/studi-guide/internal/rooms.json; /go/bin/studi-guide
-#CMD /go/bin/studi-guide
+CMD ["./studi-guide"]
