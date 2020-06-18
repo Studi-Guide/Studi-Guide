@@ -4,6 +4,7 @@ import {ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 import {MapViewComponent} from './map-view/map-view.component';
+import {HttpErrorResponse} from '@angular/common/http';
 
 @Component({
   selector: 'app-navigation',
@@ -13,11 +14,11 @@ import {MapViewComponent} from './map-view/map-view.component';
 
 export class NavigationPage {
 
-  @ViewChild(MapViewComponent) mapView:MapViewComponent;
+  @ViewChild(MapViewComponent) mapView: MapViewComponent;
 
   public progressIsVisible = false;
   public availableFloorsBtnIsVisible = false;
-
+  public errorMessage: string;
 
   constructor(private dataService: DataService,
               private modalCtrl: ModalController) {
@@ -25,21 +26,44 @@ export class NavigationPage {
 
 
   public async onDiscovery(searchInput: string) {
+    this.errorMessage = '';
     this.progressIsVisible = true;
-    await this.mapView.showDiscoveryLocation(searchInput);
-    this.progressIsVisible = false;
-    this.availableFloorsBtnIsVisible = true;
+    try {
+      await this.mapView.showDiscoveryLocation(searchInput);
+      this.availableFloorsBtnIsVisible = true;
+    } catch (ex) {
+      this.handleInputError(ex, searchInput);
+    } finally {
+      this.progressIsVisible = false;
+    }
   }
 
   public async onRoute(routeInput: string[]) {
     this.progressIsVisible = true;
-    await this.mapView.showRoute(routeInput[0], routeInput[1]);
-    this.progressIsVisible = false;
-    this.availableFloorsBtnIsVisible = true;
-  }
+    try {
+      await this.mapView.showRoute(routeInput[0], routeInput[1]);
+      this.availableFloorsBtnIsVisible = true;
+    } catch (ex) {
+      let inputError = '';
+      if (ex instanceof HttpErrorResponse) {
+        const errorString = (ex as HttpErrorResponse).error.message;
+        if (errorString.includes(routeInput[0])) {
+          inputError = routeInput[0];
+        }
 
-  private isEmptyOrSpaces(str) {
-    return str === null || str.match(/^ *$/) !== null;
+        if (errorString.includes(routeInput[1])) {
+          if (inputError.length > 0) {
+            inputError += ' and ';
+          }
+
+          inputError += routeInput[1];
+        }
+      }
+
+      this.handleInputError(ex, inputError.length === 0 ? routeInput.toString() : inputError);
+    } finally {
+      this.progressIsVisible = false;
+    }
   }
 
   async presentAvailableFloorModal() {
@@ -75,26 +99,17 @@ export class NavigationPage {
     }
   }
 
-  private handleError(error: HttpErrorResponse) {
-
-    if (error.error instanceof ErrorEvent) {
-      // A client-side or network error occurred. Handle it accordingly.
-      console.error('An error occurred:', error.error.message);
-    } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong,
-      console.error(
-          `Backend returned code ${error.status}, ` +
-          `body was: ${error.error}`);
-      if (error.status === 400) {
-        this.progressIsVisible = false;
-        this.mapIsVisible = false;
-        //ToDo set this to false somewhere
-        this.errorOccured = true;
+  private handleInputError(ex, searchInput: string) {
+    this.availableFloorsBtnIsVisible = false;
+    if (ex instanceof HttpErrorResponse) {
+      const httpError = ex as HttpErrorResponse;
+      if (httpError.status === 400) {
+        this.errorMessage = 'Studi-Guide can\'t find ' + searchInput;
+      } else {
+        this.errorMessage = httpError.message;
       }
+      // Remove this code when discovery mode is finished
+      this.mapView.clearMapCanvas();
     }
-    // return an observable with a user-facing error message
-    return throwError(
-        'Something bad happened; please try again later.');
-  };
+  }
 }

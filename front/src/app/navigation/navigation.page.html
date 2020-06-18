@@ -7,9 +7,17 @@
             (route)="onRoute($event)">
     </app-search-input>
 
-    <div id="error-message" *ngIf="errorOccured">
-      Zu deiner Suchanfrage {{startInput}} wurde nichts gefunden
-    </div>
+    <ion-text id="error-message" *ngIf="errorMessage" >
+      <h5><span class="error">{{ errorMessage }}</span></h5>
+      <p>
+        Make sure your search is spelled correctly.
+      </p>
+      <p>
+        Should this place be on Studi-Guide?
+        <br/>
+        <a href="https://github.com/Studi-Guide/Studi-Guide/issues/new/choose">Request a missing place</a>
+      </p>
+    </ion-text>
     <div id="canvas-wrapper">
       <app-map-view></app-map-view>
     </div>

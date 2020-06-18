@@ -54,7 +54,6 @@ export class MapViewComponent implements AfterViewInit {
     this.floorMapRenderer = new FloorMapRenderer(items, locations);
     this.floorMapRenderer.renderFloorMap(map);
     this.displayPin(map, res.PathNode);
-
   }
 
   public async showFloor(building:string, floor:string) {
@@ -101,7 +100,8 @@ export class MapViewComponent implements AfterViewInit {
     iconOnMapRenderer.render(map, x, y, 30, 30);
   }
 
-  private clearMapCanvas(map: CanvasRenderingContext2D) {
+  public clearMapCanvas() {
+    const map = (document.getElementById('map') as HTMLCanvasElement).getContext('2d');
     if (map != null) {
       map.clearRect(0, 0, map.canvas.width, map.canvas.height);
     }
