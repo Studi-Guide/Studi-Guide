@@ -39,6 +39,7 @@ export class NavigationPage {
   }
 
   public async onRoute(routeInput: string[]) {
+    this.errorMessage = '';
     this.progressIsVisible = true;
     try {
       await this.mapView.showRoute(routeInput[0], routeInput[1]);
