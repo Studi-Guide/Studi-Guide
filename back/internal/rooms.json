@@ -286,7 +286,7 @@
     "tags": [],
     "pathNodes": [
       {
-        "Id": 9120591,
+        "Id": 4001,
         "ConnectedPathNodes" : [
         ],
         "X": 380, "Y": 115, "Z": 0 }
@@ -1227,7 +1227,7 @@
     "tags": [],
     "pathNodes": [
       {
-        "Id": 9120492,
+        "Id": 4002,
         "ConnectedPathNodes" : [
           120492
         ],
@@ -1363,7 +1363,7 @@
     "tags": [],
     "pathNodes": [
       {
-        "Id": 9120491,
+        "Id": 4000,
         "ConnectedPathNodes" : [
         ],
         "X": 215, "Y": 600, "Z": 0 }],
@@ -1751,7 +1751,7 @@
 
     "pathNodes": [
       {
-        "Id": 9120891,
+        "Id": 4003,
         "ConnectedPathNodes" : [
         ],
         "X": 215, "Y": 640, "Z": 0 }],
@@ -7818,7 +7818,8 @@
       {
         "Id": 120492,
         "ConnectedPathNodes" : [
-          220492
+          220492,
+          4002
         ],
         "X": 180, "Y": 570, "Z": 3 }],
 
