@@ -1,11 +1,13 @@
 package entitymapper
 
 import (
+	"fmt"
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/db/ent/building"
 	"studi-guide/pkg/building/db/ent/location"
 	"studi-guide/pkg/building/db/ent/tag"
 	"studi-guide/pkg/navigation"
+	"studi-guide/pkg/utils"
 )
 
 func (r *EntityMapper) locationArrayMapper(entLocations []*ent.Location) []Location {
@@ -84,7 +86,10 @@ func (r *EntityMapper) GetLocation(name, buildingstr, campus string) (Location, 
 
 	entLocation, err := q.First(r.context)
 	if err != nil {
-		return Location{}, err
+		return Location{}, &utils.QueryError{
+			Query: fmt.Sprintf("Location %v: not found!", name),
+			Err:   err,
+		}
 	}
 	return *r.locationMapper(entLocation), nil
 }

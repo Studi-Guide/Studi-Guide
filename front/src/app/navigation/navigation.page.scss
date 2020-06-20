@@ -4,6 +4,14 @@
     flex-flow: column;
 }
 
+.error {
+    color: red;
+}
+
+#error-message {
+    margin-left: 20px;
+}
+
 #canvas-wrapper {
     padding: 2px;
     flex-grow: 1;

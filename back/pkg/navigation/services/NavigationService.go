@@ -1,7 +1,9 @@
 package services
 
 import (
+	"fmt"
 	"studi-guide/pkg/navigation"
+	"studi-guide/pkg/utils"
 )
 
 type NavigationService struct {
@@ -24,12 +26,18 @@ func (n *NavigationService) CalculateFromString(startLocationName string, endLoc
 
 	start, err := n.pathNodeProvider.GetRoutePoint(startLocationName)
 	if err != nil {
-		return nil, err
+		return nil, &utils.QueryError{
+			Query: fmt.Sprintf("Startlocation %v: not found!", startLocationName),
+			Err:   err,
+		}
 	}
 
 	end, err := n.pathNodeProvider.GetRoutePoint(endLocationName)
 	if err != nil {
-		return nil, err
+		return nil, &utils.QueryError{
+			Query: fmt.Sprintf("Endlocation %v: not found!", endLocationName),
+			Err:   err,
+		}
 	}
 
 	nodes, distance, err := n.routeCalc.GetRoute(start.Node, end.Node)
