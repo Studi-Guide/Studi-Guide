@@ -109,7 +109,7 @@ export class NavigationPage {
       } else {
         this.errorMessage = httpError.message;
       }
-      // Remove this code when discovery mode is finished
+      // TODO Remove this code when discovery mode is finished
       this.mapView.clearMapCanvas();
     }
   }
