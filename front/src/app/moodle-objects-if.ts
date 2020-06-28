@@ -57,6 +57,7 @@ export interface Event {
     timemodified: number;
     icon: Icon;
     course: Course;
+    category: Category;
     subscription: Subscription;
     canedit: boolean;
     candelete: boolean;
@@ -98,4 +99,17 @@ export interface CalenderRequestData {
     categoryid: number;
     isloggedin: boolean;
     date: Date;
+}
+
+export interface Category {
+    id: number;
+    name: string;
+    idnumber: string;
+    parent: number;
+    coursecount: number;
+    visible: number;
+    timemodified: number;
+    depth: number;
+    nestedname: string;
+    url: string;
 }
