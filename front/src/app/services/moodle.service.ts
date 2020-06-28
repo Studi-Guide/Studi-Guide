@@ -31,9 +31,9 @@ export class MoodleService {
     }
 
     private moodleRequest<T>(token: MoodleToken, restFunction: string, parameters: ParameterMap) {
-        const url = this.moodleUrl + 'webservice/rest/server.php' +  this.generateUrlQuery({
-            wstoken: token.Token,
-            wsfuction: restFunction,
+        const url = this.moodleUrl + '/webservice/rest/server.php' +  this.generateUrlQuery({
+            wstoken: token.token,
+            wsfunction: restFunction,
             moodlewsrestformat: 'json'
         });
 

@@ -1,98 +1,101 @@
 export interface MoodleToken {
-    Token: string;
-    PrivateToken: string
+    token: string;
+    privateToken: string
 }
 
 export interface Icon {
-    Key: string;
-    Component: string;
-    Alttext: string;
+    key: string;
+    component: string;
+    alttext: string;
 }
 
 export interface Course {
-    Id: number;
-    FullName: string;
-    ShortName: string;
-    IdNumber: string;
-    Summary: string;
-    SummaryFormat: number;
-    StartDate: number;
-    EndDate: number;
-    Visible: boolean;
-    FullNameDisplay: string;
-    ViewUrl: string;
-    CourseImage: string;
-    Progress: number;
-    HasProgress: boolean;
-    IsFavourite: boolean;
-    Hidden: boolean;
-    ShowShortName: boolean;
-    CourseCategory: string;
+    id: number;
+    fullname: string;
+    shortname: string;
+    idnumber: string;
+    summary: string;
+    summaryformat: number;
+    startdate: number;
+    enddate: number;
+    visible: boolean;
+    fullnamedisplay: string;
+    viewurl: string;
+    courseimage: string;
+    progress: number;
+    hasprogress: boolean;
+    isfavourite: boolean;
+    hidden: boolean;
+    showshortname: boolean;
+    coursecategory: string;
 }
 
 export interface Subscription {
-    DisplayEventsource: boolean;
-    SubscriptionName: string;
-    SubscriptionUrl: string;
+    displayeventsource: boolean;
+    subscriptionname: string;
+    subscriptionurl: string;
 }
 
 export interface Event {
-    Id: number;
-    Name: string;
-    Description: string;
-    DescriptionFormat: number;
-    Location: string;
-    CategoryId?: any;
-    GroupId?: any;
-    UserId: number;
-    RepeatId?: any;
-    EventCount?: any;
-    ModuleName: string;
-    Instance?: any;
-    EventType: string;
-    TimeStart: number;
-    TimeDuration: number;
-    TimeSort: number;
-    Visible: number;
-    TimeModified: number;
-    Icon: Icon;
-    Course: Course;
-    Subscription: Subscription;
-    CanEdit: boolean;
-    CanDelete: boolean;
-    FormattedTime: string;
-    IsActionEvent: boolean;
-    IsCourseEvent: boolean;
-    IsCategoryEvent: boolean;
-    GroupName?: any;
-    NormalisedEventType: string;
-    NormalisedEventTypeText: string;
-    Url: string;
-    IsLastDay: boolean;
-    PopupName: string;
-    Draggable: boolean;
+    id: number;
+    name: string;
+    description: string;
+    descriptionformat: number;
+    location: string;
+    categoryid?: any;
+    groupid?: any;
+    userid: number;
+    repeatid?: any;
+    eventcount?: any;
+    modulename: string;
+    instance?: any;
+    eventtype: string;
+    timestart: number;
+    timeduration: number;
+    timesort: number;
+    visible: number;
+    timemodified: number;
+    icon: Icon;
+    course: Course;
+    subscription: Subscription;
+    canedit: boolean;
+    candelete: boolean;
+    deleteurl: string;
+    editurl: string;
+    viewurl: string;
+    formattedtime: string;
+    isactionevent: boolean;
+    iscourseevent: boolean;
+    iscategoryevent: boolean;
+    groupname?: any;
+    normalisedeventtype: string;
+    normalisedeventtypetext: string;
+    url: string;
+    islastday: boolean;
+    popupname: string;
+    draggable: boolean;
 }
 
 export interface Date {
-    Seconds: number;
-    Minutes: number;
-    Hours: number;
-    mDay: number;
-    wDay: number;
+    seconds: number;
+    minutes: number;
+    hours: number;
+    mday: number;
+    wday: number;
     mon: number;
     year: number;
-    yDay: number;
+    yday: number;
     weekday: string;
     month: string;
     timestamp: number;
 }
 
 export interface CalenderRequestData {
-    Events: Event[];
-    DefaultEventContext: number;
+    events: Event[];
+    defaulteventcontext: number;
     filter_selector: string;
-    CourseId: number;
-    CategoryId: number;
-    IsLoggedIn: boolean;
-    Date: Date;
+    courseid: number;
+    categoryid: number;
+    isloggedin: boolean;
+    date: Date;
 }
