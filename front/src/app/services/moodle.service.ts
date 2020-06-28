@@ -2,26 +2,42 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Env} from '../../environments/environment';
 import {forEach} from '@angular-devkit/schematics';
-import {MoodleToken} from '../moodle-objects-if';
+import {CalenderRequestData, MoodleToken} from '../moodle-objects-if';
 
 @Injectable({
     providedIn: 'root'
 })
 export class MoodleService {
-    baseUrl:string;// = SERVER_URL // "https://studi-guide.azurewebsites.net"; // for development: http://localhost:8090
+    moodleUrl:string;// = SERVER_URL // "https://studi-guide.azurewebsites.net"; // for development: http://localhost:8090
     constructor(private httpClient : HttpClient, private env : Env) {
-        this.baseUrl = 'https://www.moodle3.de';
+        this.moodleUrl = 'https://moodle3.de';
     }
 
     getLoginToken(user: string, pw: string) {
-        const parameters: { [key: string] : string; } = {
+        const url =  this.moodleUrl + '/login/token.php' + this.generateUrlQuery({
             username : user,
             password : pw,
             service : 'moodle_mobile_app'
-        };
-
-        const url =  this.baseUrl + '/login/token.php' + this.generateUrlQuery(parameters);
+        });
         return this.httpClient.get<MoodleToken>(url);
+    }
+
+    getCalenderEventsMonth(token: MoodleToken) {
+        return this.moodleRequest<CalenderRequestData>(token, 'core_calendar_get_calendar_monthly_view', null);
+    }
+
+    getCalenderEventsWeek(token: MoodleToken) {
+        return this.moodleRequest<CalenderRequestData>(token, 'core_calendar_get_calendar_upcoming_view', null);
+    }
+
+    private moodleRequest<T>(token: MoodleToken, restFunction: string, parameters: ParameterMap) {
+        const url = this.moodleUrl + 'webservice/rest/server.php' +  this.generateUrlQuery({
+            wstoken: token.Token,
+            wsfuction: restFunction,
+            moodlewsrestformat: 'json'
+        });
+
+        return this.httpClient.get<T>(url);
     }
 
     private generateUrlQuery(parameters: ParameterMap) {
