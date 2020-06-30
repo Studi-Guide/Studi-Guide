@@ -126,4 +126,8 @@ export class MapViewComponent implements AfterViewInit {
 
     return CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
   }
+
+  public onClickTouch(event:MouseEvent) {
+    console.log(event.clientX-event.currentTarget.offsetLeft, event.clientY-event.currentTarget.offsetTop);
+  }
 }
