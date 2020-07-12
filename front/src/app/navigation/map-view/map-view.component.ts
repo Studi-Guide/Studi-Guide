@@ -148,7 +148,6 @@ export class MapViewComponent implements AfterViewInit {
       for(const section of mapItem.Sections) {
         polygon.push([section.Start.X, section.Start.Y]);
       }
-      console.log(point, polygon)
       if (pip(point, polygon)) {
         await this.showNextFloor();
         return;
