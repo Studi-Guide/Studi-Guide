@@ -25,10 +25,10 @@ Ein Orientierungssystem bzw. Besucherleitsystem soll es verschiedenen Zielgruppe
 sich auf dem Gelände und in den Gebäuden der Hochschule schnell zu orientieren und sicher
 zurechtzufinden.
 Zielgruppen sind, u.a.:
-• einmalige Nutzer, z.B. Gäste, Besucher der Hochschule, Besucher von Veranstaltungen,
-Lieferanten, Handwerker
-• neue Nutzer, z.B. Studieninteressierte, neue Studenten/Mitarbeiter/Dozenten
-• Dauernutzer, z.B. Studenten, Mitarbeiter, Dozenten
+ - einmalige Nutzer, z.B. Gäste, Besucher der Hochschule, Besucher von Veranstaltungen, Lieferanten, Handwerker
+ - neue Nutzer, z.B. Studieninteressierte, neue Studenten/Mitarbeiter/Dozenten
+ - Dauernutzer, z.B. Studenten, Mitarbeiter, Dozenten
+ 
 Das Orientierungssystem soll es speziell den Studierenden ermöglichen, schnell auf Raum- und
 Terminänderungen zu reagieren, indem rechtzeitig über die Änderung informiert und Betroffene
 möglichst ohne Zeitverlust zu den entsprechenden Ausweichräumen geleitet werden. Schaukästen,
