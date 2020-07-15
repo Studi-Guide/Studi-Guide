@@ -5,6 +5,7 @@ import {Floor, Location, MapItem, PathNode} from '../../building-objects-if';
 import {FloorMapRenderer} from './floorMapRenderer';
 import {NaviRouteRenderer, ReceivedRoute} from './naviRouteRenderer';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
+import * as pip from 'point-in-polygon';
 
 @Component({
   selector: 'app-map-view',
@@ -14,6 +15,7 @@ import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 export class MapViewComponent implements AfterViewInit {
   private currentBuilding: string;
   private currentRoute:ReceivedRoute;
+  private currentFloor:string;
 
   private routeRenderer:NaviRouteRenderer;
   private floorMapRenderer:FloorMapRenderer;
@@ -54,6 +56,7 @@ export class MapViewComponent implements AfterViewInit {
     this.floorMapRenderer = new FloorMapRenderer(items, locations);
     this.floorMapRenderer.renderFloorMap(map);
     this.displayPin(map, res.PathNode);
+    this.currentFloor = res.Floor;
   }
 
   public async showFloor(building:string, floor:string) {
@@ -68,6 +71,7 @@ export class MapViewComponent implements AfterViewInit {
       this.floorMapRenderer = new FloorMapRenderer(res, locations);
       this.floorMapRenderer.renderFloorMap(map);
     }
+    this.currentFloor = floor;
   }
 
   private async renderNavigationPage(building: string, floor: string) {
@@ -90,6 +94,7 @@ export class MapViewComponent implements AfterViewInit {
     this.floorMapRenderer.renderFloorMap(map);
     await this.routeRenderer.render(map, this.currentRoute, floor);
     this.routeRenderer.startAnimation();
+    this.currentFloor = floor;
   }
 
   private displayPin(map: CanvasRenderingContext2D, pathNode:PathNode) {
@@ -126,4 +131,39 @@ export class MapViewComponent implements AfterViewInit {
 
     return CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
   }
+
+  public async onClickTouch(event:MouseEvent) {
+
+    const point = [event.clientX - (event.currentTarget as HTMLElement).offsetLeft,
+      event.clientY - (event.currentTarget as HTMLElement).offsetTop];
+
+    if(this.currentRoute == null) {
+      return;
+    }
+
+    const items:MapItem[] = await this.routeRenderer.getInteractiveStairWellMapItems(this.currentRoute, this.currentFloor);
+
+    for(const mapItem of items) {
+      const polygon = [];
+      for(const section of mapItem.Sections) {
+        polygon.push([section.Start.X, section.Start.Y]);
+      }
+      if (pip(point, polygon)) {
+        await this.showNextFloor();
+        return;
+      }
+    }
+  }
+
+  private async showNextFloor() {
+    for (let i = 0; i < this.currentRoute.RouteSections.length-1; i++) {
+      if (this.currentRoute.RouteSections[i].Floor === this.currentFloor) {
+        this.currentFloor = this.currentRoute.RouteSections[i+1].Floor;
+        this.currentBuilding = this.currentRoute.RouteSections[i+1].Building;
+        await this.showFloor(this.currentBuilding, this.currentFloor);
+        return;
+      }
+    }
+  }
+
 }
