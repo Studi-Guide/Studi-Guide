@@ -48,7 +48,13 @@ export class MapViewComponent implements AfterViewInit {
 
   public async showDiscoveryLocation(location:string) {
     this.routeRenderer.stopAnimation();
-    const res = await this.dataService.get_location(location).toPromise<Location>();
+    const foundLocations = await this.dataService.get_locations_search(location).toPromise();
+    if (foundLocations === null || foundLocations.length === 0) {
+       throw new Error('Studi-Guide can\'t find ' + location);
+    }
+
+    // TODO show multiple locations in future
+    const res = foundLocations[0];
     this.currentBuilding = res.Building;
     const items = await this.dataService.get_map_floor(this.currentBuilding, res.Floor).toPromise();
     const locations = await this.dataService.get_locations(res.Building, res.Floor).toPromise<Location[]>();
