@@ -108,7 +108,7 @@ export class NaviRouteRenderer {
         this.pin.render(map,x-15, y-30, 30, 30);
     }
 
-    private async renderFlashingStairWell(map: CanvasRenderingContext2D, route:ReceivedRoute, floor :string) {
+    public async getInteractiveStairWellMapItems(route:ReceivedRoute, floor:string) {
         const pNodes:PathNode[] = [];
         for (let i = 0; i < route.RouteSections.length-1; i++) {
             if (route.RouteSections[i].Building !== route.RouteSections[i+1].Building)
@@ -130,6 +130,13 @@ export class NaviRouteRenderer {
                 mItems.push(mapItem);
             }
         }
+
+        return mItems;
+    }
+
+    private async renderFlashingStairWell(map: CanvasRenderingContext2D, route:ReceivedRoute, floor :string) {
+
+        const mItems:MapItem[] = await this.getInteractiveStairWellMapItems(route, floor);
 
         if (mItems.length === 0) {
             this.stopAnimation();
