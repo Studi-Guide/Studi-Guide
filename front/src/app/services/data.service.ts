@@ -3,8 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
 import {BuildingData, Location, MapItem} from '../building-objects-if';
 import {ReceivedRoute} from '../navigation/map-view/naviRouteRenderer';
-import {EMPTY, Observable, of} from 'rxjs';
-import {catchError, shareReplay} from 'rxjs/operators';
+import {CacheService} from './cache.service';
 
 @Injectable({
     providedIn: 'root'
@@ -13,53 +12,35 @@ export class DataService {
 
     baseUrl:string;// = SERVER_URL // "https://studi-guide.azurewebsites.net"; // for development: http://localhost:8090
 
-    cache = {};
-
-    constructor(private httpClient : HttpClient, private env : Env) {
+    constructor(private httpClient : HttpClient, private env : Env, private cache: CacheService) {
         this.baseUrl = env.serverUrl;
     }
 
     get_map_floor(building:string, floor:string){
-        return this.runGetRequest<MapItem[]>(this.baseUrl + '/buildings/' + building + '/floors/'+ floor + '/maps');
+        return this.cache.Get<MapItem[]>(this.httpClient, this.baseUrl + '/buildings/' + building + '/floors/'+ floor + '/maps');
     }
 
     get_route(start:string, end:string){
-        return this.runGetRequest<ReceivedRoute>(this.baseUrl + '/navigation/dir?start=' + start + '&end=' + end );
+        return this.cache.Get<ReceivedRoute>(this.httpClient, this.baseUrl + '/navigation/dir?start=' + start + '&end=' + end );
     }
 
     get_locations_search(name:string) {
-        return this.runGetRequest<Location[]>(this.baseUrl + '/locations?search=' + name );
+        return this.cache.Get<Location[]>(this.httpClient,this.baseUrl + '/locations?search=' + name );
     }
 
     get_location(name:string) {
-        return this.runGetRequest<Location>(this.baseUrl + '/locations/' + name );
+        return this.cache.Get<Location>(this.httpClient,this.baseUrl + '/locations/' + name );
     }
 
     get_locations(building:string, floor:string) {
-        return this.runGetRequest<Location[]>(this.baseUrl + '/buildings/'+ building +'/floors/' + floor + '/locations');
+        return this.cache.Get<Location[]>(this.httpClient,this.baseUrl + '/buildings/'+ building +'/floors/' + floor + '/locations');
     }
 
     get_building(name:string) {
-        return this.runGetRequest<BuildingData>(this.baseUrl + '/buildings/' + name);
+        return this.cache.Get<BuildingData>(this.httpClient,this.baseUrl + '/buildings/' + name);
     }
 
     get_map_item(pathnodeid:number) {
-        return this.runGetRequest<MapItem[]>(this.baseUrl + '/maps?pathnodeid=' + pathnodeid);
-    }
-
-    runGetRequest<T>(request: string): Observable<T> {
-        if (this.cache[request]) {
-            console.log('Returning cached value!')
-            return this.cache[request] as Observable<T>;
-        }
-
-        this.cache[request] = this.httpClient.get<T>(request).pipe(
-            shareReplay(1),
-            catchError(err => {
-                delete this.cache[request];
-                return EMPTY;
-            }));
-
-         return this.cache[request];
+        return this.cache.Get<MapItem[]>(this.httpClient,this.baseUrl + '/maps?pathnodeid=' + pathnodeid);
     }
 }
