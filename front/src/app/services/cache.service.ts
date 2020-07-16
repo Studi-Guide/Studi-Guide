@@ -12,7 +12,6 @@ export class CacheService {
 
     Get<T>(client: HttpClient,  request: string): Observable<T> {
         if (this.cache[request]) {
-            console.log('Returning cached value!')
             return this.cache[request] as Observable<T>;
         }
 
