@@ -3,7 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
 import {BuildingData, Location, MapItem} from '../building-objects-if';
 import {ReceivedRoute} from '../navigation/map-view/naviRouteRenderer';
-import {Observable, of} from "rxjs";
+import {EMPTY, Observable, of} from 'rxjs';
+import {catchError, shareReplay} from 'rxjs/operators';
 
 @Injectable({
     providedIn: 'root'
@@ -49,11 +50,16 @@ export class DataService {
     runGetRequest<T>(request: string): Observable<T> {
         if (this.cache[request]) {
             console.log('Returning cached value!')
-            return this.cache[request]
+            return this.cache[request] as Observable<T>;
         }
 
-        const observable = this.httpClient.get<T>(request);
-        this.cache[request] =observable;
-        return observable;
+        this.cache[request] = this.httpClient.get<T>(request).pipe(
+            shareReplay(1),
+            catchError(err => {
+                delete this.cache[request];
+                return EMPTY;
+            }));
+
+         return this.cache[request];
     }
 }
