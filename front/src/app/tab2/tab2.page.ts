@@ -25,4 +25,10 @@ export class Tab2Page implements AfterViewInit{
     this.calenderEvents = calenderRequestData.events;
     await loading.dismiss();
   }
+
+    async doRefreshEvents(event) {
+      const calenderRequestData = await this.moodleService.getCalenderEventsWeek(this.token).toPromise();
+      this.calenderEvents = calenderRequestData.events;
+      event.target.complete();
+    }
 }
