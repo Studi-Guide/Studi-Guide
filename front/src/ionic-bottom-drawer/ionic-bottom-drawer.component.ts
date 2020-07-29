@@ -31,7 +31,7 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   @Input() state: DrawerState = DrawerState.Bottom;
 
-  @Input() minimumHeight = 50;
+  @Input() minimumHeight = 100;
 
   @Output() stateChange: EventEmitter<DrawerState> = new EventEmitter<DrawerState>();
 
@@ -49,14 +49,18 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
 
+    console.log("ionic bottom drawer after init!");
 
     this.gesture = this.gestureCtrl.create({
       el: this.element.nativeElement,
       threshold: 15,
       gestureName: 'swipe-up',
       direction: "y",
-      onMove: (detail => { this.onMove(detail); })
+      onMove: (detail => { this.onMove(detail); }),
+      onStart: (detail => { this._handlePanStart(); }),
+      onEnd: (detail => { this._handlePanEnd(detail); })
     });
+    this.gesture.enable();
 
 
 
@@ -121,24 +125,24 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
         'touch-action', 'none');
     this._setDrawerState(this.state);
 
-    const hammer = new Hammer(this.element.nativeElement);
-    hammer.get('pan').set({ enable: true, direction: Hammer.DIRECTION_VERTICAL });
-    hammer.on('pan panstart panend', (ev: any) => {
-      if (this.disableDrag) {
-        return;
-      }
-
-      switch (ev.type) {
-        case 'panstart':
-          this._handlePanStart();
-          break;
-        case 'panend':
-          this._handlePanEnd(ev);
-          break;
-        default:
-          this._handlePan(ev);
-      }
-    });
+    // const hammer = new Hammer(this.element.nativeElement);
+    // hammer.get('pan').set({ enable: true, direction: Hammer.DIRECTION_VERTICAL });
+    // hammer.on('pan panstart panend', (ev: any) => {
+    //   if (this.disableDrag) {
+    //     return;
+    //   }
+    //
+    //   switch (ev.type) {
+    //     case 'panstart':
+    //       this._handlePanStart();
+    //       break;
+    //     case 'panend':
+    //       this._handlePanEnd(ev);
+    //       break;
+    //     default:
+    //       this._handlePan(ev);
+    //   }
+    // });
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -150,7 +154,7 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
   }
 
   private onMove(detail) {
-    console.log(detail.type, detail.currentX, detail.deltaX,  detail.velocityX, detail.currentY, detail.velocityY);
+    console.log(detail);
   }
 
   private _setDrawerState(state: DrawerState) {

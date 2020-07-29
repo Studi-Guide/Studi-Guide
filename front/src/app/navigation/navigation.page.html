@@ -1,6 +1,10 @@
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
 
+  <app-ionic-bottom-drawer>
+    <p>Bottom Drawer works!</p>
+  </app-ionic-bottom-drawer>
+
   <div id="map-content">
     <app-search-input
             (discovery)="onDiscovery($event)"
