@@ -27,7 +27,9 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   @Input() distanceTop = 100;
 
-  @Input() transition = '0.25s ease-in-out';
+  @Input() easing = 'ease-in-out';
+
+  @Input() duration = 300;
 
   @Input() state: DrawerState = DrawerState.Bottom;
 
@@ -66,91 +68,14 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
     this.animation = this.animationCtrl.create()
         .addElement(this.element.nativeElement)
-        .easing('ease-in-out')
-        .duration(300)
+        .easing(this.easing)
+        .duration(this.duration)
         .to('transform', 'translateY(100px)')
         .iterations(1);
-
-
-    // Codepen Snippet for Gesture
-    //
-    // JS
-    //   import { createGesture } from 'https://cdn.jsdelivr.net/npm/@ionic/core/dist/esm/index.mjs';
-    //
-    //   let p = document.querySelector('p');
-    //   const gesture = createGesture({
-    //     el: document.querySelector('.rectangle'),
-    //     direction: "y",
-    //     onMove: (detail) => { onMove(detail); }
-    //   })
-    //
-    //   gesture.enable(true);
-    //
-    //   const onMove = (detail) => {
-    //     const type = detail.type;
-    //     const currentX = detail.currentX;
-    //     const deltaX = detail.deltaX;
-    //     const velocityX = detail.velocityX;
-    //     const currentY = detail.currentY;
-    //     const deltaY = detail.deltaY;
-    //     const velocitY = detail.velocityY;
-    //
-    //     p.innerHTML = `
-    //   <div>Type: ${type}</div>
-    //   <div>Current X: ${currentX}</div>
-    //   <div>Delta X: ${deltaX}</div>
-    //   <div>Velocity X: ${velocityX}</div>
-    //   <div>Current Y: ${currentY}</div>
-    //   <div>Delta Y: ${deltaY}</div>
-    //   <div>Velocity Y: ${velocitY}</div>
-    // `
-    //   }
-    //
-    // HTML
-    //
-    // <html>
-    //     <head></head>
-    // <body>
-    // <div class="rectangle"></div>
-    //     <p>
-    //     Swipe to start tracking
-    // </p>
-    // </body>
-    // </html>
-    //
-    // CSS
-    //
-    // .rectangle {
-    //     width: 100px;
-    //     height: 400px;
-    //     background: rgba(0, 0, 255, 0.5);
-    //   }
-
-
-
 
     this.renderer.setStyle(this.element.nativeElement.querySelector('.ion-bottom-drawer-scrollable-content :first-child'),
         'touch-action', 'none');
     this._setDrawerState(this.state);
-
-    // const hammer = new Hammer(this.element.nativeElement);
-    // hammer.get('pan').set({ enable: true, direction: Hammer.DIRECTION_VERTICAL });
-    // hammer.on('pan panstart panend', (ev: any) => {
-    //   if (this.disableDrag) {
-    //     return;
-    //   }
-    //
-    //   switch (ev.type) {
-    //     case 'panstart':
-    //       this._handlePanStart();
-    //       break;
-    //     case 'panend':
-    //       this._handlePanEnd(ev);
-    //       break;
-    //     default:
-    //       this._handlePan(ev);
-    //   }
-    // });
   }
 
   ngOnChanges(changes: SimpleChanges) {
