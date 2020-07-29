@@ -9,7 +9,7 @@ import {
   Output,
   Renderer2, SimpleChanges
 } from '@angular/core';
-import {DomController, Platform, Gesture, GestureController} from "@ionic/angular";
+import {DomController, Platform, Gesture, GestureController, Animation, AnimationController} from "@ionic/angular";
 import {DrawerState} from "./drawer-state";
 
 @Component({
@@ -38,13 +38,15 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
   private _startPositionTop: number;
   private readonly _BOUNCE_DELTA = 30;
   private gesture: Gesture;
+  private animation: Animation;
 
   constructor(
       private element: ElementRef,
       private renderer: Renderer2,
       private domCtrl: DomController,
       private platform: Platform,
-      private gestureCtrl: GestureController
+      private gestureCtrl: GestureController,
+      private animationCtrl: AnimationController
   ) { }
 
   ngAfterViewInit() {
@@ -57,11 +59,17 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
       gestureName: 'swipe-up',
       direction: "y",
       onMove: (detail => { this.onMove(detail); }),
-      onStart: (detail => { this._handlePanStart(); }),
-      onEnd: (detail => { this._handlePanEnd(detail); })
+      onStart: (detail => {  this._handlePanStart(); }),
+      onEnd: (detail => { this.animation.play(); this._handlePanEnd(detail); })
     });
     this.gesture.enable();
 
+    this.animation = this.animationCtrl.create()
+        .addElement(this.element.nativeElement)
+        .easing('ease-in-out')
+        .duration(300)
+        .to('transform', 'translateY(100px)')
+        .iterations(1);
 
 
     // Codepen Snippet for Gesture
