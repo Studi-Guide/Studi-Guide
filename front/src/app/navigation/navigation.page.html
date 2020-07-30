@@ -2,15 +2,13 @@
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
 
   <app-ionic-bottom-drawer>
-    <p>Bottom Drawer works!</p>
-  </app-ionic-bottom-drawer>
-
-  <div id="map-content">
     <app-search-input
             (discovery)="onDiscovery($event)"
             (route)="onRoute($event)">
     </app-search-input>
+  </app-ionic-bottom-drawer>
 
+  <div id="map-content">
     <ion-text id="error-message" *ngIf="errorMessage" >
       <h5><span class="error">{{ errorMessage }}</span></h5>
       <p>

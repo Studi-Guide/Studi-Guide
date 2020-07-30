@@ -33,7 +33,7 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   @Input() duration = 300;
 
-  @Input() state: DrawerState = DrawerState.Bottom;
+  @Input() state: DrawerState = DrawerState.Docked;
 
   @Input() bounceDelta = 30;
 
