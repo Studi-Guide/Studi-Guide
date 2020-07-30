@@ -95,6 +95,13 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   private onMove(detail) {
     const newTop = this.startPositionTop + detail.deltaY;
+
+    if (newTop < this.distanceTop - this.bounceDelta) {
+      return;
+    } else if (newTop > (this.platform.height() - this.minimumHeight) + this.bounceDelta) {
+      return;
+    }
+
     this.animate(newTop);
   }
 
