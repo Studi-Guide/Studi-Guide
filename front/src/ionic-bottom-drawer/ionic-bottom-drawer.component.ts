@@ -5,11 +5,11 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  OnInit,
   Output,
-  Renderer2, SimpleChanges
+  Renderer2,
+  SimpleChanges
 } from '@angular/core';
-import {DomController, Platform, Gesture, GestureController, Animation, AnimationController} from "@ionic/angular";
+import {AnimationController, DomController, Gesture, GestureController, Platform} from "@ionic/angular";
 import {DrawerState} from "./drawer-state";
 
 @Component({
@@ -19,13 +19,15 @@ import {DrawerState} from "./drawer-state";
 })
 export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
+  @Input() distanceTop = 100;
+
   @Input() dockedHeight = 250;
+
+  @Input() minimumHeight = 125;
 
   @Input() shouldBounce = true;
 
   @Input() disableDrag = false;
-
-  @Input() distanceTop = 100;
 
   @Input() easing = 'ease-in-out';
 
@@ -33,14 +35,12 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   @Input() state: DrawerState = DrawerState.Bottom;
 
-  @Input() minimumHeight = 100;
+  @Input() bounceDelta = 30;
 
   @Output() stateChange: EventEmitter<DrawerState> = new EventEmitter<DrawerState>();
 
-  private _startPositionTop: number;
-  private readonly _BOUNCE_DELTA = 30;
+  private startPositionTop: number;
   private gesture: Gesture;
-  private animation: Animation;
 
   constructor(
       private element: ElementRef,
@@ -53,29 +53,18 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit() {
 
-    console.log("ionic bottom drawer after init!");
-
     this.gesture = this.gestureCtrl.create({
       el: this.element.nativeElement,
       threshold: 15,
       gestureName: 'swipe-up',
       direction: "y",
       onMove: (detail => { this.onMove(detail); }),
-      onStart: (detail => {  this._handlePanStart(); }),
-      onEnd: (detail => { this.animation.play(); this._handlePanEnd(detail); })
+      onStart: (detail => {  this.onStart(detail); }),
+      onEnd: (detail => { this.onEnd(detail); })
     });
     this.gesture.enable();
 
-    this.animation = this.animationCtrl.create()
-        .addElement(this.element.nativeElement)
-        .easing(this.easing)
-        .duration(this.duration)
-        .to('transform', 'translateY(100px)')
-        .iterations(1);
-
-    this.renderer.setStyle(this.element.nativeElement.querySelector('.ion-bottom-drawer-scrollable-content :first-child'),
-        'touch-action', 'none');
-    this._setDrawerState(this.state);
+    this.SetState(this.state);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -83,98 +72,57 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
       return;
     }
 
-    this._setDrawerState(changes.state.currentValue);
+    this.SetState(changes.state.currentValue);
+  }
+
+  public SetState(newState:DrawerState) {
+    this.state = newState;
+
+    switch (this.state) {
+      case DrawerState.Top:
+        this.animate(this.distanceTop);
+        break;
+      case DrawerState.Bottom:
+        this.animate(this.platform.height() - this.minimumHeight);
+        break;
+      case DrawerState.Docked:
+        this.animate(this.platform.height() - this.dockedHeight);
+        break;
+    }
   }
 
   private onMove(detail) {
-    console.log(detail);
+    const newTop = this.startPositionTop + detail.deltaY;
+    this.animate(newTop);
   }
 
-  private _setDrawerState(state: DrawerState) {
-    this.renderer.setStyle(this.element.nativeElement, 'transition', this.transition);
-    switch (state) {
-      case DrawerState.Bottom:
-        this._setTranslateY('calc(100vh - ' + this.minimumHeight + 'px)');
-        break;
-      case DrawerState.Docked:
-        this._setTranslateY((this.platform.height() - this.dockedHeight) + 'px');
-        break;
-      default:
-        this._setTranslateY(this.distanceTop + 'px');
-    }
+  private onStart(detail) {
+    this.startPositionTop = this.element.nativeElement.getBoundingClientRect().top;
   }
 
-  private _handlePanStart() {
-    this._startPositionTop = this.element.nativeElement.getBoundingClientRect().top;
-  }
+  private onEnd(detail) {
+    const newTop = this.startPositionTop + detail.deltaY;
+    const deltaTop = Math.abs(this.distanceTop - newTop);
+    const deltaDock = Math.abs(this.platform.height() - this.dockedHeight - newTop);
+    const deltaBot = Math.abs(this.platform.height() - this.minimumHeight - newTop);
 
-  private _handlePanEnd(ev) {
-    if (this.shouldBounce && ev.isFinal) {
-      this.renderer.setStyle(this.element.nativeElement, 'transition', this.transition);
-
-      switch (this.state) {
-        case DrawerState.Docked:
-          this._handleDockedPanEnd(ev);
-          break;
-        case DrawerState.Top:
-          this._handleTopPanEnd(ev);
-          break;
-        default:
-          this._handleBottomPanEnd(ev);
-      }
-    }
-    this.stateChange.emit(this.state);
-  }
-
-  private _handleTopPanEnd(ev) {
-    if (ev.deltaY > this._BOUNCE_DELTA) {
-      this.state = DrawerState.Docked;
+    if (deltaTop < deltaDock && deltaTop < deltaBot) {
+      this.SetState(DrawerState.Top);
+    } else if (deltaBot < deltaDock && deltaBot < deltaTop) {
+      this.SetState(DrawerState.Bottom);
     } else {
-      this._setTranslateY(this.distanceTop + 'px');
+      this.SetState(DrawerState.Docked);
     }
   }
 
-  private _handleDockedPanEnd(ev) {
-    const absDeltaY = Math.abs(ev.deltaY);
-    if (absDeltaY > this._BOUNCE_DELTA && ev.deltaY < 0) {
-      this.state = DrawerState.Top;
-    } else if (absDeltaY > this._BOUNCE_DELTA && ev.deltaY > 0) {
-      this.state = DrawerState.Bottom;
-    } else {
-      this._setTranslateY((this.platform.height() - this.dockedHeight) + 'px');
-    }
-  }
-
-  private _handleBottomPanEnd(ev) {
-    if (-ev.deltaY > this._BOUNCE_DELTA) {
-      this.state = DrawerState.Docked;
-    } else {
-      this._setTranslateY('calc(100vh - ' + this.minimumHeight + 'px)');
-    }
-  }
-
-  private _handlePan(ev) {
-    const pointerY = ev.center.y;
-    this.renderer.setStyle(this.element.nativeElement, 'transition', 'none');
-    if (pointerY > 0 && pointerY < this.platform.height()) {
-      if (ev.additionalEvent === 'panup' || ev.additionalEvent === 'pandown') {
-        const newTop = this._startPositionTop + ev.deltaY;
-        if (newTop >= this.distanceTop) {
-          this._setTranslateY(newTop + 'px');
-        } else if (newTop < this.distanceTop) {
-          this._setTranslateY(this.distanceTop + 'px');
-        }
-        if (newTop > this.platform.height() - this.minimumHeight) {
-          this._setTranslateY((this.platform.height() - this.minimumHeight) + 'px');
-        }
-      }
-    }
-  }
-
-  private _setTranslateY(value) {
-    this.domCtrl.write(() => {
-      this.renderer.setStyle(this.element.nativeElement, 'transform', 'translateY(' + value + ')');
-    });
+  private animate(position:number) {
+    this.animationCtrl.create()
+        .addElement(this.element.nativeElement)
+        .easing(this.easing)
+        .duration(this.duration)
+        .to('transform', 'translateY(' + position + 'px)')
+        .iterations(1)
+        .play();
   }
 
 }
