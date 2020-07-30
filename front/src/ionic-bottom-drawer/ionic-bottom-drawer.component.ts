@@ -89,6 +89,8 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
         this.animate(this.platform.height() - this.dockedHeight);
         break;
     }
+
+    this.stateChange.emit(this.state);
   }
 
   private onMove(detail) {
