@@ -19,7 +19,7 @@ import {DrawerState} from "./drawer-state";
 })
 export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
-  @Input() distanceTop = 100;
+  @Input() distanceTop = 50;
 
   @Input() dockedHeight = 250;
 
@@ -96,9 +96,11 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
   private onMove(detail) {
     const newTop = this.startPositionTop + detail.deltaY;
 
-    if (newTop < this.distanceTop - this.bounceDelta) {
+    if ((this.shouldBounce && newTop < this.distanceTop - this.bounceDelta)
+        || (!this.shouldBounce && newTop < this.distanceTop)) {
       return;
-    } else if (newTop > (this.platform.height() - this.minimumHeight) + this.bounceDelta) {
+    } else if ((this.shouldBounce && newTop > (this.platform.height() - this.minimumHeight) + this.bounceDelta)
+        || (!this.shouldBounce && newTop > (this.platform.height() - this.minimumHeight))) {
       return;
     }
 
