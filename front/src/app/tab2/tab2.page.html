@@ -22,7 +22,7 @@
                     </ion-card-header>
                     <ion-card-content>
                         <div [innerHTML]="event.description"></div>
-                        <ion-text color="secondary"  (click)="onLocationClick(event.location)">Location: {{event.location}}</ion-text>
+                        <ion-text id="location-entry"  (click)="onLocationClick(event.location)">Location: {{event.location}}</ion-text>
                     </ion-card-content>
                 </ion-card>
             </ion-item>
