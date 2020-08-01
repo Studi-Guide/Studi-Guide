@@ -135,8 +135,6 @@ export class MapViewComponent implements AfterViewInit {
       }
     }
 
-    mapHeightNeeded += 100;
-
     return CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
   }
 
