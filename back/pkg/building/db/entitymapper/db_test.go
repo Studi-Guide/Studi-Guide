@@ -44,7 +44,7 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
-	building, _ := client.Building.Create().SetName("main").Save(ctx)
+	building, _ := client.Building.Create().SetName("main").SetCampus("testcampus").Save(ctx)
 	testRooms = []Room{}
 	for i := 1; i < 4; i++ {
 
@@ -120,6 +120,7 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 				Floor:     strconv.Itoa(i),
 				Building:  "main",
 				PathNodes: []*navigation.PathNode{&patnode},
+				Campus:    "testcampus",
 			},
 			Location: Location{
 				Id:          entLocation.ID,

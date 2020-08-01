@@ -141,7 +141,7 @@ func (r *EntityMapper) storeRooms(rooms []Room) error {
 			continue
 		}
 
-		entBuilding, err := r.mapBuilding(rm.Location.Building)
+		entBuilding, err := r.mapBuilding(rm.Location.Building, rm.MapItem.Campus)
 		if err != nil {
 			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.PathNode.Id))
 		}
