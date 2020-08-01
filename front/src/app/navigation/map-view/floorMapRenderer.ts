@@ -4,7 +4,7 @@ import {Door, MapItem, Location} from '../../building-objects-if';
 //   providedIn: 'root'
 // })
 export class FloorMapRenderer {
-    private readonly objectsToBeVisualized: MapItem[];
+    public readonly objectsToBeVisualized: MapItem[];
     public readonly locationNames: Location[];
 
     constructor(objectsToBeVisualized: MapItem[],

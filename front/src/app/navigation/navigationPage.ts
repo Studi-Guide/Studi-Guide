@@ -40,6 +40,7 @@ export class NavigationPage implements  AfterViewInit{
                 if (this.mapView.CurrentRoute == null && this.mapView.CurrentBuilding == null) {
                     // STDG-138 load base map
                     await this.mapView.showDiscoveryMap('', 'EG')
+                    this.availableFloorsBtnIsVisible = true;
                 }
             }
         });
@@ -91,17 +92,30 @@ export class NavigationPage implements  AfterViewInit{
         let floors = new Array<string>();
 
         if (this.mapView.CurrentRoute == null) {
-            const building = await this.dataService.get_building(this.mapView.CurrentBuilding).toPromise<BuildingData>();
-            floors = floors.concat(building.Floors);
+            if (this.mapView.CurrentBuilding != null) {
+                const building = await this.dataService.get_building(this.mapView.CurrentBuilding).toPromise<BuildingData>();
+                floors = floors.concat(building.Floors);
+            }
+            else {
+                // STDG-138 discovery mode ... get all floor of all displayed buildings
+                let buildings = this.mapView.floorMapRenderer.objectsToBeVisualized.map(x => x.Building);
+                buildings = buildings.filter((n, i) => buildings.indexOf(n) === i);
+
+                for (const building of buildings) {
+                    const buildingData = await this.dataService.get_building(building).toPromise<BuildingData>();
+                    floors = floors.concat(buildingData.Floors);
+                }
+            }
         } else {
             // get all floors from all buildings on the route
             for (const routeSection of this.mapView.CurrentRoute.RouteSections) {
                 const building = await this.dataService.get_building(routeSection.Building).toPromise<BuildingData>();
                 floors = floors.concat(building.Floors);
             }
-            // distinct array
-            floors = floors.filter((n, i) => floors.indexOf(n) === i);
         }
+
+        // distinct array
+        floors = floors.filter((n, i) => floors.indexOf(n) === i);
 
         const availableFloorModal = await this.modalCtrl.create({
             component: AvailableFloorsPage,

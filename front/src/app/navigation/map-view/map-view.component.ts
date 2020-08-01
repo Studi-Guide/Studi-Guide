@@ -18,7 +18,7 @@ export class MapViewComponent implements AfterViewInit {
   private currentFloor:string;
   private clickThreshold = 20;
   private routeRenderer:NaviRouteRenderer;
-  private floorMapRenderer:FloorMapRenderer;
+  public floorMapRenderer:FloorMapRenderer;
 
   public get CurrentRoute():ReceivedRoute {
     return this.currentRoute;
@@ -70,9 +70,9 @@ export class MapViewComponent implements AfterViewInit {
       await this.renderNavigationPage(this.currentBuilding, floor);
     }
     else {
-      const res = await this.dataService.get_map_floor(building, floor).toPromise();
+      const res = await this.dataService.get_map_items('', floor, building).toPromise()
       const map = this.getCanvasMap(res);
-      const locations = await this.dataService.get_locations(this.currentBuilding, floor).toPromise<Location[]>();
+      const locations = await this.dataService.get_locations_items('', floor, building).toPromise();
       this.floorMapRenderer = new FloorMapRenderer(res, locations);
       this.floorMapRenderer.renderFloorMap(map);
     }
