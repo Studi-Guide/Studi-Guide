@@ -1,0 +1,9 @@
+ion-searchbar {
+  max-width: 680px;
+}
+
+ion-button {
+  width: calc(100% - 22px);
+  max-width: calc(680px - 22px);
+  margin: 0 12px;
+}

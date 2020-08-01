@@ -1,0 +1,26 @@
+<div *ngIf="!moodleUserIsLoggedIn">
+  <ion-header>
+    <ion-toolbar>
+      <ion-title>
+        Moodle Login
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" class="ion-justify-content-center">
+        <ion-searchbar #userNameInput animated="true" search-icon="person-circle-outline" inputmode="text"
+                       mode="ios" placeholder="user name" color="light" icon-color="dark"
+        ></ion-searchbar>
+        <ion-searchbar #passwordInput animated="true" search-icon="key-outline" inputmode="text"
+                       mode="ios" placeholder="password" color="light" icon-color="dark" type="password"
+        >
+          <!--  (keyup.enter)="emitDiscoveryEvent()"-->
+        </ion-searchbar>
+        <ion-button size="default" mode="ios" color="secondary" (click)="signIn()">
+          <h4>sign in</h4>
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</div>
