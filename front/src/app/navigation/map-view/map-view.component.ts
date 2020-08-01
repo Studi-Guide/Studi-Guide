@@ -65,7 +65,7 @@ export class MapViewComponent implements AfterViewInit {
     this.currentFloor = res.Floor;
   }
 
-  public async showFloor(building:string, floor:string) {
+  public async showFloor(floor:string, building:string) {
     this.routeRenderer.stopAnimation();
     if (this.currentRoute != null) {
       await this.renderNavigationPage(this.currentBuilding, floor);
@@ -78,6 +78,10 @@ export class MapViewComponent implements AfterViewInit {
       this.floorMapRenderer.renderFloorMap(map);
     }
     this.currentFloor = floor;
+  }
+
+  public async showDiscoveryMap(floor:string, buildings: string[]) {
+      this.dataService.get_locations_search()
   }
 
   private async renderNavigationPage(building: string, floor: string) {

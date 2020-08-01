@@ -37,6 +37,9 @@ export class NavigationPage implements  AfterViewInit{
                 await this.onDiscovery(params.location);
             }
         });
+
+        // STDG-138 load base map
+
     }
 
     public async onDiscovery(searchInput: string) {
@@ -109,7 +112,7 @@ export class NavigationPage implements  AfterViewInit{
         const data = await availableFloorModal.onDidDismiss()
         if (data.data) {
             this.progressIsVisible = true;
-            await this.mapView.showFloor(this.mapView.CurrentBuilding, data.data);
+            await this.mapView.showFloor(data.data, this.mapView.CurrentBuilding);
             this.progressIsVisible = false;
         }
     }
