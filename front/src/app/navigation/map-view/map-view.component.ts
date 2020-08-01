@@ -33,7 +33,6 @@ export class MapViewComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.routeRenderer = new NaviRouteRenderer(this.dataService);
-    // discovery init
   }
 
   public async showRoute(start:string, end:string) {
@@ -80,8 +79,13 @@ export class MapViewComponent implements AfterViewInit {
     this.currentFloor = floor;
   }
 
-  public async showDiscoveryMap(floor:string, buildings: string[]) {
-      this.dataService.get_locations_search()
+  public async showDiscoveryMap(campus:string, floor: string) {
+      const items = await this.dataService.get_map_items(campus, floor, '').toPromise();
+      const locations = await this.dataService.get_locations_items(campus, floor, '').toPromise();
+      const map = this.getCanvasMap(items);
+      this.floorMapRenderer = new FloorMapRenderer(items, locations);
+      this.floorMapRenderer.renderFloorMap(map);
+      this.currentFloor = floor;
   }
 
   private async renderNavigationPage(building: string, floor: string) {

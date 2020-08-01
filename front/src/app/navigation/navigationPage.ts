@@ -29,17 +29,20 @@ export class NavigationPage implements  AfterViewInit{
 
     }
 
-    ngAfterViewInit(): void {
+    async ngAfterViewInit(): Promise<void> {
         this.route.params.subscribe(async params =>
         {
             if (params != null && params.location != null && params.location.length > 0) {
                 this.searchInput.setDiscoverySearchbarValue(params.location);
                 await this.onDiscovery(params.location);
             }
+            else {
+                if (this.mapView.CurrentRoute == null && this.mapView.CurrentBuilding == null) {
+                    // STDG-138 load base map
+                    await this.mapView.showDiscoveryMap('', 'EG')
+                }
+            }
         });
-
-        // STDG-138 load base map
-
     }
 
     public async onDiscovery(searchInput: string) {

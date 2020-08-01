@@ -20,8 +20,16 @@ export class DataService {
         return this.cache.Get<MapItem[]>(this.httpClient, this.baseUrl + '/buildings/' + building + '/floors/'+ floor + '/maps');
     }
 
-    get_map_campus(campus:string) {
-        return this.cache.Get<MapItem[]>(this.httpClient, this.baseUrl + '/maps?campus=' + campus);
+    get_map_items(campus:string, floor: string, buildingstr:string) {
+        return this.cache.Get<MapItem[]>(
+            this.httpClient,
+            this.baseUrl + '/maps?floor=' + floor + '&campus=' + campus + '&building=' + buildingstr);
+    }
+
+    get_locations_items(campus:string, floor: string, buildingstr:string) {
+        return this.cache.Get<Location[]>(
+            this.httpClient,
+            this.baseUrl + '/locations?floor=' + floor + '&campus=' + campus + '&building=' + buildingstr);
     }
 
     get_route(start:string, end:string){
@@ -42,10 +50,6 @@ export class DataService {
 
     get_building(name:string) {
         return this.cache.Get<BuildingData>(this.httpClient,this.baseUrl + '/buildings/' + name);
-    }
-
-    get_buildings(name: string, campus: string, floor: string) {
-        return this.cache.Get<BuildingData[]>(this.httpClient, this.baseUrl + '/buildings')
     }
 
     get_map_item(pathnodeid:number) {
