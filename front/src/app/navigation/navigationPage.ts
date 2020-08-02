@@ -9,7 +9,6 @@ import {ActivatedRoute} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from "../../ionic-bottom-drawer/drawer-state";
 import {IonicBottomDrawerComponent} from "../../ionic-bottom-drawer/ionic-bottom-drawer.component";
-import {log} from "util";
 
 @Component({
     selector: 'app-navigation',
@@ -97,6 +96,8 @@ export class NavigationPage implements  AfterViewInit{
 
     public onMapViewLocationClick(location:Location) {
         console.log(location);
+        this.searchDrawer.SetState(DrawerState.Hidden);
+        this.locationDrawer.SetState(DrawerState.Docked);
     }
 
     async presentAvailableFloorModal() {

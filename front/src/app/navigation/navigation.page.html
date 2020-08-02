@@ -5,110 +5,107 @@
     <div class="nav-bottom-drawer">
       <div class="ion-padding-top"></div>
       <div class="nav-hbar"></div>
-
       <app-search-input
               (discovery)="onDiscovery($event)"
               (route)="onRoute($event)">
       </app-search-input>
-
       <ion-content color="light" #drawerContent>
 
-        <ion-grid>
-          <ion-list-header>Current Campus</ion-list-header>
-          <ion-row>
-            <ion-col>
-              <ion-button class="square ion-no-padding" shape="round">
-                <ion-icon slot="icon-only" name="business-outline" size="large"></ion-icon>
-              </ion-button>
-            </ion-col>
-            <ion-col>
-              <ion-button class="square ion-no-padding" shape="round" color="medium" (click)="presentAvailableFloorModal()">
-                <ion-icon slot="icon-only" name="layers-outline" size="large"></ion-icon>
-              </ion-button>
-            </ion-col>
-            <ion-col>
-              <ion-button class="square ion-no-padding" shape="round" color="dark">
-                <ion-icon slot="icon-only" name="library-outline" size="large"></ion-icon>
-              </ion-button>
-            </ion-col>
-            <ion-col></ion-col>
-          </ion-row>
-        </ion-grid>
+          <ion-grid>
+            <ion-list-header>Current Campus</ion-list-header>
+            <ion-row>
+              <ion-col>
+                <ion-button class="square ion-no-padding" shape="round">
+                  <ion-icon slot="icon-only" name="business-outline" size="large"></ion-icon>
+                </ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button class="square ion-no-padding" shape="round" color="medium" (click)="presentAvailableFloorModal()">
+                  <ion-icon slot="icon-only" name="layers-outline" size="large"></ion-icon>
+                </ion-button>
+              </ion-col>
+              <ion-col>
+                <ion-button class="square ion-no-padding" shape="round" color="dark">
+                  <ion-icon slot="icon-only" name="library-outline" size="large"></ion-icon>
+                </ion-button>
+              </ion-col>
+              <ion-col></ion-col>
+            </ion-row>
+          </ion-grid>
 
-        <ion-list class="ion-no-padding">
-          <ion-list-header color="light">
-            Recent Searches
-          </ion-list-header>
-          <ion-item color="light">
-            <ion-avatar slot="start">
-              <ion-icon name="color-wand-outline"></ion-icon>
-            </ion-avatar>
-            <ion-label>
-              <h2>Professor Holz</h2>
-              <h3>Ich und mein Holz</h3>
-            </ion-label>
-          </ion-item>
-          <ion-item color="light">
-            <ion-avatar slot="start">
-              <ion-icon name="calculator-outline"></ion-icon>
-            </ion-avatar>
-            <ion-label>
-              <h2>Rechenzentrum</h2>
-              <h3>Zeigt her euren Studi-Guide!</h3>
-            </ion-label>
-          </ion-item>
-          <ion-item color="light">
-            <ion-avatar slot="start">
-              <ion-icon name="book-outline"></ion-icon>
-            </ion-avatar>
-            <ion-label>
-              <h2>Ohm Professional School</h2>
-              <h3>Master im Blended-Learning Konzept</h3>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-        <ion-list class="ion-no-padding">
-          <ion-list-header color="light">
-            Choose a Campus
-          </ion-list-header>
-          <ion-item color="light">
-            <ion-label>
-              <h2>Technische Hochschule Nürnberg</h2>
-              <h3>Keßlerplatz 12</h3>
-            </ion-label>
-          </ion-item>
-          <ion-item color="light">
-            <ion-label>
-              <h2>Technische Hochschule Fakultät Design</h2>
-              <h3>Wassertorstraße 10</h3>
-            </ion-label>
-          </ion-item>
-          <ion-item color="light">
-            <ion-label>
-              <h2>Technische Hochschule Fakultät Informatik</h2>
-              <h3>Hohfelderstraße 40</h3>
-            </ion-label>
-          </ion-item>
-          <ion-item color="light">
-            <ion-label>
-              <h2>OHM Professional School</h2>
-              <h3>Keßlerstraße 1</h3>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-        <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
-        <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
-        <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
-      </ion-content>
-
+          <ion-list class="ion-no-padding">
+            <ion-list-header color="light">
+              Recent Searches
+            </ion-list-header>
+            <ion-item color="light">
+              <ion-avatar slot="start">
+                <ion-icon name="color-wand-outline"></ion-icon>
+              </ion-avatar>
+              <ion-label>
+                <h2>Professor Holz</h2>
+                <h3>Ich und mein Holz</h3>
+              </ion-label>
+            </ion-item>
+            <ion-item color="light">
+              <ion-avatar slot="start">
+                <ion-icon name="calculator-outline"></ion-icon>
+              </ion-avatar>
+              <ion-label>
+                <h2>Rechenzentrum</h2>
+                <h3>Zeigt her euren Studi-Guide!</h3>
+              </ion-label>
+            </ion-item>
+            <ion-item color="light">
+              <ion-avatar slot="start">
+                <ion-icon name="book-outline"></ion-icon>
+              </ion-avatar>
+              <ion-label>
+                <h2>Ohm Professional School</h2>
+                <h3>Master im Blended-Learning Konzept</h3>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+          <ion-list class="ion-no-padding">
+            <ion-list-header color="light">
+              Choose a Campus
+            </ion-list-header>
+            <ion-item color="light">
+              <ion-label>
+                <h2>Technische Hochschule Nürnberg</h2>
+                <h3>Keßlerplatz 12</h3>
+              </ion-label>
+            </ion-item>
+            <ion-item color="light">
+              <ion-label>
+                <h2>Technische Hochschule Fakultät Design</h2>
+                <h3>Wassertorstraße 10</h3>
+              </ion-label>
+            </ion-item>
+            <ion-item color="light">
+              <ion-label>
+                <h2>Technische Hochschule Fakultät Informatik</h2>
+                <h3>Hohfelderstraße 40</h3>
+              </ion-label>
+            </ion-item>
+            <ion-item color="light">
+              <ion-label>
+                <h2>OHM Professional School</h2>
+                <h3>Keßlerstraße 1</h3>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+          <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+          <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+          <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+        </ion-content>
     </div>
   </app-ionic-bottom-drawer>
 
-  <app-ionic-bottom-drawer hidden #locationDrawer>
+  <app-ionic-bottom-drawer #locationDrawer state="DrawerState.Hidden">
     <div class="nav-bottom-drawer">
       <div class="ion-padding-top"></div>
       <div class="nav-hbar"></div>
-      <ion-content>
+      <ion-content color="light">
 
       </ion-content>
     </div>
