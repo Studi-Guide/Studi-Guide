@@ -1,13 +1,13 @@
 import {BuildingData} from '../building-objects-if';
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
-import {ModalController} from '@ionic/angular';
+import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 import {MapViewComponent} from './map-view/map-view.component';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
-
+import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 @Component({
     selector: 'app-navigation',
     templateUrl: 'navigation.page.html',
@@ -18,6 +18,7 @@ export class NavigationPage implements  AfterViewInit{
 
     @ViewChild(MapViewComponent) mapView: MapViewComponent;
     @ViewChild(SearchInputComponent) searchInput: SearchInputComponent;
+    @ViewChild('drawerContent') drawerContent : IonContent;
 
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
@@ -85,6 +86,14 @@ export class NavigationPage implements  AfterViewInit{
             this.handleInputError(ex, inputError.length === 0 ? routeInput.toString() : inputError);
         } finally {
             this.progressIsVisible = false;
+        }
+    }
+
+    public onDrawerStateChange(state:DrawerState) {
+        if (state == DrawerState.Top) {
+            this.drawerContent.scrollY = true;
+        } else {
+            this.drawerContent.scrollY = false;
         }
     }
 

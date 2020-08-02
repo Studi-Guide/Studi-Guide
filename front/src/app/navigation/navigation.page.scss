@@ -47,3 +47,24 @@ ion-progress-bar {
   border-left: 2px solid #9d9fa6;
   height: 38px;
 }
+
+.nav-hbar {
+    border-top: 2px solid var(--ion-color-medium, #9d9fa6);
+    border-bottom: 2px solid var(--ion-color-medium, #9d9fa6);
+    border-radius: 2px;
+    height: 0px;
+    width: auto;
+    margin: 0 45% 0 45%;
+}
+
+.nav-bottom-drawer {
+    background-color: var(--ion-color-light, #f4f5f8);
+    height: 100%;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.square {
+    height: 64px;
+    width: 64px;
+}
