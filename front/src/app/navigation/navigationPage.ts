@@ -1,4 +1,4 @@
-import {BuildingData} from '../building-objects-if';
+import {BuildingData, Location} from '../building-objects-if';
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
@@ -8,6 +8,8 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from "../../ionic-bottom-drawer/drawer-state";
+import {IonicBottomDrawerComponent} from "../../ionic-bottom-drawer/ionic-bottom-drawer.component";
+import {log} from "util";
 
 @Component({
     selector: 'app-navigation',
@@ -20,6 +22,8 @@ export class NavigationPage implements  AfterViewInit{
     @ViewChild(MapViewComponent) mapView: MapViewComponent;
     @ViewChild(SearchInputComponent) searchInput: SearchInputComponent;
     @ViewChild('drawerContent') drawerContent : IonContent;
+    @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
+    @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
 
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
@@ -89,6 +93,10 @@ export class NavigationPage implements  AfterViewInit{
         } else {
             this.drawerContent.scrollY = false;
         }
+    }
+
+    public onMapViewLocationClick(location:Location) {
+        console.log(location);
     }
 
     async presentAvailableFloorModal() {

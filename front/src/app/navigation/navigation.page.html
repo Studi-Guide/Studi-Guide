@@ -1,7 +1,7 @@
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
 
-  <app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)">
+  <app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)" #searchDrawer>
     <div class="nav-bottom-drawer">
       <div class="ion-padding-top"></div>
       <div class="nav-hbar"></div>
@@ -104,6 +104,16 @@
     </div>
   </app-ionic-bottom-drawer>
 
+  <app-ionic-bottom-drawer hidden #locationDrawer>
+    <div class="nav-bottom-drawer">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+      <ion-content>
+
+      </ion-content>
+    </div>
+  </app-ionic-bottom-drawer>
+
   <div id="map-content">
     <ion-text id="error-message" *ngIf="errorMessage" >
       <h5><span class="error">{{ errorMessage }}</span></h5>
@@ -117,7 +127,7 @@
       </p>
     </ion-text>
     <div id="canvas-wrapper">
-      <app-map-view></app-map-view>
+      <app-map-view (locationClick)="onMapViewLocationClick($event)"></app-map-view>
     </div>
   </div>
 </ion-content>
