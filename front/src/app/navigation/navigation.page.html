@@ -1,7 +1,7 @@
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
 
-  <app-ionic-bottom-drawer>
+  <app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)">
     <div class="nav-bottom-drawer">
       <div class="ion-padding-top"></div>
       <div class="nav-hbar"></div>
@@ -11,7 +11,30 @@
               (route)="onRoute($event)">
       </app-search-input>
 
-      <ion-content color="light">
+      <ion-content color="light" #drawerContent>
+
+        <ion-grid>
+          <ion-list-header>Current Campus</ion-list-header>
+          <ion-row>
+            <ion-col>
+              <ion-button class="square ion-no-padding" shape="round">
+                <ion-icon slot="icon-only" name="business-outline" size="large"></ion-icon>
+              </ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button class="square ion-no-padding" shape="round" color="medium" (click)="presentAvailableFloorModal()">
+                <ion-icon slot="icon-only" name="layers-outline" size="large"></ion-icon>
+              </ion-button>
+            </ion-col>
+            <ion-col>
+              <ion-button class="square ion-no-padding" shape="round" color="dark">
+                <ion-icon slot="icon-only" name="library-outline" size="large"></ion-icon>
+              </ion-button>
+            </ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+        </ion-grid>
+
         <ion-list class="ion-no-padding">
           <ion-list-header color="light">
             Recent Searches
@@ -75,6 +98,7 @@
         </ion-list>
         <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
         <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+        <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
       </ion-content>
 
     </div>
@@ -96,10 +120,4 @@
       <app-map-view></app-map-view>
     </div>
   </div>
-
-  <ion-fab vertical="bottom" horizontal="start" slot="fixed">
-    <ion-fab-button *ngIf="availableFloorsBtnIsVisible" (click)="presentAvailableFloorModal()" color="dark">
-      <ion-icon name="layers"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
 </ion-content>
