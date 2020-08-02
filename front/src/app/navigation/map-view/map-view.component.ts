@@ -178,6 +178,11 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
+  public focusPathNode(node: PathNode)
+  {
+
+  }
+
   private async showNextFloor() {
     for (let i = 0; i < this.currentRoute.RouteSections.length-1; i++) {
       if (this.currentRoute.RouteSections[i].Floor === this.currentFloor) {
@@ -188,5 +193,4 @@ export class MapViewComponent implements AfterViewInit {
       }
     }
   }
-
 }
