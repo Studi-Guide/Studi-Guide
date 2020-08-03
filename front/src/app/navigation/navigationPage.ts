@@ -105,6 +105,11 @@ export class NavigationPage implements  AfterViewInit{
         this.locationDrawer.SetState(DrawerState.Docked);
     }
 
+    public onCloseLocationDrawer(event:any) {
+        this.locationDrawer.SetState(DrawerState.Hidden);
+        this.searchDrawer.SetState(DrawerState.Docked);
+    }
+
     async presentAvailableFloorModal() {
         let floors = new Array<string>();
 
