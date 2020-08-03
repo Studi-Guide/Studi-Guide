@@ -1,4 +1,4 @@
-import {BuildingData, Location} from '../building-objects-if';
+import {BuildingData, Location, PathNode} from '../building-objects-if';
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
@@ -27,11 +27,11 @@ export class NavigationPage implements  AfterViewInit{
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
     public errorMessage: string;
+    public clickedLocation:Location;
 
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
                 private  route: ActivatedRoute) {
-
     }
 
     ngAfterViewInit(): void {
@@ -101,6 +101,7 @@ export class NavigationPage implements  AfterViewInit{
 
     public onMapViewLocationClick(location:Location) {
         console.log(location);
+        this.clickedLocation = location;
         this.searchDrawer.SetState(DrawerState.Hidden);
         this.locationDrawer.SetState(DrawerState.Docked);
     }

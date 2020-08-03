@@ -109,7 +109,7 @@
         <ion-grid>
           <ion-row class="ion-justify-content-between ion-align-self-center">
             <ion-col size="auto">
-              <ion-list-header>Clicked Location</ion-list-header>
+              <ion-list-header *ngIf="clickedLocation !== undefined">{{clickedLocation.Name}}</ion-list-header>
             </ion-col>
             <ion-col class="ion-justify-content-end ion-padding-horizontal">
               <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseLocationDrawer($event)">
