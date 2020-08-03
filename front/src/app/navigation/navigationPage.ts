@@ -87,7 +87,12 @@ export class NavigationPage implements  AfterViewInit{
     }
 
     public onDrawerStateChange(state:DrawerState) {
-        if (state == DrawerState.Top) {
+        // in case the view is not initialized
+        if (this.drawerContent === undefined) {
+            return;
+        }
+
+        if (state === DrawerState.Top) {
             this.drawerContent.scrollY = true;
         } else {
             this.drawerContent.scrollY = false;

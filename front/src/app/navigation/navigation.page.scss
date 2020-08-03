@@ -64,7 +64,17 @@ ion-progress-bar {
     height: inherit;
 }
 
-.square {
+.square-md {
     height: 64px;
     width: 64px;
+}
+
+.square-sm {
+    height: 32px;
+    width: 32px;
+}
+
+.square-xs {
+    height: 16px;
+    width: 16px;
 }

@@ -15,17 +15,17 @@
             <ion-list-header>Current Campus</ion-list-header>
             <ion-row>
               <ion-col>
-                <ion-button class="square ion-no-padding" shape="round">
+                <ion-button class="square-md ion-no-padding" shape="round">
                   <ion-icon slot="icon-only" name="business-outline" size="large"></ion-icon>
                 </ion-button>
               </ion-col>
               <ion-col>
-                <ion-button class="square ion-no-padding" shape="round" color="medium" (click)="presentAvailableFloorModal()">
+                <ion-button class="square-md ion-no-padding" shape="round" color="medium" (click)="presentAvailableFloorModal()">
                   <ion-icon slot="icon-only" name="layers-outline" size="large"></ion-icon>
                 </ion-button>
               </ion-col>
               <ion-col>
-                <ion-button class="square ion-no-padding" shape="round" color="dark">
+                <ion-button class="square-md ion-no-padding" shape="round" color="dark">
                   <ion-icon slot="icon-only" name="library-outline" size="large"></ion-icon>
                 </ion-button>
               </ion-col>
@@ -106,7 +106,18 @@
       <div class="ion-padding-top"></div>
       <div class="nav-hbar"></div>
       <ion-content color="light">
-
+        <ion-grid>
+          <ion-row class="ion-justify-content-between ion-align-self-center">
+            <ion-col size="auto">
+              <ion-list-header>Clicked Location</ion-list-header>
+            </ion-col>
+            <ion-col class="ion-justify-content-end ion-padding-horizontal">
+              <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="dark">
+                <ion-icon slot="icon-only" name="library-outline" size="small"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
       </ion-content>
     </div>
   </app-ionic-bottom-drawer>
