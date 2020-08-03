@@ -42,6 +42,12 @@ export class NavigationPage implements  AfterViewInit{
                     // STDG-138 load base map
                     await this.mapView.showDiscoveryMap('', 'EG')
                     this.availableFloorsBtnIsVisible = true;
+
+                    // Scroll to mid
+                    const div = document.getElementById('canvas-wrapper');
+
+                    // Coordinates of KA.013
+                    div.scrollBy(345 - 125,600 - 125);
                 }
             }
         });
@@ -90,7 +96,7 @@ export class NavigationPage implements  AfterViewInit{
     }
 
     public onDrawerStateChange(state:DrawerState) {
-        if (state == DrawerState.Top) {
+        if (state === DrawerState.Top) {
             this.drawerContent.scrollY = true;
         } else {
             this.drawerContent.scrollY = false;
