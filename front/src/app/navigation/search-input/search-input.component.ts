@@ -66,4 +66,7 @@ export class SearchInputComponent implements OnInit {
     }
   }
 
+  public setDiscoverySearchbarValue(value:string) {
+    this.discoverySearchbar.value = value;
+  }
 }

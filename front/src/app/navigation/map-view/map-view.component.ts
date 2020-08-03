@@ -160,12 +160,13 @@ export class MapViewComponent implements AfterViewInit {
 
     // Track clicks/touches on locations
     const locations:Location[] = this.floorMapRenderer.locationNames
-    for(const location of locations) {
-      if (Math.abs(location.PathNode.Coordinate.X - point[0]) < this.clickThreshold
-          && Math.abs(location.PathNode.Coordinate.Y - point [1]) < this.clickThreshold)
-      {
-        alert(location.Name + '\r\n' + location.Description);
-        return;
+    if (locations != null) {
+      for (const location of locations) {
+        if (Math.abs(location.PathNode.Coordinate.X - point[0]) < this.clickThreshold
+            && Math.abs(location.PathNode.Coordinate.Y - point [1]) < this.clickThreshold) {
+          alert(location.Name + '\r\n' + location.Description);
+          return;
+        }
       }
     }
   }
