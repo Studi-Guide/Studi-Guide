@@ -16,7 +16,7 @@ export class MapViewComponent implements AfterViewInit {
   private currentBuilding: string;
   private currentRoute:ReceivedRoute;
   private currentFloor:string;
-
+  private clickThreshold = 20;
   private routeRenderer:NaviRouteRenderer;
   private floorMapRenderer:FloorMapRenderer;
 
@@ -143,20 +143,30 @@ export class MapViewComponent implements AfterViewInit {
     const point = [event.clientX - (event.currentTarget as HTMLElement).offsetLeft,
       event.clientY - (event.currentTarget as HTMLElement).offsetTop];
 
-    if(this.currentRoute == null) {
-      return;
+    if(this.currentRoute != null) {
+      const items: MapItem[] = await this.routeRenderer.getInteractiveStairWellMapItems(this.currentRoute, this.currentFloor);
+
+      for (const mapItem of items) {
+        const polygon = [];
+        for (const section of mapItem.Sections) {
+          polygon.push([section.Start.X, section.Start.Y]);
+        }
+        if (pip(point, polygon)) {
+          await this.showNextFloor();
+          return;
+        }
+      }
     }
 
-    const items:MapItem[] = await this.routeRenderer.getInteractiveStairWellMapItems(this.currentRoute, this.currentFloor);
-
-    for(const mapItem of items) {
-      const polygon = [];
-      for(const section of mapItem.Sections) {
-        polygon.push([section.Start.X, section.Start.Y]);
-      }
-      if (pip(point, polygon)) {
-        await this.showNextFloor();
-        return;
+    // Track clicks/touches on locations
+    const locations:Location[] = this.floorMapRenderer.locationNames
+    if (locations != null) {
+      for (const location of locations) {
+        if (Math.abs(location.PathNode.Coordinate.X - point[0]) < this.clickThreshold
+            && Math.abs(location.PathNode.Coordinate.Y - point [1]) < this.clickThreshold) {
+          alert(location.Name + '\r\n' + location.Description);
+          return;
+        }
       }
     }
   }

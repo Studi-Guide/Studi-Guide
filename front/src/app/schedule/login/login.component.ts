@@ -1,4 +1,6 @@
+import { Storage } from '@ionic/storage';
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {MoodleService} from '../../services/moodle.service';
 
 class MoodleUser {
   private name: string;
@@ -11,16 +13,8 @@ class MoodleUser {
   setPassword(value: string) {
     this.password = value;
   }
-  getName(): string {
-    return this.name;
-  }
   getPassword(): string {
     return this.password;
-  }
-  signIn() {
-    // TODO implement login at moodle
-    alert('sign in');
-    this.signedIn = true;
   }
   isSignedIn(): boolean {
     return this.signedIn;
@@ -41,7 +35,7 @@ export class LoginComponent implements OnInit {
   private user: MoodleUser;
   public moodleUserIsLoggedIn;
 
-  constructor() {
+  constructor(private storage: Storage, private moodleService: MoodleService) {
     this.user = new MoodleUser();
   }
 
@@ -55,14 +49,17 @@ export class LoginComponent implements OnInit {
   signIn() {
     this.user.setName(this.userNameInput.value);
     this.user.setPassword(this.passwordInput.value);
-    console.log('user: '+ this.user.getName()+'\npassword: '+this.user.getPassword());
-    this.user.signIn();
+    // TODO add MoodleTokenPersistence
+    const tokenToPersist = this.moodleService.getLoginToken(this.userNameInput.value, this.passwordInput.value).toPromise();
+    // this.storage.set(this.userNameInput.value, tokenToPersist);
+
     this.moodleUserIsLoggedIn = this.isUserSignedIn();
     this.isSignedIn.emit(this.isUserSignedIn());
   }
 
   public isUserSignedIn() {
-    return this.user.isSignedIn();
+    // TODO check if a token with user name is persisted
+    return true;
   }
 
 }
