@@ -27,7 +27,18 @@ export class NavigationPage implements  AfterViewInit{
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
     public errorMessage: string;
-    public clickedLocation:Location;
+    public clickedLocation:Location = {
+        Building: '',
+        Description: '',
+        Floor: '',
+        Id: 0,
+        Name: '',
+        PathNode: {
+            Coordinate: {X: 0, Y: 0, Z: 0},
+            Id: 0
+            },
+        Tags: []
+    };
 
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
