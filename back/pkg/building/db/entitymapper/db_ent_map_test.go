@@ -129,6 +129,7 @@ func TestMapRoom(t *testing.T) {
 			},
 			Floor:    "1",
 			Building: "main",
+			Campus:   "testcampus",
 		},
 
 		Location: Location{
@@ -239,6 +240,7 @@ func TestMapRoom(t *testing.T) {
 			},
 			Floor:    "1",
 			Building: "main",
+			Campus:   "testcampus",
 		},
 
 		Location: Location{
@@ -365,6 +367,7 @@ func TestMapRoom(t *testing.T) {
 			},
 			Floor:    "1",
 			Building: "main",
+			Campus:   "testcampus",
 		},
 		Location: Location{
 			Id:          2,
@@ -780,7 +783,7 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 		t.Error(err)
 	}
 
-	building, err := r.client.Building.Create().SetName("building").Save(r.context)
+	building, err := r.client.Building.Create().SetName("building").SetCampus("testcampus").Save(r.context)
 	if err != nil {
 		t.Error(err)
 	}

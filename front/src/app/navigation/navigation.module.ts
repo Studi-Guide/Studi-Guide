@@ -1,11 +1,11 @@
 import { IonicModule } from '@ionic/angular';
-import { RouterModule } from '@angular/router';
+import { RouterModule} from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavigationPage } from './navigationPage';
-import {SearchInputComponent} from "./search-input/search-input.component";
-import {MapViewComponent} from "./map-view/map-view.component";
+import {SearchInputComponent} from './search-input/search-input.component';
+import {MapViewComponent} from './map-view/map-view.component';
 import {IonicBottomDrawerModule} from "../../ionic-bottom-drawer/ionic-bottom-drawer.module";
 
 @NgModule({

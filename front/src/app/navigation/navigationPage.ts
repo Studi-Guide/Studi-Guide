@@ -7,8 +7,8 @@ import {MapViewComponent} from './map-view/map-view.component';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
-import {DrawerState} from "../../ionic-bottom-drawer/drawer-state";
-import {IonicBottomDrawerComponent} from "../../ionic-bottom-drawer/ionic-bottom-drawer.component";
+import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
+import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 
 @Component({
     selector: 'app-navigation',
@@ -45,12 +45,25 @@ export class NavigationPage implements  AfterViewInit{
                 private  route: ActivatedRoute) {
     }
 
-    ngAfterViewInit(): void {
+    async ngAfterViewInit(): Promise<void> {
         this.route.params.subscribe(async params =>
         {
             if (params != null && params.location != null && params.location.length > 0) {
                 this.searchInput.setDiscoverySearchbarValue(params.location);
                 await this.onDiscovery(params.location);
+            }
+            else {
+                if (this.mapView.CurrentRoute == null && this.mapView.CurrentBuilding == null) {
+                    // STDG-138 load base map
+                    await this.mapView.showDiscoveryMap('', 'EG')
+                    this.availableFloorsBtnIsVisible = true;
+
+                    // Scroll to mid
+                    const div = document.getElementById('canvas-wrapper');
+
+                    // Coordinates of KA.013
+                    div.scrollBy(345 - 50,600 - 125);
+                }
             }
         });
     }
@@ -126,17 +139,30 @@ export class NavigationPage implements  AfterViewInit{
         let floors = new Array<string>();
 
         if (this.mapView.CurrentRoute == null) {
-            const building = await this.dataService.get_building(this.mapView.CurrentBuilding).toPromise<BuildingData>();
-            floors = floors.concat(building.Floors);
+            if (this.mapView.CurrentBuilding != null) {
+                const building = await this.dataService.get_building(this.mapView.CurrentBuilding).toPromise<BuildingData>();
+                floors = floors.concat(building.Floors);
+            }
+            else {
+                // STDG-138 discovery mode ... get all floor of all displayed buildings
+                let buildings = this.mapView.floorMapRenderer.objectsToBeVisualized.map(x => x.Building);
+                buildings = buildings.filter((n, i) => buildings.indexOf(n) === i);
+
+                for (const building of buildings) {
+                    const buildingData = await this.dataService.get_building(building).toPromise<BuildingData>();
+                    floors = floors.concat(buildingData.Floors);
+                }
+            }
         } else {
             // get all floors from all buildings on the route
             for (const routeSection of this.mapView.CurrentRoute.RouteSections) {
                 const building = await this.dataService.get_building(routeSection.Building).toPromise<BuildingData>();
                 floors = floors.concat(building.Floors);
             }
-            // distinct array
-            floors = floors.filter((n, i) => floors.indexOf(n) === i);
         }
+
+        // distinct array
+        floors = floors.filter((n, i) => floors.indexOf(n) === i);
 
         const availableFloorModal = await this.modalCtrl.create({
             component: AvailableFloorsPage,
@@ -150,7 +176,7 @@ export class NavigationPage implements  AfterViewInit{
         const data = await availableFloorModal.onDidDismiss()
         if (data.data) {
             this.progressIsVisible = true;
-            await this.mapView.showFloor(this.mapView.CurrentBuilding, data.data);
+            await this.mapView.showFloor(data.data, this.mapView.CurrentBuilding);
             this.progressIsVisible = false;
         }
     }

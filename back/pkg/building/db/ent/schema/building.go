@@ -16,6 +16,7 @@ type Building struct {
 func (Building) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("Name").Unique(),
+		field.String("Campus"),
 	}
 }
 
