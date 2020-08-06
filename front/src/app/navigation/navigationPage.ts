@@ -7,8 +7,8 @@ import {MapViewComponent} from './map-view/map-view.component';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
-import {DrawerState} from "../../ionic-bottom-drawer/drawer-state";
-import {IonicBottomDrawerComponent} from "../../ionic-bottom-drawer/ionic-bottom-drawer.component";
+import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
+import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 
 @Component({
     selector: 'app-navigation',
@@ -62,7 +62,7 @@ export class NavigationPage implements  AfterViewInit{
                     const div = document.getElementById('canvas-wrapper');
 
                     // Coordinates of KA.013
-                    div.scrollBy(345 - 125,600 - 125);
+                    div.scrollBy(345 - 50,600 - 125);
                 }
             }
         });
