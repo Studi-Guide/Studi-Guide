@@ -88,6 +88,9 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
       case DrawerState.Docked:
         this.animate(this.platform.height() - this.dockedHeight);
         break;
+      case DrawerState.Hidden:
+        this.animate(this.platform.height());
+        break;
     }
 
     this.stateChange.emit(this.state);

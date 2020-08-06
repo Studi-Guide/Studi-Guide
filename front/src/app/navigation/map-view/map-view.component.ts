@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {DataService} from '../../services/data.service';
 import {CanvasResolutionConfigurator} from '../../services/CanvasResolutionConfigurator';
 import {Floor, Location, MapItem, PathNode} from '../../building-objects-if';
@@ -19,6 +19,8 @@ export class MapViewComponent implements AfterViewInit {
   private clickThreshold = 20;
   private routeRenderer:NaviRouteRenderer;
   private floorMapRenderer:FloorMapRenderer;
+
+  @Output() locationClick = new EventEmitter<Location>();
 
   public get CurrentRoute():ReceivedRoute {
     return this.currentRoute;
@@ -156,15 +158,15 @@ export class MapViewComponent implements AfterViewInit {
           return;
         }
       }
-    }
-
-    // Track clicks/touches on locations
-    const locations:Location[] = this.floorMapRenderer.locationNames
-    if (locations != null) {
-      for (const location of locations) {
+    } else {
+      // Track clicks/touches on locations
+      const locations:Location[] = this.floorMapRenderer.locationNames
+      if (locations == null)
+        return;
+      for(const location of locations) {
         if (Math.abs(location.PathNode.Coordinate.X - point[0]) < this.clickThreshold
             && Math.abs(location.PathNode.Coordinate.Y - point [1]) < this.clickThreshold) {
-          alert(location.Name + '\r\n' + location.Description);
+          this.locationClick.emit(location);
           return;
         }
       }

@@ -1,4 +1,4 @@
-import {BuildingData} from '../building-objects-if';
+import {BuildingData, Location, PathNode} from '../building-objects-if';
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
@@ -8,6 +8,7 @@ import {HttpErrorResponse} from '@angular/common/http';
 import {ActivatedRoute} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from "../../ionic-bottom-drawer/drawer-state";
+import {IonicBottomDrawerComponent} from "../../ionic-bottom-drawer/ionic-bottom-drawer.component";
 
 @Component({
     selector: 'app-navigation',
@@ -20,15 +21,28 @@ export class NavigationPage implements  AfterViewInit{
     @ViewChild(MapViewComponent) mapView: MapViewComponent;
     @ViewChild(SearchInputComponent) searchInput: SearchInputComponent;
     @ViewChild('drawerContent') drawerContent : IonContent;
+    @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
+    @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
 
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
     public errorMessage: string;
+    public clickedLocation:Location = {
+        Building: '',
+        Description: '',
+        Floor: '',
+        Id: 0,
+        Name: '',
+        PathNode: {
+            Coordinate: {X: 0, Y: 0, Z: 0},
+            Id: 0
+            },
+        Tags: []
+    };
 
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
                 private  route: ActivatedRoute) {
-
     }
 
     ngAfterViewInit(): void {
@@ -84,11 +98,28 @@ export class NavigationPage implements  AfterViewInit{
     }
 
     public onDrawerStateChange(state:DrawerState) {
-        if (state == DrawerState.Top) {
+        // in case the view is not initialized
+        if (this.drawerContent === undefined) {
+            return;
+        }
+
+        if (state === DrawerState.Top) {
             this.drawerContent.scrollY = true;
         } else {
             this.drawerContent.scrollY = false;
         }
+    }
+
+    public onMapViewLocationClick(location:Location) {
+        console.log(location);
+        this.clickedLocation = location;
+        this.searchDrawer.SetState(DrawerState.Hidden);
+        this.locationDrawer.SetState(DrawerState.Docked);
+    }
+
+    public onCloseLocationDrawer(event:any) {
+        this.locationDrawer.SetState(DrawerState.Hidden);
+        this.searchDrawer.SetState(DrawerState.Docked);
     }
 
     async presentAvailableFloorModal() {
