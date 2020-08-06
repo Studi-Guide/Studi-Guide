@@ -1,4 +1,4 @@
-<div *ngIf="!moodleUserIsLoggedIn">
+<div> <!-- *ngIf="!userIsLoggedIn" -->
   <ion-header>
     <ion-toolbar>
       <ion-title>
@@ -17,7 +17,7 @@
         >
           <!--  (keyup.enter)="emitDiscoveryEvent()"-->
         </ion-searchbar>
-        <ion-button size="default" mode="ios" color="secondary" (click)="signIn()">
+        <ion-button size="default" mode="ios" color="secondary" (click)="fetchAndPersistMoodleToken()">
           <h4>sign in</h4>
         </ion-button>
       </ion-col>

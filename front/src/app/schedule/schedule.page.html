@@ -1,5 +1,9 @@
 <ion-content>
-    <app-login (isSignedIn)="onSignIn($event)"></app-login>
+    <app-login
+            (isSignedIn)="onSignIn($event)"
+            (moodleToken)="fetchMoodleData($event)"
+            *ngIf="!isMoodleUserSignedIn"
+    ></app-login>
     <ion-refresher slot="fixed" (ionRefresh)="doRefreshEvents($event)">
         <ion-refresher-content>
         </ion-refresher-content>

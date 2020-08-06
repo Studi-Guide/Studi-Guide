@@ -1,25 +1,7 @@
 import { Storage } from '@ionic/storage';
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {MoodleService} from '../../services/moodle.service';
-
-class MoodleUser {
-  private name: string;
-  private password: string;
-  private signedIn: boolean;
-
-  setName(value: string) {
-    this.name = value;
-  }
-  setPassword(value: string) {
-    this.password = value;
-  }
-  getPassword(): string {
-    return this.password;
-  }
-  isSignedIn(): boolean {
-    return this.signedIn;
-  }
-}
+import { MoodleToken } from 'src/app/moodle-objects-if';
 
 @Component({
   selector: 'app-login',
@@ -31,35 +13,60 @@ export class LoginComponent implements OnInit {
   @ViewChild('passwordInput') passwordInput;
 
   @Output() isSignedIn = new EventEmitter<boolean>();
+  @Output() moodleToken = new EventEmitter<MoodleToken>();
 
-  private user: MoodleUser;
-  public moodleUserIsLoggedIn;
+  public isUserLoggedIn: boolean;
+  public token: MoodleToken;
 
-  constructor(private storage: Storage, private moodleService: MoodleService) {
-    this.user = new MoodleUser();
-  }
+  private readonly MOODLE_TOKEN = 'moodle_token';
+  private readonly MOODLE_USER = 'moodle_user';
+
+  constructor(
+      private storage: Storage,
+      private moodleService: MoodleService
+  ) {}
 
   ngOnInit() {}
 
-  // tslint:disable-next-line:use-lifecycle-interface
-  ngAfterViewInit() {
-    this.moodleUserIsLoggedIn = this.isUserSignedIn();
+  async ionViewWillEnter() { // ngAfterViewInit
+    this.storage.ready().then(async () => {
+      await this.getPersistedToken();
+      this.token == null ? this.isUserLoggedIn = false : this.isUserLoggedIn = true;
+      this.isSignedIn.emit(this.isUserLoggedIn);
+      if (this.isUserLoggedIn) {
+        this.moodleToken.emit(this.token);
+      }
+      console.log('login::ngAfterViewInit - isTokenPersisted: '+ this.token);
+      console.log('login::ngAfterViewInit - isUserLoggedIn: '+ this.isUserLoggedIn);
+    });
   }
 
-  signIn() {
-    this.user.setName(this.userNameInput.value);
-    this.user.setPassword(this.passwordInput.value);
-    // TODO add MoodleTokenPersistence
-    const tokenToPersist = this.moodleService.getLoginToken(this.userNameInput.value, this.passwordInput.value).toPromise();
-    // this.storage.set(this.userNameInput.value, tokenToPersist);
+  public async fetchAndPersistMoodleToken() {
+    const userName = this.userNameInput.value;
+    const password = this.passwordInput.value;
 
-    this.moodleUserIsLoggedIn = this.isUserSignedIn();
-    this.isSignedIn.emit(this.isUserSignedIn());
+    const tokenToPersist = await this.moodleService.getLoginToken(userName, password).toPromise();
+
+    if (tokenToPersist.token != undefined || tokenToPersist.token != null) {
+      this.isUserLoggedIn = true;
+      this.moodleToken.emit(tokenToPersist);
+      console.log('login::fetchAndPersistMoodleToken - isUserLoggedIn: '+ this.isUserLoggedIn);
+      this.isSignedIn.emit(this.isUserLoggedIn);
+      await this.storage.set(this.MOODLE_USER, userName);
+      await this.storage.set(this.MOODLE_TOKEN, tokenToPersist);
+    } else {
+      // if login fails moodle response contains: "errorcode":"invalidlogin"
+      this.isUserLoggedIn = false;
+      this.isSignedIn.emit(this.isUserLoggedIn);
+      alert('invalid credentials');
+    }
   }
 
-  public isUserSignedIn() {
-    // TODO check if a token with user name is persisted
-    return true;
+  private async getPersistedToken() {
+    await this.storage.get(this.MOODLE_TOKEN).then(value => {
+      this.token = value;
+      console.log('login::getPersistedToken - token: ' + this.token);
+    });
   }
 
 }
