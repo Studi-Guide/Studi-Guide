@@ -6,6 +6,7 @@ import {FloorMapRenderer} from './floorMapRenderer';
 import {NaviRouteRenderer, ReceivedRoute} from './naviRouteRenderer';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import * as pip from 'point-in-polygon';
+import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 
 @Component({
   selector: 'app-map-view',
@@ -158,8 +159,7 @@ export class MapViewComponent implements AfterViewInit {
 
   public async onClickTouch(event:MouseEvent) {
 
-    const point = [event.clientX - (event.currentTarget as HTMLElement).offsetLeft,
-      event.clientY - (event.currentTarget as HTMLElement).offsetTop];
+    const point = CanvasTouchHelper.CalculateXY(event, event.currentTarget as HTMLElement);
 
     if(this.currentRoute != null) {
       const items: MapItem[] = await this.routeRenderer.getInteractiveStairWellMapItems(this.currentRoute, this.currentFloor);
@@ -181,7 +181,7 @@ export class MapViewComponent implements AfterViewInit {
         return;
       for(const location of locations) {
         if (Math.abs(location.PathNode.Coordinate.X - point[0]) < this.clickThreshold
-            && Math.abs(location.PathNode.Coordinate.Y - point [1]) < this.clickThreshold) {
+            && Math.abs(location.PathNode.Coordinate.Y - point[1]) < this.clickThreshold) {
           this.locationClick.emit(location);
           return;
         }
