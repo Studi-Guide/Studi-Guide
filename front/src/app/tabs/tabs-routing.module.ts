@@ -38,12 +38,12 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'tab4',
+        path: 'settings',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab4/tab4.module').then(m => m.Tab4PageModule)
+              import('../settings/settings.module').then(m => m.SettingsPageModule)
           }
         ]
       },

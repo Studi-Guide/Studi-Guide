@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { Tab4Page } from './tab4.page';
+import { SettingsPage } from './settings.page';
 
-describe('Tab4Page', () => {
-  let component: Tab4Page;
-  let fixture: ComponentFixture<Tab4Page>;
+describe('SettingsPage', () => {
+  let component: SettingsPage;
+  let fixture: ComponentFixture<SettingsPage>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [Tab4Page],
+      declarations: [SettingsPage],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(Tab4Page);
+    fixture = TestBed.createComponent(SettingsPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));
