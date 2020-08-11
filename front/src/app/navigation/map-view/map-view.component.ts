@@ -67,6 +67,7 @@ export class MapViewComponent implements AfterViewInit {
     this.floorMapRenderer.renderFloorMap(map);
     this.displayPin(map, res.PathNode);
     this.currentFloor = res.Floor;
+    return res;
   }
 
   public async showFloor(floor:string, building:string) {

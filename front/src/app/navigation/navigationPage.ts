@@ -27,7 +27,7 @@ export class NavigationPage implements  AfterViewInit{
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
     public errorMessage: string;
-    public clickedLocation:Location = {
+    public selectedLocation:Location = {
         Building: '',
         Description: '',
         Floor: '',
@@ -72,7 +72,8 @@ export class NavigationPage implements  AfterViewInit{
         this.errorMessage = '';
         this.progressIsVisible = true;
         try {
-            await this.mapView.showDiscoveryLocation(searchInput);
+            const location = await this.mapView.showDiscoveryLocation(searchInput);
+            this.showLocationDrawer(location);
             this.availableFloorsBtnIsVisible = true;
         } catch (ex) {
             this.handleInputError(ex, searchInput);
@@ -123,9 +124,9 @@ export class NavigationPage implements  AfterViewInit{
         }
     }
 
-    public onMapViewLocationClick(location:Location) {
-        console.log(location);
-        this.clickedLocation = location;
+    public showLocationDrawer(location:Location) {
+        this.locationDrawer.SetState(DrawerState.Hidden);
+        this.selectedLocation = location;
         this.searchDrawer.SetState(DrawerState.Hidden);
         this.locationDrawer.SetState(DrawerState.Docked);
     }

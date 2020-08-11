@@ -109,7 +109,7 @@
         <ion-grid>
           <ion-row class="ion-justify-content-between ion-align-self-center">
             <ion-col size="auto">
-              <ion-list-header>{{clickedLocation.Name}}</ion-list-header>
+              <ion-list-header>{{selectedLocation.Name}}</ion-list-header>
             </ion-col>
             <ion-col class="ion-justify-content-end ion-padding-horizontal">
               <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseLocationDrawer($event)">
@@ -119,11 +119,11 @@
           </ion-row>
           <ion-row>
             <ion-col>Description:</ion-col>
-            <ion-col>{{clickedLocation.Description}}</ion-col>
+            <ion-col>{{selectedLocation.Description}}</ion-col>
           </ion-row>
           <ion-row>
             <ion-col>Tags:</ion-col>
-            <ion-col>{{clickedLocation.Tags}}</ion-col>
+            <ion-col>{{selectedLocation.Tags}}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-content>
@@ -143,7 +143,7 @@
       </p>
     </ion-text>
     <div id="canvas-wrapper">
-      <app-map-view (locationClick)="onMapViewLocationClick($event)"></app-map-view>
+      <app-map-view (locationClick)="showLocationDrawer($event)"></app-map-view>
     </div>
   </div>
 </ion-content>
