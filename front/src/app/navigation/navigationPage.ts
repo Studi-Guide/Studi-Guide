@@ -127,11 +127,11 @@ export class NavigationPage implements  AfterViewInit{
         await this.locationDrawer.SetState(DrawerState.Hidden);
         this.clickedLocation = location;
         this.searchDrawer.SetState(DrawerState.Hidden);
-        await this.locationDrawer.SetState(DrawerState.Docked);
+        this.locationDrawer.SetState(DrawerState.Docked);
     }
 
-    public onCloseLocationDrawer(event:any) {
-        this.locationDrawer.SetState(DrawerState.Hidden);
+    public async onCloseLocationDrawer(event:any) {
+        await this.locationDrawer.SetState(DrawerState.Hidden);
         this.searchDrawer.SetState(DrawerState.Docked);
     }
 
