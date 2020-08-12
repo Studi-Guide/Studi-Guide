@@ -1,4 +1,4 @@
-import {BuildingData, Location, PathNode} from '../building-objects-if';
+import {BuildingData, Location} from '../building-objects-if';
 import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
@@ -123,11 +123,11 @@ export class NavigationPage implements  AfterViewInit{
         }
     }
 
-    public onMapViewLocationClick(location:Location) {
-        console.log(location);
+    public async onMapViewLocationClick(location:Location) {
+        await this.locationDrawer.SetState(DrawerState.Hidden);
         this.clickedLocation = location;
         this.searchDrawer.SetState(DrawerState.Hidden);
-        this.locationDrawer.SetState(DrawerState.Docked);
+        await this.locationDrawer.SetState(DrawerState.Docked);
     }
 
     public onCloseLocationDrawer(event:any) {

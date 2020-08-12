@@ -75,21 +75,21 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
     this.SetState(changes.state.currentValue);
   }
 
-  public SetState(newState:DrawerState) {
+  public async SetState(newState:DrawerState) {
     this.state = newState;
 
     switch (this.state) {
       case DrawerState.Top:
-        this.animate(this.distanceTop);
+        await this.animate(this.distanceTop);
         break;
       case DrawerState.Bottom:
-        this.animate(this.platform.height() - this.minimumHeight);
+        await this.animate(this.platform.height() - this.minimumHeight);
         break;
       case DrawerState.Docked:
-        this.animate(this.platform.height() - this.dockedHeight);
+        await this.animate(this.platform.height() - this.dockedHeight);
         break;
       case DrawerState.Hidden:
-        this.animate(this.platform.height());
+        await this.animate(this.platform.height());
         break;
     }
 
@@ -129,8 +129,8 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  private animate(position:number) {
-    this.animationCtrl.create()
+  private async animate(position:number) {
+    await this.animationCtrl.create()
         .addElement(this.element.nativeElement)
         .easing(this.easing)
         .duration(this.duration)
