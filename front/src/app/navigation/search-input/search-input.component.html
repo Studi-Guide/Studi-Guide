@@ -13,7 +13,7 @@
 </ion-item>
 <ion-item color="primary" *ngIf="routeInputIsVisible" lines="none">
   <ion-searchbar #routeSearchBar search-icon="navigate-circle-outline" animated="true" inputmode="text" mode="ios"
-                 placeholder="destination" color="light" icon-color="dark"
+                 placeholder="start" color="light" icon-color="dark"
                  (keyup.enter)="emitRouteEvent()">
   </ion-searchbar>
   <ion-button size="default" mode="ios" color="primary" (click)="hideRouteSearchBar()" *ngIf="closeRouteBtnIsVisible">

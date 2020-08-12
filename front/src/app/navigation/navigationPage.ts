@@ -200,4 +200,10 @@ export class NavigationPage implements  AfterViewInit{
             this.mapView.clearMapCanvas();
         }
     }
+
+    navigationBtnClick() {
+        if (this.selectedLocation != null) {
+            // this.selectedLocation
+        }
+    }
 }
