@@ -9,6 +9,7 @@ import {ActivatedRoute} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
+import { Storage } from '@ionic/storage';
 
 @Component({
     selector: 'app-navigation',
@@ -42,7 +43,8 @@ export class NavigationPage implements  AfterViewInit{
 
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
-                private  route: ActivatedRoute) {
+                private  route: ActivatedRoute,
+                private storage: Storage) {
     }
 
     async ngAfterViewInit(): Promise<void> {
@@ -77,6 +79,7 @@ export class NavigationPage implements  AfterViewInit{
         } catch (ex) {
             this.handleInputError(ex, searchInput);
         } finally {
+            await this.storage.set('searches', JSON.stringify([searchInput]));
             this.progressIsVisible = false;
         }
     }
