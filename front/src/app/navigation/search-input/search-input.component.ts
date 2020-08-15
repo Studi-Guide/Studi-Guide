@@ -16,6 +16,8 @@ export class SearchInputComponent implements OnInit {
   public searchBtnIsVisible = true;
   public routeInputIsVisible = false;
   public closeRouteBtnIsVisible = false;
+  private routeSearchBarValue: string;
+  private discoverySearchbarValue: string;
 
   constructor() { }
 
@@ -67,6 +69,10 @@ export class SearchInputComponent implements OnInit {
   }
 
   public setDiscoverySearchbarValue(value:string) {
-    this.discoverySearchbar.value = value;
+    this.discoverySearchbarValue = value;
+  }
+
+  public setStartSearchbarValue(value:string) {
+    this.routeSearchBarValue = value;
   }
 }

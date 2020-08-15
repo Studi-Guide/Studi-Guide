@@ -48,23 +48,21 @@ export class NavigationPage implements  AfterViewInit{
     async ngAfterViewInit(): Promise<void> {
         this.route.params.subscribe(async params =>
         {
-            if (params != null && params.location != null && params.location.length > 0) {
-                this.searchInput.setDiscoverySearchbarValue(params.location);
-                await this.onDiscovery(params.location);
-            }
-            else {
-                if (this.mapView.CurrentRoute == null && this.mapView.CurrentBuilding == null) {
-                    // STDG-138 load base map
-                    await this.mapView.showDiscoveryMap('', 'EG')
-                    this.availableFloorsBtnIsVisible = true;
-
-                    // Scroll to mid
-                    const div = document.getElementById('canvas-wrapper');
-
-                    // Coordinates of KA.013
-                    div.scrollBy(345 - 50,600 - 125);
+                // discover requested location
+                if (params != null && params.location != null && params.location.length > 0) {
+                    this.searchInput.setDiscoverySearchbarValue(params.location);
+                    await this.onDiscovery(params.location);
+                    return;
                 }
-            }
+
+                // launch requested navigation
+                if (params.start != null && params.start.length > 0 &&
+                        params.destination != null && params.destination.length >0) {
+                    await this.showNavigation(params.start, params.destination);
+                    return;
+                }
+
+                await this.showDiscoveryMode();
         });
     }
 
@@ -201,9 +199,32 @@ export class NavigationPage implements  AfterViewInit{
         }
     }
 
-    navigationBtnClick() {
+    async navigationBtnClick() {
         if (this.selectedLocation != null) {
-            // this.selectedLocation
+            // STDG 178 KV.001 wird als default start eingefügt
+            await this.showNavigation('KV.001', this.selectedLocation.Name);
+        }
+    }
+
+    private async showNavigation(start: string, destination: string) {
+        this.searchInput.showRouteSearchBar();
+        this.searchInput.setDiscoverySearchbarValue(destination);
+        this.searchInput.setStartSearchbarValue(start);
+        await this.onRoute([start, destination])
+        this.locationDrawer.SetState(DrawerState.Docked);
+    }
+
+    private async showDiscoveryMode() {
+        if (this.mapView.CurrentRoute == null && this.mapView.CurrentBuilding == null) {
+            // STDG-138 load base map
+            await this.mapView.showDiscoveryMap('', 'EG')
+            this.availableFloorsBtnIsVisible = true;
+
+            // Scroll to mid
+            const div = document.getElementById('canvas-wrapper');
+
+            // Coordinates of KA.013
+            div.scrollBy(345 - 50, 600 - 125);
         }
     }
 }

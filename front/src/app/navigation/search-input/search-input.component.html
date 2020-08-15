@@ -1,7 +1,7 @@
 <ion-item color="light" lines="none">
   <ion-searchbar #discoverySearchbar animated="true" search-icon="search-circle-outline" inputmode="text"
                  mode="ios" placeholder="location" color="" icon-color="dark"
-                 (keyup.enter)="emitDiscoveryEvent()" >
+                 (keyup.enter)="emitDiscoveryEvent()" [value]="discoverySearchbarValue">
   </ion-searchbar>
   <ion-button size="default" mode="ios" color="medium" (click)="emitDiscoveryEvent()" *ngIf="searchBtnIsVisible">
     <ion-icon size="large" slot="icon-only" name="search" color=""></ion-icon>
@@ -14,7 +14,7 @@
 <ion-item color="primary" *ngIf="routeInputIsVisible" lines="none">
   <ion-searchbar #routeSearchBar search-icon="navigate-circle-outline" animated="true" inputmode="text" mode="ios"
                  placeholder="start" color="light" icon-color="dark"
-                 (keyup.enter)="emitRouteEvent()">
+                 (keyup.enter)="emitRouteEvent()" [value]="routeSearchBarValue">
   </ion-searchbar>
   <ion-button size="default" mode="ios" color="primary" (click)="hideRouteSearchBar()" *ngIf="closeRouteBtnIsVisible">
     <ion-icon size="large" slot="icon-only" name="close-outline"></ion-icon>
