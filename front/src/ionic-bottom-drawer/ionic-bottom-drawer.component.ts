@@ -31,7 +31,7 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   @Input() easing = 'ease-in-out';
 
-  @Input() duration = 300;
+  @Input() duration = 150;
 
   @Input() state: DrawerState = DrawerState.Docked;
 
