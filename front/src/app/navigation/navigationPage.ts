@@ -210,8 +210,8 @@ export class NavigationPage implements  AfterViewInit{
         this.searchInput.showRouteSearchBar();
         this.searchInput.setDiscoverySearchbarValue(destination);
         this.searchInput.setStartSearchbarValue(start);
+        this.locationDrawer.SetState(DrawerState.Hidden);
         await this.onRoute([start, destination])
-        this.locationDrawer.SetState(DrawerState.Docked);
     }
 
     private async showDiscoveryMode() {
