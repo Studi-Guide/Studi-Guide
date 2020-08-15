@@ -122,16 +122,16 @@ export class NavigationPage implements  AfterViewInit{
         }
     }
 
-    public showLocationDrawer(location:Location) {
-        this.locationDrawer.SetState(DrawerState.Hidden);
+    public async showLocationDrawer(location:Location) {
+        await this.locationDrawer.SetState(DrawerState.Hidden);
         this.selectedLocation = location;
-        this.searchDrawer.SetState(DrawerState.Hidden);
-        this.locationDrawer.SetState(DrawerState.Docked);
+        await this.searchDrawer.SetState(DrawerState.Hidden);
+        await this.locationDrawer.SetState(DrawerState.Docked);
     }
 
-    public onCloseLocationDrawer(event:any) {
-        this.locationDrawer.SetState(DrawerState.Hidden);
-        this.searchDrawer.SetState(DrawerState.Docked);
+    public async onCloseLocationDrawer(event:any) {
+        await this.locationDrawer.SetState(DrawerState.Hidden);
+        await this.searchDrawer.SetState(DrawerState.Docked);
     }
 
     async presentAvailableFloorModal() {
@@ -210,7 +210,7 @@ export class NavigationPage implements  AfterViewInit{
         this.searchInput.showRouteSearchBar();
         this.searchInput.setDiscoverySearchbarValue(destination);
         this.searchInput.setStartSearchbarValue(start);
-        this.onCloseLocationDrawer(null);
+        await this.onCloseLocationDrawer(null);
         await this.onRoute([start, destination])
     }
 
