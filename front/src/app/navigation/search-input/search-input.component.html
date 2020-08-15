@@ -11,9 +11,9 @@
     <ion-icon size="large" slot="icon-only" src="/assets/navigation-svgs/directions-24px.svg"></ion-icon>
   </ion-button>
 </ion-item>
-<ion-item color="primary" *ngIf="routeInputIsVisible" lines="none">
+<ion-item color="light" *ngIf="routeInputIsVisible" lines="none">
   <ion-searchbar #startSearchBar search-icon="navigate-circle-outline" animated="true" inputmode="text" mode="ios"
-                 placeholder="start" color="light" icon-color="dark"
+                 placeholder="start" color="" icon-color="dark"
                  (keyup.enter)="emitRouteEvent()" [value]="startSearchBarValue">
   </ion-searchbar>
   <ion-button size="default" mode="ios" color="primary" (click)="hideRouteSearchBar()" *ngIf="closeRouteBtnIsVisible">

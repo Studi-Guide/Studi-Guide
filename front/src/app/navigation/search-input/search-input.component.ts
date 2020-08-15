@@ -25,8 +25,8 @@ export class SearchInputComponent implements OnInit {
 
   public showRouteSearchBar() {
       this.routeInputIsVisible = true;
-      const searchbars = document.querySelector('ion-item');
-      searchbars.setAttribute('color', 'primary');
+      // const searchbars = document.querySelector('ion-item');
+      // searchbars.setAttribute('color', 'primary');
       this.searchBtnIsVisible = false;
       this.closeRouteBtnIsVisible = true;
   }
@@ -34,8 +34,8 @@ export class SearchInputComponent implements OnInit {
   public hideRouteSearchBar() {
     if (this.routeInputIsVisible) {
       this.routeInputIsVisible = false;
-      const searchbars = document.querySelector('ion-item');
-      searchbars.setAttribute('color', 'light-tint');
+      // const searchbars = document.querySelector('ion-item');
+      // searchbars.setAttribute('color', 'light-tint');
       this.searchBtnIsVisible = true;
       this.closeRouteBtnIsVisible = false;
     }

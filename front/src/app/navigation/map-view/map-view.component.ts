@@ -175,12 +175,11 @@ export class MapViewComponent implements AfterViewInit {
           return;
         }
       }
-    } else {
-      // Track clicks/touches on locations
-      const locations:Location[] = this.floorMapRenderer.locationNames
-      if (locations == null)
-        return;
-      for(const location of locations) {
+    }
+    // Track clicks/touches on locations
+    const locations:Location[] = this.floorMapRenderer.locationNames
+    if (locations != null) {
+      for (const location of locations) {
         if (Math.abs(location.PathNode.Coordinate.X - point[0]) < this.clickThreshold
             && Math.abs(location.PathNode.Coordinate.Y - point[1]) < this.clickThreshold) {
           this.locationClick.emit(location);
