@@ -1,5 +1,5 @@
 <ion-item color="light" lines="none">
-  <ion-searchbar #destinationSearchbar animated="true" search-icon="search-circle-outline" inputmode="text"
+  <ion-searchbar #destinationSearchbar search-icon="navigate-circle-outline" inputmode="text"
                  mode="ios" placeholder="destination" color="" icon-color="dark"
                  (keyup.enter)="emitDiscoveryEvent()" [value]="destinationSearchbarValue">
   </ion-searchbar>
@@ -12,7 +12,7 @@
   </ion-button>
 </ion-item>
 <ion-item color="light" *ngIf="routeInputIsVisible" lines="none">
-  <ion-searchbar #startSearchBar search-icon="navigate-circle-outline" animated="true" inputmode="text" mode="ios"
+  <ion-searchbar #startSearchBar search-icon="locate-outline" animated="true" inputmode="text" mode="ios"
                  placeholder="start" color="" icon-color="dark"
                  (keyup.enter)="emitRouteEvent()" [value]="startSearchBarValue">
   </ion-searchbar>
