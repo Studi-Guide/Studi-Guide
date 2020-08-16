@@ -15,8 +15,9 @@ export class LoginComponent implements OnInit {
   @Output() isSignedIn = new EventEmitter<boolean>();
   @Output() moodleToken = new EventEmitter<MoodleToken>();
 
-  public isUserLoggedIn: boolean;
+  public isUserLoggedIn = true;
   public token: MoodleToken;
+  public invalidCredentialsMessage:string;
 
   private readonly MOODLE_TOKEN = 'moodle_token';
   private readonly MOODLE_USER = 'moodle_user';
@@ -59,7 +60,7 @@ export class LoginComponent implements OnInit {
       // if login fails moodle response contains: "errorcode":"invalidlogin"
       this.isUserLoggedIn = false;
       this.isSignedIn.emit(this.isUserLoggedIn);
-      alert('invalid credentials');
+      this.invalidCredentialsMessage = 'Invalid credentials';
     }
   }
 
@@ -68,6 +69,10 @@ export class LoginComponent implements OnInit {
       this.token = value;
       console.log('login::getPersistedToken - token: ' + this.token);
     });
+  }
+
+  public clearInvalidCredentialsMsg() {
+    this.invalidCredentialsMessage = '';
   }
 
 }
