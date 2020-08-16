@@ -1,5 +1,5 @@
 import {BuildingData, Location} from '../building-objects-if';
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
@@ -9,6 +9,7 @@ import {ActivatedRoute} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
+import { Storage } from '@ionic/storage';
 
 @Component({
     selector: 'app-navigation',
@@ -16,7 +17,7 @@ import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom
     styleUrls: ['navigation.page.scss']
 })
 
-export class NavigationPage implements  AfterViewInit{
+export class NavigationPage implements  AfterViewInit, OnInit{
 
     @ViewChild(MapViewComponent) mapView: MapViewComponent;
     @ViewChild(SearchInputComponent) searchInput: SearchInputComponent;
@@ -40,9 +41,13 @@ export class NavigationPage implements  AfterViewInit{
         Tags: []
     };
 
+    private recentSearchesKey = 'searches';
+    public recentSearches : string[] = [];
+
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
-                private  route: ActivatedRoute) {
+                private  route: ActivatedRoute,
+                private storage: Storage) {
     }
 
     async ngAfterViewInit(): Promise<void> {
@@ -68,11 +73,20 @@ export class NavigationPage implements  AfterViewInit{
         });
     }
 
+    async ngOnInit() {
+        const searches = JSON.parse(await this.storage.get(this.recentSearchesKey));
+        if (searches !== null) {
+            this.recentSearches = searches[0];
+            console.log(this.recentSearches);
+        }
+    }
+
     public async onDiscovery(searchInput: string) {
         this.errorMessage = '';
         this.progressIsVisible = true;
         try {
             await this.mapView.showDiscoveryLocation(searchInput);
+            this.addRecentSearch(searchInput);
             this.availableFloorsBtnIsVisible = true;
         } catch (ex) {
             this.handleInputError(ex, searchInput);
@@ -198,5 +212,20 @@ export class NavigationPage implements  AfterViewInit{
         if (this.mapView != null) {
             this.mapView.clearMapCanvas();
         }
+    }
+
+    private addRecentSearch(location:string) {
+        if (this.recentSearches.includes(location)) {
+            this.recentSearches.splice(this.recentSearches.indexOf(location), 1);
+        }
+
+        this.recentSearches.unshift(location);
+
+        if (this.recentSearches.length > 3) {
+            this.recentSearches.pop();
+        }
+
+        this.storage.set(this.recentSearchesKey, JSON.stringify([this.recentSearches]));
+        console.log(this.recentSearches);
     }
 }
