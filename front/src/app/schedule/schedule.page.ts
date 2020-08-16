@@ -1,8 +1,10 @@
-import {AfterViewInit, Component} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import {MoodleService} from '../services/moodle.service';
 import {Event, MoodleToken} from '../moodle-objects-if';
 import {LoadingController} from '@ionic/angular';
 import {Router} from '@angular/router';
+import {LoginComponent} from './login/login.component';
+
 
 @Component({
   selector: 'app-schedule',
@@ -14,11 +16,17 @@ export class SchedulePage implements AfterViewInit {
   public calenderEvents: Event[] = [];
   public isMoodleUserSignedIn: boolean;
 
+  @ViewChild(LoginComponent) login:LoginComponent;
+
   constructor(
       private moodleService: MoodleService,
       public loadingController: LoadingController,
       private router: Router
   ) {}
+
+  async ionViewWillEnter() {
+    this.login.checkMoodleLoginState();
+  }
 
   public async onSignIn(isSignedIn: boolean) {
     console.log('schedule::onSignIn - isSignedIn: '+isSignedIn);

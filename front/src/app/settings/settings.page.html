@@ -1,23 +1,31 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Settings
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
-
 <ion-content>
-  <div style="padding: 12px;">
-    <ion-list-header>
-      <ion-label>set Language</ion-label>
-    </ion-list-header>
+  <div class="padding">
+    <ion-list-header>Accounts</ion-list-header>
+    <ion-list lines="none">
+      <ion-item>
+        <ion-avatar slot="start">
+          <img src="/assets/person-circle-sharp.svg">
+        </ion-avatar>
+        <ion-label>
+          <h3>Moodle</h3>
+          <p [innerHTML]="moodleUserName"></p>
+        </ion-label>
+        <ion-select *ngIf="isSignedIn" (ionChange)="logoutFromMoodle()" selected-text="" interface="action-sheet" mode="ios">
+          <ion-select-option value="sign-out" selected-text="">sign out</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </div>
+  <hr>
+  <div class="padding">
+    <ion-list-header>Language</ion-list-header>
     <select>
       <option value="german">Deutsch</option>
       <option value="english">English</option>
       <option value="spain">Español</option>
     </select>
   </div>
-  <hr style="background: #d7d8da;">
+  <hr>
   <ion-list lines="" class="ion-padding-top ion-margin-top">
     <ion-item href="#">
       <ion-icon slot="end" color="dark" name="help-circle-outline"></ion-icon>

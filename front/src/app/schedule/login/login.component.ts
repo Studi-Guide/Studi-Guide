@@ -28,7 +28,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {}
 
-  async ionViewWillEnter() { // ngAfterViewInit
+  public async checkMoodleLoginState() {
+    console.log('ionViewWillEnter - schedule.page');
     this.storage.ready().then(async () => {
       await this.getPersistedToken();
       this.token == null ? this.isUserLoggedIn = false : this.isUserLoggedIn = true;
