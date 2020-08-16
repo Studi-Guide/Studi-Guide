@@ -16,8 +16,8 @@ export class SearchInputComponent implements OnInit {
   public searchBtnIsVisible = true;
   public routeInputIsVisible = false;
   public closeRouteBtnIsVisible = false;
-  private startSearchBarValue: string;
-  private destinationSearchbarValue: string;
+  public startSearchBarValue: string;
+  public destinationSearchbarValue: string;
 
   constructor() { }
 
