@@ -13,6 +13,7 @@ export class DataService {
     baseUrl:string;// = SERVER_URL // "https://studi-guide.azurewebsites.net"; // for development: http://localhost:8090
 
     constructor(private httpClient : HttpClient, private env : Env, private cache: CacheService) {
+        console.log('Using' + env.serverUrl);
         this.baseUrl = env.serverUrl;
     }
 
