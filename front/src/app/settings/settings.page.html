@@ -10,8 +10,10 @@
           <h3>Moodle</h3>
           <p [innerHTML]="moodleUserName"></p>
         </ion-label>
-        <ion-select *ngIf="isSignedIn" (ionChange)="logoutFromMoodle()" selected-text="" interface="action-sheet" mode="ios">
-          <ion-select-option value="sign-out" selected-text="">sign out</ion-select-option>
+        <ion-select *ngIf="isSignedIn" (ionChange)="logoutFromMoodle()" selected-text=""
+                    interface="action-sheet" [interfaceOptions]="actionSheetOptions" mode="ios"
+        >
+          <ion-select-option id="moodle-logout" value="sign-out" selected-text="">sign out</ion-select-option>
         </ion-select>
       </ion-item>
     </ion-list>

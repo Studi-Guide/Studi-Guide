@@ -29,14 +29,10 @@ export class SchedulePage implements AfterViewInit {
   }
 
   public async onSignIn(isSignedIn: boolean) {
-    console.log('schedule::onSignIn - isSignedIn: '+isSignedIn);
     isSignedIn ? this.isMoodleUserSignedIn = true : this.isMoodleUserSignedIn = false;
   }
 
   public async fetchMoodleData(moodleToken: MoodleToken) {
-    // TODO check response if token is expired
-    //  => this.isMoodleUserSignedIn = false; this.storage.remove('moodleToken');
-    console.log('schedule::fetchMoodleData');
     const loading = await this.loadingController.create({
       message: 'Collecting moodle data...'
     });
@@ -54,7 +50,6 @@ export class SchedulePage implements AfterViewInit {
       }
       await loading.dismiss();
     } else {
-      // TODO
       this.isMoodleUserSignedIn = false;
       loading.dismiss();
     }

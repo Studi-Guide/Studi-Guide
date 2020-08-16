@@ -16,22 +16,18 @@ export class SettingsPage {
 
   constructor(
       private storage: Storage
-  ) {
-  }
+  ) {}
 
   async ionViewWillEnter() {
-    console.log('ionViewWillEnter');
     this.storage.ready().then(async () => {
       await this.isMoodleUserLoggedIn();
     });
   }
 
-  public async logoutFromMoodle(value:string) {
-    console.log('logout');
+  public async logoutFromMoodle() {
     await this.storage.remove(this.MOODLE_USER).then(async value => {
       await this.storage.remove(this.MOODLE_TOKEN).then(async value => {
-        this.isSignedIn = false;
-        this.moodleUserName = 'Kein User eingelogged.';
+        this.setLoggedOutFromMoodle();
       });
     });
   }
@@ -43,10 +39,14 @@ export class SettingsPage {
         this.isSignedIn = true;
         await this.getMoodleUserName();
       } else {
-        this.isSignedIn = false;
-        this.moodleUserName = 'Kein User eingelogged.'
+        this.setLoggedOutFromMoodle();
       }
     });
+  }
+
+  private setLoggedOutFromMoodle() {
+    this.isSignedIn = false;
+    this.moodleUserName = 'Kein User eingelogged.'
   }
 
   private async getMoodleUserName() {
@@ -54,4 +54,8 @@ export class SettingsPage {
       this.moodleUserName = userName;
     });
   }
+
+  actionSheetOptions: any = {
+    header: 'Moodle'
+  };
 }

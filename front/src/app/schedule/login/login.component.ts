@@ -30,7 +30,6 @@ export class LoginComponent implements OnInit {
   ngOnInit() {}
 
   public async checkMoodleLoginState() {
-    console.log('ionViewWillEnter - schedule.page');
     this.storage.ready().then(async () => {
       await this.getPersistedToken();
       this.token == null ? this.isUserLoggedIn = false : this.isUserLoggedIn = true;
@@ -38,8 +37,6 @@ export class LoginComponent implements OnInit {
       if (this.isUserLoggedIn) {
         this.moodleToken.emit(this.token);
       }
-      console.log('login::ngAfterViewInit - isTokenPersisted: '+ this.token);
-      console.log('login::ngAfterViewInit - isUserLoggedIn: '+ this.isUserLoggedIn);
     });
   }
 
@@ -52,7 +49,6 @@ export class LoginComponent implements OnInit {
     if (tokenToPersist.token != undefined || tokenToPersist.token != null) {
       this.isUserLoggedIn = true;
       this.moodleToken.emit(tokenToPersist);
-      console.log('login::fetchAndPersistMoodleToken - isUserLoggedIn: '+ this.isUserLoggedIn);
       this.isSignedIn.emit(this.isUserLoggedIn);
       await this.storage.set(this.MOODLE_USER, userName);
       await this.storage.set(this.MOODLE_TOKEN, tokenToPersist);
@@ -67,7 +63,6 @@ export class LoginComponent implements OnInit {
   private async getPersistedToken() {
     await this.storage.get(this.MOODLE_TOKEN).then(value => {
       this.token = value;
-      console.log('login::getPersistedToken - token: ' + this.token);
     });
   }
 
