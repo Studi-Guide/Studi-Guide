@@ -37,32 +37,8 @@
             <ion-list-header color="light">
               Recent Searches
             </ion-list-header>
-            <ion-item color="light">
-              <ion-avatar slot="start">
-                <ion-icon name="color-wand-outline"></ion-icon>
-              </ion-avatar>
-              <ion-label>
-                <h2>Professor Holz</h2>
-                <h3>Ich und mein Holz</h3>
-              </ion-label>
-            </ion-item>
-            <ion-item color="light">
-              <ion-avatar slot="start">
-                <ion-icon name="calculator-outline"></ion-icon>
-              </ion-avatar>
-              <ion-label>
-                <h2>Rechenzentrum</h2>
-                <h3>Zeigt her euren Studi-Guide!</h3>
-              </ion-label>
-            </ion-item>
-            <ion-item color="light">
-              <ion-avatar slot="start">
-                <ion-icon name="book-outline"></ion-icon>
-              </ion-avatar>
-              <ion-label>
-                <h2>Ohm Professional School</h2>
-                <h3>Master im Blended-Learning Konzept</h3>
-              </ion-label>
+            <ion-item color="light" *ngFor="let s of recentSearches;">
+              <ion-label><h2>{{s}}</h2></ion-label>
             </ion-item>
           </ion-list>
           <ion-list class="ion-no-padding">
