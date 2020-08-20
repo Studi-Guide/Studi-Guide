@@ -106,10 +106,10 @@
       <div class="ion-padding-top"></div>
       <div class="nav-hbar"></div>
       <ion-content color="light">
-        <ion-grid>
+        <ion-grid id="locationdrawerContent" >
           <ion-row class="ion-justify-content-between ion-align-self-center">
             <ion-col size="auto">
-              <ion-list-header>{{clickedLocation.Name}}</ion-list-header>
+              <ion-text id="locationdrawerName">{{selectedLocation.Name}}</ion-text>
             </ion-col>
             <ion-col class="ion-justify-content-end ion-padding-horizontal">
               <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseLocationDrawer($event)">
@@ -117,13 +117,20 @@
               </ion-button>
             </ion-col>
           </ion-row>
+          <ion-row >
+            <ion-col>
+              <ion-button id="routeBtn" color="primary" expand="block" (click)="navigationBtnClick()">
+                Route
+              </ion-button>
+            </ion-col>
+          </ion-row>
           <ion-row>
             <ion-col>Description:</ion-col>
-            <ion-col>{{clickedLocation.Description}}</ion-col>
+            <ion-col>{{selectedLocation.Description}}</ion-col>
           </ion-row>
           <ion-row>
             <ion-col>Tags:</ion-col>
-            <ion-col>{{clickedLocation.Tags}}</ion-col>
+            <ion-col>{{selectedLocation.Tags}}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-content>
@@ -143,7 +150,7 @@
       </p>
     </ion-text>
     <div id="canvas-wrapper">
-      <app-map-view (locationClick)="onMapViewLocationClick($event)"></app-map-view>
+      <app-map-view (locationClick)="showLocationDrawer($event)"></app-map-view>
     </div>
   </div>
 </ion-content>

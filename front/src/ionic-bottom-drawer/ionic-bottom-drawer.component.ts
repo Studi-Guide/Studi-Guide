@@ -9,8 +9,8 @@ import {
   Renderer2,
   SimpleChanges
 } from '@angular/core';
-import {AnimationController, DomController, Gesture, GestureController, Platform} from "@ionic/angular";
-import {DrawerState} from "./drawer-state";
+import {AnimationController, DomController, Gesture, GestureController, Platform} from '@ionic/angular';
+import {DrawerState} from './drawer-state';
 
 @Component({
   selector: 'app-ionic-bottom-drawer',
@@ -31,7 +31,7 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   @Input() easing = 'ease-in-out';
 
-  @Input() duration = 300;
+  @Input() duration = 150;
 
   @Input() state: DrawerState = DrawerState.Docked;
 
@@ -57,7 +57,7 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
       el: this.element.nativeElement,
       threshold: 15,
       gestureName: 'swipe-up',
-      direction: "y",
+      direction: 'y',
       onMove: (detail => { this.onMove(detail); }),
       onStart: (detail => {  this.onStart(detail); }),
       onEnd: (detail => { this.onEnd(detail); })

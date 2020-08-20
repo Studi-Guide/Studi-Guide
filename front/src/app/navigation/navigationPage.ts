@@ -1,4 +1,4 @@
-import {BuildingData, Location} from '../building-objects-if';
+import {BuildingData, Location, PathNode} from '../building-objects-if';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
@@ -28,7 +28,7 @@ export class NavigationPage implements  AfterViewInit, OnInit{
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
     public errorMessage: string;
-    public clickedLocation:Location = {
+    public selectedLocation:Location = {
         Building: '',
         Description: '',
         Floor: '',
@@ -53,23 +53,21 @@ export class NavigationPage implements  AfterViewInit, OnInit{
     async ngAfterViewInit(): Promise<void> {
         this.route.params.subscribe(async params =>
         {
-            if (params != null && params.location != null && params.location.length > 0) {
-                this.searchInput.setDiscoverySearchbarValue(params.location);
-                await this.onDiscovery(params.location);
-            }
-            else {
-                if (this.mapView.CurrentRoute == null && this.mapView.CurrentBuilding == null) {
-                    // STDG-138 load base map
-                    await this.mapView.showDiscoveryMap('', 'EG')
-                    this.availableFloorsBtnIsVisible = true;
-
-                    // Scroll to mid
-                    const div = document.getElementById('canvas-wrapper');
-
-                    // Coordinates of KA.013
-                    div.scrollBy(345 - 50,600 - 125);
+                // discover requested location
+                if (params != null && params.location != null && params.location.length > 0) {
+                    this.searchInput.setDiscoverySearchbarValue(params.location);
+                    await this.onDiscovery(params.location);
+                    return;
                 }
-            }
+
+                // launch requested navigation
+                if (params.start != null && params.start.length > 0 &&
+                        params.destination != null && params.destination.length >0) {
+                    await this.showNavigation(params.start, params.destination);
+                    return;
+                }
+
+                await this.showDiscoveryMode();
         });
     }
 
@@ -85,8 +83,9 @@ export class NavigationPage implements  AfterViewInit, OnInit{
         this.errorMessage = '';
         this.progressIsVisible = true;
         try {
-            await this.mapView.showDiscoveryLocation(searchInput);
+            const location = await this.mapView.showDiscoveryLocation(searchInput);
             this.addRecentSearch(searchInput);
+            this.showLocationDrawer(location);
             this.availableFloorsBtnIsVisible = true;
         } catch (ex) {
             this.handleInputError(ex, searchInput);
@@ -137,16 +136,16 @@ export class NavigationPage implements  AfterViewInit, OnInit{
         }
     }
 
-    public async onMapViewLocationClick(location:Location) {
+    public async showLocationDrawer(location:Location) {
         await this.locationDrawer.SetState(DrawerState.Hidden);
-        this.clickedLocation = location;
-        this.searchDrawer.SetState(DrawerState.Hidden);
-        this.locationDrawer.SetState(DrawerState.Docked);
+        this.selectedLocation = location;
+        await this.searchDrawer.SetState(DrawerState.Hidden);
+        await this.locationDrawer.SetState(DrawerState.Docked);
     }
 
     public async onCloseLocationDrawer(event:any) {
         await this.locationDrawer.SetState(DrawerState.Hidden);
-        this.searchDrawer.SetState(DrawerState.Docked);
+        await this.searchDrawer.SetState(DrawerState.Docked);
     }
 
     async presentAvailableFloorModal() {
@@ -211,6 +210,35 @@ export class NavigationPage implements  AfterViewInit, OnInit{
         // TODO Remove this code when discovery mode is finished
         if (this.mapView != null) {
             this.mapView.clearMapCanvas();
+        }
+    }
+
+    async navigationBtnClick() {
+        if (this.selectedLocation != null) {
+            // STDG 178 KV.001 wird als default start eingefügt
+            await this.showNavigation('KV.001', this.selectedLocation.Name);
+        }
+    }
+
+    private async showNavigation(start: string, destination: string) {
+        this.searchInput.showRouteSearchBar();
+        this.searchInput.setDiscoverySearchbarValue(destination);
+        this.searchInput.setStartSearchbarValue(start);
+        await this.onCloseLocationDrawer(null);
+        await this.onRoute([start, destination])
+    }
+
+    private async showDiscoveryMode() {
+        if (this.mapView.CurrentRoute == null && this.mapView.CurrentBuilding == null) {
+            // STDG-138 load base map
+            await this.mapView.showDiscoveryMap('', 'EG')
+            this.availableFloorsBtnIsVisible = true;
+
+            // Scroll to mid
+            const div = document.getElementById('canvas-wrapper');
+
+            // Coordinates of KA.013
+            div.scrollBy(345 - 50, 600 - 125);
         }
     }
 
