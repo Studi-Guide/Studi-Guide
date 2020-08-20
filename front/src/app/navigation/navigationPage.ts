@@ -9,6 +9,7 @@ import {ActivatedRoute} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
+import { Storage } from '@ionic/storage';
 
 @Component({
     selector: 'app-navigation',
