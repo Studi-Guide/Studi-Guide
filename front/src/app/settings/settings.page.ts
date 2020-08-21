@@ -1,5 +1,7 @@
 import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
+import {MoodleService} from '../services/moodle.service';
+import { MoodleToken } from '../moodle-objects-if';
 
 @Component({
   selector: 'app-settings',
@@ -10,17 +12,27 @@ export class SettingsPage {
 
   public isSignedIn:boolean;
   public moodleUserName:string;
+  public persistedMoodleToken:MoodleToken;
 
   private readonly MOODLE_TOKEN = 'moodle_token';
   private readonly MOODLE_USER = 'moodle_user';
 
   constructor(
-      private storage: Storage
+      private storage: Storage,
+      private moodleService: MoodleService
   ) {}
 
   async ionViewWillEnter() {
     this.storage.ready().then(async () => {
-      await this.isMoodleUserLoggedIn();
+      if (await this.isMoodleTokenPersisted()) {
+        const data = await this.moodleService.getCalenderEventsWeek(this.persistedMoodleToken).toPromise();
+        if (data.events != null || data.events != undefined) {
+          this.isSignedIn = true;
+          await this.getMoodleUserName();
+          return;
+        }
+      }
+      this.setLoggedOutFromMoodle();
     });
   }
 
@@ -32,21 +44,20 @@ export class SettingsPage {
     });
   }
 
-  private async isMoodleUserLoggedIn() {
-    await this.storage.get(this.MOODLE_TOKEN).then(async value => {
-      if (value != null || value != undefined) {
-        console.log(value.token);
-        this.isSignedIn = true;
-        await this.getMoodleUserName();
+  private async isMoodleTokenPersisted():Promise<boolean> {
+    return await this.storage.get(this.MOODLE_TOKEN).then( (value) => {
+      this.persistedMoodleToken = value;
+      if (this.persistedMoodleToken != null || this.persistedMoodleToken != undefined) {
+        return true;
       } else {
-        this.setLoggedOutFromMoodle();
+        return false;
       }
     });
   }
 
   private setLoggedOutFromMoodle() {
     this.isSignedIn = false;
-    this.moodleUserName = 'Kein User eingelogged.'
+    this.moodleUserName = 'No user signed in.'
   }
 
   private async getMoodleUserName() {

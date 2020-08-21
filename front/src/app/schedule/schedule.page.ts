@@ -51,6 +51,7 @@ export class SchedulePage implements AfterViewInit {
       await loading.dismiss();
     } else {
       this.isMoodleUserSignedIn = false;
+      this.login.isUserLoggedIn = false;
       loading.dismiss();
     }
   }
