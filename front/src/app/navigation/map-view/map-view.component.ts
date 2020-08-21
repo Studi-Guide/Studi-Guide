@@ -194,7 +194,7 @@ export class MapViewComponent implements AfterViewInit {
       if (this.currentRoute.RouteSections[i].Floor === this.currentFloor) {
         this.currentFloor = this.currentRoute.RouteSections[i+1].Floor;
         this.currentBuilding = this.currentRoute.RouteSections[i+1].Building;
-        await this.showFloor(this.currentBuilding, this.currentFloor);
+        await this.showFloor(this.currentFloor, this.currentBuilding);
         return;
       }
     }
