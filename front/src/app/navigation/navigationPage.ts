@@ -10,6 +10,7 @@ import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import { Storage } from '@ionic/storage';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'app-navigation',
@@ -47,7 +48,8 @@ export class NavigationPage implements  AfterViewInit, OnInit{
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
                 private  route: ActivatedRoute,
-                private storage: Storage) {
+                private storage: Storage,
+                private router:Router) {
     }
 
     async ngAfterViewInit(): Promise<void> {
@@ -255,5 +257,13 @@ export class NavigationPage implements  AfterViewInit, OnInit{
 
         this.storage.set(this.recentSearchesKey, JSON.stringify([this.recentSearches]));
         console.log(this.recentSearches);
+    }
+
+    public async recentSearchClick(location:string) {
+        // TODO proper implementation of the router module
+        // await this.router.navigateByUrl('tabs/navigation/search/' + location);
+        // use native code until router implementation can be used
+        this.searchInput.setDiscoverySearchbarValue(location);
+        await this.onDiscovery(location);
     }
 }

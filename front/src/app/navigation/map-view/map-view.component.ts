@@ -171,7 +171,7 @@ export class MapViewComponent implements AfterViewInit {
           polygon.push([section.Start.X, section.Start.Y]);
         }
         if (pip(point, polygon)) {
-          await this.showNextFloor();
+          await this.showNextFloor(mapItem);
           return;
         }
       }
@@ -189,12 +189,12 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  private async showNextFloor() {
+  private async showNextFloor(item: MapItem) {
     for (let i = 0; i < this.currentRoute.RouteSections.length-1; i++) {
-      if (this.currentRoute.RouteSections[i].Floor === this.currentFloor) {
+      if (this.currentRoute.RouteSections[i].Floor === item.Floor && this.currentRoute.RouteSections[i].Building === item.Building) {
         this.currentFloor = this.currentRoute.RouteSections[i+1].Floor;
         this.currentBuilding = this.currentRoute.RouteSections[i+1].Building;
-        await this.showFloor(this.currentBuilding, this.currentFloor);
+        await this.showFloor(this.currentFloor, this.currentBuilding);
         return;
       }
     }

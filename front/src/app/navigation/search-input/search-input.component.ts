@@ -63,7 +63,7 @@ export class SearchInputComponent implements OnInit {
     let isDestinationEmpty = this.startSearchBar.value === '' || this.startSearchBar.value === undefined;
     isDestinationEmpty = isDestinationEmpty || this.startSearchBar.value === null;
     if (!isStartEmpty && !isDestinationEmpty) {
-      const route:string[] = [this.destinationSearchbar.value, this.startSearchBar.value];
+      const route:string[] = [this.startSearchBar.value, this.destinationSearchbar.value];
       this.route.emit(route);
     }
   }
