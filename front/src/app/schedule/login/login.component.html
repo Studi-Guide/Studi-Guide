@@ -11,13 +11,13 @@
       <ion-col size="12" class="ion-justify-content-center">
         <ion-searchbar #userNameInput animated="true" search-icon="person-circle-outline" inputmode="text"
                        mode="ios" placeholder="user name" color="light" icon-color="dark"
-                       (ionChange)="clearInvalidCredentialsMsg()"
+                       (ionChange)="clearInvalidCredentialsMsg()" value="admin"
         ></ion-searchbar>
+        <!-- TODO remove searchbar values -->
         <ion-searchbar #passwordInput animated="true" search-icon="key-outline" inputmode="text"
                        mode="ios" placeholder="password" color="light" icon-color="dark" type="password"
-                       (ionChange)="clearInvalidCredentialsMsg()"
-        >
-        </ion-searchbar>
+                       (ionChange)="clearInvalidCredentialsMsg()" value="administrator"
+        ></ion-searchbar>
         <ion-button size="default" mode="ios" color="secondary" (click)="fetchAndPersistMoodleToken()">
           <h4>sign in</h4>
         </ion-button>

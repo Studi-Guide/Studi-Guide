@@ -41,7 +41,7 @@ export class SchedulePage implements AfterViewInit {
     this.token = moodleToken;
     const calenderRequestData = await this.moodleService.getCalenderEventsWeek(moodleToken).toPromise();
 
-    if (calenderRequestData.events != undefined || calenderRequestData.events != null) {
+    if (this.moodleService.containsEvents(calenderRequestData)) {
       this.calenderEvents = calenderRequestData.events;
 
       // add dummy location to KA.206
@@ -56,10 +56,10 @@ export class SchedulePage implements AfterViewInit {
     }
   }
 
-  async doRefreshEvents(event) {
+  public async doRefreshEvents(event) {
     if (this.isMoodleUserSignedIn) {
       const calenderRequestData = await this.moodleService.getCalenderEventsWeek(this.token).toPromise();
-      if (calenderRequestData.events !== undefined || calenderRequestData.events !== null) {
+      if (this.moodleService.containsEvents(calenderRequestData)) {
         this.calenderEvents = calenderRequestData.events;
 
         // add dummy location to KA.206
@@ -74,7 +74,7 @@ export class SchedulePage implements AfterViewInit {
     }
   }
 
-  async onLocationClick(location: string) {
+  public async onLocationClick(location: string) {
     await this.router.navigateByUrl('tabs/navigation/search/' + location)
   }
 

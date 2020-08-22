@@ -46,7 +46,7 @@ export class LoginComponent implements OnInit {
 
     const tokenToPersist = await this.moodleService.getLoginToken(userName, password).toPromise();
 
-    if (tokenToPersist.token != undefined || tokenToPersist.token != null) {
+    if (this.moodleService.containsToken(tokenToPersist)) {
       this.isUserLoggedIn = true;
       this.moodleToken.emit(tokenToPersist);
       this.isSignedIn.emit(this.isUserLoggedIn);
@@ -60,14 +60,13 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  public clearInvalidCredentialsMsg() {
+    this.invalidCredentialsMessage = '';
+  }
+
   private async getPersistedToken() {
     await this.storage.get(this.MOODLE_TOKEN).then(value => {
       this.token = value;
     });
   }
-
-  public clearInvalidCredentialsMsg() {
-    this.invalidCredentialsMessage = '';
-  }
-
 }

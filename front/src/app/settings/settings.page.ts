@@ -26,7 +26,7 @@ export class SettingsPage {
     this.storage.ready().then(async () => {
       if (await this.isMoodleTokenPersisted()) {
         const data = await this.moodleService.getCalenderEventsWeek(this.persistedMoodleToken).toPromise();
-        if (data.events != null || data.events != undefined) {
+        if (this.moodleService.containsEvents(data)) {
           this.isSignedIn = true;
           await this.getMoodleUserName();
           return;
@@ -47,11 +47,7 @@ export class SettingsPage {
   private async isMoodleTokenPersisted():Promise<boolean> {
     return await this.storage.get(this.MOODLE_TOKEN).then( (value) => {
       this.persistedMoodleToken = value;
-      if (this.persistedMoodleToken != null || this.persistedMoodleToken != undefined) {
-        return true;
-      } else {
-        return false;
-      }
+      return this.moodleService.containsToken(this.persistedMoodleToken) ? true : false;
     });
   }
 

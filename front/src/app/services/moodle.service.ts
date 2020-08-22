@@ -30,6 +30,14 @@ export class MoodleService {
         return this.moodleRequest<CalenderRequestData>(token, 'core_calendar_get_calendar_upcoming_view', null);
     }
 
+    public containsEvents(responseObj: any) : boolean {
+        return responseObj.events != undefined || responseObj.events != null
+    }
+
+    public containsToken(responseObj: any) : boolean {
+        return responseObj.token != undefined || responseObj.token != null
+    }
+
     private moodleRequest<T>(token: MoodleToken, restFunction: string, parameters: ParameterMap) {
         const url = this.moodleUrl + '/webservice/rest/server.php' +  this.generateUrlQuery({
             wstoken: token.token,
