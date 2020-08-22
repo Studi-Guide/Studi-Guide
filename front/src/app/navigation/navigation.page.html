@@ -37,7 +37,7 @@
             <ion-list-header color="light">
               Recent Searches
             </ion-list-header>
-            <ion-item color="light" *ngFor="let s of recentSearches;" (click)="recentSearchClick(s)">
+            <ion-item color="light" *ngFor="let s of recentSearches;" button (click)="recentSearchClick(s)">
               <ion-label><h2>{{s}}</h2></ion-label>
             </ion-item>
           </ion-list>
