@@ -260,6 +260,10 @@ export class NavigationPage implements  AfterViewInit, OnInit{
     }
 
     public async recentSearchClick(location:string) {
-        await this.router.navigateByUrl('tabs/navigation/search/' + location);
+        // TODO proper implementation of the router module
+        // await this.router.navigateByUrl('tabs/navigation/search/' + location);
+        // use native code until router implementation can be used
+        this.searchInput.setDiscoverySearchbarValue(location);
+        await this.onDiscovery(location);
     }
 }
