@@ -13,11 +13,24 @@ export class DataService {
     baseUrl:string;// = SERVER_URL // "https://studi-guide.azurewebsites.net"; // for development: http://localhost:8090
 
     constructor(private httpClient : HttpClient, private env : Env, private cache: CacheService) {
+        console.log('Using' + env.serverUrl);
         this.baseUrl = env.serverUrl;
     }
 
     get_map_floor(building:string, floor:string){
         return this.cache.Get<MapItem[]>(this.httpClient, this.baseUrl + '/buildings/' + building + '/floors/'+ floor + '/maps');
+    }
+
+    get_map_items(campus:string, floor: string, buildingstr:string) {
+        return this.cache.Get<MapItem[]>(
+            this.httpClient,
+            this.baseUrl + '/maps?floor=' + floor ?? '' + '&campus=' + campus ?? '' + '&building=' + buildingstr ?? '');
+    }
+
+    get_locations_items(campus:string, floor: string, buildingstr:string) {
+        return this.cache.Get<Location[]>(
+            this.httpClient,
+            this.baseUrl + '/locations?floor=' + floor ?? '' + '&campus=' + campus ?? '' + '&building=' + buildingstr ?? '');
     }
 
     get_route(start:string, end:string){

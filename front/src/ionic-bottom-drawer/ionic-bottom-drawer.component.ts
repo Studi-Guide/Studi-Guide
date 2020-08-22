@@ -9,8 +9,8 @@ import {
   Renderer2,
   SimpleChanges
 } from '@angular/core';
-import {AnimationController, DomController, Gesture, GestureController, Platform} from "@ionic/angular";
-import {DrawerState} from "./drawer-state";
+import {AnimationController, DomController, Gesture, GestureController, Platform} from '@ionic/angular';
+import {DrawerState} from './drawer-state';
 
 @Component({
   selector: 'app-ionic-bottom-drawer',
@@ -31,7 +31,7 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   @Input() easing = 'ease-in-out';
 
-  @Input() duration = 300;
+  @Input() duration = 150;
 
   @Input() state: DrawerState = DrawerState.Docked;
 
@@ -57,7 +57,7 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
       el: this.element.nativeElement,
       threshold: 15,
       gestureName: 'swipe-up',
-      direction: "y",
+      direction: 'y',
       onMove: (detail => { this.onMove(detail); }),
       onStart: (detail => {  this.onStart(detail); }),
       onEnd: (detail => { this.onEnd(detail); })
@@ -75,18 +75,21 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
     this.SetState(changes.state.currentValue);
   }
 
-  public SetState(newState:DrawerState) {
+  public async SetState(newState:DrawerState) {
     this.state = newState;
 
     switch (this.state) {
       case DrawerState.Top:
-        this.animate(this.distanceTop);
+        await this.animate(this.distanceTop);
         break;
       case DrawerState.Bottom:
-        this.animate(this.platform.height() - this.minimumHeight);
+        await this.animate(this.platform.height() - this.minimumHeight);
         break;
       case DrawerState.Docked:
-        this.animate(this.platform.height() - this.dockedHeight);
+        await this.animate(this.platform.height() - this.dockedHeight);
+        break;
+      case DrawerState.Hidden:
+        await this.animate(this.platform.height());
         break;
     }
 
@@ -126,8 +129,8 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  private animate(position:number) {
-    this.animationCtrl.create()
+  private async animate(position:number) {
+    await this.animationCtrl.create()
         .addElement(this.element.nativeElement)
         .easing(this.easing)
         .duration(this.duration)

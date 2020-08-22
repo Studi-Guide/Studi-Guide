@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 import {Injectable} from '@angular/core';
+import {Platform} from '@ionic/angular';
 
 export const environment = {
   production: false
@@ -14,6 +15,13 @@ export class Env {
   serverUrl = 'http://localhost:8080';
   production = false;
 
+  constructor(public plt: Platform) {
+    console.log(plt.platforms());
+    if (plt.is('hybrid')){
+      console.log('Android or iOS app recognized');
+      // this.serverUrl ='https://studi-guide.azurewebsites.net';
+    }
+  }
 }
 
 /*

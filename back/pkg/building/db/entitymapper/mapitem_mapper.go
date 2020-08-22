@@ -48,6 +48,7 @@ func (r *EntityMapper) mapItemMapper(entMapItem *ent.MapItem) *MapItem {
 	b, err := entMapItem.Edges.BuildingOrErr()
 	if err == nil {
 		m.Building = b.Name
+		m.Campus = b.Campus
 	}
 
 	return &m
@@ -94,10 +95,13 @@ func (r *EntityMapper) FilterMapItems(floor, buildingFilter, campus string) ([]M
 	}
 
 	if len(floor) > 0 {
-		mapQuery = mapQuery.Where(mapitem.Floor(floor))
+		mapQuery = mapQuery.Where(mapitem.FloorEqualFold(floor))
 	}
 
-	// TODO Missing items: campus
+	if len(campus) > 0 {
+		mapQuery = mapQuery.Where(mapitem.HasBuildingWith(building.CampusEqualFold(campus)))
+	}
+
 	entMapItems, err := mapQuery.
 		WithBuilding().
 		WithDoors().

@@ -15,7 +15,8 @@ import {IonicBottomDrawerModule} from '../../ionic-bottom-drawer/ionic-bottom-dr
     FormsModule,
     RouterModule.forChild([
         {path: '', component: NavigationPage},
-        { path: 'search/:location', component: NavigationPage }
+        { path: 'search/:location', component: NavigationPage },
+        { path: 'navigation/:start/:destination', component: NavigationPage}
         ]),
     IonicBottomDrawerModule
   ],

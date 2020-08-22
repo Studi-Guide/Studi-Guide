@@ -59,12 +59,32 @@ ion-progress-bar {
 
 .nav-bottom-drawer {
     background-color: var(--ion-color-light, #f4f5f8);
-    height: 100%;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
+    height: inherit;
 }
 
-.square {
+.square-md {
     height: 64px;
     width: 64px;
+}
+
+.square-sm {
+    height: 32px;
+    width: 32px;
+}
+
+.square-xs {
+    height: 16px;
+    width: 16px;
+}
+
+#locationdrawerContent {
+    margin-left: 30px;
+    margin-right: 30px;
+    position: center;
+}
+
+#locationdrawerName {
+    font-weight: bold;
 }

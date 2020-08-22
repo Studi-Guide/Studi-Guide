@@ -1,11 +1,12 @@
-import {AfterViewInit, Component, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {DataService} from '../../services/data.service';
-import {CanvasResolutionConfigurator} from '../../services/CanvasResolutionConfigurator';
+import {CanvasResolutionConfigurator, TranslationPosition} from '../../services/CanvasResolutionConfigurator';
 import {Floor, Location, MapItem, PathNode} from '../../building-objects-if';
 import {FloorMapRenderer} from './floorMapRenderer';
 import {NaviRouteRenderer, ReceivedRoute} from './naviRouteRenderer';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import * as pip from 'point-in-polygon';
+import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 
 @Component({
   selector: 'app-map-view',
@@ -18,7 +19,9 @@ export class MapViewComponent implements AfterViewInit {
   private currentFloor:string;
   private clickThreshold = 20;
   private routeRenderer:NaviRouteRenderer;
-  private floorMapRenderer:FloorMapRenderer;
+  public floorMapRenderer:FloorMapRenderer;
+
+  @Output() locationClick = new EventEmitter<Location>();
 
   public get CurrentRoute():ReceivedRoute {
     return this.currentRoute;
@@ -33,7 +36,6 @@ export class MapViewComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.routeRenderer = new NaviRouteRenderer(this.dataService);
-    // discovery init
   }
 
   public async showRoute(start:string, end:string) {
@@ -58,26 +60,38 @@ export class MapViewComponent implements AfterViewInit {
     this.currentBuilding = res.Building;
     const items = await this.dataService.get_map_floor(this.currentBuilding, res.Floor).toPromise();
     const locations = await this.dataService.get_locations(res.Building, res.Floor).toPromise<Location[]>();
-    const map = this.getCanvasMap(items);
+
+    // TODO shift map got get res.PathNode into focus
+    const map = this.getCanvasMap(items, 0, 0);
     this.floorMapRenderer = new FloorMapRenderer(items, locations);
     this.floorMapRenderer.renderFloorMap(map);
     this.displayPin(map, res.PathNode);
     this.currentFloor = res.Floor;
+    return res;
   }
 
-  public async showFloor(building:string, floor:string) {
+  public async showFloor(floor:string, building:string) {
     this.routeRenderer.stopAnimation();
     if (this.currentRoute != null) {
       await this.renderNavigationPage(this.currentBuilding, floor);
     }
     else {
-      const res = await this.dataService.get_map_floor(building, floor).toPromise();
-      const map = this.getCanvasMap(res);
-      const locations = await this.dataService.get_locations(this.currentBuilding, floor).toPromise<Location[]>();
+      const res = await this.dataService.get_map_items('', floor, building).toPromise()
+      const map = this.getCanvasMap(res, 0, 0);
+      const locations = await this.dataService.get_locations_items('', floor, building).toPromise();
       this.floorMapRenderer = new FloorMapRenderer(res, locations);
       this.floorMapRenderer.renderFloorMap(map);
     }
     this.currentFloor = floor;
+  }
+
+  public async showDiscoveryMap(campus:string, floor: string) {
+      const items = await this.dataService.get_map_items(campus, floor, '').toPromise();
+      const locations = await this.dataService.get_locations_items(campus, floor, '').toPromise();
+      const map = this.getCanvasMap(items, 0,0);
+      this.floorMapRenderer = new FloorMapRenderer(items, locations);
+      this.floorMapRenderer.renderFloorMap(map);
+      this.currentFloor = floor;
   }
 
   private async renderNavigationPage(building: string, floor: string) {
@@ -94,7 +108,7 @@ export class MapViewComponent implements AfterViewInit {
       }
     }
 
-    const map = this.getCanvasMap(mapItems);
+    const map = this.getCanvasMap(mapItems, 0, 0);
     this.currentBuilding = building;
     this.floorMapRenderer = new FloorMapRenderer(mapItems, locations);
     this.floorMapRenderer.renderFloorMap(map);
@@ -118,7 +132,7 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  private getCanvasMap(mapItems: MapItem[]) {
+  private getCanvasMap(mapItems: MapItem[], positionX: number, positionY: number) {
     const mapCanvas = document.getElementById('map') as HTMLCanvasElement;
     let mapHeightNeeded = 0;
     let mapWidthNeeded = 0;
@@ -135,13 +149,18 @@ export class MapViewComponent implements AfterViewInit {
       }
     }
 
-    return CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
+    // increase map size
+    mapWidthNeeded += Math.abs(positionX);
+    mapHeightNeeded += Math.abs(positionY);
+    const position = new TranslationPosition();
+    position.X = positionX;
+    position.Y = positionY;
+    return CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded,1, position);
   }
 
   public async onClickTouch(event:MouseEvent) {
 
-    const point = [event.clientX - (event.currentTarget as HTMLElement).offsetLeft,
-      event.clientY - (event.currentTarget as HTMLElement).offsetTop];
+    const point = CanvasTouchHelper.CalculateXY(event, event.currentTarget as HTMLElement);
 
     if(this.currentRoute != null) {
       const items: MapItem[] = await this.routeRenderer.getInteractiveStairWellMapItems(this.currentRoute, this.currentFloor);
@@ -157,14 +176,13 @@ export class MapViewComponent implements AfterViewInit {
         }
       }
     }
-
     // Track clicks/touches on locations
     const locations:Location[] = this.floorMapRenderer.locationNames
     if (locations != null) {
       for (const location of locations) {
         if (Math.abs(location.PathNode.Coordinate.X - point[0]) < this.clickThreshold
-            && Math.abs(location.PathNode.Coordinate.Y - point [1]) < this.clickThreshold) {
-          alert(location.Name + '\r\n' + location.Description);
+            && Math.abs(location.PathNode.Coordinate.Y - point[1]) < this.clickThreshold) {
+          this.locationClick.emit(location);
           return;
         }
       }
@@ -182,4 +200,8 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
+
+  private draw(scale:number, translatePosition) {
+
+  }
 }
