@@ -14,6 +14,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": true,
+            "i18nMissingTranslation": "error",
+            "de": {
+              "localize": ["de"]
+            },
             "outputPath": "www",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -83,6 +88,12 @@
             "ci": {
               "progress": false
             }
+          }
+        },
+        "i18n": {
+          "sourceLocale": "en-US",
+          "locales": {
+            "de": "src/locale/messages.de.xlf",
           }
         },
         "extract-i18n": {
