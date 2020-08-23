@@ -48,12 +48,11 @@ export class NavigationPage implements  AfterViewInit, OnInit{
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
                 private  route: ActivatedRoute,
-                private storage: Storage,
-                private router:Router) {
+                private storage: Storage) {
     }
 
-    async ngAfterViewInit(): Promise<void> {
-        this.route.params.subscribe(async params =>
+    ngAfterViewInit() {
+        this.route.queryParams.subscribe(async params =>
         {
                 // discover requested location
                 if (params != null && params.location != null && params.location.length > 0) {
