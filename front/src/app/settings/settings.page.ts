@@ -10,6 +10,11 @@ import { MoodleToken } from '../moodle-objects-if';
 })
 export class SettingsPage {
 
+  constructor(
+      private storage: Storage,
+      private moodleService: MoodleService
+  ) {}
+
   public isSignedIn:boolean;
   public moodleUserName:string;
   public persistedMoodleToken:MoodleToken;
@@ -17,10 +22,9 @@ export class SettingsPage {
   private readonly MOODLE_TOKEN = 'moodle_token';
   private readonly MOODLE_USER = 'moodle_user';
 
-  constructor(
-      private storage: Storage,
-      private moodleService: MoodleService
-  ) {}
+  actionSheetOptions: any = {
+    header: 'Moodle'
+  };
 
   async ionViewWillEnter() {
     this.storage.ready().then(async () => {
@@ -37,8 +41,8 @@ export class SettingsPage {
   }
 
   public async logoutFromMoodle() {
-    await this.storage.remove(this.MOODLE_USER).then(async value => {
-      await this.storage.remove(this.MOODLE_TOKEN).then(async value => {
+    await this.storage.remove(this.MOODLE_USER).then(() => {
+      this.storage.remove(this.MOODLE_TOKEN).then( () => {
         this.setLoggedOutFromMoodle();
       });
     });
@@ -47,7 +51,7 @@ export class SettingsPage {
   private async isMoodleTokenPersisted():Promise<boolean> {
     return await this.storage.get(this.MOODLE_TOKEN).then( (value) => {
       this.persistedMoodleToken = value;
-      return this.moodleService.containsToken(this.persistedMoodleToken) ? true : false;
+      return this.persistedMoodleToken != null;
     });
   }
 
@@ -61,8 +65,4 @@ export class SettingsPage {
       this.moodleUserName = userName;
     });
   }
-
-  actionSheetOptions: any = {
-    header: 'Moodle'
-  };
 }

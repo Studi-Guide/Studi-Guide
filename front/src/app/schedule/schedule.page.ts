@@ -25,7 +25,7 @@ export class SchedulePage implements AfterViewInit {
   ) {}
 
   async ionViewWillEnter() {
-    this.login.checkMoodleLoginState();
+    await this.login.checkMoodleLoginState();
   }
 
   public async onSignIn(isSignedIn: boolean) {
@@ -36,7 +36,7 @@ export class SchedulePage implements AfterViewInit {
     const loading = await this.loadingController.create({
       message: 'Collecting moodle data...'
     });
-    const task = loading.present();
+    await loading.present();
 
     this.token = moodleToken;
     const calenderRequestData = await this.moodleService.getCalenderEventsWeek(moodleToken).toPromise();
@@ -52,7 +52,7 @@ export class SchedulePage implements AfterViewInit {
     } else {
       this.isMoodleUserSignedIn = false;
       this.login.isUserLoggedIn = false;
-      loading.dismiss();
+      await loading.dismiss();
     }
   }
 

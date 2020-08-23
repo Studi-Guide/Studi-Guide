@@ -31,11 +31,11 @@ export class MoodleService {
     }
 
     public containsEvents(responseObj: any) : boolean {
-        return responseObj.events != undefined || responseObj.events != null
+        return responseObj.events != null || responseObj.events !== undefined
     }
 
     public containsToken(responseObj: any) : boolean {
-        return responseObj.token != undefined || responseObj.token != null
+        return responseObj.token != null || responseObj.token !== undefined
     }
 
     private moodleRequest<T>(token: MoodleToken, restFunction: string, parameters: ParameterMap) {

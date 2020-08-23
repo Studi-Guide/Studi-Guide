@@ -4,7 +4,7 @@
     <ion-list lines="none">
       <ion-item [attr.href]='isSignedIn ? null : "/tabs/schedule"'>
         <ion-avatar slot="start">
-          <img src="/assets/person-circle-sharp.svg">
+          <img src="/assets/person-circle-sharp.svg" alt="avatar">
         </ion-avatar>
         <ion-label>
           <h3>Moodle</h3>
@@ -21,11 +21,13 @@
   <hr>
   <div class="padding">
     <ion-list-header>Language</ion-list-header>
-    <select>
-      <option value="english" selected>English</option>
-      <option value="german">Deutsch</option>
-      <option value="spain">Español</option>
-    </select>
+    <label>
+      <select>
+        <option value="english" selected>English</option>
+        <option value="german">Deutsch</option>
+        <option value="spain">Español</option>
+      </select>
+    </label>
   </div>
   <hr>
   <ion-list lines="" class="ion-padding-top ion-margin-top">
