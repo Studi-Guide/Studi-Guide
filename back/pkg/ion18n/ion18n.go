@@ -29,9 +29,9 @@ func NewIon18nRouter(router *gin.RouterGroup, ionPath string) (*Ion18nRouter, er
 func (i *Ion18nRouter) HandleRequest(c *gin.Context) {
 
 	if strings.Contains(c.GetHeader("Accept-Language"), "de") {
-		c.Redirect(http.StatusMultipleChoices, "/de/")
+		c.Redirect(http.StatusTemporaryRedirect, "/de/")
 	} else {
-		c.Redirect(http.StatusMultipleChoices, "/en-US/")
+		c.Redirect(http.StatusTemporaryRedirect, "/en-US/")
 	}
 
 }
