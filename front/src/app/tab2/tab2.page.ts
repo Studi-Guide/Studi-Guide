@@ -45,7 +45,7 @@ export class Tab2Page implements AfterViewInit{
       event.target.complete();
     }
 
-  async onLocationClick(location: string) {
-    await this.router.navigateByUrl('tabs/navigation/search/' + location)
+  async onLocationClick(locationName: string) {
+    await this.router.navigate(['tabs/navigation'], { queryParams: { location: locationName } });
   }
 }
