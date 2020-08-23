@@ -2,7 +2,7 @@
   <div class="padding">
     <ion-list-header>Accounts</ion-list-header>
     <ion-list lines="none">
-      <ion-item>
+      <ion-item [attr.href]='isSignedIn ? null : "/tabs/schedule"'>
         <ion-avatar slot="start">
           <img src="/assets/person-circle-sharp.svg">
         </ion-avatar>
