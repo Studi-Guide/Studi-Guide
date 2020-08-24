@@ -48,6 +48,7 @@ export class NavigationPage implements  AfterViewInit, OnInit{
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
                 private  route: ActivatedRoute,
+                private router: Router,
                 private storage: Storage) {
     }
 
@@ -259,10 +260,6 @@ export class NavigationPage implements  AfterViewInit, OnInit{
     }
 
     public async recentSearchClick(location:string) {
-        // TODO proper implementation of the router module
-        // await this.router.navigateByUrl('tabs/navigation/search/' + location);
-        // use native code until router implementation can be used
-        this.searchInput.setDiscoverySearchbarValue(location);
-        await this.onDiscovery(location);
+        await this.router.navigate(['tabs/navigation'], { queryParams: { location: location } });
     }
 }
