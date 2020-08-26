@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { IonicDetailViewComponent } from './ionic-detail-view.component';
+import { DetailViewSelectLanguageComponent } from './detail-view-select-language.component';
 
-describe('IonicDetailViewComponent', () => {
-  let component: IonicDetailViewComponent;
-  let fixture: ComponentFixture<IonicDetailViewComponent>;
+describe('DetailViewSelectLanguageComponent', () => {
+  let component: DetailViewSelectLanguageComponent;
+  let fixture: ComponentFixture<DetailViewSelectLanguageComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ IonicDetailViewComponent ],
+      declarations: [ DetailViewSelectLanguageComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(IonicDetailViewComponent);
+    fixture = TestBed.createComponent(DetailViewSelectLanguageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

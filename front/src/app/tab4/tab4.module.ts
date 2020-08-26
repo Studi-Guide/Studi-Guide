@@ -4,8 +4,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Tab4Page } from './tab4.page';
-import {IonicDetailViewModule} from "../../ionic-detail-view/ionic-detail-view.module";
-import {IonicDetailViewComponent} from "../../ionic-detail-view/ionic-detail-view.component";
+import {DetailViewSelectLanguageComponent} from "../detail-view-select-language/detail-view-select-language.component";
+import {DetailViewSelectLanguageModule} from "../detail-view-select-language/detail-view-select-language.module";
 
 @NgModule({
     imports: [
@@ -14,9 +14,9 @@ import {IonicDetailViewComponent} from "../../ionic-detail-view/ionic-detail-vie
         FormsModule,
         RouterModule.forChild([
             {path: '', component: Tab4Page},
-            {path: 'language', component: IonicDetailViewComponent, }
+            {path: 'language', component: DetailViewSelectLanguageComponent, }
         ]),
-        IonicDetailViewModule
+        DetailViewSelectLanguageModule
     ],
   declarations: [Tab4Page]
 })
