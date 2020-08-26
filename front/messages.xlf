@@ -59,6 +59,14 @@
         <note priority="1" from="description">missing place request</note>
         <note priority="1" from="meaning">search error</note>
       </trans-unit>
+      <trans-unit id="a598b2d406e55535d58ab9381347189920bfa333" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{l.Language}}"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <note priority="1" from="description">Select Language</note>
+      </trans-unit>
     </body>
   </file>
 </xliff>

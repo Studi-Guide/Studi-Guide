@@ -1,4 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'detail-view-select-language',
@@ -7,10 +8,28 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class DetailViewSelectLanguageComponent implements OnInit {
 
-  @Input() PageTitle:string;
+  public readonly languages = [
+      {Language: 'English',  Identifier: 'en-US'},
+      {Language: 'German', Identifier: 'de'}
+  ];
 
-  constructor() { }
+  constructor(
+      private router:Router,
+      @Inject(LOCALE_ID) private locale:string
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    console.log(this.router.url, this.locale);
+  }
+
+  public SelectLanguageClick(identifier:string) {
+    console.log(identifier);
+    if (identifier !== this.locale) {
+      console.log('/' + identifier + this.router.url);
+      this.router.navigate(['/' + identifier + this.router.url]);
+    } else {
+      console.log('locale', this.locale, 'not found in current URL');
+    }
+  }
 
 }
