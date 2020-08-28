@@ -1,5 +1,5 @@
 import {BuildingData, Location, PathNode} from '../building-objects-if';
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
@@ -18,13 +18,14 @@ import {Router} from '@angular/router';
     styleUrls: ['navigation.page.scss']
 })
 
-export class NavigationPage implements  AfterViewInit, OnInit{
+export class NavigationPage implements OnInit{
 
     @ViewChild(MapViewComponent) mapView: MapViewComponent;
     @ViewChild(SearchInputComponent) searchInput: SearchInputComponent;
     @ViewChild('drawerContent') drawerContent : IonContent;
     @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
     @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
+    @ViewChild('canvasWrapper', {read: ElementRef}) private canvasWrapper: ElementRef;
 
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
@@ -52,7 +53,7 @@ export class NavigationPage implements  AfterViewInit, OnInit{
                 private storage: Storage) {
     }
 
-    ngAfterViewInit() {
+    ionViewDidEnter() {
         this.route.queryParams.subscribe(async params =>
         {
                 // discover requested location
@@ -248,8 +249,7 @@ export class NavigationPage implements  AfterViewInit, OnInit{
     }
 
     private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
-        const div = document.getElementById('canvas-wrapper');
-        div.scrollTo(xCoordinate,yCoordinate );
+        this.canvasWrapper.nativeElement.scrollTo(xCoordinate,yCoordinate );
     }
 
     private addRecentSearch(location:string) {
