@@ -128,7 +128,7 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  private getCanvasMap(mapItems: MapItem[], positionX: number, positionY: number) {
+  private getCanvasMap(mapItems: MapItem[], positionX: number, positionY: number, scale: number = 1) {
     const mapCanvas = document.getElementById('map') as HTMLCanvasElement;
     let mapHeightNeeded = 0;
     let mapWidthNeeded = 0;
@@ -151,7 +151,7 @@ export class MapViewComponent implements AfterViewInit {
     const position = new TranslationPosition();
     position.X = positionX;
     position.Y = positionY;
-    return CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded,1, position);
+    return CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded,scale, position);
   }
 
   public async onClickTouch(event:MouseEvent) {
@@ -194,10 +194,5 @@ export class MapViewComponent implements AfterViewInit {
         return;
       }
     }
-  }
-
-
-  private draw(scale:number, translatePosition) {
-
   }
 }
