@@ -3,12 +3,13 @@
     <ion-buttons slot="start">
       <ion-back-button defaultHref="/"></ion-back-button>
     </ion-buttons>
-    <ion-title>Select Language</ion-title>
+    <ion-title i18n="Select Language|Header">Select Language</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content>
-  <ion-list>
-    <ion-item *ngFor="let l of languages" href="/{{l.Identifier}}" i18n="Select Language">{{l.Language}}</ion-item>
+  <ion-list i18n="Select Language|Languages">
+    <ion-item href="/en-US">English</ion-item>
+    <ion-item href="/de">German</ion-item>
   </ion-list>
 </ion-content>
 

@@ -59,13 +59,67 @@
         <note priority="1" from="description">missing place request</note>
         <note priority="1" from="meaning">search error</note>
       </trans-unit>
-      <trans-unit id="a598b2d406e55535d58ab9381347189920bfa333" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{l.Language}}"/></source>
+      <trans-unit id="6729329861748a1ac918658f7871a97414091deb" datatype="html">
+        <source>Select Language</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <note priority="1" from="description">Header</note>
+        <note priority="1" from="meaning">Select Language</note>
+      </trans-unit>
+      <trans-unit id="b47b79397919ae72f70bdc7252be4e238da67d8d" datatype="html">
+        <source>
+    <x id="START_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;ion-item&gt;"/>English<x id="CLOSE_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;/ion-item&gt;"/>
+    <x id="START_TAG_ION-ITEM_1" ctype="x-ion-item" equiv-text="&lt;ion-item&gt;"/>German<x id="CLOSE_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;/ion-item&gt;"/>
+  </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+        <note priority="1" from="description">Languages</note>
+        <note priority="1" from="meaning">Select Language</note>
+      </trans-unit>
+      <trans-unit id="cd3c4d3ddc94ff59b452b521a7945485f22a18cf" datatype="html">
+        <source>
+      Settings
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/tab4/tab4.page.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <note priority="1" from="description">Header</note>
+        <note priority="1" from="meaning">Settings</note>
+      </trans-unit>
+      <trans-unit id="8943e53641a04eb7defe5a7e15698f4924c59196" datatype="html">
+        <source>
+      <x id="START_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;ion-label&gt;"/>Language<x id="CLOSE_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;/ion-label&gt;"/>
+      <x id="START_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;ion-note&gt;"/>English<x id="CLOSE_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;/ion-note&gt;"/>
+    </source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/tab4/tab4.page.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
-        <note priority="1" from="description">Select Language</note>
+        <note priority="1" from="description">Navigate to Language Selection</note>
+        <note priority="1" from="meaning">Settings</note>
+      </trans-unit>
+      <trans-unit id="38eca8ed965ed27304f3e8f5505492248159100b" datatype="html">
+        <source>Help</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/tab4/tab4.page.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <note priority="1" from="description">Help</note>
+        <note priority="1" from="meaning">Settings</note>
+      </trans-unit>
+      <trans-unit id="e3ac5f8fae66ee7d38924f267b57dbc2ae4d16d8" datatype="html">
+        <source>About</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/tab4/tab4.page.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+        <note priority="1" from="description">About</note>
+        <note priority="1" from="meaning">Settings</note>
       </trans-unit>
     </body>
   </file>

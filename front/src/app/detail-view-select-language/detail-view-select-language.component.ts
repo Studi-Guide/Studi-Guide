@@ -25,7 +25,6 @@ export class DetailViewSelectLanguageComponent implements OnInit {
   public SelectLanguageClick(identifier:string) {
     console.log(identifier);
     if (identifier !== this.locale) {
-      console.log('/' + identifier + this.router.url);
       this.router.navigate(['/' + identifier + this.router.url]);
     } else {
       console.log('locale', this.locale, 'not found in current URL');
