@@ -12,6 +12,7 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import {Env} from '../environments/environment';
 import {IonicStorageModule} from '@ionic/storage';
+import {WINDOW_PROVIDERS} from './services/windowProvider';
 
 @NgModule({
   declarations: [AppComponent],
@@ -21,6 +22,7 @@ import {IonicStorageModule} from '@ionic/storage';
     StatusBar,
     SplashScreen,
     Env,
+    WINDOW_PROVIDERS,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

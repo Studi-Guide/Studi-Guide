@@ -2,8 +2,9 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import {Injectable} from '@angular/core';
+import {Inject, Injectable} from '@angular/core';
 import {Platform} from '@ionic/angular';
+import {WINDOW} from '../app/services/windowProvider';
 
 export const environment = {
   production: false
@@ -15,7 +16,13 @@ export class Env {
   serverUrl = 'http://localhost:8080';
   production = false;
 
-  constructor(public plt: Platform) {
+  constructor(public plt: Platform,
+              @Inject(WINDOW) window: Window){
+    if (window != null)  {
+        console.log('Server url: ' + window.origin);
+        this.serverUrl = window.origin;
+    }
+
     console.log(plt.platforms());
     if (plt.is('hybrid')){
       console.log('Android or iOS app recognized');
