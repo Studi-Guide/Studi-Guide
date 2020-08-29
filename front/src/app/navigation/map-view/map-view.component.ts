@@ -38,14 +38,9 @@ export class MapViewComponent implements AfterViewInit {
     this.routeRenderer = new NaviRouteRenderer(this.dataService);
   }
 
-  public async showRoute(start:string, end:string) {
+  public async showRoute(route:ReceivedRoute, startLocation:Location) {
     this.routeRenderer.stopAnimation();
-
-    // Get target location
-    const startLocation = await this.dataService.get_location(start).toPromise<Location>();
-    this.currentRoute = await this.dataService.get_route(start, end).toPromise();
-
-    await this.renderNavigationPage(startLocation.Building, startLocation.Floor);
+    await this.renderNavigationPage(route, startLocation.Building, startLocation.Floor);
   }
 
   public async showDiscoveryLocation(location:string) {
@@ -73,7 +68,7 @@ export class MapViewComponent implements AfterViewInit {
   public async showFloor(floor:string, building:string) {
     this.routeRenderer.stopAnimation();
     if (this.currentRoute != null) {
-      await this.renderNavigationPage(this.currentBuilding, floor);
+      await this.renderNavigationPage(this.currentRoute, this.currentBuilding, floor);
     }
     else {
       const res = await this.dataService.get_map_items('', floor, building).toPromise()
@@ -94,11 +89,11 @@ export class MapViewComponent implements AfterViewInit {
       this.currentFloor = floor;
   }
 
-  private async renderNavigationPage(building: string, floor: string) {
+  private async renderNavigationPage(route:ReceivedRoute, building: string, floor: string) {
     // TODO allow passing a regex to backend to filter map items
     let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<MapItem[]>() ?? new Array<MapItem>();
     let locations = await this.dataService.get_locations(building, floor).toPromise<Location[]>() ?? new Array<Location>();
-    for (const routeSection of this.currentRoute.RouteSections) {
+    for (const routeSection of route.RouteSections) {
       if (routeSection.Floor === floor && routeSection.Building !== building) {
         const items = await this.dataService.get_map_floor(routeSection.Building, routeSection.Floor).toPromise<MapItem[]>();
         mapItems = mapItems.concat(items);
@@ -112,8 +107,9 @@ export class MapViewComponent implements AfterViewInit {
     this.currentBuilding = building;
     this.floorMapRenderer = new FloorMapRenderer(mapItems, locations);
     this.floorMapRenderer.renderFloorMap(map);
-    await this.routeRenderer.render(map, this.currentRoute, floor);
+    await this.routeRenderer.render(map, route, floor);
     this.routeRenderer.startAnimation();
+    this.currentRoute = route;
     this.currentFloor = floor;
   }
 

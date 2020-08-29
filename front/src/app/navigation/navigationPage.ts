@@ -1,5 +1,5 @@
 import {BuildingData, Location, PathNode} from '../building-objects-if';
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
@@ -18,13 +18,14 @@ import {Router} from '@angular/router';
     styleUrls: ['navigation.page.scss']
 })
 
-export class NavigationPage implements  AfterViewInit, OnInit{
+export class NavigationPage implements OnInit{
 
     @ViewChild(MapViewComponent) mapView: MapViewComponent;
     @ViewChild(SearchInputComponent) searchInput: SearchInputComponent;
     @ViewChild('drawerContent') drawerContent : IonContent;
     @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
     @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
+    @ViewChild('canvasWrapper', {read: ElementRef}) private canvasWrapper: ElementRef;
 
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
@@ -52,7 +53,7 @@ export class NavigationPage implements  AfterViewInit, OnInit{
                 private storage: Storage) {
     }
 
-    ngAfterViewInit() {
+    ionViewDidEnter() {
         this.route.queryParams.subscribe(async params =>
         {
                 // discover requested location
@@ -87,6 +88,9 @@ export class NavigationPage implements  AfterViewInit, OnInit{
         try {
             const location = await this.mapView.showDiscoveryLocation(searchInput);
             this.addRecentSearch(searchInput);
+            this.scrollToCoordinate(location.PathNode.Coordinate.X, location.PathNode.Coordinate.Y);
+
+            // Wenn man hier ein await einfügt spackt der drawer komplett. Keine ahnung wieso
             this.showLocationDrawer(location);
             this.availableFloorsBtnIsVisible = true;
         } catch (ex) {
@@ -100,7 +104,10 @@ export class NavigationPage implements  AfterViewInit, OnInit{
         this.errorMessage = '';
         this.progressIsVisible = true;
         try {
-            await this.mapView.showRoute(routeInput[0], routeInput[1]);
+            const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<Location>();
+            const route = await this.dataService.get_route(routeInput[0], routeInput[1]).toPromise();
+            await this.mapView.showRoute(route, startLocation);
+            this.scrollToCoordinate(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
             this.availableFloorsBtnIsVisible = true;
         } catch (ex) {
             let inputError = '';
@@ -236,12 +243,13 @@ export class NavigationPage implements  AfterViewInit, OnInit{
             await this.mapView.showDiscoveryMap('', 'EG')
             this.availableFloorsBtnIsVisible = true;
 
-            // Scroll to mid
-            const div = document.getElementById('canvas-wrapper');
-
             // Coordinates of KA.013
-            div.scrollBy(345 - 50, 600 - 125);
+            this.scrollToCoordinate(345 - 50, 600 - 125);
         }
+    }
+
+    private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
+        this.canvasWrapper.nativeElement.scrollTo(xCoordinate,yCoordinate );
     }
 
     private addRecentSearch(location:string) {
@@ -259,7 +267,7 @@ export class NavigationPage implements  AfterViewInit, OnInit{
         console.log(this.recentSearches);
     }
 
-    public async recentSearchClick(location:string) {
-        await this.router.navigate(['tabs/navigation'], { queryParams: { location: location } });
+    public async recentSearchClick(locationStr:string) {
+        await this.router.navigate(['tabs/navigation'], { queryParams: { location: locationStr } });
     }
 }
