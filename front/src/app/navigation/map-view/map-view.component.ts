@@ -156,7 +156,7 @@ export class MapViewComponent implements AfterViewInit {
 
   public async onClickTouch(event:MouseEvent) {
 
-    const point = CanvasTouchHelper.CalculateXY(event, event.currentTarget as HTMLElement);
+    const point = CanvasTouchHelper.CalculateXY({x: event.clientX, y:event.clientY}, event.currentTarget as HTMLElement);
 
     if(this.currentRoute != null) {
       const items: MapItem[] = await this.routeRenderer.getInteractiveStairWellMapItems(this.currentRoute, this.currentFloor);
