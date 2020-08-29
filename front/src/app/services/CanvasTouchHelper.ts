@@ -19,7 +19,7 @@ export class CanvasTouchHelper {
         this.currentZoom = defaultZoom; // Default original zoom
         const minZoom  = 0.3;
         const maxZoom  = 1.5;
-        const zoomVelocity = 0.025;
+        const zoomVelocity = 0.03;
 
         const hammerTime = new Hammer.Manager(canvasElement.nativeElement, { touchAction: 'pan-x pan-y' });
         const pinch = new Hammer.Pinch();
