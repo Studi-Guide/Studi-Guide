@@ -135,6 +135,7 @@ export class CanvasTouchHelper {
     public static transistion(xCoordinate: number, yCoordinate: number, canvasElement: ElementRef, renderer: Renderer2, isPan: boolean){
         this.currentZoom.x = this.lastZoom.x + xCoordinate
         this.currentZoom.y = this.lastZoom.y + yCoordinate;
+        console.log('Map-Transition by ... x: ' + xCoordinate + ' y: ' + yCoordinate );
         this.update(this.originalSize, this.currentZoom, canvasElement, renderer);
         if (!isPan) {
             this.lastZoom.x = this.currentZoom.x;
