@@ -6,6 +6,12 @@ export class CanvasTouchHelper {
     private static currentZoom:
         { x: number; width: number; y: number; z: number;height: number };
 
+    private static lastZoom :{
+        x: number;
+        y: number;
+        z: number;
+    };
+
     public static CalculateXY(coordinates: { x: number; y: number }, canvasElement: HTMLElement) {
         const rect = canvasElement.getBoundingClientRect();
         const x = coordinates.x/this.currentZoom.z - rect.left;
@@ -39,10 +45,10 @@ export class CanvasTouchHelper {
             height: originalSize.height * 1,
         }
 
-        const last = {
-            x: this.currentZoom.x,
-            y: this.currentZoom.y,
-            z: this.currentZoom.z
+        this.lastZoom = {
+            x: 0,
+            y:0,
+            z:1
         }
 
         hammerTime.on('doubletap', (event) => {
@@ -65,9 +71,9 @@ export class CanvasTouchHelper {
                 this.currentZoom.y += d.y;
                 this.currentZoom.z += d.z;
 
-                last.x = this.currentZoom.x;
-                last.y = this.currentZoom.y;
-                last.z = this.currentZoom.z;
+                this.lastZoom.x = this.currentZoom.x;
+                this.lastZoom.y = this.currentZoom.y;
+                this.lastZoom.z = this.currentZoom.z;
 
                 this.update(originalSize, this.currentZoom, canvasElement, renderer);
             }
@@ -87,17 +93,17 @@ export class CanvasTouchHelper {
                 }
             }
 
-            this.currentZoom.x = last.x + event.deltaX - fixHammerjsDeltaIssue.x;
-            this.currentZoom.y = last.y + event.deltaY - fixHammerjsDeltaIssue.y;
+            this.currentZoom.x = this.lastZoom.x + event.deltaX - fixHammerjsDeltaIssue.x;
+            this.currentZoom.y = this.lastZoom.y + event.deltaY - fixHammerjsDeltaIssue.y;
             lastEvent = 'pan';
             this.update(originalSize, this.currentZoom, canvasElement, renderer);
         })
 
         hammerTime.on('pinch', (event) => {
-            const d = this.scaleFrom(pinchZoomOrigin, last.z, last.z * event.scale, originalSize)
-            this.currentZoom.x = d.x + last.x + event.deltaX;
-            this.currentZoom.y = d.y + last.y + event.deltaY;
-            this.currentZoom.z = d.z + last.z;
+            const d = this.scaleFrom(pinchZoomOrigin, this.lastZoom.z, this.lastZoom.z * event.scale, originalSize)
+            this.currentZoom.x = d.x + this.lastZoom.x + event.deltaX;
+            this.currentZoom.y = d.y + this.lastZoom.y + event.deltaY;
+            this.currentZoom.z = d.z + this.lastZoom.z;
             lastEvent = 'pinch';
             this.update(originalSize, this.currentZoom, canvasElement, renderer);
         })
@@ -112,15 +118,15 @@ export class CanvasTouchHelper {
         })
 
         hammerTime.on('panend', (event: MSGestureEvent) => {
-            last.x = this.currentZoom.x;
-            last.y = this.currentZoom.y;
+            this.lastZoom.x = this.currentZoom.x;
+            this.lastZoom.y = this.currentZoom.y;
             lastEvent = 'panend';
         })
 
         hammerTime.on('pinchend', (event: MSGestureEvent) => {
-            last.x = this.currentZoom.x;
-            last.y = this.currentZoom.y;
-            last.z = this.currentZoom.z;
+            this.lastZoom.x = this.currentZoom.x;
+            this.lastZoom.y = this.currentZoom.y;
+            this.lastZoom.z = this.currentZoom.z;
             lastEvent = 'pinchend';
         })
     }
