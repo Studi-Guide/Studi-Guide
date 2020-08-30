@@ -46,24 +46,31 @@ export class CanvasTouchHelper {
         }
 
         hammerTime.on('doubletap', (event) => {
-            canvasElement.nativeElement.style.transition = '0.3s';
-            setTimeout(() => {
-                canvasElement.nativeElement.style.transition = 'none';
-            }, 300)
+            if (this.currentZoom.z !== 1) {
+                canvasElement.nativeElement.style.transition = '0.3s';
+                setTimeout(() => {
+                    canvasElement.nativeElement.style.transition = 'none';
+                }, 300)
 
-            const zoomOrigin = this.CalculateXY(
-                {x: event.deltaX, y: event.deltaY},
-                event.currentTarget as HTMLElement ?? event.target as HTMLElement);
-            const d = this.scaleFrom(zoomOrigin, this.currentZoom.z, 1, originalSize)
-            this.currentZoom.x += d.x;
-            this.currentZoom.y += d.y;
-            this.currentZoom.z += d.z;
+                const zoomOrigin = this.getRelativePosition(
+                    event.currentTarget as HTMLElement ?? event.target as HTMLElement,
+                    {x: event.center.x, y: event.center.y}, originalSize, this.currentZoom.z);
 
-            last.x = this.currentZoom.x;
-            last.y = this.currentZoom.y;
-            last.z = this.currentZoom.z;
 
-            this.update(originalSize, this.currentZoom, canvasElement, renderer);
+                // const zoomOrigin = this.CalculateXY(
+                //   {x: event.deltaX, y: event.deltaY},
+                //    event.currentTarget as HTMLElement ?? event.target as HTMLElement);
+                const d = this.scaleFrom(zoomOrigin, this.currentZoom.z, 1, originalSize)
+                this.currentZoom.x += d.x;
+                this.currentZoom.y += d.y;
+                this.currentZoom.z += d.z;
+
+                last.x = this.currentZoom.x;
+                last.y = this.currentZoom.y;
+                last.z = this.currentZoom.z;
+
+                this.update(originalSize, this.currentZoom, canvasElement, renderer);
+            }
         })
 
         hammerTime.on('pan', (event) => {
