@@ -19,7 +19,10 @@ export class CanvasTouchHelper {
         const hammerTime = new Hammer(canvasElement.nativeElement, {});
         hammerTime.get('pinch').set({ enable: true });
         hammerTime.get('pan').set({ threshold: 0 });
-        let fixHammerjsDeltaIssue;
+        let fixHammerjsDeltaIssue = {
+            x: 0,
+            y: 0
+        }
         const pinchStart = { x: undefined, y: undefined }
         let lastEvent;
 
@@ -70,6 +73,12 @@ export class CanvasTouchHelper {
                     y: event.deltaY
                 }
             }
+            else {
+                fixHammerjsDeltaIssue = {
+                    x: 0,
+                    y: 0
+                }
+            }
 
             this.currentZoom.x = last.x + event.deltaX - fixHammerjsDeltaIssue.x;
             this.currentZoom.y = last.y + event.deltaY - fixHammerjsDeltaIssue.y;
@@ -115,8 +124,12 @@ export class CanvasTouchHelper {
                           renderer: Renderer2) {
         this.currentZoom.height = originalSize.height * + zoom.z;
         this.currentZoom.width = originalSize.width * zoom.z;
-        renderer.setStyle(element.nativeElement, 'zoom', zoom.z);
-        element.nativeElement.scrollTo(zoom.x,zoom.y);
+        renderer.setStyle(
+            element.nativeElement,
+            'transform',
+            'translate3d(' + this.currentZoom.x + 'px, ' + this.currentZoom.y + 'px, 0) scale(' + this.currentZoom.z + ')');
+        // renderer.setStyle(element.nativeElement, 'zoom', zoom.z);
+        // element.nativeElement.scrollTo(zoom.x,zoom.y);
         // renderer.setStyle(element.nativeElement, )
         // element.style.transform =
         //    ;
@@ -133,22 +146,9 @@ export class CanvasTouchHelper {
         return { x: relativeX, y: relativeY }
     }
 
-    private  static getCoords(elem: HTMLElement) { // crossbrowser version
+    private static getCoords(elem: HTMLElement) { // crossbrowser version
         const box = elem.getBoundingClientRect();
-
-        const body = document.body;
-        const docEl = document.documentElement;
-
-        const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-        const scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-
-        const clientTop = docEl.clientTop || body.clientTop || 0;
-        const clientLeft = docEl.clientLeft || body.clientLeft || 0;
-
-        const top  = box.top +  scrollTop - clientTop;
-        const left = box.left + scrollLeft - clientLeft;
-
-        return { x: Math.round(left), y: Math.round(top) };
+        return { x: Math.round(box.left), y: Math.round(box.top) };
     }
 
     private static scaleFrom(zoomOrigin, currentScale: number, newScale: number, originalSize) {
