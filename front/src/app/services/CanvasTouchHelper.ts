@@ -11,6 +11,7 @@ export class CanvasTouchHelper {
         y: number;
         z: number;
     };
+    private static originalSize: { width: number; height: number };
 
     public static CalculateXY(coordinates: { x: number; y: number }, canvasElement: HTMLElement) {
         const rect = canvasElement.getBoundingClientRect();
@@ -32,7 +33,7 @@ export class CanvasTouchHelper {
         const pinchStart = { x: undefined, y: undefined }
         let lastEvent;
 
-        const originalSize = {
+        this.originalSize = {
             width: canvasElement.nativeElement.offsetWidth,
             height: canvasElement.nativeElement.offsetHeight
         }
@@ -41,8 +42,8 @@ export class CanvasTouchHelper {
             x: 0,
             y: 0,
             z: 1,
-            width: originalSize.width * 1,
-            height: originalSize.height * 1,
+            width: this.originalSize.width * 1,
+            height: this.originalSize.height * 1,
         }
 
         this.lastZoom = {
@@ -60,13 +61,13 @@ export class CanvasTouchHelper {
 
                 const zoomOrigin = this.getRelativePosition(
                     event.currentTarget as HTMLElement ?? event.target as HTMLElement,
-                    {x: event.center.x, y: event.center.y}, originalSize, this.currentZoom.z);
+                    {x: event.center.x, y: event.center.y}, this.originalSize, this.currentZoom.z);
 
 
                 // const zoomOrigin = this.CalculateXY(
                 //   {x: event.deltaX, y: event.deltaY},
                 //    event.currentTarget as HTMLElement ?? event.target as HTMLElement);
-                const d = this.scaleFrom(zoomOrigin, this.currentZoom.z, 1, originalSize)
+                const d = this.scaleFrom(zoomOrigin, this.currentZoom.z, 1, this.originalSize)
                 this.currentZoom.x += d.x;
                 this.currentZoom.y += d.y;
                 this.currentZoom.z += d.z;
@@ -75,7 +76,7 @@ export class CanvasTouchHelper {
                 this.lastZoom.y = this.currentZoom.y;
                 this.lastZoom.z = this.currentZoom.z;
 
-                this.update(originalSize, this.currentZoom, canvasElement, renderer);
+                this.update(this.originalSize, this.currentZoom, canvasElement, renderer);
             }
         })
 
@@ -93,19 +94,19 @@ export class CanvasTouchHelper {
                 }
             }
 
-            this.currentZoom.x = this.lastZoom.x + event.deltaX - fixHammerjsDeltaIssue.x;
-            this.currentZoom.y = this.lastZoom.y + event.deltaY - fixHammerjsDeltaIssue.y;
+            const xTransition = event.deltaX - fixHammerjsDeltaIssue.x;
+            const yTransition = event.deltaY - fixHammerjsDeltaIssue.y;
+            this.transistion(xTransition, yTransition, canvasElement, renderer)
             lastEvent = 'pan';
-            this.update(originalSize, this.currentZoom, canvasElement, renderer);
         })
 
         hammerTime.on('pinch', (event) => {
-            const d = this.scaleFrom(pinchZoomOrigin, this.lastZoom.z, this.lastZoom.z * event.scale, originalSize)
+            const d = this.scaleFrom(pinchZoomOrigin, this.lastZoom.z, this.lastZoom.z * event.scale, this.originalSize)
             this.currentZoom.x = d.x + this.lastZoom.x + event.deltaX;
             this.currentZoom.y = d.y + this.lastZoom.y + event.deltaY;
             this.currentZoom.z = d.z + this.lastZoom.z;
             lastEvent = 'pinch';
-            this.update(originalSize, this.currentZoom, canvasElement, renderer);
+            this.update(this.originalSize, this.currentZoom, canvasElement, renderer);
         })
 
         let pinchZoomOrigin;
@@ -113,7 +114,7 @@ export class CanvasTouchHelper {
             pinchStart.x = event.deltaX;
             pinchStart.y = event.deltaY;
             pinchZoomOrigin = this.getRelativePosition(event.currentTarget as HTMLElement ?? event.target as HTMLElement,
-                { x: pinchStart.x, y: pinchStart.y }, originalSize, this.currentZoom.z);
+                { x: pinchStart.x, y: pinchStart.y }, this.originalSize, this.currentZoom.z);
             lastEvent = 'pinchstart';
         })
 
@@ -129,6 +130,12 @@ export class CanvasTouchHelper {
             this.lastZoom.z = this.currentZoom.z;
             lastEvent = 'pinchend';
         })
+    }
+
+    public static transistion(xCoordinate: number, yCoordinate: number, canvasElement: ElementRef, renderer: Renderer2){
+        this.currentZoom.x = this.lastZoom.x + xCoordinate
+        this.currentZoom.y = this.lastZoom.y + yCoordinate;
+        this.update(this.originalSize, this.currentZoom, canvasElement, renderer);
     }
 
     private static update(originalSize: { width: any; height: any },
