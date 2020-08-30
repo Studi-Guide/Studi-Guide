@@ -3,7 +3,7 @@ import * as Hammer from 'hammerjs';
 
 export class CanvasTouchHelper {
 
-    private static currentZoom:
+    public static currentZoom:
         { x: number; width: number; y: number; z: number;height: number };
 
     private static lastZoom :{
