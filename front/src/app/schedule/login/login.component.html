@@ -9,16 +9,24 @@
   <ion-grid fixed="md">
     <ion-row>
       <ion-col size="12">
-        <ion-searchbar #userNameInput animated="true" search-icon="person-circle-outline" inputmode="text"
-                       mode="ios" placeholder="user name" color="light" icon-color="dark"
-                       (ionChange)="clearInvalidCredentialsMsg()" value="admin"
-        ></ion-searchbar>
+        <ion-item>
+          <ion-label position="stacked">user name</ion-label>
+          <ion-input #userNameInput type="text" class="ion-text-center" clear-input
+                     (ionChange)="clearInvalidCredentialsMsg()" value="admin"
+          >
+            <ion-icon name="person-outline"></ion-icon>
+          </ion-input>
+        </ion-item>
         <!-- TODO remove searchbar values -->
-        <ion-searchbar #passwordInput animated="true" search-icon="key-outline" inputmode="text"
-                       mode="ios" placeholder="password" color="light" icon-color="dark" type="password"
-                       (ionChange)="clearInvalidCredentialsMsg()" value="administrator"
-        ></ion-searchbar>
-        <ion-button size="default" mode="ios" color="secondary" (click)="fetchAndPersistMoodleToken()">
+        <ion-item>
+          <ion-label position="stacked">password</ion-label>
+          <ion-input #passwordInput type="password" class="ion-text-center" clear-input
+                     (ionChange)="clearInvalidCredentialsMsg()" value="administrator"
+          >
+            <ion-icon name="key-outline"></ion-icon>
+          </ion-input>
+        </ion-item>
+        <ion-button size="default" expand="full" mode="ios" color="secondary" (click)="fetchAndPersistMoodleToken()">
           <h4>sign in</h4>
         </ion-button>
       </ion-col>
