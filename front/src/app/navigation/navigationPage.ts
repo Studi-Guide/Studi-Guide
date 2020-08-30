@@ -256,7 +256,7 @@ export class NavigationPage implements OnInit{
             CanvasTouchHelper.currentZoom.x - xCoordinate,
             CanvasTouchHelper.currentZoom.y - yCoordinate,
             this.canvasWrapper,
-            this. renderer);
+            this. renderer, false);
     }
 
     private addRecentSearch(location:string) {

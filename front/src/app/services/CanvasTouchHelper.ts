@@ -96,8 +96,8 @@ export class CanvasTouchHelper {
 
             const xTransition = event.deltaX - fixHammerjsDeltaIssue.x;
             const yTransition = event.deltaY - fixHammerjsDeltaIssue.y;
-            this.transistion(xTransition, yTransition, canvasElement, renderer)
             lastEvent = 'pan';
+            this.transistion(xTransition, yTransition, canvasElement, renderer, true)
         })
 
         hammerTime.on('pinch', (event) => {
@@ -132,10 +132,14 @@ export class CanvasTouchHelper {
         })
     }
 
-    public static transistion(xCoordinate: number, yCoordinate: number, canvasElement: ElementRef, renderer: Renderer2){
+    public static transistion(xCoordinate: number, yCoordinate: number, canvasElement: ElementRef, renderer: Renderer2, isPan: boolean){
         this.currentZoom.x = this.lastZoom.x + xCoordinate
         this.currentZoom.y = this.lastZoom.y + yCoordinate;
         this.update(this.originalSize, this.currentZoom, canvasElement, renderer);
+        if (!isPan) {
+            this.lastZoom.x = this.currentZoom.x;
+            this.lastZoom.y = this.currentZoom.y;
+        }
     }
 
     private static update(originalSize: { width: any; height: any },
