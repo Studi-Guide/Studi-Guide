@@ -6,9 +6,9 @@
       </ion-title>
     </ion-toolbar>
   </ion-header>
-  <ion-grid>
+  <ion-grid fixed="md">
     <ion-row>
-      <ion-col size="12" class="ion-justify-content-center">
+      <ion-col size="12">
         <ion-searchbar #userNameInput animated="true" search-icon="person-circle-outline" inputmode="text"
                        mode="ios" placeholder="user name" color="light" icon-color="dark"
                        (ionChange)="clearInvalidCredentialsMsg()" value="admin"
