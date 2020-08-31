@@ -247,7 +247,7 @@ export class NavigationPage implements OnInit{
             this.availableFloorsBtnIsVisible = true;
 
             // Coordinates of KA.013
-            this.scrollToCoordinate(345 - 50, 600 - 125);
+            this.scrollToCoordinate(310, 550);
         }
     }
 
