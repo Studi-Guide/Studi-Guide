@@ -12,7 +12,7 @@
         <a href="https://github.com/Studi-Guide/Studi-Guide/issues/new/choose">Request a missing place</a>
       </p>
     </ion-text>
-    <div id="canvas-wrapper" #canvasWrapper>
+    <div id="canvas-wrapper" #canvasWrapper class="draggable">
       <app-map-view (locationClick)="showLocationDrawer($event)"></app-map-view>
     </div>
   </div>
