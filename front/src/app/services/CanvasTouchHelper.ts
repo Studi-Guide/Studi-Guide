@@ -13,10 +13,9 @@ export class CanvasTouchHelper {
     };
     private static originalSize: { width: number; height: number };
 
-    public static CalculateXY(coordinates: { x: number; y: number }, canvasElement: HTMLElement) {
-        const rect = canvasElement.getBoundingClientRect();
-        const x = coordinates.x/this.currentZoom.z - rect.left;
-        const y = coordinates.y/this.currentZoom.z - rect.top;
+    public static CalculateXY(coordinates: { x: number; y: number }) {
+        const x = coordinates.x/this.currentZoom.z - this.currentZoom.x;
+        const y = coordinates.y/this.currentZoom.z - this.currentZoom.y ;
         console.log('Recognized Interaction with zoom ' + this.currentZoom.z + 'on ... x: ' + x + ' y: ' + y );
 
         return [x, y];
