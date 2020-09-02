@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
-import {BuildingData, Location, MapItem} from '../building-objects-if';
+import {IBuilding, ILocation, IMapItem} from '../building-objects-if';
 import {ReceivedRoute} from '../navigation/map-view/naviRouteRenderer';
 import {CacheService} from './cache.service';
 
@@ -18,17 +18,17 @@ export class DataService {
     }
 
     get_map_floor(building:string, floor:string){
-        return this.cache.Get<MapItem[]>(this.httpClient, this.baseUrl + '/buildings/' + building + '/floors/'+ floor + '/maps');
+        return this.cache.Get<IMapItem[]>(this.httpClient, this.baseUrl + '/buildings/' + building + '/floors/'+ floor + '/maps');
     }
 
     get_map_items(campus:string, floor: string, buildingstr:string) {
-        return this.cache.Get<MapItem[]>(
+        return this.cache.Get<IMapItem[]>(
             this.httpClient,
             this.baseUrl + '/maps?floor=' + floor ?? '' + '&campus=' + campus ?? '' + '&building=' + buildingstr ?? '');
     }
 
     get_locations_items(campus:string, floor: string, buildingstr:string) {
-        return this.cache.Get<Location[]>(
+        return this.cache.Get<ILocation[]>(
             this.httpClient,
             this.baseUrl + '/locations?floor=' + floor ?? '' + '&campus=' + campus ?? '' + '&building=' + buildingstr ?? '');
     }
@@ -38,22 +38,22 @@ export class DataService {
     }
 
     get_locations_search(name:string) {
-        return this.cache.Get<Location[]>(this.httpClient,this.baseUrl + '/locations?search=' + name );
+        return this.cache.Get<ILocation[]>(this.httpClient,this.baseUrl + '/locations?search=' + name );
     }
 
     get_location(name:string) {
-        return this.cache.Get<Location>(this.httpClient,this.baseUrl + '/locations/' + name );
+        return this.cache.Get<ILocation>(this.httpClient,this.baseUrl + '/locations/' + name );
     }
 
     get_locations(building:string, floor:string) {
-        return this.cache.Get<Location[]>(this.httpClient,this.baseUrl + '/buildings/'+ building +'/floors/' + floor + '/locations');
+        return this.cache.Get<ILocation[]>(this.httpClient,this.baseUrl + '/buildings/'+ building +'/floors/' + floor + '/locations');
     }
 
     get_building(name:string) {
-        return this.cache.Get<BuildingData>(this.httpClient,this.baseUrl + '/buildings/' + name);
+        return this.cache.Get<IBuilding>(this.httpClient,this.baseUrl + '/buildings/' + name);
     }
 
     get_map_item(pathnodeid:number) {
-        return this.cache.Get<MapItem[]>(this.httpClient,this.baseUrl + '/maps?pathnodeid=' + pathnodeid);
+        return this.cache.Get<IMapItem[]>(this.httpClient,this.baseUrl + '/maps?pathnodeid=' + pathnodeid);
     }
 }

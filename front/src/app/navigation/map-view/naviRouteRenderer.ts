@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {MapItem, PathNode} from '../../building-objects-if';
+import {IMapItem, IPathNode} from '../../building-objects-if';
 import {CanvasResolutionConfigurator} from '../../services/CanvasResolutionConfigurator';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import {DataService} from '../../services/data.service';
@@ -17,12 +17,12 @@ export class ReceivedRoute {
 }
 
 export class RoutePoint {
-    Node:           PathNode;
+    Node:           IPathNode;
     Floor:          string;
 }
 
 export class RouteSection {
-    Route: 		PathNode[];
+    Route: 		IPathNode[];
     Description: string;
     Distance: 	 number;
     Building: 	string;
@@ -109,19 +109,19 @@ export class NaviRouteRenderer {
     }
 
     public async getInteractiveStairWellMapItems(route:ReceivedRoute, floor:string) {
-        const pNodes:PathNode[] = [];
+        const pNodes:IPathNode[] = [];
         for (let i = 0; i < route.RouteSections.length-1; i++) {
             if (route.RouteSections[i].Building !== route.RouteSections[i+1].Building)
                 continue;
             pNodes.push(route.RouteSections[i].Route[route.RouteSections[i].Route.length-1]);
         }
 
-        const tmpMItemss:MapItem[][] = [];
+        const tmpMItemss:IMapItem[][] = [];
         for (const pNode of pNodes) {
-            tmpMItemss.push(await this.dataService.get_map_item(pNode.Id).toPromise<MapItem[]>());
+            tmpMItemss.push(await this.dataService.get_map_item(pNode.Id).toPromise<IMapItem[]>());
         }
 
-        const mItems:MapItem[] = [];
+        const mItems:IMapItem[] = [];
         for (const mapItems of tmpMItemss) {
             for (const mapItem of mapItems) {
                 if (mapItem.Floor !== floor) {
@@ -136,7 +136,7 @@ export class NaviRouteRenderer {
 
     private async renderFlashingStairWell(map: CanvasRenderingContext2D, route:ReceivedRoute, floor :string) {
 
-        const mItems:MapItem[] = await this.getInteractiveStairWellMapItems(route, floor);
+        const mItems:IMapItem[] = await this.getInteractiveStairWellMapItems(route, floor);
 
         if (mItems.length === 0) {
             this.stopAnimation();

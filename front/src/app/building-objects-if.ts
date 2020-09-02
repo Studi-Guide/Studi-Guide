@@ -1,65 +1,54 @@
-export class Floor {
-  rooms: Room[];
-  corridors: Corridor[];
-}
-
-export class Corridor {
-  name: string;
-  fill: string;
-  width: number;
-  height: number;
-  X: number;
-  Y: number;
-}
-
-export class Coordinate {
+export interface ICoordinate {
   X: number;
   Y: number;
   Z: number;
 }
 
-export interface PathNode {
+export interface IPathNode {
   Id: number;
-  Coordinate: Coordinate;
+  Coordinate: ICoordinate;
 }
 
-export class Door {
+export interface ISection {
   Id: number;
-  Section: Section;
-  pathNode: PathNode;
+  Start: ICoordinate;
+  End: ICoordinate;
 }
 
-export interface Section {
-  Start: Coordinate;
-  End: Coordinate;
+export interface IDoor {
+  Id: number;
+  Section: ISection;
+  pathNode: IPathNode;
 }
 
-export interface MapItem {
-  Doors: Door[];
+export interface IMapItem {
+  Doors: IDoor[];
   Color: string;
-  Floor: string;
-  Sections: Section[];
+  Sections: ISection[];
   Campus: string;
   Building: string;
-  PathNodes: PathNode[];
+  PathNodes: IPathNode[];
+  Floor: string;
+  render(renderingContext:any);
 }
 
-export interface BuildingData {
+export interface IBuilding {
   Id: number;
   Name: string;
   Floors: string[];
+  Campus: string;
 }
 
-export interface Location {
+export interface ILocation {
   Id: number;
   Name: string;
   Description: string;
   Tags: string[];
-  PathNode: PathNode;
   Floor: string;
   Building: string;
+  PathNode: IPathNode;
 }
 
-export interface Room extends MapItem, Location{
-
+export interface IRoom extends IMapItem, ILocation{
+  Id: number;
 }

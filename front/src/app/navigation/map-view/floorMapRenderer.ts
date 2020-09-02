@@ -1,19 +1,35 @@
-import {Door, MapItem, Location} from '../../building-objects-if';
+import {IDoor, IMapItem, ILocation, IPathNode, ISection} from '../../building-objects-if';
 
 // @Injectable({
 //   providedIn: 'root'
 // })
-export class FloorMapRenderer {
-    public readonly objectsToBeVisualized: MapItem[];
-    public readonly locationNames: Location[];
 
-    constructor(objectsToBeVisualized: MapItem[],
-                locationNames: Location[]) {
+export class MapItem implements IMapItem {
+    Building: string;
+    Campus: string;
+    Color: string;
+    Doors: IDoor[];
+    Floor: string;
+    PathNodes: IPathNode[];
+    Sections: ISection[];
+
+    public render(renderingContext: CanvasRenderingContext2D) {
+        
+    }
+
+}
+
+export class FloorMapRenderer {
+    public readonly objectsToBeVisualized: IMapItem[];
+    public readonly locationNames: ILocation[];
+
+    constructor(objectsToBeVisualized: IMapItem[],
+                locationNames: ILocation[]) {
         this.objectsToBeVisualized = objectsToBeVisualized;
         this.locationNames = locationNames;
     }
 
-    private renderDoor(map: CanvasRenderingContext2D, door:Door, color:string) {
+    private renderDoor(map: CanvasRenderingContext2D, door:IDoor, color:string) {
         map.beginPath();
         map.moveTo(door.Section.Start.X,door.Section.Start.Y);
         map.lineTo(door.Section.End.X,door.Section.End.Y);
@@ -33,7 +49,7 @@ export class FloorMapRenderer {
         }
     }
 
-    private renderRoomFrom(map: CanvasRenderingContext2D, mapItem:MapItem) {
+    private renderRoomFrom(map: CanvasRenderingContext2D, mapItem:IMapItem) {
         if (mapItem.Sections != null && mapItem.Sections.length > 0) {
             map.beginPath();
             map.moveTo(mapItem.Sections[0].Start.X, mapItem.Sections[0].Start.Y);

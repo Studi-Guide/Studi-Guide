@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
 import {DataService} from '../../services/data.service';
 import {CanvasResolutionConfigurator, TranslationPosition} from '../../services/CanvasResolutionConfigurator';
-import {Floor, Location, MapItem, PathNode} from '../../building-objects-if';
+import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
 import {FloorMapRenderer} from './floorMapRenderer';
 import {NaviRouteRenderer, ReceivedRoute} from './naviRouteRenderer';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
@@ -21,7 +21,7 @@ export class MapViewComponent implements AfterViewInit {
   private routeRenderer:NaviRouteRenderer;
   public floorMapRenderer:FloorMapRenderer;
 
-  @Output() locationClick = new EventEmitter<Location>();
+  @Output() locationClick = new EventEmitter<ILocation>();
 
   public get CurrentRoute():ReceivedRoute {
     return this.currentRoute;
@@ -38,7 +38,7 @@ export class MapViewComponent implements AfterViewInit {
     this.routeRenderer = new NaviRouteRenderer(this.dataService);
   }
 
-  public async showRoute(route:ReceivedRoute, startLocation:Location) {
+  public async showRoute(route:ReceivedRoute, startLocation:ILocation) {
     this.routeRenderer.stopAnimation();
     await this.renderNavigationPage(route, startLocation.Building, startLocation.Floor);
   }
@@ -54,7 +54,7 @@ export class MapViewComponent implements AfterViewInit {
     const res = foundLocations[0];
     this.currentBuilding = res.Building;
     const items = await this.dataService.get_map_floor(this.currentBuilding, res.Floor).toPromise();
-    const locations = await this.dataService.get_locations(res.Building, res.Floor).toPromise<Location[]>();
+    const locations = await this.dataService.get_locations(res.Building, res.Floor).toPromise<ILocation[]>();
 
     // TODO shift map got get res.PathNode into focus
     const map = this.getCanvasMap(items, 0, 0);
@@ -91,14 +91,14 @@ export class MapViewComponent implements AfterViewInit {
 
   private async renderNavigationPage(route:ReceivedRoute, building: string, floor: string) {
     // TODO allow passing a regex to backend to filter map items
-    let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<MapItem[]>() ?? new Array<MapItem>();
-    let locations = await this.dataService.get_locations(building, floor).toPromise<Location[]>() ?? new Array<Location>();
+    let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<IMapItem[]>() ?? new Array<IMapItem>();
+    let locations = await this.dataService.get_locations(building, floor).toPromise<ILocation[]>() ?? new Array<ILocation>();
     for (const routeSection of route.RouteSections) {
       if (routeSection.Floor === floor && routeSection.Building !== building) {
-        const items = await this.dataService.get_map_floor(routeSection.Building, routeSection.Floor).toPromise<MapItem[]>();
+        const items = await this.dataService.get_map_floor(routeSection.Building, routeSection.Floor).toPromise<IMapItem[]>();
         mapItems = mapItems.concat(items);
 
-        const locationItems = await this.dataService.get_locations(routeSection.Building, routeSection.Floor).toPromise<Location[]>();
+        const locationItems = await this.dataService.get_locations(routeSection.Building, routeSection.Floor).toPromise<ILocation[]>();
         locations = locations.concat(locationItems);
       }
     }
@@ -113,7 +113,7 @@ export class MapViewComponent implements AfterViewInit {
     this.currentFloor = floor;
   }
 
-  private displayPin(map: CanvasRenderingContext2D, pathNode:PathNode) {
+  private displayPin(map: CanvasRenderingContext2D, pathNode:IPathNode) {
 
     const x = pathNode.Coordinate.X - 15;
     const y = pathNode.Coordinate.Y - 30;
@@ -128,7 +128,7 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  private getCanvasMap(mapItems: MapItem[], positionX: number, positionY: number) {
+  private getCanvasMap(mapItems: IMapItem[], positionX: number, positionY: number) {
     const mapCanvas = document.getElementById('map') as HTMLCanvasElement;
     let mapHeightNeeded = 0;
     let mapWidthNeeded = 0;
@@ -159,7 +159,7 @@ export class MapViewComponent implements AfterViewInit {
     const point = CanvasTouchHelper.CalculateXY(event, event.currentTarget as HTMLElement);
 
     if(this.currentRoute != null) {
-      const items: MapItem[] = await this.routeRenderer.getInteractiveStairWellMapItems(this.currentRoute, this.currentFloor);
+      const items: IMapItem[] = await this.routeRenderer.getInteractiveStairWellMapItems(this.currentRoute, this.currentFloor);
 
       for (const mapItem of items) {
         const polygon = [];
@@ -173,7 +173,7 @@ export class MapViewComponent implements AfterViewInit {
       }
     }
     // Track clicks/touches on locations
-    const locations:Location[] = this.floorMapRenderer.locationNames
+    const locations:ILocation[] = this.floorMapRenderer.locationNames
     if (locations != null) {
       for (const location of locations) {
         if (Math.abs(location.PathNode.Coordinate.X - point[0]) < this.clickThreshold
@@ -185,7 +185,7 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  private async showNextFloor(item: MapItem) {
+  private async showNextFloor(item: IMapItem) {
     for (let i = 0; i < this.currentRoute.RouteSections.length-1; i++) {
       if (this.currentRoute.RouteSections[i].Floor === item.Floor && this.currentRoute.RouteSections[i].Building === item.Building) {
         this.currentFloor = this.currentRoute.RouteSections[i+1].Floor;
