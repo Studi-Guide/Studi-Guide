@@ -15,7 +15,7 @@ export class CanvasTouchHelper {
 
     public static CalculateXY(coordinates: { x: number; y: number }) {
         const x = coordinates.x/this.currentZoom.z - this.currentZoom.x;
-        const y = coordinates.y/this.currentZoom.z - this.currentZoom.y ;
+        const y = coordinates.y/this.currentZoom.z - this.currentZoom.y;
         console.log('Recognized Interaction with zoom ' + this.currentZoom.z + 'on ... x: ' + x + ' y: ' + y );
 
         return [x, y];
@@ -62,10 +62,6 @@ export class CanvasTouchHelper {
                     event.currentTarget as HTMLElement ?? event.target as HTMLElement,
                     {x: event.center.x, y: event.center.y}, this.originalSize, this.currentZoom.z);
 
-
-                // const zoomOrigin = this.CalculateXY(
-                //   {x: event.deltaX, y: event.deltaY},
-                //    event.currentTarget as HTMLElement ?? event.target as HTMLElement);
                 const d = this.scaleFrom(zoomOrigin, this.currentZoom.z, 1, this.originalSize)
                 this.currentZoom.x += d.x;
                 this.currentZoom.y += d.y;
@@ -93,10 +89,24 @@ export class CanvasTouchHelper {
                 }
             }
 
-            const xTransition = event.deltaX - fixHammerjsDeltaIssue.x;
-            const yTransition = event.deltaY - fixHammerjsDeltaIssue.y;
-            lastEvent = 'pan';
-            this.transistion(xTransition, yTransition, canvasElement, renderer, true)
+            const transition = {
+                x: event.deltaX - fixHammerjsDeltaIssue.x,
+                y: event.deltaY - fixHammerjsDeltaIssue.y,
+            };
+
+            const canvasHTMLElement = event.target as HTMLCanvasElement;
+            if (canvasHTMLElement != null && canvasHTMLElement !== undefined) {
+                const rect = canvasHTMLElement.getBoundingClientRect();
+                const natizeSize = {
+                    x: rect.width,
+                    y: rect.height,
+                }
+
+                lastEvent = 'pan';
+                if (natizeSize.x !== undefined && natizeSize.y !== undefined) {
+                    this.transistion(transition, natizeSize, canvasElement, renderer, true)
+                }
+            }
         })
 
         hammerTime.on('pinch', (event) => {
@@ -131,15 +141,31 @@ export class CanvasTouchHelper {
         })
     }
 
-    public static transistion(xCoordinate: number, yCoordinate: number, canvasElement: ElementRef, renderer: Renderer2, isPan: boolean){
-        this.currentZoom.x = this.lastZoom.x + xCoordinate
-        this.currentZoom.y = this.lastZoom.y + yCoordinate;
-        console.log('Map-Transition by ... x: ' + xCoordinate + ' y: ' + yCoordinate );
+    public static transistion(
+        transition: { x: number; y: number },
+        natizeElementSize: { x: number; y: number },
+        canvasElement: ElementRef,
+        renderer: Renderer2,
+        isPan: boolean){
+        this.currentZoom.x = this.lastZoom.x + transition.x
+        this.currentZoom.y = this.lastZoom.y + transition.y;
+        this.currentZoom = this.validateZoom(this.currentZoom, natizeElementSize);
+        console.log('Map-Transition to ... x: ' + this.currentZoom.x + ' y: ' + this.currentZoom.y );
         this.update(this.originalSize, this.currentZoom, canvasElement, renderer);
         if (!isPan) {
             this.lastZoom.x = this.currentZoom.x;
             this.lastZoom.y = this.currentZoom.y;
         }
+    }
+
+    private static validateZoom(currentZoom: { x: number; width: number; y: number; z: number; height: number },
+                                natizeElementSize: { x: number; y: number }) {
+        const xTransitionMax = (natizeElementSize.x - this.originalSize.width);
+        const yTransitionMax = (natizeElementSize.y - this.originalSize.height);
+        console.log('Max Map-Transition to ... x: ' + xTransitionMax + ' y: ' + yTransitionMax);
+        currentZoom.x = Math.max(Math.min(0, currentZoom.x), -xTransitionMax);
+        currentZoom.y = Math.max(Math.min(0, currentZoom.y), -yTransitionMax);
+        return currentZoom;
     }
 
     private static update(originalSize: { width: any; height: any },
@@ -152,11 +178,6 @@ export class CanvasTouchHelper {
             element.nativeElement,
             'transform',
             'translate3d(' + this.currentZoom.x + 'px, ' + this.currentZoom.y + 'px, 0) scale(' + this.currentZoom.z + ')');
-        // renderer.setStyle(element.nativeElement, 'zoom', zoom.z);
-        // element.nativeElement.scrollTo(zoom.x,zoom.y);
-        // renderer.setStyle(element.nativeElement, )
-        // element.style.transform =
-        //    ;
     }
 
     private static getRelativePosition(element: HTMLElement, point, originalSize, scale) {

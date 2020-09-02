@@ -252,11 +252,9 @@ export class NavigationPage implements OnInit{
     }
 
     private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
-        CanvasTouchHelper.transistion(
-            CanvasTouchHelper.currentZoom.x - xCoordinate,
-            CanvasTouchHelper.currentZoom.y - yCoordinate,
-            this.canvasWrapper,
-            this. renderer, false);
+        CanvasTouchHelper.transistion({ x:CanvasTouchHelper.currentZoom.x - xCoordinate, y: CanvasTouchHelper.currentZoom.y - yCoordinate},
+            {x: xCoordinate * 2, y: yCoordinate * 2},
+            this.canvasWrapper, this.renderer, false);
     }
 
     private addRecentSearch(location:string) {
