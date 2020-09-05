@@ -253,7 +253,6 @@ export class NavigationPage implements OnInit{
 
     private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
         CanvasTouchHelper.transistion({ x:CanvasTouchHelper.currentZoom.x - xCoordinate, y: CanvasTouchHelper.currentZoom.y - yCoordinate},
-            {x: xCoordinate * 2, y: yCoordinate * 2},
             this.canvasWrapper, this.renderer, false);
     }
 
