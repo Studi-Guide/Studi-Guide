@@ -10,10 +10,18 @@
       "projectType": "application",
       "prefix": "app",
       "schematics": {},
+      "i18n": {
+        "sourceLocale": "en-US",
+        "locales": {
+          "de": "src/locale/messages.de.xlf"
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "aot": true,
+            "i18nMissingTranslation": "error",
             "outputPath": "www",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -54,6 +62,7 @@
               "sourceMap": false,
               "extractCss": true,
               "namedChunks": false,
+              "localize": true,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,

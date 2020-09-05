@@ -2,7 +2,6 @@ package server
 
 import (
 	"github.com/gin-contrib/cors"
-	"github.com/gin-contrib/static"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	"github.com/swaggo/gin-swagger"
@@ -16,6 +15,7 @@ import (
 	"studi-guide/pkg/building/room/controllers"
 	buildingRoom "studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/env"
+	"studi-guide/pkg/ion18n"
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
 )
@@ -53,8 +53,17 @@ func NewStudiGuideServer(env *env.Env,
 	// TODO verify IONIC input
 	_, err := os.Stat(env.FrontendPath())
 	if err == nil {
-		log.Print("IONIC found! Serving files ....")
-		router.Use(static.Serve("/", static.LocalFile(env.FrontendPath(), true)))
+		log.Print("IONIC found! Serving files using ion18n router....")
+
+		ionRouter := router.Group("/")
+
+		if _, err := ion18n.NewIon18nRouter(ionRouter, env.FrontendPath()); err != nil {
+			log.Fatal(err)
+		} else {
+			log.Print("Successfully initialized ion18n router")
+		}
+
+
 	}
 
 	roomRouter := router.Group("/rooms")

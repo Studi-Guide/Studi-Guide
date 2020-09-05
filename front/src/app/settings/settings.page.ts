@@ -1,6 +1,6 @@
 import { Storage } from '@ionic/storage';
 import { Component } from '@angular/core';
-import {MoodleService} from '../services/moodle.service';
+import { MoodleService } from '../services/moodle.service';
 import { MoodleToken } from '../moodle-objects-if';
 
 @Component({
