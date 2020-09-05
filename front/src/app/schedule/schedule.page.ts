@@ -5,11 +5,11 @@ import {LoadingController} from '@ionic/angular';
 import {Router} from '@angular/router';
 
 @Component({
-  selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss']
+  selector: 'app-schedule',
+  templateUrl: 'schedule.page.html',
+  styleUrls: ['schedule.page.scss']
 })
-export class Tab2Page implements AfterViewInit{
+export class SchedulePage implements AfterViewInit{
   private token: MoodleToken;
   public calenderEvents: Event[] = [];
 

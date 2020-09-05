@@ -102,7 +102,7 @@
       Einstellungen
     </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/tab4/tab4.page.html</context>
+          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
           <context context-type="linenumber">3</context>
         </context-group>
         <note priority="1" from="description">Header</note>
@@ -118,7 +118,7 @@
       <x id="START_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;ion-note&gt;"/>Deutsch<x id="CLOSE_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;/ion-note&gt;"/>
     </target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/tab4/tab4.page.html</context>
+          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
           <context context-type="linenumber">11</context>
         </context-group>
         <note priority="1" from="description">Navigate to Language Selection</note>
@@ -128,7 +128,7 @@
         <source>Help</source>
         <target>Hilfe</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/tab4/tab4.page.html</context>
+          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
           <context context-type="linenumber">17</context>
         </context-group>
         <note priority="1" from="description">Help</note>
@@ -138,7 +138,7 @@
         <source>About</source>
         <target>Über Uns</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/tab4/tab4.page.html</context>
+          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
           <context context-type="linenumber">21</context>
         </context-group>
         <note priority="1" from="description">About</note>
