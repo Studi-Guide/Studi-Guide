@@ -13,9 +13,11 @@ export class CanvasTouchHelper {
     };
 
     public static CalculateXY(coordinates: { x: number; y: number}, canvas: HTMLCanvasElement) {
+        console.log('Recognized Interaction with zoom ' + this.currentZoom.z + 'on ... x: ' + coordinates.x + ' y: ' + coordinates.y );
         const rect = canvas.getBoundingClientRect();
-        const x = coordinates.x/this.currentZoom.z - rect.left;
-        const y = coordinates.y/this.currentZoom.z - rect.top;
+        console.log('Rect top' + rect.top + 'Rect left' + rect.left +  'Rect bottom' + rect.bottom +'Rect top' + rect.top)
+        const x = (coordinates.x - rect.left)/this.currentZoom.z;
+        const y = (coordinates.y - rect.top)/this.currentZoom.z;
         console.log('Recognized Interaction with zoom ' + this.currentZoom.z + 'on ... x: ' + x + ' y: ' + y );
 
         return [x, y];
