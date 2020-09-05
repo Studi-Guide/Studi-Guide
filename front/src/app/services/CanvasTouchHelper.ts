@@ -12,15 +12,14 @@ export class CanvasTouchHelper {
         z: number;
     };
 
-    public static CalculateXY(coordinates: { x: number; y: number}, canvas: HTMLCanvasElement) {
-        console.log('Recognized Interaction with zoom ' + this.currentZoom.z + 'on ... x: ' + coordinates.x + ' y: ' + coordinates.y );
+    public static transformInOriginCoordinate(coordinates: { x: number; y: number}, canvas: HTMLCanvasElement) {
+        console.log('Touch Interaction on: x' + coordinates.x + '... y:' + coordinates.y);
         const rect = canvas.getBoundingClientRect();
-        console.log('Rect top' + rect.top + 'Rect left' + rect.left +  'Rect bottom' + rect.bottom +'Rect top' + rect.top)
         const x = (coordinates.x - rect.left)/this.currentZoom.z;
         const y = (coordinates.y - rect.top)/this.currentZoom.z;
-        console.log('Recognized Interaction with zoom ' + this.currentZoom.z + 'on ... x: ' + x + ' y: ' + y );
 
-        return [x, y];
+        console.log('Transformed to: x' + x + '... y:' + y);
+        return {x, y};
     }
 
     public static RegisterPinch(renderer: Renderer2, canvasElement: ElementRef){
@@ -126,24 +125,16 @@ export class CanvasTouchHelper {
         hammerTime.on('pinchstart', (event) =>  {
             const rect = (event.target as HTMLCanvasElement).getBoundingClientRect();
             pinchZoomOrigin = {x: event.center.x + rect.left, y: event.center.y + rect.top};
-            console.log('pinchZoomOrigin: x' + pinchZoomOrigin.x + '... y:' + pinchZoomOrigin.y);
             lastEvent = 'pinchstart';
         })
 
         hammerTime.on('panend', (event: MSGestureEvent) => {
             this.lastZoom.x = this.currentZoom.x;
             this.lastZoom.y = this.currentZoom.y;
-            console.log('pan_end entered');
             lastEvent = 'panend';
         })
 
         hammerTime.on('pinchend', (event: MSGestureEvent) => {
-            // const rect = (event.target as HTMLCanvasElement).getBoundingClientRect();
-            // if (rect != null && rect !== undefined) {
-              //  this.currentZoom.x = rect.left;
-             //   this.currentZoom.y = rect.top;
-            // }
-            console.log('pinch_end entered');
             this.lastZoom.x = this.currentZoom.x;
             this.lastZoom.y = this.currentZoom.y;
             this.lastZoom.z = this.currentZoom.z;
@@ -162,13 +153,16 @@ export class CanvasTouchHelper {
         const natizeElementSize = {
             width: rect.width,
             height: rect.height,
+            top: rect.top,
+            left: rect.left
         }
 
         const availableSize = {width: window.innerWidth, height: window.innerHeight};
 
         this.currentZoom.x = this.lastZoom.x + transition.x
         this.currentZoom.y = this.lastZoom.y + transition.y;
-        this.currentZoom = this.validateZoom(this.currentZoom, natizeElementSize, availableSize);
+        console.log('Requested transition to x:' + this.currentZoom.x + '...y' + this.currentZoom.y)
+        this.currentZoom = this.validateZoom(this.currentZoom, natizeElementSize, canvasHTMLElement, availableSize);
         this.update(this.currentZoom, canvasElement, renderer);
         if (!isPan) {
             this.lastZoom.x = this.currentZoom.x;
@@ -177,15 +171,27 @@ export class CanvasTouchHelper {
     }
 
     private static validateZoom(currentZoom: { x: number; y: number; z: number;},
-                                natizeElementSize: { width: number; height: number },
+                                natizeElementSize: { width: number; height: number; top:number; left: number },
+                                canvasElement: HTMLCanvasElement,
                                 visibleSize: {width: number, height: number},) {
 
         const xTransitionMax = natizeElementSize.width - visibleSize.width;
 
         // allow a little bit of overdrive because of the tab and drawers
         const yTransitionMax = natizeElementSize.height - visibleSize.height * 0.8;
-        currentZoom.x = Math.max(Math.min(0, currentZoom.x), -xTransitionMax);
-        currentZoom.y = Math.max(Math.min(0, currentZoom.y), -yTransitionMax);
+
+        const origin = this.transformInOriginCoordinate({x:0, y:0}, canvasElement)
+        const x =  origin.x * (-1);
+        const y =  origin.y * (-1);
+
+        console.log('x..:' + x + 'y...' + y);
+        const yFirstValue = y >= 0 ? Math.min(y, currentZoom.y) : Math.max(y, currentZoom.y);
+        const xFirstValue = x >= 0 ? Math.min(x, currentZoom.x) : Math.max(x, currentZoom.x);
+
+        console.log('min x..:' + x + 'max y...' + y);
+
+        currentZoom.x = Math.max(xFirstValue, -xTransitionMax);
+        currentZoom.y = Math.max(yFirstValue, -yTransitionMax);
         return currentZoom;
     }
 
