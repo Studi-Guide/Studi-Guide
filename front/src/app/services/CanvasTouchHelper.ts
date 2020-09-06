@@ -149,20 +149,9 @@ export class CanvasTouchHelper {
         isPan: boolean){
 
         const canvasHTMLElement = canvasElement.nativeElement as HTMLCanvasElement;
-        const rect = canvasHTMLElement.getBoundingClientRect();
-        const natizeElementSize = {
-            width: rect.width,
-            height: rect.height,
-            top: rect.top,
-            left: rect.left
-        }
 
         const availableSize = {width: window.innerWidth, height: window.innerHeight};
-
-        this.currentZoom.x = this.lastZoom.x + transition.x
-        this.currentZoom.y = this.lastZoom.y + transition.y;
-        console.log('Requested transition to x:' + this.currentZoom.x + '...y' + this.currentZoom.y)
-        this.currentZoom = this.validateZoom(this.currentZoom, natizeElementSize, canvasHTMLElement, availableSize);
+        this.currentZoom = this.validateZoom(this.currentZoom, canvasHTMLElement, availableSize, transition);
         this.update(this.currentZoom, canvasElement, renderer);
         if (!isPan) {
             this.lastZoom.x = this.currentZoom.x;
@@ -171,27 +160,62 @@ export class CanvasTouchHelper {
     }
 
     private static validateZoom(currentZoom: { x: number; y: number; z: number;},
-                                natizeElementSize: { width: number; height: number; top:number; left: number },
                                 canvasElement: HTMLCanvasElement,
-                                visibleSize: {width: number, height: number},) {
+                                visibleSize: {width: number, height: number},
+                                transition: {x:number, y:number}) {
+        const rect = canvasElement.getBoundingClientRect();
+        const natizeElementSize = {
+            width: rect.width,
+            height: rect.height,
+            top: rect.top,
+            left: rect.left
+        }
 
-        const xTransitionMax = natizeElementSize.width - visibleSize.width;
+        console.log('Incomming transition x:' + transition.x + '...y' + transition.y)
+        currentZoom.x = this.lastZoom.x + transition.x
+        currentZoom.y = this.lastZoom.y + transition.y;
+        console.log('Requested transition to x:' + currentZoom.x + '...y' + currentZoom.y)
+
+        const xTransitionMax = (natizeElementSize.width - visibleSize.width) * (-1);
 
         // allow a little bit of overdrive because of the tab and drawers
-        const yTransitionMax = natizeElementSize.height - visibleSize.height * 0.8;
+        const yTransitionMax = (natizeElementSize.height - visibleSize.height * 0.8)  * (-1);
 
         const origin = this.transformInOriginCoordinate({x:0, y:0}, canvasElement)
-        const x =  origin.x * (-1);
-        const y =  origin.y * (-1);
+        const x =  origin.x ;
+        const y =  origin.y;
 
-        console.log('x..:' + x + 'y...' + y);
-        const yFirstValue = y >= 0 ? Math.min(y, currentZoom.y) : Math.max(y, currentZoom.y);
-        const xFirstValue = x >= 0 ? Math.min(x, currentZoom.x) : Math.max(x, currentZoom.x);
+        const yTansistionMaxNegativ = -y;
+        const xTansistionMaxNegativ = -x;
 
-        console.log('min x..:' + x + 'max y...' + y);
+        let yzoomValue = currentZoom.y;
+        if (((yTransitionMax >= 0 && yzoomValue > yTransitionMax) ||
+            (yTransitionMax < 0 && yzoomValue < yTransitionMax)) && transition.y < 0) {
+            yzoomValue = yTransitionMax;
+        }
 
-        currentZoom.x = Math.max(xFirstValue, -xTransitionMax);
-        currentZoom.y = Math.max(yFirstValue, -yTransitionMax);
+        if (((yTansistionMaxNegativ >= 0 && yzoomValue > yTansistionMaxNegativ) ||
+            (yTansistionMaxNegativ < 0 && yzoomValue < yTansistionMaxNegativ)) && transition.y > 0) {
+            yzoomValue = currentZoom.z !== 1 ? -yTansistionMaxNegativ : 0;
+        }
+
+        let xzoomValue = currentZoom.x;
+        if (((xTansistionMaxNegativ >= 0 && xzoomValue > xTansistionMaxNegativ) ||
+            (xTansistionMaxNegativ < 0 && xzoomValue < xTansistionMaxNegativ )) && transition.x > 0) {
+                xzoomValue = currentZoom.z !== 1 ? -xTansistionMaxNegativ : 0;
+        }
+
+        if (((xTransitionMax >= 0 && xzoomValue > xTransitionMax) ||
+            (xTransitionMax < 0 && xzoomValue < xTransitionMax)) && transition.x < 0) {
+            xzoomValue = xTransitionMax;
+        }
+
+        console.log('min x..:' + xTansistionMaxNegativ + 'min y...' + yTansistionMaxNegativ);
+        console.log('max x..:' + xTransitionMax + 'max y...' + yTransitionMax);
+        console.log('Result Zoom x..:' + xzoomValue + ' y...' + yzoomValue);
+
+        currentZoom.x = xzoomValue;
+        currentZoom.y = yzoomValue;
         return currentZoom;
     }
 
