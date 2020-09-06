@@ -10,7 +10,7 @@
   <div class="padding">
     <ion-list-header>Accounts</ion-list-header>
     <ion-list lines="none">
-      <ion-item [attr.href]='isSignedIn ? null : "/tabs/schedule"'>
+      <ion-item routerLink="{{ isSignedIn ? '/tabs/settings' : '/tabs/schedule' }}">
         <ion-avatar slot="start">
           <ion-icon size="large" name="person-circle-sharp"></ion-icon>
         </ion-avatar>
