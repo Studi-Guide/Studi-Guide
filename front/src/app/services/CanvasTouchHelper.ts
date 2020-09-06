@@ -175,12 +175,12 @@ export class CanvasTouchHelper {
         const yvalueOld = currentZoom.y - 9000;
         currentZoom.x = this.lastZoom.x + transition.x
         currentZoom.y = this.lastZoom.y + transition.y;
-        const xTransitionMax = (natizeElementSize.width - visibleSize.width) * (-1) - 9000;
+        const origin = this.transformInOriginCoordinate({x:0, y:0}, canvasElement)
+        const xTransitionMax = (natizeElementSize.width *1/currentZoom.z- visibleSize.width) * (-1) - 9000;
 
         // allow a little bit of overdrive because of the tab and drawers
-        const yTransitionMax = (natizeElementSize.height - visibleSize.height * 0.8)  * (-1) - 9000;
+        const yTransitionMax = (natizeElementSize.height * 1/currentZoom.z - visibleSize.height * 0.9)  * (-1) - 9000;
 
-        const origin = this.transformInOriginCoordinate({x:0, y:0}, canvasElement)
         // Introduce origin (9000/9000)
         const x =  9000 - ((origin.x + 25)* (Math.pow(currentZoom.z, 3)));
         const y =  9000 - ((origin.y + 25) *(Math.pow(currentZoom.z, 3)));

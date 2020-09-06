@@ -18,12 +18,12 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'tab2',
+        path: 'schedule',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab2/tab2.module').then(m => m.Tab2PageModule)
+              import('../schedule/schedule.module').then(m => m.SchedulePageModule)
           }
         ]
       },
@@ -38,12 +38,12 @@ const routes: Routes = [
         ]
       },
       {
-        path: 'tab4',
+        path: 'settings',
         children: [
           {
             path: '',
             loadChildren: () =>
-              import('../tab4/tab4.module').then(m => m.Tab4PageModule)
+              import('../settings/settings.module').then(m => m.SettingsPageModule)
           }
         ]
       },

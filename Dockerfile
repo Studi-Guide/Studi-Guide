@@ -11,7 +11,7 @@ RUN npm install -g @ionic/cli
 WORKDIR /www/app
 RUN npm install
 
-RUN ionic build --engine=browser ${ionicproduction}
+RUN ionic build --engine=browser --localize ${ionicproduction}
 RUN ls
 
 # Start from the latest golang base image

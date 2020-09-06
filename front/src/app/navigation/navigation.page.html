@@ -3,11 +3,8 @@
   <div id="map-content">
     <ion-text id="error-message" *ngIf="errorMessage" >
       <h5><span class="error">{{ errorMessage }}</span></h5>
-      <p>
-        Make sure your search is spelled correctly.
-      </p>
-      <p>
-        Should this place be on Studi-Guide?
+      <p i18n="search error|spelling check">Make sure your search is spelled correctly.</p>
+      <p i18n="search error|missing place request">Should this place be on Studi-Guide?
         <br/>
         <a href="https://github.com/Studi-Guide/Studi-Guide/issues/new/choose">Request a missing place</a>
       </p>
