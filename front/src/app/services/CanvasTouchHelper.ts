@@ -171,59 +171,58 @@ export class CanvasTouchHelper {
             left: rect.left
         }
 
-        console.log('Incomming transition x:' + transition.x + '...y' + transition.y)
+        const xvalueOld = currentZoom.x - 9000;
+        const yvalueOld = currentZoom.y - 9000;
         currentZoom.x = this.lastZoom.x + transition.x
         currentZoom.y = this.lastZoom.y + transition.y;
-        console.log('Requested transition to x:' + currentZoom.x + '...y' + currentZoom.y)
-
-        const xTransitionMax = (natizeElementSize.width - visibleSize.width) * (-1);
+        const xTransitionMax = (natizeElementSize.width - visibleSize.width) * (-1) - 9000;
 
         // allow a little bit of overdrive because of the tab and drawers
-        const yTransitionMax = (natizeElementSize.height - visibleSize.height * 0.8)  * (-1);
+        const yTransitionMax = (natizeElementSize.height - visibleSize.height * 0.8)  * (-1) - 9000;
 
         const origin = this.transformInOriginCoordinate({x:0, y:0}, canvasElement)
-        const x =  origin.x ;
-        const y =  origin.y;
+        // Introduce origin (9000/9000)
+        const x =  9000 - ((origin.x + 25)* (Math.pow(currentZoom.z, 3)));
+        const y =  9000 - ((origin.y + 25) *(Math.pow(currentZoom.z, 3)));
 
         const yTansistionMaxNegativ = -y;
         const xTansistionMaxNegativ = -x;
 
-        let yzoomValue = currentZoom.y;
-        if (((yTransitionMax >= 0 && yzoomValue > yTransitionMax) ||
-            (yTransitionMax < 0 && yzoomValue < yTransitionMax)) && transition.y < 0) {
-            yzoomValue = yTransitionMax;
+        let yzoomValue = currentZoom.y - 9000;
+        if (yzoomValue < yTransitionMax && transition.y < 0) {
+            console.log('Zoom Limit y_max reached. Reset value '   + yzoomValue + ' to: ' + yTransitionMax);
+            yzoomValue = yvalueOld;
         }
 
-        if (((yTansistionMaxNegativ >= 0 && yzoomValue > yTansistionMaxNegativ) ||
-            (yTansistionMaxNegativ < 0 && yzoomValue < yTansistionMaxNegativ)) && transition.y > 0) {
-            yzoomValue = currentZoom.z !== 1 ? -yTansistionMaxNegativ : 0;
+        if (yzoomValue > yTansistionMaxNegativ && transition.y > 0) {
+            const valueToSet = yzoomValue -(transition.y * 3/4);
+            console.log('Zoom Limit y_min reached. Reset value '   + yzoomValue + ' to: ' + valueToSet);
+            yzoomValue = yvalueOld;
         }
 
-        let xzoomValue = currentZoom.x;
-        if (((xTansistionMaxNegativ >= 0 && xzoomValue > xTansistionMaxNegativ) ||
-            (xTansistionMaxNegativ < 0 && xzoomValue < xTansistionMaxNegativ )) && transition.x > 0) {
-                xzoomValue = currentZoom.z !== 1 ? -xTansistionMaxNegativ : 0;
+        let xzoomValue = currentZoom.x- 9000;
+        if (xzoomValue > xTansistionMaxNegativ && transition.x > 0) {
+            const valueToSet=  xzoomValue -(transition.x* 3/4);
+            console.log('Zoom Limit x_min reached. Reset value '   + (xzoomValue) + ' to: ' + (valueToSet));
+                xzoomValue = xvalueOld;
         }
 
-        if (((xTransitionMax >= 0 && xzoomValue > xTransitionMax) ||
-            (xTransitionMax < 0 && xzoomValue < xTransitionMax)) && transition.x < 0) {
-            xzoomValue = xTransitionMax;
+        if (xzoomValue < xTransitionMax && transition.x < 0) {
+            console.log('Zoom Limit x_max reached. Reset value '   + xzoomValue + ' to: ' + xTransitionMax);
+            xzoomValue  = xvalueOld;
         }
 
-        console.log('min x..:' + xTansistionMaxNegativ + 'min y...' + yTansistionMaxNegativ);
-        console.log('max x..:' + xTransitionMax + 'max y...' + yTransitionMax);
-        console.log('Result Zoom x..:' + xzoomValue + ' y...' + yzoomValue);
+        // console.log('Result Zoom x..:' + xzoomValue + ' y...' + yzoomValue);
 
-        currentZoom.x = xzoomValue;
-        currentZoom.y = yzoomValue;
+        currentZoom.x = xzoomValue + 9000;
+        currentZoom.y = yzoomValue + 9000;
+        console.log('Result Zoom x..:' + currentZoom.x + ' y...' + currentZoom.y);
         return currentZoom;
     }
 
     private static update(zoom: { x: number; y: number; z: number;},
                           element: ElementRef,
                           renderer: Renderer2) {
-        console.log('Zoom to : x' + zoom.x + '... y:' + zoom.y +  '...z:' + zoom.z);
-
         renderer.setStyle(
             element.nativeElement,
             'transform',
