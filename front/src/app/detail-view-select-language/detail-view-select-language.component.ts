@@ -1,5 +1,5 @@
 import {Component, Inject, LOCALE_ID, OnInit} from '@angular/core';
-import {Router} from "@angular/router";
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'detail-view-select-language',

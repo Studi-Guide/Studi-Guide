@@ -7,6 +7,26 @@
 </ion-header>
 
 <ion-content>
+  <div class="padding">
+    <ion-list-header>Accounts</ion-list-header>
+    <ion-list lines="none">
+      <ion-item routerLink="{{ isSignedIn ? '/tabs/settings' : '/tabs/schedule' }}">
+        <ion-avatar slot="start">
+          <ion-icon size="large" name="person-circle-sharp"></ion-icon>
+        </ion-avatar>
+        <ion-label>
+          <h3>Moodle</h3>
+          <p [innerHTML]="moodleUserName"></p>
+        </ion-label>
+        <ion-select *ngIf="isSignedIn" (ionChange)="logoutFromMoodle()" selected-text=""
+                    interface="action-sheet" [interfaceOptions]="actionSheetOptions" mode="ios"
+        >
+          <ion-select-option id="moodle-logout" value="sign-out" selected-text="">sign out</ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ion-list>
+  </div>
+  <hr>
   <ion-list lines="" class="ion-padding-top ion-margin-top">
     <ion-item i18n="Settings|Navigate to Language Selection" routerLink="language">
       <ion-label>Language</ion-label>
