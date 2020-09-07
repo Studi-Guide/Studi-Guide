@@ -52,3 +52,9 @@ export interface ILocation {
 export interface IRoom extends IMapItem, ILocation{
   Id: number;
 }
+
+export interface IRenderer {
+  render(renderingContext:any)
+  startAnimation(renderingContext:any)
+  stopAnimation(renderingContext:any)
+}
