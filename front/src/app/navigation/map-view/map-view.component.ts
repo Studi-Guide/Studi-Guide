@@ -3,10 +3,11 @@ import {DataService} from '../../services/data.service';
 import {CanvasResolutionConfigurator, TranslationPosition} from '../../services/CanvasResolutionConfigurator';
 import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
 import {FloorMapRenderer} from './floorMapRenderer';
-import {NaviRouteRenderer, ReceivedRoute} from './naviRouteRenderer';
+import {NaviRouteRenderer} from './naviRouteRenderer';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import * as pip from 'point-in-polygon';
 import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
+import {IReceivedRoute} from "../../route-objects-if";
 
 @Component({
   selector: 'app-map-view',
@@ -15,7 +16,7 @@ import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 })
 export class MapViewComponent implements AfterViewInit {
   private currentBuilding: string;
-  private currentRoute:ReceivedRoute;
+  private currentRoute:IReceivedRoute;
   private currentFloor:string;
   private clickThreshold = 20;
   private routeRenderer:NaviRouteRenderer;
@@ -23,7 +24,7 @@ export class MapViewComponent implements AfterViewInit {
 
   @Output() locationClick = new EventEmitter<ILocation>();
 
-  public get CurrentRoute():ReceivedRoute {
+  public get CurrentRoute():IReceivedRoute {
     return this.currentRoute;
   }
 
@@ -38,7 +39,7 @@ export class MapViewComponent implements AfterViewInit {
     this.routeRenderer = new NaviRouteRenderer(this.dataService);
   }
 
-  public async showRoute(route:ReceivedRoute, startLocation:ILocation) {
+  public async showRoute(route:IReceivedRoute, startLocation:ILocation) {
     this.routeRenderer.stopAnimation();
     await this.renderNavigationPage(route, startLocation.Building, startLocation.Floor);
   }
@@ -89,7 +90,7 @@ export class MapViewComponent implements AfterViewInit {
       this.currentFloor = floor;
   }
 
-  private async renderNavigationPage(route:ReceivedRoute, building: string, floor: string) {
+  private async renderNavigationPage(route:IReceivedRoute, building: string, floor: string) {
     // TODO allow passing a regex to backend to filter map items
     let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<IMapItem[]>() ?? new Array<IMapItem>();
     let locations = await this.dataService.get_locations(building, floor).toPromise<ILocation[]>() ?? new Array<ILocation>();

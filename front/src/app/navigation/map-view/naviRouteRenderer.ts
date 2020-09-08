@@ -1,33 +1,7 @@
-import { Injectable } from '@angular/core';
 import {IMapItem, IPathNode} from '../../building-objects-if';
-import {CanvasResolutionConfigurator} from '../../services/CanvasResolutionConfigurator';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import {DataService} from '../../services/data.service';
-import {resolveFileWithPostfixes} from '@angular/compiler-cli/ngcc/src/utils';
-
-@Injectable({
-    providedIn: 'root'
-})
-
-export class ReceivedRoute {
-    Distance:       number;
-    Start:          RoutePoint;
-    End:            RoutePoint;
-    RouteSections:  RouteSection[];
-}
-
-export class RoutePoint {
-    Node:           IPathNode;
-    Floor:          string;
-}
-
-export class RouteSection {
-    Route: 		IPathNode[];
-    Description: string;
-    Distance: 	 number;
-    Building: 	string;
-    Floor: 		string;
-}
+import {IReceivedRoute} from '../../route-objects-if';
 
 export class NaviRouteRenderer {
 
@@ -40,7 +14,7 @@ export class NaviRouteRenderer {
     constructor(private dataService:DataService) {
     }
 
-    public async render(map: CanvasRenderingContext2D, route:ReceivedRoute, floor :string) {
+    public async render(map: CanvasRenderingContext2D, route:IReceivedRoute, floor :string) {
         this.renderRoute(map, route, floor);
         this.renderDistanceOfRoute(map, route, floor);
         this.renderPinAtRouteStart(map, route, floor);
@@ -60,7 +34,7 @@ export class NaviRouteRenderer {
         this.animationCallback = null;
     }
 
-    private renderDistanceOfRoute(map: CanvasRenderingContext2D, route:ReceivedRoute, floor :string) {
+    private renderDistanceOfRoute(map: CanvasRenderingContext2D, route:IReceivedRoute, floor :string) {
         const routeSections = route.RouteSections.filter(section => section.Floor === floor);
         if (routeSections != null && routeSections.length > 0){
             for (const routeSection of routeSections) {
@@ -80,7 +54,7 @@ export class NaviRouteRenderer {
         }
     }
 
-    private renderRoute(map: CanvasRenderingContext2D, route:ReceivedRoute, floor :string) {
+    private renderRoute(map: CanvasRenderingContext2D, route:IReceivedRoute, floor :string) {
         const routeSections = route.RouteSections.filter(section => section.Floor === floor);
         if (routeSections != null) {
             for (const routeSection of routeSections) {
@@ -97,7 +71,7 @@ export class NaviRouteRenderer {
         }
     }
 
-    private renderPinAtRouteStart(map: CanvasRenderingContext2D, route:ReceivedRoute, floor :string) {
+    private renderPinAtRouteStart(map: CanvasRenderingContext2D, route:IReceivedRoute, floor :string) {
         this.pin = new IconOnMapRenderer('pin-sharp.png');
         if (route.Start.Floor !== floor) {
             return;
@@ -108,7 +82,7 @@ export class NaviRouteRenderer {
         this.pin.render(map,x-15, y-30, 30, 30);
     }
 
-    public async getInteractiveStairWellMapItems(route:ReceivedRoute, floor:string) {
+    public async getInteractiveStairWellMapItems(route:IReceivedRoute, floor:string) {
         const pNodes:IPathNode[] = [];
         for (let i = 0; i < route.RouteSections.length-1; i++) {
             if (route.RouteSections[i].Building !== route.RouteSections[i+1].Building)
@@ -134,7 +108,7 @@ export class NaviRouteRenderer {
         return mItems;
     }
 
-    private async renderFlashingStairWell(map: CanvasRenderingContext2D, route:ReceivedRoute, floor :string) {
+    private async renderFlashingStairWell(map: CanvasRenderingContext2D, route:IReceivedRoute, floor :string) {
 
         const mItems:IMapItem[] = await this.getInteractiveStairWellMapItems(route, floor);
 
@@ -171,7 +145,7 @@ export class NaviRouteRenderer {
 
     }
 
-    private renderFlagAtRouteEnd(map: CanvasRenderingContext2D, route:ReceivedRoute, floor :string) {
+    private renderFlagAtRouteEnd(map: CanvasRenderingContext2D, route:IReceivedRoute, floor :string) {
         this.flag = new IconOnMapRenderer('flag-sharp.png');
         if (route.End.Floor !== floor) {
             return;

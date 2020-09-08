@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
 import {IBuilding, ILocation, IMapItem} from '../building-objects-if';
-import {ReceivedRoute} from '../navigation/map-view/naviRouteRenderer';
 import {CacheService} from './cache.service';
+import {IReceivedRoute} from "../route-objects-if";
 
 @Injectable({
     providedIn: 'root'
@@ -34,7 +34,7 @@ export class DataService {
     }
 
     get_route(start:string, end:string){
-        return this.cache.Get<ReceivedRoute>(this.httpClient, this.baseUrl + '/navigation/dir?start=' + start + '&end=' + end );
+        return this.cache.Get<IReceivedRoute>(this.httpClient, this.baseUrl + '/navigation/dir?start=' + start + '&end=' + end );
     }
 
     get_locations_search(name:string) {
