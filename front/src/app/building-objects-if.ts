@@ -29,7 +29,6 @@ export interface IMapItem {
   Building: string;
   PathNodes: IPathNode[];
   Floor: string;
-  render(renderingContext:any);
 }
 
 export interface IBuilding {

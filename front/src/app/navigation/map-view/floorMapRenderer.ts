@@ -1,23 +1,5 @@
 import {IDoor, IMapItem, ILocation, IPathNode, ISection} from '../../building-objects-if';
 
-// @Injectable({
-//   providedIn: 'root'
-// })
-
-export class MapItem implements IMapItem {
-    Building: string;
-    Campus: string;
-    Color: string;
-    Doors: IDoor[];
-    Floor: string;
-    PathNodes: IPathNode[];
-    Sections: ISection[];
-
-    public render(renderingContext: CanvasRenderingContext2D) {
-        
-    }
-
-}
 
 export class FloorMapRenderer {
     public readonly objectsToBeVisualized: IMapItem[];
