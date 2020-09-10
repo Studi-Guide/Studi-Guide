@@ -63,7 +63,6 @@ func NewStudiGuideServer(env *env.Env,
 			log.Print("Successfully initialized ion18n router")
 		}
 
-
 	}
 
 	roomRouter := router.Group("/rooms")

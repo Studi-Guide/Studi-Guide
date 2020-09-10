@@ -2,6 +2,7 @@
     height: 100%;
     display: flex;
     flex-flow: column;
+    position: absolute;
 }
 
 .error {
@@ -15,6 +16,7 @@
 #canvas-wrapper {
     padding: 2px;
     flex-grow: 1;
+    position: absolute;
     overflow-y: scroll;
     overflow-x: scroll;
     scrollbar-width: none; // FF
@@ -30,6 +32,14 @@
     bottom: 0;
     display: block;
     z-index: 10;
+}
+
+.draggable {
+    cursor: grab; /* W3C standards syntax, all modern browser */
+}
+
+.draggable:active {
+    cursor: grabbing;
 }
 
 .center {

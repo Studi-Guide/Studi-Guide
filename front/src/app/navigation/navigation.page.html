@@ -1,6 +1,18 @@
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
-
+  <div id="map-content">
+    <ion-text id="error-message" *ngIf="errorMessage" >
+      <h5><span class="error">{{ errorMessage }}</span></h5>
+      <p i18n="search error|spelling check">Make sure your search is spelled correctly.</p>
+      <p i18n="search error|missing place request">Should this place be on Studi-Guide?
+        <br/>
+        <a href="https://github.com/Studi-Guide/Studi-Guide/issues/new/choose">Request a missing place</a>
+      </p>
+    </ion-text>
+    <div id="canvas-wrapper" #canvasWrapper class="draggable">
+      <app-map-view (locationClick)="showLocationDrawer($event)"></app-map-view>
+    </div>
+  </div>
   <app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)" #searchDrawer>
     <div class="nav-bottom-drawer">
       <div class="ion-padding-top"></div>
@@ -112,18 +124,4 @@
       </ion-content>
     </div>
   </app-ionic-bottom-drawer>
-
-  <div id="map-content">
-    <ion-text id="error-message" *ngIf="errorMessage" >
-      <h5><span class="error">{{ errorMessage }}</span></h5>
-      <p i18n="search error|spelling check">Make sure your search is spelled correctly.</p>
-      <p i18n="search error|missing place request">Should this place be on Studi-Guide?
-        <br/>
-        <a href="https://github.com/Studi-Guide/Studi-Guide/issues/new/choose">Request a missing place</a>
-      </p>
-    </ion-text>
-    <div id="canvas-wrapper" #canvasWrapper>
-      <app-map-view (locationClick)="showLocationDrawer($event)"></app-map-view>
-    </div>
-  </div>
 </ion-content>

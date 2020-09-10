@@ -1,5 +1,5 @@
 import {IBuilding, ILocation, IPathNode} from '../building-objects-if';
-import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
@@ -11,6 +11,7 @@ import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import { Storage } from '@ionic/storage';
 import {Router} from '@angular/router';
+import {CanvasTouchHelper} from "../services/CanvasTouchHelper";
 
 @Component({
     selector: 'app-navigation',
@@ -50,10 +51,12 @@ export class NavigationPage implements OnInit{
                 private modalCtrl: ModalController,
                 private  route: ActivatedRoute,
                 private router: Router,
-                private storage: Storage) {
+                private storage: Storage,
+                private renderer: Renderer2) {
     }
 
     ionViewDidEnter() {
+        CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
         this.route.queryParams.subscribe(async params =>
         {
                 // discover requested location
@@ -244,12 +247,13 @@ export class NavigationPage implements OnInit{
             this.availableFloorsBtnIsVisible = true;
 
             // Coordinates of KA.013
-            this.scrollToCoordinate(345 - 50, 600 - 125);
+            this.scrollToCoordinate(310, 550);
         }
     }
 
     private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
-        this.canvasWrapper.nativeElement.scrollTo(xCoordinate,yCoordinate );
+        CanvasTouchHelper.transistion({ x:CanvasTouchHelper.currentZoom.x - xCoordinate, y: CanvasTouchHelper.currentZoom.y - yCoordinate},
+            this.canvasWrapper, this.renderer, false);
     }
 
     private addRecentSearch(location:string) {

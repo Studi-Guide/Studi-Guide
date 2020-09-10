@@ -7,8 +7,8 @@ import (
 )
 
 type Ion18nRouter struct {
-	router   *gin.RouterGroup
-	ionPath  string
+	router  *gin.RouterGroup
+	ionPath string
 }
 
 func NewIon18nRouter(router *gin.RouterGroup, ionPath string) (*Ion18nRouter, error) {
@@ -20,8 +20,8 @@ func NewIon18nRouter(router *gin.RouterGroup, ionPath string) (*Ion18nRouter, er
 	// is there any advantage of gin-contrib/static over the default router.Static?
 	//i.router.Use(static.Serve("/en-US/", static.LocalFile(i.ionPath + "/en-US/", true)))
 	//i.router.Use(static.Serve("/de/", static.LocalFile(i.ionPath + "/de/", true)))
-	i.router.Static("en-US/", i.ionPath + "/en-US/")
-	i.router.Static("de/", i.ionPath + "/de/")
+	i.router.Static("en-US/", i.ionPath+"/en-US/")
+	i.router.Static("de/", i.ionPath+"/de/")
 
 	return &i, nil
 }
