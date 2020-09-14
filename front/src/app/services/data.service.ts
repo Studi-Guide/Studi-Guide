@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
 import {IBuilding, ILocation, IMapItem} from '../building-objects-if';
 import {CacheService} from './cache.service';
-import {IReceivedRoute} from "../route-objects-if";
+import {IReceivedRoute} from '../route-objects-if';
 
 @Injectable({
     providedIn: 'root'
@@ -13,7 +13,7 @@ export class DataService {
     baseUrl:string;// = SERVER_URL // "https://studi-guide.azurewebsites.net"; // for development: http://localhost:8090
 
     constructor(private httpClient : HttpClient, private env : Env, private cache: CacheService) {
-        console.log('Using' + env.serverUrl);
+        console.log('Using ', env.serverUrl);
         this.baseUrl = env.serverUrl;
     }
 
@@ -51,6 +51,10 @@ export class DataService {
 
     get_building(name:string) {
         return this.cache.Get<IBuilding>(this.httpClient,this.baseUrl + '/buildings/' + name);
+    }
+
+    get_buildings() {
+        return this.cache.Get<IBuilding[]>(this.httpClient, this.baseUrl + '/buildings');
     }
 
     get_map_item(pathnodeid:number) {

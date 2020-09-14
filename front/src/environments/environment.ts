@@ -18,9 +18,10 @@ export class Env {
 
   constructor(public plt: Platform,
               @Inject(WINDOW) window: Window){
+    console.log('window.origin: ', window.origin);
     if (window != null)  {
-        console.log('Server url: ' + window.origin);
         this.serverUrl = window.origin;
+        this.serverUrl = this.serverUrl.replace(':8100', ':8080');
     }
 
     console.log(plt.platforms());

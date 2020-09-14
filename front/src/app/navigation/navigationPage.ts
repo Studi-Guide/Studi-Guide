@@ -11,7 +11,7 @@ import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import { Storage } from '@ionic/storage';
 import {Router} from '@angular/router';
-import {CanvasTouchHelper} from "../services/CanvasTouchHelper";
+import {CanvasTouchHelper} from '../services/CanvasTouchHelper';
 
 @Component({
     selector: 'app-navigation',
@@ -163,27 +163,13 @@ export class NavigationPage implements OnInit{
     async presentAvailableFloorModal() {
         let floors = new Array<string>();
 
-        if (this.mapView.CurrentRoute == null) {
-            if (this.mapView.CurrentBuilding != null) {
-                const building = await this.dataService.get_building(this.mapView.CurrentBuilding).toPromise<IBuilding>();
-                floors = floors.concat(building.Floors);
-            }
-            else {
-                // STDG-138 discovery mode ... get all floor of all displayed buildings
-                let buildings = this.mapView.floorMapRenderer.objectsToBeVisualized.map(x => x.Building);
-                buildings = buildings.filter((n, i) => buildings.indexOf(n) === i);
+        // STDG-138 discovery mode ... get all floor of all displayed buildings
+        let buildings = await this.dataService.get_buildings().toPromise<IBuilding[]>();
+        buildings = buildings.filter((n, i) => buildings.indexOf(n) === i);
 
-                for (const building of buildings) {
-                    const buildingData = await this.dataService.get_building(building).toPromise<IBuilding>();
-                    floors = floors.concat(buildingData.Floors);
-                }
-            }
-        } else {
-            // get all floors from all buildings on the route
-            for (const routeSection of this.mapView.CurrentRoute.RouteSections) {
-                const building = await this.dataService.get_building(routeSection.Building).toPromise<IBuilding>();
-                floors = floors.concat(building.Floors);
-            }
+        for (const building of buildings) {
+            const buildingData = await this.dataService.get_building(building.Name).toPromise<IBuilding>();
+            floors = floors.concat(buildingData.Floors);
         }
 
         // distinct array
