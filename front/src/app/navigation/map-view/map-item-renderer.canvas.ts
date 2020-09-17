@@ -8,6 +8,10 @@ export class MapItemRendererCanvas implements IRenderer {
     private doAnim = false;
     private animationCallback: () => void;
 
+    public get MapItem() : IMapItem {
+        return this.mapItem;
+    }
+
     render(renderingContext: CanvasRenderingContext2D) {
         renderingContext.beginPath();
         renderingContext.moveTo(this.mapItem.Sections[0].Start.X, this.mapItem.Sections[0].Start.Y);

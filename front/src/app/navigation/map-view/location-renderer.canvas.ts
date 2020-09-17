@@ -6,6 +6,10 @@ export class LocationRendererCanvas implements IRenderer {
     constructor(private location:ILocation) {
     }
 
+    public get Location() : ILocation {
+        return this.location;
+    }
+
     render(renderingContext: CanvasRenderingContext2D) {
         renderingContext.font = '12px Arial';
         renderingContext.textAlign = 'center';
