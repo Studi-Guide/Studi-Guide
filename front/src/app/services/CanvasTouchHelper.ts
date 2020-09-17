@@ -13,12 +13,12 @@ export class CanvasTouchHelper {
     };
 
     public static transformInOriginCoordinate(coordinates: { x: number; y: number}, canvas: HTMLCanvasElement) {
-        console.log('Touch Interaction on: x' + coordinates.x + '... y:' + coordinates.y);
+
         const rect = canvas.getBoundingClientRect();
         const x = (coordinates.x - rect.left)/this.currentZoom.z;
         const y = (coordinates.y - rect.top)/this.currentZoom.z;
 
-        console.log('Transformed to: x' + x + '... y:' + y);
+
         return {x, y};
     }
 
@@ -47,7 +47,7 @@ export class CanvasTouchHelper {
 
         hammerTime.on('doubletap', (event) => {
             if (this.currentZoom.z !== 1) {
-                console.log('doubletab entered');
+
                 const canvasHTMLElement = event.target as HTMLCanvasElement;
 
                 canvasHTMLElement.style.transition = '0.3s';
@@ -62,11 +62,11 @@ export class CanvasTouchHelper {
 
                 const rect = (event.target as HTMLCanvasElement).getBoundingClientRect();
                 const doubleTapOrigin = {x: event.center.x + rect.left, y: event.center.y + rect.top};
-                console.log('doubleTapOrigin: x' + pinchZoomOrigin.x + '... y:' + pinchZoomOrigin.y);
+
 
                 const d = this.scaleFrom(doubleTapOrigin, this.currentZoom.z, 1, originalSize)
 
-                console.log('Scale back : x' + d.x + '... y:' + d.y +  '...z:' + d.z);
+
                 this.currentZoom.x = 0;
                 this.currentZoom.y = 0;
                 this.currentZoom.z += d.z;
@@ -80,7 +80,6 @@ export class CanvasTouchHelper {
         })
 
         hammerTime.on('pan', (event) => {
-            console.log('pan entered');
             if (lastEvent !== 'pan') {
                 fixHammerjsDeltaIssue = {
                     x: event.deltaX,
@@ -190,25 +189,22 @@ export class CanvasTouchHelper {
 
         let yzoomValue = currentZoom.y - 9000;
         if (yzoomValue < yTransitionMax && transition.y < 0) {
-            console.log('Zoom Limit y_max reached. Reset value '   + yzoomValue + ' to: ' + yTransitionMax);
+
             yzoomValue = yvalueOld;
         }
 
         if (yzoomValue > yTansistionMaxNegativ && transition.y > 0) {
             const valueToSet = yzoomValue -(transition.y * 3/4);
-            console.log('Zoom Limit y_min reached. Reset value '   + yzoomValue + ' to: ' + valueToSet);
             yzoomValue = yvalueOld;
         }
 
         let xzoomValue = currentZoom.x- 9000;
         if (xzoomValue > xTansistionMaxNegativ && transition.x > 0) {
             const valueToSet=  xzoomValue -(transition.x* 3/4);
-            console.log('Zoom Limit x_min reached. Reset value '   + (xzoomValue) + ' to: ' + (valueToSet));
                 xzoomValue = xvalueOld;
         }
 
         if (xzoomValue < xTransitionMax && transition.x < 0) {
-            console.log('Zoom Limit x_max reached. Reset value '   + xzoomValue + ' to: ' + xTransitionMax);
             xzoomValue  = xvalueOld;
         }
 
@@ -216,7 +212,6 @@ export class CanvasTouchHelper {
 
         currentZoom.x = xzoomValue + 9000;
         currentZoom.y = yzoomValue + 9000;
-        console.log('Result Zoom x..:' + currentZoom.x + ' y...' + currentZoom.y);
         return currentZoom;
     }
 
