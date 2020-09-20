@@ -8,6 +8,10 @@ export class RouteRendererCanvas implements IRenderer {
     constructor(private route:IReceivedRoute) {
     }
 
+    public get Route() : IReceivedRoute {
+        return this.route;
+    }
+
     render(renderingContext: CanvasRenderingContext2D, args?: any) {
         console.log(args);
         const pin = new IconOnMapRenderer('pin-sharp.png');
@@ -26,6 +30,7 @@ export class RouteRendererCanvas implements IRenderer {
 
         const routeSections = this.route.RouteSections.filter(section => section.Floor === args.floor);
         if (routeSections != null) {
+            // draw route line
             for (const routeSection of routeSections) {
                 renderingContext.strokeStyle = '#A00';
                 renderingContext.lineWidth = 3;
@@ -37,6 +42,23 @@ export class RouteRendererCanvas implements IRenderer {
                 renderingContext.stroke();
                 renderingContext.closePath();
             }
+
+            // draw route length
+            for (const routeSection of routeSections) {
+                const numberOfPathNodes: number = routeSection.Route.length;
+                const value: number = routeSection.Distance;
+                const x: number = routeSection.Route[Math.round((numberOfPathNodes - 1) / 2)].Coordinate.X;
+                const y: number = routeSection.Route[Math.round((numberOfPathNodes - 1) / 2)].Coordinate.Y;
+                const font = '14px Arial';
+                const width = renderingContext.measureText(value.toString()).width + 14;
+                const height = parseInt('14px Arial', 10) + 14;
+                renderingContext.fillStyle = '#A00';
+                renderingContext.fillRect(x - width / 2, y - height / 2, width, 20);
+                renderingContext.font = font;
+                renderingContext.fillStyle = '#FFF';
+                renderingContext.fillText(value.toString(), x, y);
+            }
+
         }
     }
 

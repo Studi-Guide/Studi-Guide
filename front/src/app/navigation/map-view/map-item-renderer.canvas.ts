@@ -49,6 +49,9 @@ export class MapItemRendererCanvas implements IRenderer {
 
             window.requestAnimationFrame(this.animationCallback);
         }
+
+        this.doAnim = true;
+        window.requestAnimationFrame(this.animationCallback);
     }
 
     stopAnimation(renderingContext: CanvasRenderingContext2D) {

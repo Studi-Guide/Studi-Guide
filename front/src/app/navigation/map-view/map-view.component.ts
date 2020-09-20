@@ -126,7 +126,10 @@ export class MapViewComponent implements AfterViewInit {
       x: event.clientX, y:event.clientY}, event.target as HTMLCanvasElement);
     const point = [coordinate.x, coordinate.y];
     if(this.currentRoute != null) {
-      const items: IMapItem[] = []; //await this.routeRenderer.getInteractiveStairWellMapItems(this.currentRoute, this.currentFloor);
+      const items: IMapItem[] = [];
+      for (const m of this.getInteractiveStairWellMapItemRenderer(this.currentFloor)) {
+        items.push(m.MapItem);
+      }
 
       for (const mapItem of items) {
         const polygon = [];
@@ -178,6 +181,10 @@ export class MapViewComponent implements AfterViewInit {
     this.renderRoutes({floor: floor});
     // TODO animate route call here
 
+    for(const m of this.getInteractiveStairWellMapItemRenderer(floor)) {
+      m.startAnimation(this.renderingContext);
+    }
+
     this.currentRoute = route;
     this.currentFloor = floor;
   }
@@ -225,6 +232,30 @@ export class MapViewComponent implements AfterViewInit {
         return;
       }
     }
+  }
+
+  private getInteractiveStairWellMapItemRenderer(floor:string) {
+    const pNodes:IPathNode[] = [];
+    console.log(this.routeRenderer);
+    for (const r of this.routeRenderer) {
+      console.log(r, r.Route);
+      for (let i = 0; i < r.Route.RouteSections.length-1; i++) {
+        if (r.Route.RouteSections[i].Building !== r.Route.RouteSections[i+1].Building)
+          continue;
+        pNodes.push(r.Route.RouteSections[i].Route[r.Route.RouteSections[i].Route.length-1]);
+      }
+    }
+
+    const tmpMItems:MapItemRendererCanvas[] = [];
+    for (const pNode of pNodes) {
+      for (const m of this.mapItemRenderer) {
+        if (m.MapItem.Floor === floor && m.MapItem.PathNodes.filter(p => p.Id === pNode.Id).length > 0) {
+          tmpMItems.push(m);
+        }
+      }
+    }
+
+    return tmpMItems;
   }
 
   private stopAllAnimations() {
