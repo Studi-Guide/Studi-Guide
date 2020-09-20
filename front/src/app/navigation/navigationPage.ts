@@ -274,4 +274,8 @@ export class NavigationPage implements OnInit{
     public async recentSearchClick(locationStr:string) {
         await this.router.navigate(['tabs/navigation'], { queryParams: { location: locationStr } });
     }
+
+    public async presentMapPage() {
+        await this.router.navigate(['tabs/navigation/map']);
+    }
 }
