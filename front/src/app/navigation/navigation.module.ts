@@ -7,6 +7,7 @@ import { NavigationPage } from './navigationPage';
 import {SearchInputComponent} from './search-input/search-input.component';
 import {MapViewComponent} from './map-view/map-view.component';
 import {IonicBottomDrawerModule} from '../../ionic-bottom-drawer/ionic-bottom-drawer.module';
+import {MapPageComponent} from './map-page/map-page.component';
 
 @NgModule({
   imports: [
@@ -14,12 +15,12 @@ import {IonicBottomDrawerModule} from '../../ionic-bottom-drawer/ionic-bottom-dr
     CommonModule,
     FormsModule,
     RouterModule.forChild([
-        { path: '', component: NavigationPage}
-     //   { path: 'search/:location', component: NavigationPage },
+        { path: '', component: NavigationPage},
+        { path: 'map', component: MapPageComponent },
      //   { path: 'navigation/:start/:destination', component: NavigationPage}
         ]),
     IonicBottomDrawerModule
   ],
-    declarations: [NavigationPage, SearchInputComponent, MapViewComponent]
+    declarations: [NavigationPage, SearchInputComponent, MapViewComponent, MapPageComponent]
 })
 export class NavigationPageModule {}
