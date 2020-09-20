@@ -13,7 +13,6 @@ export class RouteRendererCanvas implements IRenderer {
     }
 
     render(renderingContext: CanvasRenderingContext2D, args?: any) {
-        console.log(args);
         const pin = new IconOnMapRenderer('pin-sharp.png');
         if (this.route.Start.Floor === args.floor) {
             const x = this.route.Start.Node.Coordinate.X;

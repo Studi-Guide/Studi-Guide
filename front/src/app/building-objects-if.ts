@@ -54,6 +54,6 @@ export interface IRoom extends IMapItem, ILocation{
 
 export interface IRenderer {
   render(renderingContext:any, args?:any)
-  startAnimation(renderingContext:any)
-  stopAnimation(renderingContext:any)
+  startAnimation(renderingContext:any, args?:any)
+  stopAnimation(renderingContext:any, args?:any)
 }

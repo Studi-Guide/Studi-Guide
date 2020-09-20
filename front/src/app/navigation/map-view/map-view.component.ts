@@ -177,12 +177,11 @@ export class MapViewComponent implements AfterViewInit {
     this.renderMapItems();
     this.renderLocations();
 
-    console.log("calling renderRoutes");
     this.renderRoutes({floor: floor});
     // TODO animate route call here
 
     for(const m of this.getInteractiveStairWellMapItemRenderer(floor)) {
-      m.startAnimation(this.renderingContext);
+      m.startAnimation(this.renderingContext, {renderer: this.routeRenderer, floor: floor});
     }
 
     this.currentRoute = route;
@@ -236,9 +235,8 @@ export class MapViewComponent implements AfterViewInit {
 
   private getInteractiveStairWellMapItemRenderer(floor:string) {
     const pNodes:IPathNode[] = [];
-    console.log(this.routeRenderer);
+
     for (const r of this.routeRenderer) {
-      console.log(r, r.Route);
       for (let i = 0; i < r.Route.RouteSections.length-1; i++) {
         if (r.Route.RouteSections[i].Building !== r.Route.RouteSections[i+1].Building)
           continue;
