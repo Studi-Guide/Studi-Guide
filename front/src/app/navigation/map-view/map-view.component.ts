@@ -2,8 +2,6 @@ import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angula
 import {DataService} from '../../services/data.service';
 import {CanvasResolutionConfigurator, TranslationPosition} from '../../services/CanvasResolutionConfigurator';
 import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
-import {FloorMapRenderer} from './floorMapRenderer';
-import {NaviRouteRenderer} from './naviRouteRenderer';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import * as pip from 'point-in-polygon';
 import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
