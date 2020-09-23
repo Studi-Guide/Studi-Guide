@@ -13,6 +13,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {Env} from '../environments/environment';
 import {IonicStorageModule} from '@ionic/storage';
 import {WINDOW_PROVIDERS} from './services/windowProvider';
+import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 
 @NgModule({
   declarations: [AppComponent],
@@ -20,6 +21,7 @@ import {WINDOW_PROVIDERS} from './services/windowProvider';
   imports: [
     BrowserModule,
     HttpClientModule,
+    LeafletModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     IonicStorageModule.forRoot()
