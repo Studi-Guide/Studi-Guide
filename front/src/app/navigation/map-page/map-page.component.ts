@@ -29,15 +29,27 @@ export class MapPageComponent implements OnInit, OnDestroy {
   constructor() { }
 
   ngOnInit() { }
-  ionViewDidEnter() { this.leafletMap(); }
+  ionViewDidEnter() { this.initializeMap(); }
 
-  private leafletMap() {
-    this.map = Leaflet.map('mapId').setView([49.452858, 11.093235], 17);
+  private initializeMap() {
+    const southWest = Leaflet.latLng(49.4126, 11.0111);
+    const northEast = Leaflet.latLng(49.5118, 11.2167);
+    const bounds = Leaflet.latLngBounds(southWest, northEast);
+
+    this.map = Leaflet.map('mapId', {
+      maxBounds:bounds,
+      maxZoom: 19,
+      minZoom: 14
+    }).setView([49.452858, 11.093235], 17);
+
     Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'edupala.com © Angular LeafLet',
     }).addTo(this.map);
 
-    Leaflet.marker([49.452858, 11.093235]).addTo(this.map).bindPopup('Technische Hochschule Nürnberg Georg Simon Ohm').openPopup();
+    Leaflet.marker([49.452858, 11.093235]).
+      addTo(this.map).
+      bindPopup('Technische Hochschule Nürnberg Georg Simon Ohm').
+      openPopup();
   }
 
     /** Remove map when we have multiple map object */
