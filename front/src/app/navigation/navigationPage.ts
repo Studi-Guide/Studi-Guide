@@ -1,4 +1,4 @@
-import {BuildingData, Location, PathNode} from '../building-objects-if';
+import {IBuilding, ILocation, IPathNode} from '../building-objects-if';
 import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
@@ -31,7 +31,7 @@ export class NavigationPage implements OnInit{
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
     public errorMessage: string;
-    public selectedLocation:Location = {
+    public selectedLocation:ILocation = {
         Building: '',
         Description: '',
         Floor: '',
@@ -107,7 +107,7 @@ export class NavigationPage implements OnInit{
         this.errorMessage = '';
         this.progressIsVisible = true;
         try {
-            const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<Location>();
+            const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<ILocation>();
             const route = await this.dataService.get_route(routeInput[0], routeInput[1]).toPromise();
             await this.mapView.showRoute(route, startLocation);
             this.scrollToCoordinate(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
@@ -148,7 +148,7 @@ export class NavigationPage implements OnInit{
         }
     }
 
-    public async showLocationDrawer(location:Location) {
+    public async showLocationDrawer(location:ILocation) {
         await this.locationDrawer.SetState(DrawerState.Hidden);
         this.selectedLocation = location;
         await this.searchDrawer.SetState(DrawerState.Hidden);
@@ -163,27 +163,13 @@ export class NavigationPage implements OnInit{
     async presentAvailableFloorModal() {
         let floors = new Array<string>();
 
-        if (this.mapView.CurrentRoute == null) {
-            if (this.mapView.CurrentBuilding != null) {
-                const building = await this.dataService.get_building(this.mapView.CurrentBuilding).toPromise<BuildingData>();
-                floors = floors.concat(building.Floors);
-            }
-            else {
-                // STDG-138 discovery mode ... get all floor of all displayed buildings
-                let buildings = this.mapView.floorMapRenderer.objectsToBeVisualized.map(x => x.Building);
-                buildings = buildings.filter((n, i) => buildings.indexOf(n) === i);
+        // STDG-138 discovery mode ... get all floor of all displayed buildings
+        let buildings = await this.dataService.get_buildings().toPromise<IBuilding[]>();
+        buildings = buildings.filter((n, i) => buildings.indexOf(n) === i);
 
-                for (const building of buildings) {
-                    const buildingData = await this.dataService.get_building(building).toPromise<BuildingData>();
-                    floors = floors.concat(buildingData.Floors);
-                }
-            }
-        } else {
-            // get all floors from all buildings on the route
-            for (const routeSection of this.mapView.CurrentRoute.RouteSections) {
-                const building = await this.dataService.get_building(routeSection.Building).toPromise<BuildingData>();
-                floors = floors.concat(building.Floors);
-            }
+        for (const building of buildings) {
+            const buildingData = await this.dataService.get_building(building.Name).toPromise<IBuilding>();
+            floors = floors.concat(buildingData.Floors);
         }
 
         // distinct array
