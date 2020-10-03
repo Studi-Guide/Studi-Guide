@@ -6,7 +6,7 @@ import (
 )
 
 func (r *EntityMapper) GetAllCampus() ([]*ent.Campus, error) {
-	campus, err := r.client.Campus.Query().All(r.context)
+	campus, err := r.client.Campus.Query().WithAddress().All(r.context)
 	if err != nil {
 		return nil, err
 	}
@@ -14,7 +14,7 @@ func (r *EntityMapper) GetAllCampus() ([]*ent.Campus, error) {
 }
 
 func (r *EntityMapper) GetCampus(name string) (ent.Campus, error) {
-	b, err := r.client.Campus.Query().
+	b, err := r.client.Campus.Query().WithAddress().
 		Where(
 			entcampus.Or(
 				entcampus.NameEqualFold(name),
