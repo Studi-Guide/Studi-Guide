@@ -695,3 +695,19 @@ func TestEntityService_CampusEntity(t *testing.T) {
 		t.Error("expected: ", "Am Platzl", "; got: ", campusArray[0].Edges.Address.Street)
 	}
 }
+func TestEntityService_CampusEntity_Negative(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+	_, err := dbService.GetCampus("HBB")
+	if err == nil {
+		t.Error("expected error got: ", nil)
+	}
+
+	campusArray, err := dbService.FilterCampus("HBB")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	if len(campusArray) != 0 {
+		t.Error("expected: ", nil, "; got: ", campusArray)
+	}
+}
