@@ -4,12 +4,12 @@ import {
   ElementRef,
   EventEmitter,
   Input,
-  OnChanges,
+  OnChanges, OnInit,
   Output,
   Renderer2,
   SimpleChanges
 } from '@angular/core';
-import {AnimationController, DomController, Gesture, GestureController, Platform} from '@ionic/angular';
+import {AnimationController, DomController, Gesture, Animation, GestureController, Platform} from '@ionic/angular';
 import {DrawerState} from './drawer-state';
 
 @Component({
@@ -17,7 +17,7 @@ import {DrawerState} from './drawer-state';
   templateUrl: './ionic-bottom-drawer.component.html',
   styleUrls: ['./ionic-bottom-drawer.component.scss'],
 })
-export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
+export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input() distanceTop = 50;
 
@@ -41,6 +41,7 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
 
   private startPositionTop: number;
   private gesture: Gesture;
+  private animation: Animation;
 
   constructor(
       private element: ElementRef,
@@ -51,18 +52,31 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
       private animationCtrl: AnimationController
   ) { }
 
-  ngAfterViewInit() {
+  ngOnInit() {
+
+    this.animation = this.animationCtrl.create()
+        .addElement(this.element.nativeElement)
+        .easing(this.easing)
+        .duration(5000)
+        .fromTo('transform', 'translateY(0px)'/*begin distance to top */, 'translateY('+this.platform.height()+'px)' /* end distance to top pos */);
 
     this.gesture = this.gestureCtrl.create({
       el: this.element.nativeElement,
       threshold: 15,
-      gestureName: 'swipe-up',
+      gestureName: 'push-pull-drawer',
       direction: 'y',
-      onMove: (detail => { this.onMove(detail); }),
       onStart: (detail => {  this.onStart(detail); }),
+      onMove: (detail => { this.onMove(detail); }),
       onEnd: (detail => { this.onEnd(detail); })
     });
     this.gesture.enable();
+  }
+
+  ngAfterViewInit() {
+
+    //this.animation.progressStart(false);
+    //this.animation.progressStep(this.minimumHeight/this.platform.height());
+    //this.animation.progressEnd(1, 0, 5000);
 
     this.SetState(this.state);
   }
@@ -79,64 +93,86 @@ export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
     this.state = newState;
 
     switch (this.state) {
-      case DrawerState.Top:
-        await this.animate(this.distanceTop);
-        break;
-      case DrawerState.Bottom:
-        await this.animate(this.platform.height() - this.minimumHeight);
-        break;
-      case DrawerState.Docked:
-        await this.animate(this.platform.height() - this.dockedHeight);
-        break;
-      case DrawerState.Hidden:
-        await this.animate(this.platform.height());
-        break;
-    }
+       case DrawerState.Top:
+         await this.animateTo(this.distanceTop);
+         break;
+       case DrawerState.Bottom:
+         await this.animateTo(this.minimumHeight);
+         break;
+       case DrawerState.Docked:
+         await this.animateTo(this.dockedHeight);
+         break;
+       case DrawerState.Hidden:
+         await this.animateTo(0);
+         break;
+     }
 
-    this.stateChange.emit(this.state);
-  }
-
-  private onMove(detail) {
-    const newTop = this.startPositionTop + detail.deltaY;
-
-    if ((this.shouldBounce && newTop < this.distanceTop - this.bounceDelta)
-        || (!this.shouldBounce && newTop < this.distanceTop)) {
-      return;
-    } else if ((this.shouldBounce && newTop > (this.platform.height() - this.minimumHeight) + this.bounceDelta)
-        || (!this.shouldBounce && newTop > (this.platform.height() - this.minimumHeight))) {
-      return;
-    }
-
-    this.animate(newTop);
+     this.stateChange.emit(this.state);
   }
 
   private onStart(detail) {
     this.startPositionTop = this.element.nativeElement.getBoundingClientRect().top;
+    this.animation.to('transform', 'translateY('+this.platform.height()+'px)');
+    this.animation.progressStart(false);
+  }
+
+  private onMove(detail) {
+    this.animation.progressStep((this.startPositionTop+detail.deltaY)/this.platform.height());
   }
 
   private onEnd(detail) {
-    const newTop = this.startPositionTop + detail.deltaY;
-    const deltaTop = Math.abs(this.distanceTop - newTop);
-    const deltaDock = Math.abs(this.platform.height() - this.dockedHeight - newTop);
-    const deltaBot = Math.abs(this.platform.height() - this.minimumHeight - newTop);
-
-    if (deltaTop < deltaDock && deltaTop < deltaBot) {
-      this.SetState(DrawerState.Top);
-    } else if (deltaBot < deltaDock && deltaBot < deltaTop) {
-      this.SetState(DrawerState.Bottom);
-    } else {
-      this.SetState(DrawerState.Docked);
-    }
+    //this.animation.to('transform', 'translateY('+(this.distanceTop)+'px)');
+    //this.animation.progressEnd(0, 1);
+    this.animation.pause();
   }
 
-  private async animate(position:number) {
-    await this.animationCtrl.create()
-        .addElement(this.element.nativeElement)
-        .easing(this.easing)
-        .duration(this.duration)
-        .to('transform', 'translateY(' + position + 'px)')
-        .iterations(1)
-        .play();
+  private async animateTo(positionY:number) {
+    console.log(this.state, positionY, this.platform.height(), positionY/this.platform.height());
+    this.animation.to('transform', 'translateY('+(this.platform.height()-positionY)+'px)');
+    await this.animation.play();
   }
+
+  // private onMove(detail) {
+  //   const newTop = this.startPositionTop + detail.deltaY;
+  //
+  //   if ((this.shouldBounce && newTop < this.distanceTop - this.bounceDelta)
+  //       || (!this.shouldBounce && newTop < this.distanceTop)) {
+  //     return;
+  //   } else if ((this.shouldBounce && newTop > (this.platform.height() - this.minimumHeight) + this.bounceDelta)
+  //       || (!this.shouldBounce && newTop > (this.platform.height() - this.minimumHeight))) {
+  //     return;
+  //   }
+  //
+  //   this.animate(newTop);
+  // }
+
+  // private onStart(detail) {
+  //   this.startPositionTop = this.element.nativeElement.getBoundingClientRect().top;
+  // }
+  //
+  // private onEnd(detail) {
+  //   const newTop = this.startPositionTop + detail.deltaY;
+  //   const deltaTop = Math.abs(this.distanceTop - newTop);
+  //   const deltaDock = Math.abs(this.platform.height() - this.dockedHeight - newTop);
+  //   const deltaBot = Math.abs(this.platform.height() - this.minimumHeight - newTop);
+  //
+  //   if (deltaTop < deltaDock && deltaTop < deltaBot) {
+  //     this.SetState(DrawerState.Top);
+  //   } else if (deltaBot < deltaDock && deltaBot < deltaTop) {
+  //     this.SetState(DrawerState.Bottom);
+  //   } else {
+  //     this.SetState(DrawerState.Docked);
+  //   }
+  // }
+  //
+  // private async animate(position:number) {
+  //   await this.animationCtrl.create()
+  //       .addElement(this.element.nativeElement)
+  //       .easing(this.easing)
+  //       .duration(this.duration)
+  //       .to('transform', 'translateY(' + position + 'px)')
+  //       .iterations(1)
+  //       .play();
+  // }
 
 }
