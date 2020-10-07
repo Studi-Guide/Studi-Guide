@@ -21,7 +21,7 @@ func TestCampusController_GetCampusByName(t *testing.T) {
 	campusprovider := NewMockCampusProvider(ctrl)
 	router := gin.Default()
 	mapRouter := router.Group("/campus")
-	NewCampusController(mapRouter, campusprovider)
+	_ = NewCampusController(mapRouter, campusprovider)
 
 	address := ent.Address{
 		ID:      1,
@@ -64,7 +64,7 @@ func TestCampusController_GetCampusByName_Negative(t *testing.T) {
 	campusprovider := NewMockCampusProvider(ctrl)
 	router := gin.Default()
 	mapRouter := router.Group("/campus")
-	NewCampusController(mapRouter, campusprovider)
+	_ = NewCampusController(mapRouter, campusprovider)
 
 	campusprovider.EXPECT().GetCampus("K").Return(ent.Campus{}, errors.New("not found"))
 	router.ServeHTTP(rec, req)
@@ -84,7 +84,7 @@ func TestCampusController_GetCampus_All(t *testing.T) {
 	campusprovider := NewMockCampusProvider(ctrl)
 	router := gin.Default()
 	mapRouter := router.Group("/campus")
-	NewCampusController(mapRouter, campusprovider)
+	_ = NewCampusController(mapRouter, campusprovider)
 
 	address := ent.Address{
 		ID:      1,
@@ -149,7 +149,7 @@ func TestCampusController_GetCampus_Filter(t *testing.T) {
 	campusprovider := NewMockCampusProvider(ctrl)
 	router := gin.Default()
 	mapRouter := router.Group("/campus")
-	NewCampusController(mapRouter, campusprovider)
+	_ = NewCampusController(mapRouter, campusprovider)
 
 	address := ent.Address{
 		ID:      1,
@@ -194,7 +194,7 @@ func TestCampusController_GetCampus_Error(t *testing.T) {
 	campusprovider := NewMockCampusProvider(ctrl)
 	router := gin.Default()
 	mapRouter := router.Group("/campus")
-	NewCampusController(mapRouter, campusprovider)
+	_ = NewCampusController(mapRouter, campusprovider)
 
 	campusprovider.EXPECT().GetAllCampus().Return(nil, errors.New("not init"))
 	router.ServeHTTP(rec, req)
