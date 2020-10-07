@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"github.com/ahmetb/go-linq/v3"
-	fbsql "github.com/facebookincubator/ent/dialect/sql"
+	fbsql "github.com/facebook/ent/dialect/sql"
 	"log"
 	"os"
 	"reflect"
