@@ -74,7 +74,7 @@ func (c CampusController) GetCampus(context *gin.Context) {
 // @Produce  json
 // @Tags CampusController
 // @Param campus path string true "name of the campus"
-// @Success 200 {array} ent.Campus
+// @Success 200 {object} ent.Campus
 // @Router /campus/{campus} [get]
 func (c CampusController) GetCampusByName(context *gin.Context) {
 	name := context.Param("campus")
