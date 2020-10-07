@@ -41,7 +41,6 @@ func TestLocationController_GetLocations(t *testing.T) {
 	}
 
 	expectJson, _ := json.Marshal(expectLocations)
-	expectJson = append(expectJson, '\n')
 	if string(expectJson) != rec.Body.String() {
 		t.Error("expect", expectJson, ", got ", rec.Body.Bytes())
 	}
@@ -77,7 +76,6 @@ func TestLocationController_GetLocations2(t *testing.T) {
 	}
 
 	expectJson, _ := json.Marshal(expectLocations)
-	expectJson = append(expectJson, '\n')
 	if string(expectJson) != rec.Body.String() {
 		t.Error("expect", expectJson, ", got ", rec.Body.Bytes())
 	}
@@ -133,7 +131,6 @@ func TestLocationController_GetLocationByName(t *testing.T) {
 	}
 
 	expectJson, _ := json.Marshal(expectLocation)
-	expectJson = append(expectJson, '\n')
 	if string(expectJson) != rec.Body.String() {
 		t.Error("expect", expectJson, ", got ", rec.Body.Bytes())
 	}
