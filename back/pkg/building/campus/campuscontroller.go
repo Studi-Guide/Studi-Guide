@@ -30,11 +30,11 @@ func NewCampusController(router *gin.RouterGroup, campusProvider CampusProvider)
 // @Accept  json
 // @Produce  json
 // @Tags CampusController
-// @Param name query string false "name of the campus"
+// @Param search query string false "name of the campus"
 // @Success 200 {array} ent.Campus
 // @Router /campus [get]
 func (c CampusController) GetCampus(context *gin.Context) {
-	name := context.Query("name")
+	name := context.Query("search")
 
 	var campusArray []ent.Campus
 	var err error
