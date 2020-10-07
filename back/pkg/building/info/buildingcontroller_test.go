@@ -47,7 +47,6 @@ func TestBuildingController_GetAllBuildings(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(building)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
