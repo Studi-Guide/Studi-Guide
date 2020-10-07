@@ -2,6 +2,7 @@ package campus
 
 import (
 	"encoding/json"
+	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/golang/mock/gomock"
 	"net/http"
@@ -50,6 +51,26 @@ func TestCampusController_GetCampusByName(t *testing.T) {
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
+
+func TestCampusController_GetCampusByName_Negative(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/campus/K", nil)
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	campusprovider := NewMockCampusProvider(ctrl)
+	router := gin.Default()
+	mapRouter := router.Group("/campus")
+	NewCampusController(mapRouter, campusprovider)
+
+	campusprovider.EXPECT().GetCampus("K").Return(ent.Campus{}, errors.New("not found"))
+	router.ServeHTTP(rec, req)
+
+	if http.StatusBadRequest != rec.Code {
+		t.Error("expected ", http.StatusBadRequest)
 	}
 }
 
@@ -160,5 +181,24 @@ func TestCampusController_GetCampus_Filter(t *testing.T) {
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
+
+func TestCampusController_GetCampus_Error(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/campus", nil)
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	campusprovider := NewMockCampusProvider(ctrl)
+	router := gin.Default()
+	mapRouter := router.Group("/campus")
+	NewCampusController(mapRouter, campusprovider)
+
+	campusprovider.EXPECT().GetAllCampus().Return(nil, errors.New("not init"))
+	router.ServeHTTP(rec, req)
+	if http.StatusBadRequest != rec.Code {
+		t.Error("expected ", http.StatusBadRequest)
 	}
 }
