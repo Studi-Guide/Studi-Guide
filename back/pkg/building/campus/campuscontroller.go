@@ -19,7 +19,7 @@ func NewCampusController(router *gin.RouterGroup, campusProvider CampusProvider)
 	}
 
 	b.router.GET("", b.GetCampus)
-	b.router.GET("/:building", b.GetCampusByName)
+	b.router.GET("/:campus", b.GetCampusByName)
 	return nil
 }
 
