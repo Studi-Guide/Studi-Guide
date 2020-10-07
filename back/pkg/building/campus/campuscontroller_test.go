@@ -117,3 +117,48 @@ func TestCampusController_GetCampus_All(t *testing.T) {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
 }
+
+func TestCampusController_GetCampus_Filter(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/campus?search=K", nil)
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	campusprovider := NewMockCampusProvider(ctrl)
+	router := gin.Default()
+	mapRouter := router.Group("/campus")
+	NewCampusController(mapRouter, campusprovider)
+
+	address := ent.Address{
+		ID:      1,
+		Street:  "Kesslerplatz",
+		Number:  "1",
+		PLZ:     1111,
+		City:    "Nürnberg",
+		Country: "Deutschland",
+		Edges:   ent.AddressEdges{},
+	}
+
+	campus := []ent.Campus{
+		{
+			ID:        1,
+			ShortName: "K",
+			Name:      "Kesslerplatz",
+			Longitude: 100.5,
+			Latitude:  200.8,
+			Edges: ent.CampusEdges{
+				Address: &address,
+			},
+		},
+	}
+
+	campusprovider.EXPECT().FilterCampus("K").Return(campus, nil)
+	router.ServeHTTP(rec, req)
+
+	expected, _ := json.Marshal(campus)
+	actual := rec.Body.String()
+	if string(expected) != actual {
+		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
