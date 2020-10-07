@@ -178,7 +178,6 @@ func TestNavigationCalculatefromString(t *testing.T) {
 		t.Error(err)
 	}
 
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
