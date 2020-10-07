@@ -144,7 +144,6 @@ func TestRoomController_GetAllRoom(t *testing.T) {
 	rooms := provider.RoomList
 
 	expected, _ := json.Marshal(rooms)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
