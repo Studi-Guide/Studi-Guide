@@ -62,7 +62,7 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
 
     this.gesture = this.gestureCtrl.create({
       el: this.element.nativeElement,
-      threshold: 15,
+      threshold: 0,
       gestureName: 'push-pull-drawer',
       direction: 'y',
       onStart: (detail => {  this.onStart(detail); }),
@@ -111,25 +111,40 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   }
 
   private onStart(detail) {
-    this.startPositionTop = this.element.nativeElement.getBoundingClientRect().top;
-    this.animation.to('transform', 'translateY('+this.platform.height()+'px)');
-    this.animation.progressStart(false);
+    this.startPositionTop = detail.startY//this.element.nativeElement.getBoundingClientRect().top;
+    const step = (this.startPositionTop)/this.platform.height();
+
+    this.animation.progressStart(false, step);
+    console.log(detail.startY, detail.currentY, detail.deltaY, step);
   }
 
   private onMove(detail) {
-    this.animation.progressStep((this.startPositionTop+detail.deltaY)/this.platform.height());
+    const step = (this.startPositionTop+detail.deltaY)/this.platform.height();
+    this.animation.progressStep(step);
+    console.log(detail.startY, detail.currentY, detail.deltaY, step);
   }
 
   private onEnd(detail) {
     //this.animation.to('transform', 'translateY('+(this.distanceTop)+'px)');
-    //this.animation.progressEnd(0, 1);
+    const step = (this.startPositionTop+detail.deltaY)/this.platform.height();
+    this.animation.progressStep(step);
     this.animation.pause();
+    //this.animation.progressEnd(0, 1);
+    console.log(detail.startY, detail.currentY, detail.deltaY, step);
+    //this.animateTo(detail.currentY);
+    //this.animation.stop();  resets the animation
+
   }
 
   private async animateTo(positionY:number) {
     console.log(this.state, positionY, this.platform.height(), positionY/this.platform.height());
-    this.animation.to('transform', 'translateY('+(this.platform.height()-positionY)+'px)');
-    await this.animation.play();
+    await this.animationCtrl.create()
+        .addElement(this.element.nativeElement)
+        .easing(this.easing)
+        .duration(this.duration)
+        .to('transform', 'translateY(' + (this.platform.height()-positionY) + 'px)')
+        .iterations(1)
+        .play();
   }
 
   // private onMove(detail) {
