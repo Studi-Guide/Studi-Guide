@@ -89,9 +89,10 @@ export class MapPageComponent implements OnInit, OnDestroy {
     const northEast = Leaflet.latLng(49.5118, 11.2167);
     const bounds = Leaflet.latLngBounds(southWest, northEast);
 
+    // maxZoom for leaflet map is 18
     this.map = Leaflet.map('mapId', {
       maxBounds:bounds,
-      maxZoom: 19,
+      maxZoom: 18,
       minZoom: 14
     }).setView([49.452858, 11.093235], 17);
 
