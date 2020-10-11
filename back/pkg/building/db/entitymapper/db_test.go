@@ -4,7 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"github.com/ahmetb/go-linq/v3"
-	fbsql "github.com/facebookincubator/ent/dialect/sql"
+	fbsql "github.com/facebook/ent/dialect/sql"
 	"log"
 	"os"
 	"reflect"
@@ -133,6 +133,25 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 			},
 		})
 	}
+
+	// client create test campus
+	address, err := client.Address.Create().
+		SetCity("Munich").
+		SetCountry("Germany").
+		SetStreet("Am Platzl").
+		SetNumber("1").
+		SetPLZ(80331).Save(ctx)
+
+	if err != nil {
+		log.Fatalf("failed creating schema resources: %v", err)
+	}
+
+	client.Campus.Create().
+		SetShortName("HB").
+		SetName("HB Hofbräu Haus").
+		SetLatitude(48.1378).
+		SetLongitude(11.5797).
+		SetAddress(address).Save(ctx)
 
 	dbService := EntityMapper{client: client, table: "", context: ctx}
 
@@ -623,5 +642,72 @@ func TestEntityService_FilterMapItems_Building_Negativ(t *testing.T) {
 	getMapItems, _ := dbService.FilterMapItems("2", "main2", "")
 	if len(getMapItems) != 0 {
 		t.Error("expected: ", nil, "; got: ", getMapItems)
+	}
+}
+
+func TestEntityService_CampusEntity(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	campusArray, err := dbService.GetAllCampus()
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	if len(campusArray) == 0 {
+		t.Error("expected something got: nothing")
+	}
+
+	if campusArray[0].Name != "HB Hofbräu Haus" {
+		t.Error("expected: ", "HB Hofbräu Haus", "; got: ", campusArray[0].Name)
+	}
+
+	if campusArray[0].Edges.Address.Street != "Am Platzl" {
+		t.Error("expected: ", "Am Platzl", "; got: ", campusArray[0].Edges.Address.Street)
+	}
+
+	campus, err := dbService.GetCampus("HB")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	if campus.Name != "HB Hofbräu Haus" {
+		t.Error("expected: ", "HB Hofbräu Haus", "; got: ", campus.Name)
+	}
+
+	if campus.Edges.Address.Street != "Am Platzl" {
+		t.Error("expected: ", "Am Platzl", "; got: ", campus.Edges.Address.Street)
+	}
+
+	campusArray, err = dbService.FilterCampus("HB")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	if len(campusArray) == 0 {
+		t.Error("expected something got: nothing")
+	}
+
+	if campusArray[0].Name != "HB Hofbräu Haus" {
+		t.Error("expected: ", "HB Hofbräu Haus", "; got: ", campusArray[0].Name)
+	}
+
+	if campusArray[0].Edges.Address.Street != "Am Platzl" {
+		t.Error("expected: ", "Am Platzl", "; got: ", campusArray[0].Edges.Address.Street)
+	}
+}
+func TestEntityService_CampusEntity_Negative(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+	_, err := dbService.GetCampus("HBB")
+	if err == nil {
+		t.Error("expected error got: ", nil)
+	}
+
+	campusArray, err := dbService.FilterCampus("HBB")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	if len(campusArray) != 0 {
+		t.Error("expected: ", nil, "; got: ", campusArray)
 	}
 }

@@ -24,10 +24,6 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
 })
 export class MapPageComponent implements OnInit, OnDestroy {
 
-  constructor() { }
-
-  map: Leaflet.Map;
-
   private readonly KV_CORNER_COORDINATES:LatLngExpression[] = [
     [49.452645,11.0924275],
     [49.45261,11.09275],
@@ -81,11 +77,24 @@ export class MapPageComponent implements OnInit, OnDestroy {
     [49.45236,11.092685]
   ];
 
-  ngOnInit() { }
-  ionViewDidEnter() { this.leafletMap(); }
+  map: Leaflet.Map;
 
-  private leafletMap() {
-    this.map = Leaflet.map('mapId').setView([49.452858, 11.093235], 17);
+  constructor() { }
+
+  ngOnInit() { }
+  ionViewDidEnter() { this.initializeMap(); }
+
+  private initializeMap() {
+    const southWest = Leaflet.latLng(49.4126, 11.0111);
+    const northEast = Leaflet.latLng(49.5118, 11.2167);
+    const bounds = Leaflet.latLngBounds(southWest, northEast);
+
+    this.map = Leaflet.map('mapId', {
+      maxBounds:bounds,
+      maxZoom: 19,
+      minZoom: 14
+    }).setView([49.452858, 11.093235], 17);
+
     Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'edupala.com © Angular LeafLet',
     }).addTo(this.map);
@@ -103,10 +112,10 @@ export class MapPageComponent implements OnInit, OnDestroy {
         }
     )
 
-    Leaflet.marker([49.452858, 11.093235])
-        .addTo(this.map)
-        .bindPopup('Technische Hochschule Nürnberg Georg Simon Ohm')
-        .openPopup();
+     Leaflet.marker([49.452858, 11.093235]).
+      addTo(this.map).
+      bindPopup('Technische Hochschule Nürnberg Georg Simon Ohm').
+      openPopup();
   }
 
   private onPolygonClick(event:LeafletMouseEvent) : void

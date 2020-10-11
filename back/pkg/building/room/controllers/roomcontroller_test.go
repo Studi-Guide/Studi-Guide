@@ -21,7 +21,6 @@ func TestRoomlistIndex(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(provider.RoomList)
-	expected = append(expected, '\n')
 	if string(expected) != rec.Body.String() {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
@@ -56,7 +55,6 @@ func TestGetRoom(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(provider.RoomList[0])
-	expected = append(expected, '\n')
 	if string(expected) != rec.Body.String() {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
@@ -73,7 +71,7 @@ func TestGetRoomNotExists(t *testing.T) {
 
 	router.ServeHTTP(rec, req)
 
-	expected := "\"no such room\"\n"
+	expected := "\"no such room\""
 	if expected != rec.Body.String() {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
 	}
@@ -92,7 +90,6 @@ func TestRoomController_GetRoomsFromFloor_Filter(t *testing.T) {
 	rooms, _ := provider.FilterRooms("1", "", "", "", "", "")
 
 	expected, _ := json.Marshal(rooms)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
@@ -144,7 +141,6 @@ func TestRoomController_GetAllRoom(t *testing.T) {
 	rooms := provider.RoomList
 
 	expected, _ := json.Marshal(rooms)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())

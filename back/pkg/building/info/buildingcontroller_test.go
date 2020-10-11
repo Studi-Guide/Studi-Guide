@@ -47,7 +47,6 @@ func TestBuildingController_GetAllBuildings(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(building)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
@@ -103,7 +102,6 @@ func TestBuildingController_GetBuildings_Filter(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(building)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
@@ -172,7 +170,6 @@ func TestBuildingController_GetLocationsFromBuildingFloor(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(excepectedLocations)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
@@ -204,7 +201,6 @@ func TestBuildingController_GetRoomsFromBuildingFloor(t *testing.T) {
 	rooms, _ := roomProvider.FilterRooms("1", "", "", "", testbuilding.Name, "")
 
 	expected, _ := json.Marshal(rooms)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
@@ -288,7 +284,6 @@ func TestBuildingController_GetMapsFromBuildingFloor(t *testing.T) {
 	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
 	router.ServeHTTP(rec, req)
 	expected, _ := json.Marshal(mockmaps)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
