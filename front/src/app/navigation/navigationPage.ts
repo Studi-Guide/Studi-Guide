@@ -1,5 +1,5 @@
-import {IBuilding, ILocation, IPathNode} from '../building-objects-if';
-import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {IBuilding, ILocation} from '../building-objects-if';
+import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
@@ -141,11 +141,7 @@ export class NavigationPage implements OnInit{
             return;
         }
 
-        if (state === DrawerState.Top) {
-            this.drawerContent.scrollY = true;
-        } else {
-            this.drawerContent.scrollY = false;
-        }
+        this.drawerContent.scrollY = state === DrawerState.Top;
     }
 
     public async showLocationDrawer(location:ILocation) {

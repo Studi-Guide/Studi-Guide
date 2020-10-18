@@ -1,15 +1,15 @@
-import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output} from '@angular/core';
 import {DataService} from '../../services/data.service';
 import {CanvasResolutionConfigurator, TranslationPosition} from '../../services/CanvasResolutionConfigurator';
 import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import * as pip from 'point-in-polygon';
 import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
-import {IReceivedRoute} from "../../route-objects-if";
-import {MapItemRendererCanvas} from "./map-item-renderer.canvas";
-import {LocationRendererCanvas} from "./location-renderer.canvas";
-import {RouteRendererCanvas} from "./route-renderer.canvas";
-import {RendererProvider} from "./renderer-provider";
+import {IReceivedRoute} from '../../route-objects-if';
+import {MapItemRendererCanvas} from './map-item-renderer.canvas';
+import {LocationRendererCanvas} from './location-renderer.canvas';
+import {RouteRendererCanvas} from './route-renderer.canvas';
+import {RendererProvider} from './renderer-provider';
 
 @Component({
   selector: 'app-map-view',
@@ -17,9 +17,9 @@ import {RendererProvider} from "./renderer-provider";
   styleUrls: ['./map-view.component.scss'],
 })
 export class MapViewComponent implements AfterViewInit {
-  private currentBuilding: string;
+  public currentBuilding: string;
   private currentRoute:IReceivedRoute;
-  private currentFloor:string;
+  public currentFloor:string;
   private clickThreshold = 20;
 
   private renderingContext:CanvasRenderingContext2D;
@@ -175,11 +175,11 @@ export class MapViewComponent implements AfterViewInit {
     this.renderMapItems();
     this.renderLocations();
 
-    this.renderRoutes({floor: floor});
+    this.renderRoutes({floor});
     // TODO animate route call here
 
     for(const m of this.getInteractiveStairWellMapItemRenderer(floor)) {
-      m.startAnimation(this.renderingContext, {renderer: this.routeRenderer, floor: floor});
+      m.startAnimation(this.renderingContext, {renderer: this.routeRenderer, floor});
     }
 
     this.currentRoute = route;
