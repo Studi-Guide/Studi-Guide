@@ -40,7 +40,7 @@ func TestCampusController_GetCampusByName(t *testing.T) {
 		Longitude: 100.5,
 		Latitude:  200.8,
 		Edges: ent.CampusEdges{
-			Address: &address,
+			Address: []*ent.Address{&address},
 		},
 	}
 
@@ -114,7 +114,7 @@ func TestCampusController_GetCampus_All(t *testing.T) {
 			Longitude: 100.5,
 			Latitude:  200.8,
 			Edges: ent.CampusEdges{
-				Address: &address,
+				Address: []*ent.Address{&address},
 			},
 		},
 		{
@@ -124,7 +124,7 @@ func TestCampusController_GetCampus_All(t *testing.T) {
 			Longitude: 500.5,
 			Latitude:  1100.8,
 			Edges: ent.CampusEdges{
-				Address: &address2,
+				Address: []*ent.Address{&address2},
 			},
 		},
 	}
@@ -169,7 +169,7 @@ func TestCampusController_GetCampus_Filter(t *testing.T) {
 			Longitude: 100.5,
 			Latitude:  200.8,
 			Edges: ent.CampusEdges{
-				Address: &address,
+				Address: []*ent.Address{&address},
 			},
 		},
 	}

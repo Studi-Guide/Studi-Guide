@@ -151,7 +151,7 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 		SetName("HB Hofbräu Haus").
 		SetLatitude(48.1378).
 		SetLongitude(11.5797).
-		SetAddress(address).Save(ctx)
+		AddAddress(address).Save(ctx)
 
 	dbService := EntityMapper{client: client, table: "", context: ctx}
 
@@ -661,8 +661,8 @@ func TestEntityService_CampusEntity(t *testing.T) {
 		t.Error("expected: ", "HB Hofbräu Haus", "; got: ", campusArray[0].Name)
 	}
 
-	if campusArray[0].Edges.Address.Street != "Am Platzl" {
-		t.Error("expected: ", "Am Platzl", "; got: ", campusArray[0].Edges.Address.Street)
+	if campusArray[0].Edges.Address[0].Street != "Am Platzl" {
+		t.Error("expected: ", "Am Platzl", "; got: ", campusArray[0].Edges.Address[0].Street)
 	}
 
 	campus, err := dbService.GetCampus("HB")
@@ -674,8 +674,8 @@ func TestEntityService_CampusEntity(t *testing.T) {
 		t.Error("expected: ", "HB Hofbräu Haus", "; got: ", campus.Name)
 	}
 
-	if campus.Edges.Address.Street != "Am Platzl" {
-		t.Error("expected: ", "Am Platzl", "; got: ", campus.Edges.Address.Street)
+	if campus.Edges.Address[0].Street != "Am Platzl" {
+		t.Error("expected: ", "Am Platzl", "; got: ", campus.Edges.Address[0].Street)
 	}
 
 	campusArray, err = dbService.FilterCampus("HB")
@@ -691,8 +691,8 @@ func TestEntityService_CampusEntity(t *testing.T) {
 		t.Error("expected: ", "HB Hofbräu Haus", "; got: ", campusArray[0].Name)
 	}
 
-	if campusArray[0].Edges.Address.Street != "Am Platzl" {
-		t.Error("expected: ", "Am Platzl", "; got: ", campusArray[0].Edges.Address.Street)
+	if campusArray[0].Edges.Address[0].Street != "Am Platzl" {
+		t.Error("expected: ", "Am Platzl", "; got: ", campusArray[0].Edges.Address[0].Street)
 	}
 }
 func TestEntityService_CampusEntity_Negative(t *testing.T) {
