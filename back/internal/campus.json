@@ -1,0 +1,43 @@
+[
+  {
+  "ShortName": "K",
+  "Name": "Kesslerplatz",
+  "Longitude": 11.0931,
+  "Latitude": 49.4529,
+  "edges": {
+    "Address": [
+      {
+      "Street": "Keßlerplatz",
+      "Number": "12",
+      "PLZ": 90489,
+      "City": "Nürnberg",
+      "Country": "Deutschland"
+      }
+    ]
+  }
+  },
+  {
+    "ShortName": "W",
+    "Name": "Wassertorstraße",
+    "Longitude": 11.0961,
+    "Latitude": 49.4528,
+    "edges": {
+      "Address": [
+        {
+        "Street": "Wassertorstraße",
+        "Number": "6",
+        "PLZ": 90489,
+        "City": "Nürnberg",
+        "Country": "Deutschland"
+        },
+        {
+          "Street": "Wassertorstraße",
+          "Number": "10",
+          "PLZ": 90489,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        }
+      ]
+    }
+  }
+]
