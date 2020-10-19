@@ -15,11 +15,11 @@ type Address struct {
 // Fields of the Address.
 func (Address) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("Street"),
-		field.String("Number"),
-		field.Int("PLZ"),
-		field.String("City"),
-		field.String("Country"),
+		field.String("Street").NotEmpty(),
+		field.String("Number").NotEmpty(),
+		field.Int("PLZ").NonNegative(),
+		field.String("City").NotEmpty(),
+		field.String("Country").NotEmpty(),
 	}
 }
 
