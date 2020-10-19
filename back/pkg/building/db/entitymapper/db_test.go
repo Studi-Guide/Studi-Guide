@@ -711,3 +711,35 @@ func TestEntityService_CampusEntity_Negative(t *testing.T) {
 		t.Error("expected: ", nil, "; got: ", campusArray)
 	}
 }
+
+func TestEntityMapper_AddCampus(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	testcampus := ent.Campus{
+		ShortName: "Test",
+		Name:      "TESTTEST",
+		Longitude: 12180840.92938,
+		Latitude:  120480124.29323,
+		Edges: ent.CampusEdges{
+			Address: []*ent.Address{
+				{
+					Street:  "BlaStreet",
+					Number:  "10",
+					PLZ:     11111,
+					City:    "BlaTown",
+					Country: "BlaLand",
+				},
+			},
+		},
+	}
+
+	err := dbService.AddCampus(testcampus)
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	_, err = dbService.GetCampus("Test")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+}
