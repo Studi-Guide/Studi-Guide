@@ -125,5 +125,149 @@
         }
       ]
     }
+  },
+  {
+    "ShortName": "SG",
+    "Name": "Karl-Grillenberger-Straße",
+    "Longitude": 11.0700,
+    "Latitude": 49.4516,
+    "edges": {
+      "Address": [
+        {
+          "Street": "Karl-Grillenberger-Straße",
+          "Number": "3a",
+          "PLZ": 90403 ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        }
+      ]
+    }
+  },
+  {
+    "ShortName": "SH8",
+    "Name": "Ostendstraße",
+    "Longitude": 11.1145,
+    "Latitude": 49.4539,
+    "edges": {
+      "Address": [
+        {
+          "Street": "Ostendstraße",
+          "Number": "82b",
+          "PLZ": 90403 ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        }
+      ]
+    }
+  },
+  {
+    "ShortName": "SP",
+    "Name": "Keßlerstraße",
+    "Longitude": 11.0883,
+    "Latitude": 49.4543,
+    "edges": {
+      "Address": [
+        {
+          "Street": "Keßlerstraße",
+          "Number": "1",
+          "PLZ": 90489 ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Keßlerstraße",
+          "Number": "2",
+          "PLZ": 90489 ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Keßlerstraße",
+          "Number": "3",
+          "PLZ": 90489 ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        }
+      ]
+    }
+  },
+  {
+    "ShortName": "F",
+    "Name": "Auf AEG",
+    "Longitude": 11.0300,
+    "Latitude": 49.4597,
+    "edges": {
+      "Address": [
+        {
+          "Street": "Fürther Straße",
+          "Number": "246",
+          "PLZ": 90429  ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Fürther Straße",
+          "Number": "247",
+          "PLZ": 90429  ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Fürther Straße",
+          "Number": "248",
+          "PLZ": 90429  ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Fürther Straße",
+          "Number": "249",
+          "PLZ": 90429  ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Fürther Straße",
+          "Number": "250",
+          "PLZ": 90429  ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        }
+      ]
+    }
+  },
+  {
+    "ShortName": "SR",
+    "Name": "Rednitzhembach",
+    "Longitude": 11.0487,
+    "Latitude": 49.3132,
+    "edges": {
+      "Address": [
+        {
+          "Street": "Siemensstraße",
+          "Number": "1",
+          "PLZ": 91126 ,
+          "City": "Rednitzhembach",
+          "Country": "Deutschland"
+        }
+      ]
+    }
+  },
+  {
+    "ShortName": "NP",
+    "Name": "Neumarkt in der Oberpfalz",
+    "Longitude": 11.4751,
+    "Latitude": 49.2756,
+    "edges": {
+      "Address": [
+        {
+          "Street": "Badstraße",
+          "Number": "88",
+          "PLZ": 92318 ,
+          "City": "Neumarkt",
+          "Country": "Deutschland"
+        }
+      ]
+    }
   }
 ]
