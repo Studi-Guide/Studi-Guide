@@ -738,8 +738,19 @@ func TestEntityMapper_AddCampus(t *testing.T) {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
 
-	_, err = dbService.GetCampus("Test")
+	realValue, err := dbService.GetCampus("Test")
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	if realValue.ShortName != testcampus.ShortName ||
+		realValue.Name != testcampus.Name ||
+		realValue.Latitude != testcampus.Latitude ||
+		realValue.Longitude != testcampus.Longitude ||
+		realValue.Edges.Address[0].Street != testcampus.Edges.Address[0].Street ||
+		realValue.Edges.Address[0].City != testcampus.Edges.Address[0].City ||
+		realValue.Edges.Address[0].Country != testcampus.Edges.Address[0].Country ||
+		realValue.Edges.Address[0].PLZ != testcampus.Edges.Address[0].PLZ {
+		t.Error("expected equal but got ", testcampus, "; real: ", realValue)
 	}
 }
