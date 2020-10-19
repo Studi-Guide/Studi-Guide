@@ -39,5 +39,91 @@
         }
       ]
     }
+  },
+  {
+    "ShortName": "B",
+    "Name": "Bahnhofstraße",
+    "Longitude": 11.0962,
+    "Latitude": 49.4486,
+    "edges": {
+      "Address": [
+        {
+          "Street": "Bahnhofstraße",
+          "Number": "87",
+          "PLZ": 90402,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Bahnhofstraße",
+          "Number": "90",
+          "PLZ": 90402,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        }
+      ]
+    }
+  },
+  {
+    "ShortName": "H",
+    "Name": "Hohfederstraße",
+    "Longitude": 11.1022,
+    "Latitude": 49.4582,
+    "edges": {
+      "Address": [
+        {
+          "Street": "Hohfederstraße",
+          "Number": "40",
+          "PLZ": 90489,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        }
+      ]
+    }
+  },
+  {
+    "ShortName": "SC",
+    "Name": "Innere Cramer-Klett-Straße",
+    "Longitude": 11.0866,
+    "Latitude": 49.4554,
+    "edges": {
+      "Address": [
+        {
+          "Street": "Innere Cramer-Klett-Straße",
+          "Number": "4",
+          "PLZ": 90403 ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Innere Cramer-Klett-Straße",
+          "Number": "5",
+          "PLZ": 90403 ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Innere Cramer-Klett-Straße",
+          "Number": "6",
+          "PLZ": 90403 ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Innere Cramer-Klett-Straße",
+          "Number": "7",
+          "PLZ": 90403 ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        },
+        {
+          "Street": "Innere Cramer-Klett-Straße",
+          "Number": "8",
+          "PLZ": 90403 ,
+          "City": "Nürnberg",
+          "Country": "Deutschland"
+        }
+      ]
+    }
   }
 ]
