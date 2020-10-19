@@ -44,7 +44,7 @@ func TestCampusController_GetCampusByName(t *testing.T) {
 		},
 	}
 
-	campusprovider.EXPECT().GetCampus("K").Return(campus, nil)
+	campusprovider.EXPECT().GetCampus("K").Return(&campus, nil)
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(campus)
@@ -66,7 +66,7 @@ func TestCampusController_GetCampusByName_Negative(t *testing.T) {
 	mapRouter := router.Group("/campus")
 	_ = NewCampusController(mapRouter, campusprovider)
 
-	campusprovider.EXPECT().GetCampus("K").Return(ent.Campus{}, errors.New("not found"))
+	campusprovider.EXPECT().GetCampus("K").Return(&ent.Campus{}, errors.New("not found"))
 	router.ServeHTTP(rec, req)
 
 	if http.StatusBadRequest != rec.Code {
@@ -106,7 +106,7 @@ func TestCampusController_GetCampus_All(t *testing.T) {
 		Edges:   ent.AddressEdges{},
 	}
 
-	campus := []ent.Campus{
+	campus := []*ent.Campus{
 		{
 			ID:        1,
 			ShortName: "K",
@@ -161,7 +161,7 @@ func TestCampusController_GetCampus_Filter(t *testing.T) {
 		Edges:   ent.AddressEdges{},
 	}
 
-	campus := []ent.Campus{
+	campus := []*ent.Campus{
 		{
 			ID:        1,
 			ShortName: "K",
