@@ -15,7 +15,7 @@ func (r *EntityMapper) GetAllCampus() ([]*ent.Campus, error) {
 	return campus, nil
 }
 
-func (r *EntityMapper) GetCampus(name string) (ent.Campus, error) {
+func (r *EntityMapper) GetCampus(name string) (*ent.Campus, error) {
 	b, err := r.client.Campus.Query().WithAddress().
 		Where(
 			entcampus.Or(
@@ -24,10 +24,10 @@ func (r *EntityMapper) GetCampus(name string) (ent.Campus, error) {
 		First(r.context)
 
 	if err != nil {
-		return ent.Campus{}, err
+		return &ent.Campus{}, err
 	}
 
-	return *b, nil
+	return b, nil
 }
 
 func (r *EntityMapper) FilterCampus(name string) ([]*ent.Campus, error) {
