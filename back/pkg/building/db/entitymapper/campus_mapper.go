@@ -60,7 +60,7 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 	for _, address := range campus.Edges.Address {
 		addressEntity, err := r.GetOrAddAddress(address)
 		if err != nil {
-			log.Fatal("Error adding address:", address, " Error:", err)
+			log.Error("Error adding address:", address, " Error:", err)
 		} else {
 			campusCreate.AddAddress(addressEntity)
 		}
@@ -68,7 +68,7 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 
 	_, err := campusCreate.Save(r.context)
 	if err != nil {
-		log.Fatal("Error adding campus:", campus.Name, " Error:", err)
+		log.Error("Error adding campus:", campus.Name, " Error:", err)
 		return err
 	}
 
