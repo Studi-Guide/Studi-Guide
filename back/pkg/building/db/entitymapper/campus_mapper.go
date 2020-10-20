@@ -1,7 +1,7 @@
 package entitymapper
 
 import (
-	"github.com/prometheus/common/log"
+	"log"
 	"studi-guide/pkg/building/db/ent"
 	entaddress "studi-guide/pkg/building/db/ent/address"
 	entcampus "studi-guide/pkg/building/db/ent/campus"
@@ -46,7 +46,7 @@ func (r *EntityMapper) FilterCampus(name string) ([]*ent.Campus, error) {
 func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 	found, _ := r.client.Campus.Query().Where(entcampus.NameEqualFold(campus.Name)).First(r.context)
 	if found != nil {
-		log.Info("campus ", campus.Name, " already imported")
+		log.Printf("campus %v already imported", campus.Name)
 		return nil
 	}
 
@@ -60,7 +60,7 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 	for _, address := range campus.Edges.Address {
 		addressEntity, err := r.GetOrAddAddress(address)
 		if err != nil {
-			log.Error("Error adding address:", address, " Error:", err)
+			log.Print("Error adding address:", address, " Error:", err)
 		} else {
 			campusCreate.AddAddress(addressEntity)
 		}
@@ -68,7 +68,7 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 
 	_, err := campusCreate.Save(r.context)
 	if err != nil {
-		log.Error("Error adding campus:", campus.Name, " Error:", err)
+		log.Print("Error adding campus:", campus.Name, " Error:", err)
 		return err
 	}
 
