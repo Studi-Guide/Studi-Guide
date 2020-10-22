@@ -841,4 +841,13 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 	if !reflect.DeepEqual(mappedItem.PathNodes, checkItem.PathNodes) {
 		t.Error(mappedItem.PathNodes, checkItem.PathNodes)
 	}
+
+	floors, err := r.getFloorsFromBuilding(mItem.Edges.Building)
+	if len(floors) == 0 {
+		t.Error("expected something and got:", err)
+	}
+
+	if floors[0] != "0" {
+		t.Error("expected '0' and got:", floors[0])
+	}
 }
