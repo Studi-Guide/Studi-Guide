@@ -4,6 +4,7 @@ import (
 	"log"
 	"studi-guide/pkg/building/db/ent"
 	entaddress "studi-guide/pkg/building/db/ent/address"
+	entbuilding "studi-guide/pkg/building/db/ent/building"
 	entcampus "studi-guide/pkg/building/db/ent/campus"
 )
 
@@ -63,6 +64,22 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 			log.Print("Error adding address:", address, " Error:", err)
 		} else {
 			campusCreate.AddAddress(addressEntity)
+		}
+	}
+
+	for _, building := range campus.Edges.Buildings {
+		buildingEntity, err := r.client.Building.Query().Where(entbuilding.NameEqualFold(building.Name)).First(r.context)
+		if buildingEntity == nil {
+			buildingEntity, err = r.client.Building.Create().
+				SetName(building.Name).
+				Save(r.context)
+			if err != nil {
+				log.Print("Error adding building:", building, " Error:", err)
+			}
+		}
+
+		if buildingEntity != nil {
+			campusCreate.AddBuildingIDs(buildingEntity.ID)
 		}
 	}
 

@@ -25,7 +25,6 @@ func TestMapController_GetMapItems(t *testing.T) {
 		Color:     "",
 		Floor:     "1",
 		Sections:  nil,
-		Campus:    "",
 		Building:  "",
 		PathNodes: nil,
 	}}
@@ -96,7 +95,6 @@ func TestMapController_GetMapItemsFromFloor_Filter(t *testing.T) {
 		Color:     "",
 		Floor:     "1",
 		Sections:  nil,
-		Campus:    "",
 		Building:  "",
 		PathNodes: nil,
 	}}
@@ -130,7 +128,6 @@ func TestMapController_GetMapItems_PathNodeID(t *testing.T) {
 		Color:     "",
 		Floor:     "1",
 		Sections:  nil,
-		Campus:    "",
 		Building:  "",
 		PathNodes: nil,
 	}

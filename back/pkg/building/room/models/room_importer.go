@@ -154,7 +154,6 @@ func (r *RoomJsonImporter) CreateMapItems(importItems []ImportMapItems) ([]entit
 				Color:     item.Color,
 				Floor:     item.Floor,
 				Sections:  item.Sections,
-				Campus:    item.Campus,
 				Building:  item.Building,
 				Doors:     doors,
 				PathNodes: roomNodes,

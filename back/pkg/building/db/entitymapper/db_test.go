@@ -44,7 +44,26 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
-	building, _ := client.Building.Create().SetName("main").SetCampus("testcampus").Save(ctx)
+	address, err := client.Address.Create().
+		SetCity("Munich").
+		SetCountry("Germany").
+		SetStreet("Am Platzl").
+		SetNumber("1").
+		SetPLZ(80331).Save(ctx)
+
+	campus, err := client.Campus.Create().
+		SetName("testcampus").
+		SetShortName("TC").
+		SetLongitude(0).
+		SetLatitude(0).
+		AddAddress(address).
+		Save(ctx)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	building, _ := client.Building.Create().SetName("main").SetCampus(campus).Save(ctx)
 	testRooms = []Room{}
 	for i := 1; i < 4; i++ {
 
@@ -120,7 +139,6 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 				Floor:     strconv.Itoa(i),
 				Building:  "main",
 				PathNodes: []*navigation.PathNode{&patnode},
-				Campus:    "testcampus",
 			},
 			Location: Location{
 				Id:          entLocation.ID,
@@ -133,14 +151,6 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 			},
 		})
 	}
-
-	// client create test campus
-	address, err := client.Address.Create().
-		SetCity("Munich").
-		SetCountry("Germany").
-		SetStreet("Am Platzl").
-		SetNumber("1").
-		SetPLZ(80331).Save(ctx)
 
 	if err != nil {
 		log.Fatalf("failed creating schema resources: %v", err)
@@ -657,11 +667,11 @@ func TestEntityService_CampusEntity(t *testing.T) {
 		t.Error("expected something got: nothing")
 	}
 
-	if campusArray[0].Name != "HB Hofbräu Haus" {
+	if campusArray[1].Name != "HB Hofbräu Haus" {
 		t.Error("expected: ", "HB Hofbräu Haus", "; got: ", campusArray[0].Name)
 	}
 
-	if campusArray[0].Edges.Address[0].Street != "Am Platzl" {
+	if campusArray[1].Edges.Address[0].Street != "Am Platzl" {
 		t.Error("expected: ", "Am Platzl", "; got: ", campusArray[0].Edges.Address[0].Street)
 	}
 
@@ -773,7 +783,8 @@ func TestEntityMapper_AddCampus_InvalidAddress(t *testing.T) {
 				{
 					Street:  "BlaStreet",
 					Number:  "10",
-					Country: "BlaLand",
+					Country: "",
+					City:    "BlaCity",
 				},
 			},
 		},

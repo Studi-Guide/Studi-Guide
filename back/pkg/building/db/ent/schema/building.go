@@ -16,7 +16,6 @@ type Building struct {
 func (Building) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("Name").Unique(),
-		field.String("Campus"),
 	}
 }
 
@@ -24,7 +23,8 @@ func (Building) Fields() []ent.Field {
 func (Building) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.From("mapitems", MapItem.Type).Ref("building"),
-		edge.From("location", MapItem.Type).Ref("building"),
+		edge.From("location", Location.Type).Ref("building"),
+		edge.From("campus", Campus.Type).Ref("buildings").Unique(),
 	}
 }
 
