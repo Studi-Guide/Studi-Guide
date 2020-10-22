@@ -4,6 +4,7 @@ import (
 	"log"
 	"studi-guide/cmd/studi-guide/server"
 	"studi-guide/docs"
+	"studi-guide/pkg/building/campus"
 	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/building/info"
 	"studi-guide/pkg/building/location"
@@ -66,6 +67,10 @@ func BuildContainer() *dig.Container {
 		})
 
 		container.Provide(func() info.BuildingProvider {
+			return entityserver
+		})
+
+		container.Provide(func() campus.CampusProvider {
 			return entityserver
 		})
 	})
