@@ -130,7 +130,7 @@ func NewStudiGuideServer(env *env.Env,
 		if err != nil {
 			log.Fatal(err)
 		} else {
-			log.Println("Successfully initialized building controller")
+			log.Println("Successfully initialized campus controller")
 		}
 	}
 
