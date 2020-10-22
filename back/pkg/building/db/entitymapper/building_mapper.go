@@ -48,16 +48,23 @@ func (r *EntityMapper) buildingArrayMapper(entBuildings []*ent.Building) ([]Buil
 
 func (r *EntityMapper) buildingMapper(entBuilding *ent.Building) (*Building, error) {
 	floors, _ := r.getFloorsFromBuilding(entBuilding)
-	return &Building{
+	building := Building{
 		Id:     entBuilding.ID,
 		Name:   entBuilding.Name,
 		Floors: floors,
-	}, nil
+	}
+
+	campus, _ := entBuilding.Edges.CampusOrErr()
+	if campus != nil {
+		building.Campus = campus.ShortName
+	}
+
+	return &building, nil
 }
 
 func (r *EntityMapper) getFloorsFromBuilding(building *ent.Building) ([]string, error) {
 	floors, err := building.QueryMapitems().
-		Select("Floor").Strings(r.context)
+		Select("floor").Strings(r.context)
 
 	if err != nil {
 		return nil, err
