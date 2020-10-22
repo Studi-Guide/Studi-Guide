@@ -13,6 +13,10 @@
       "City": "Nürnberg",
       "Country": "Deutschland"
       }
+    ],
+    "Buildings" : [
+      { "Name": "KA" },
+      { "Name": "KV" }
     ]
   }
   },

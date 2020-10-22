@@ -69,7 +69,7 @@ func (r *EntityMapper) getFloorsFromBuilding(building *ent.Building) ([]string, 
 func (r *EntityMapper) mapBuildingArray(buildings []Building) ([]*ent.Building, error) {
 	var entBuildings []*ent.Building
 	for _, b := range buildings {
-		entBuilding, err := r.mapBuilding(b.Name, b.Campus)
+		entBuilding, err := r.mapBuilding(b.Name)
 		if err != nil {
 			return nil, err
 		}
@@ -78,7 +78,7 @@ func (r *EntityMapper) mapBuildingArray(buildings []Building) ([]*ent.Building, 
 	return entBuildings, nil
 }
 
-func (r *EntityMapper) mapBuilding(buildingName string, campusName string) (*ent.Building, error) {
+func (r *EntityMapper) mapBuilding(buildingName string) (*ent.Building, error) {
 	entBuilding, _ := r.client.Building.Query().Where(entbuilding.NameEQ(buildingName)).First(r.context)
 	if entBuilding != nil {
 		return entBuilding, nil
@@ -86,6 +86,5 @@ func (r *EntityMapper) mapBuilding(buildingName string, campusName string) (*ent
 
 	return r.client.Building.Create().
 		SetName(buildingName).
-		SetCampus(campusName).
 		Save(r.context)
 }

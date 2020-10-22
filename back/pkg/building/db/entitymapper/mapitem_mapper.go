@@ -3,6 +3,7 @@ package entitymapper
 import (
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/db/ent/building"
+	entcampus "studi-guide/pkg/building/db/ent/campus"
 	"studi-guide/pkg/building/db/ent/mapitem"
 	"studi-guide/pkg/building/db/ent/pathnode"
 	"studi-guide/pkg/navigation"
@@ -48,7 +49,6 @@ func (r *EntityMapper) mapItemMapper(entMapItem *ent.MapItem) *MapItem {
 	b, err := entMapItem.Edges.BuildingOrErr()
 	if err == nil {
 		m.Building = b.Name
-		m.Campus = b.Campus
 	}
 
 	return &m
@@ -99,7 +99,12 @@ func (r *EntityMapper) FilterMapItems(floor, buildingFilter, campus string) ([]M
 	}
 
 	if len(campus) > 0 {
-		mapQuery = mapQuery.Where(mapitem.HasBuildingWith(building.CampusEqualFold(campus)))
+		mapQuery = mapQuery.Where(
+			mapitem.HasBuildingWith(
+				building.HasCampusWith(
+					entcampus.Or(
+						entcampus.ShortNameEqualFold(campus),
+						entcampus.NameEqualFold(campus)))))
 	}
 
 	entMapItems, err := mapQuery.

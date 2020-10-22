@@ -26,7 +26,10 @@ func (r *EntityMapper) roomMapper(entRoom *ent.Room) *Room {
 
 	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).
 		WithMapitem(func(q *ent.MapItemQuery) {
-			q.WithPathNodes().WithColor().WithBuilding().WithDoors(func(p *ent.DoorQuery) { p.WithPathNode().WithSection() }).WithSections()
+			q.WithPathNodes().
+				WithColor().
+				WithBuilding(func(b *ent.BuildingQuery) { b.WithCampus() }).
+				WithDoors(func(p *ent.DoorQuery) { p.WithPathNode().WithSection() }).WithSections()
 		}).
 		WithLocation(func(q *ent.LocationQuery) {
 			q.WithPathnode().WithTags().WithBuilding()
@@ -141,7 +144,7 @@ func (r *EntityMapper) storeRooms(rooms []Room) error {
 			continue
 		}
 
-		entBuilding, err := r.mapBuilding(rm.Location.Building, rm.MapItem.Campus)
+		entBuilding, err := r.mapBuilding(rm.Location.Building)
 		if err != nil {
 			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.PathNode.Id))
 		}

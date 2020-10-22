@@ -26,6 +26,7 @@ func (Campus) Fields() []ent.Field {
 func (Campus) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("address", Address.Type).Required(),
+		edge.To("buildings", Building.Type),
 	}
 }
 
