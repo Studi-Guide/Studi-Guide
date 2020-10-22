@@ -740,6 +740,18 @@ func TestEntityMapper_AddCampus(t *testing.T) {
 					Country: "BlaLand",
 				},
 			},
+			Buildings: []*ent.Building{{
+				ID:   1,
+				Name: "Test",
+			},
+				{
+					ID:   2,
+					Name: "Test2",
+				},
+				{
+					ID:   1,
+					Name: "Test3",
+				}},
 		},
 	}
 
