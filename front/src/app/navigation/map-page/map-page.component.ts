@@ -26,10 +26,10 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
 })
 export class MapPageComponent implements OnInit, OnDestroy {
   map: Leaflet.Map;
-  private _dataservice: DataService;
+  private _dataService: DataService;
 
-  constructor(dataservice: DataService) {
-    this._dataservice = dataservice;
+  constructor(dataService: DataService) {
+    this._dataService = dataService;
   }
 
   ngOnInit() { }
@@ -52,7 +52,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
     }).addTo(this.map);
 
 
-    const buildings = await this._dataservice.get_buildings().toPromise();
+    const buildings = await this._dataService.get_buildings().toPromise();
 
     function convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
         const leafletBody:LatLngLiteral[] = []
