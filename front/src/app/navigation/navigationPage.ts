@@ -5,12 +5,11 @@ import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 import {MapViewComponent} from './map-view/map-view.component';
 import {HttpErrorResponse} from '@angular/common/http';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
-import { Storage } from '@ionic/storage';
-import {Router} from '@angular/router';
+import {Storage} from '@ionic/storage';
 import {CanvasTouchHelper} from '../services/CanvasTouchHelper';
 import {CampusViewModel} from './campusViewModel';
 
@@ -20,7 +19,7 @@ import {CampusViewModel} from './campusViewModel';
     styleUrls: ['navigation.page.scss']
 })
 
-export class NavigationPage implements OnInit{
+export class NavigationPage implements OnInit, AfterViewInit{
 
     @ViewChild(MapViewComponent) mapView: MapViewComponent;
     @ViewChild(SearchInputComponent) searchInput: SearchInputComponent;
@@ -56,6 +55,10 @@ export class NavigationPage implements OnInit{
                 private router: Router,
                 private storage: Storage,
                 private renderer: Renderer2) {
+    }
+
+    ngAfterViewInit(): void {
+        this.locationDrawer.SetState(DrawerState.Hidden);
     }
 
     ionViewDidEnter() {
@@ -101,8 +104,7 @@ export class NavigationPage implements OnInit{
             this.addRecentSearch(searchInput);
             this.scrollToCoordinate(location.PathNode.Coordinate.X, location.PathNode.Coordinate.Y);
 
-            // Wenn man hier ein await einfügt spackt der drawer komplett. Keine ahnung wieso
-            this.showLocationDrawer(location);
+            await this.showLocationDrawer(location);
             this.availableFloorsBtnIsVisible = true;
         } catch (ex) {
             this.handleInputError(ex, searchInput);
