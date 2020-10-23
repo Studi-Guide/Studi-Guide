@@ -765,7 +765,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
       for (const building of buildings) {
         if (building.Body !== null && building.Body.length > 0) {
           Leaflet.polygon(convertToLeafLetCoordinates(building.Body),
-              {className: building.Name, color: building.Color})
+              {className: building.Name, color: building.Color ?? '#0083C6'})
               .addTo(this.map)
               .on('click', this.onPolygonClick);
         }

@@ -850,4 +850,22 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 	if floors[0] != "0" {
 		t.Error("expected '0' and got:", floors[0])
 	}
+
+	_, err = r.GetAllBuildings()
+	if err != nil {
+		t.Error(err)
+	}
+
+	testbuilding, err := r.GetBuilding("building")
+	if err != nil {
+		t.Error(err)
+	}
+
+	if testbuilding.Name != building.Name {
+		t.Error("expected ", building.Name, " and got:", testbuilding.Name)
+	}
+	_, err = r.FilterBuildings("building")
+	if err != nil {
+		t.Error(err)
+	}
 }
