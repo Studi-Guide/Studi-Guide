@@ -31,11 +31,17 @@ export interface IMapItem {
   Floor: string;
 }
 
+export interface IGpsCoordinate {
+  Longitude: number
+  Latitude: number
+}
+
 export interface IBuilding {
   Id: number;
   Name: string;
+  Color: string;
   Floors: string[];
-  Campus: string;
+  Body: IGpsCoordinate[];
 }
 
 export interface ILocation {

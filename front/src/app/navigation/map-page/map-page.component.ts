@@ -1,6 +1,8 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import * as Leaflet from 'leaflet';
-import {LatLngExpression, LeafletMouseEvent} from 'leaflet';
+import {LatLngExpression, LatLngLiteral, LeafletMouseEvent} from 'leaflet';
+import {DataService} from '../../services/data.service';
+import {IGpsCoordinate} from '../../building-objects-if';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -722,13 +724,16 @@ export class MapPageComponent implements OnInit, OnDestroy {
   ];
 
   map: Leaflet.Map;
+  private _dataservice: DataService;
 
-  constructor() { }
+  constructor(dataservice: DataService) {
+    this._dataservice = dataservice;
+  }
 
   ngOnInit() { }
-  ionViewDidEnter() { this.initializeMap(); }
+  async ionViewDidEnter() { await this.initializeMap(); }
 
-  private initializeMap() {
+  private async initializeMap() {
     const southWest = Leaflet.latLng(49.4126, 11.0111);
     const northEast = Leaflet.latLng(49.5118, 11.2167);
     const bounds = Leaflet.latLngBounds(southWest, northEast);
@@ -744,40 +749,28 @@ export class MapPageComponent implements OnInit, OnDestroy {
       attribution: 'edupala.com © Angular LeafLet',
     }).addTo(this.map);
 
-    [
-      {coordinates: this.KV_CORNER_COORDINATES, options: {className: 'KV', color: '#0083C6'}},
-      {coordinates: this.KA_CORNER_COORDINATES, options: {className: 'KA', color: '#0083C6'}},
-      {coordinates: this.KB_CORNER_COORDINATES, options: {className: 'KB', color: '#0083C6'}},
-      {coordinates: this.KL_CORNER_COORDINATES, options: {className: 'KL', color: '#0083C6'}},
-      {coordinates: this.KI_CORNER_COORDINATES, options: {className: 'KI', color: '#0083C6'}},
-      {coordinates: this.KS_CORNER_COORDINATES, options: {className: 'KS', color: '#0083C6'}},
-      {coordinates: this.KJ_CORNER_COORDINATES, options: {className: 'KJ', color: '#0083C6'}},
-      {coordinates: this.KR_CORNER_COORDINATES, options: {className: 'KR', color: '#0083C6'}},
-      {coordinates: this.KT_CORNER_COORDINATES, options: {className: 'KT', color: '#0083C6'}},
-      {coordinates: this.KM_CORNER_COORDINATES, options: {className: 'KM', color: '#0083C6'}},
-      {coordinates: this.KH_CORNER_COORDINATES, options: {className: 'KH', color: '#0083C6'}},
-      {coordinates: this.KY_CORNER_COORDINATES, options: {className: 'KY', color: '#0083C6'}},
 
-      {coordinates: this.WF_CORNER_COORDINATES, options: {className: 'WF', color: '#11C811'}},
-      {coordinates: this.WK_CORNER_COORDINATES, options: {className: 'WK', color: '#11C811'}},
-      {coordinates: this.W_CORNER_COORDINATES, options: {className: 'W', color: '#11C811'}}
+    const buildings = await this._dataservice.get_buildings().toPromise();
 
+    function convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
+        const leafletBody:LatLngLiteral[] = []
+        for (const coordinate of body){
+          leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});
+        }
 
+        return leafletBody;
+    }
 
-
-
-
-
-
-
-    ].forEach(
-        // tslint:disable-next-line:no-shadowed-variable
-        (polygon) => {
-          Leaflet.polygon(polygon.coordinates, polygon.options)
+    if (buildings !== null) {
+      for (const building of buildings) {
+        if (building.Body !== null && building.Body.length > 0) {
+          Leaflet.polygon(convertToLeafLetCoordinates(building.Body),
+              {className: building.Name, color: building.Color})
               .addTo(this.map)
               .on('click', this.onPolygonClick);
         }
-    )
+      }
+    }
 
      Leaflet.marker([49.452858, 11.093235]).
       addTo(this.map).
