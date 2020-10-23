@@ -20,6 +20,8 @@ import {DrawerState} from './drawer-state';
 })
 export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChanges {
 
+  @Input() gripElementsClass = 'drawer-grip';
+
   @Input() distanceTop = 50;
 
   @Input() dockedHeight = 250;
@@ -54,7 +56,7 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   ngOnInit() {
 
     this.gesture = this.gestureCtrl.create({
-      el: this.element.nativeElement,
+      el: this.element.nativeElement.querySelector('.'+this.gripElementsClass),
       threshold: 0,
       gestureName: 'push-pull-drawer',
       direction: 'y',
@@ -111,8 +113,6 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   private onStart(detail) {
     this.renderer.setStyle(this.element.nativeElement, 'transition', 'transform 0s ease-in-out');
     this.startPositionTop = this.element.nativeElement.getBoundingClientRect().top;
-    const step = (this.startPositionTop)/this.platform.height();
-    console.log(detail.startY, detail.currentY, detail.deltaY, step);
   }
 
   private onMove(detail) {
@@ -132,7 +132,6 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   private onEnd(detail) {
     this.renderer.setStyle(this.element.nativeElement, 'transition', 'transform '+this.duration+'ms ease-in-out');
     const step = (this.startPositionTop+detail.deltaY)/this.platform.height();
-    console.log(detail.startY, detail.currentY, detail.deltaY, step);
 
 
     const newTop = detail.currentY;
@@ -150,7 +149,6 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   }
 
   private async animateTo(positionY:number) {
-    console.log(this.state, positionY, this.platform.height(), positionY/this.platform.height());
     const translate = 'translateY('+(this.platform.height()-positionY)+'px)';
     this.renderer.setStyle(this.element.nativeElement, 'transform', translate);
 
@@ -159,7 +157,7 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   }
 
   private async delay(ms: number) {
-    await new Promise(resolve => setTimeout(()=>resolve(), ms)).then(()=>console.log("fired"));
+    await new Promise(resolve => setTimeout(()=>resolve(), ms)).then();
   }
 
 }
