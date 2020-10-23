@@ -8,4 +8,5 @@ type Building struct {
 	Floors []string
 	Campus string
 	Body   []navigation.GpsCoordinate
+	Color  string
 }
