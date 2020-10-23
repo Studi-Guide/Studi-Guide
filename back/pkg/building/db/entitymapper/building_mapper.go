@@ -52,6 +52,7 @@ func (r *EntityMapper) buildingMapper(entBuilding *ent.Building) (*Building, err
 	building := Building{
 		Id:     entBuilding.ID,
 		Name:   entBuilding.Name,
+		Color:  entBuilding.Color,
 		Floors: floors,
 	}
 
