@@ -743,6 +743,12 @@ func TestEntityMapper_AddCampus(t *testing.T) {
 			Buildings: []*ent.Building{{
 				ID:   1,
 				Name: "Test",
+				Edges: ent.BuildingEdges{
+					Body: []*ent.Coordinate{{
+						Latitude:  20,
+						Longitude: 10,
+					}},
+				},
 			},
 				{
 					ID:   2,

@@ -14,8 +14,8 @@ type Coordinate struct {
 // Fields of the PathNodes.
 func (Coordinate) Fields() []ent.Field {
 	return []ent.Field{
-		field.Float("X").Default(0),
-		field.Float("Y").Default(0),
+		field.Float("Latitude").Default(0),
+		field.Float("Longitude").Default(0),
 	}
 }
 

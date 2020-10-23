@@ -9,7 +9,7 @@ import (
 )
 
 func (r *EntityMapper) GetAllCampus() ([]*ent.Campus, error) {
-	campus, err := r.client.Campus.Query().WithAddress().All(r.context)
+	campus, err := r.client.Campus.Query().WithBuildings().WithAddress().All(r.context)
 	if err != nil {
 		return nil, err
 	}
@@ -17,7 +17,7 @@ func (r *EntityMapper) GetAllCampus() ([]*ent.Campus, error) {
 }
 
 func (r *EntityMapper) GetCampus(name string) (*ent.Campus, error) {
-	b, err := r.client.Campus.Query().WithAddress().
+	b, err := r.client.Campus.Query().WithBuildings().WithAddress().
 		Where(
 			entcampus.Or(
 				entcampus.NameEqualFold(name),
@@ -32,7 +32,7 @@ func (r *EntityMapper) GetCampus(name string) (*ent.Campus, error) {
 }
 
 func (r *EntityMapper) FilterCampus(name string) ([]*ent.Campus, error) {
-	campus, err := r.client.Campus.Query().WithAddress().Where(
+	campus, err := r.client.Campus.Query().WithBuildings().WithAddress().Where(
 		entcampus.Or(
 			entcampus.NameEqualFold(name),
 			entcampus.ShortNameEqualFold(name))).All(r.context)
@@ -70,9 +70,22 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 	for _, building := range campus.Edges.Buildings {
 		buildingEntity, err := r.client.Building.Query().Where(entbuilding.NameEqualFold(building.Name)).First(r.context)
 		if buildingEntity == nil {
-			buildingEntity, err = r.client.Building.Create().
-				SetName(building.Name).
-				Save(r.context)
+
+			buildingQuery := r.client.Building.Create().
+				SetColor(building.Color).SetName(building.Name)
+
+			// Store coordinates
+			if building.Edges.Body != nil {
+				for _, coordinate := range building.Edges.Body {
+					entCoordiante, _ := r.client.Coordinate.
+						Create().SetLatitude(coordinate.Latitude).SetLongitude(coordinate.Longitude).Save(r.context)
+					if entCoordiante != nil {
+						buildingQuery.AddBody(entCoordiante)
+					}
+				}
+			}
+
+			buildingEntity, err = buildingQuery.Save(r.context)
 			if err != nil {
 				log.Print("Error adding building:", building, " Error:", err)
 			}
