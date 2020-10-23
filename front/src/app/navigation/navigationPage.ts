@@ -79,6 +79,16 @@ export class NavigationPage implements OnInit, AfterViewInit{
                     return;
                 }
 
+                if (params.building != null && params.building.length > 0) {
+                    const building = await this.dataService.get_building(params.building).toPromise()
+                    if (building !== null) {
+                        await this.mapView.showFloor (
+                            building.Floors?.includes('EG') ? 'EG' : building.Floors[0],
+                            params.building);
+                        return;
+                    }
+                }
+
                 await this.showDiscoveryMode();
         });
     }

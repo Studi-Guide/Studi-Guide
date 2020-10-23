@@ -41,6 +41,7 @@ export interface IBuilding {
   Name: string;
   Color: string;
   Floors: string[];
+  Campus: string;
   Body: IGpsCoordinate[];
 }
 
