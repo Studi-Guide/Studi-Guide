@@ -27,7 +27,6 @@ type ImportMapItems struct {
 	Color       string
 	Floor       string
 	Sections    []entitymapper.Section
-	Campus      string
 	Building    string
 	PathNodes   []ImportPathNode
 }

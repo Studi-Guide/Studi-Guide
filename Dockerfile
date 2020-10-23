@@ -32,6 +32,7 @@ RUN go build  -a -tags netgo -v  -ldflags '-w -extldflags "-static"' -o /go/bin 
 # import rooms
 WORKDIR /go/bin
 RUN rm -f ./db.sqlite3
+RUN studi-guide-ctl migrate import campus /go/src/studi-guide/internal/campus.json;
 RUN studi-guide-ctl migrate import rooms /go/src/studi-guide/internal/rooms.json;
 FROM scratch
 

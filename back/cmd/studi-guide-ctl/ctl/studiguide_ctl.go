@@ -2,6 +2,7 @@ package ctl
 
 import (
 	"github.com/urfave/cli/v2"
+	"studi-guide/pkg/building/campus"
 	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/building/room/models"
 )
@@ -27,6 +28,17 @@ func StudiGuideCtlCli(dbService *entitymapper.EntityMapper) *cli.App {
 								Usage: "import room data",
 								Action: func(context *cli.Context) error {
 									importer, err := models.NewRoomImporter(context.Args().First(), dbService)
+									if err != nil {
+										return err
+									}
+									return importer.RunImport()
+								},
+							},
+							{
+								Name:  "campus",
+								Usage: "import campus data",
+								Action: func(context *cli.Context) error {
+									importer, err := campus.NewCampusImporter(context.Args().First(), dbService)
 									if err != nil {
 										return err
 									}

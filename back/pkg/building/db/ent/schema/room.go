@@ -1,8 +1,8 @@
 package schema
 
 import (
-	"github.com/facebookincubator/ent"
-	"github.com/facebookincubator/ent/schema/edge"
+	"github.com/facebook/ent"
+	"github.com/facebook/ent/schema/edge"
 )
 
 // Room holds the schema definition for the Room entity.

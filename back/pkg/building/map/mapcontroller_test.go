@@ -25,7 +25,6 @@ func TestMapController_GetMapItems(t *testing.T) {
 		Color:     "",
 		Floor:     "1",
 		Sections:  nil,
-		Campus:    "",
 		Building:  "",
 		PathNodes: nil,
 	}}
@@ -40,7 +39,6 @@ func TestMapController_GetMapItems(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(expectedMapItems)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
@@ -97,7 +95,6 @@ func TestMapController_GetMapItemsFromFloor_Filter(t *testing.T) {
 		Color:     "",
 		Floor:     "1",
 		Sections:  nil,
-		Campus:    "",
 		Building:  "",
 		PathNodes: nil,
 	}}
@@ -112,7 +109,6 @@ func TestMapController_GetMapItemsFromFloor_Filter(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(expectedMapItems)
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
@@ -132,7 +128,6 @@ func TestMapController_GetMapItems_PathNodeID(t *testing.T) {
 		Color:     "",
 		Floor:     "1",
 		Sections:  nil,
-		Campus:    "",
 		Building:  "",
 		PathNodes: nil,
 	}
@@ -147,7 +142,6 @@ func TestMapController_GetMapItems_PathNodeID(t *testing.T) {
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal([]entitymapper.MapItem{expectedMapItem})
-	expected = append(expected, '\n')
 	actual := rec.Body.String()
 	if string(expected) != actual {
 		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())

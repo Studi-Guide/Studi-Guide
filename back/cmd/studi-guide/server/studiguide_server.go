@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"studi-guide/pkg/building/campus"
 	buildingInfo "studi-guide/pkg/building/info"
 	buildingLocation "studi-guide/pkg/building/location"
 	buildingMap "studi-guide/pkg/building/map"
@@ -27,7 +28,8 @@ type StudiGuideServer struct {
 func NewStudiGuideServer(env *env.Env,
 	buildingProvider buildingInfo.BuildingProvider, roomProvider buildingRoom.RoomServiceProvider,
 	locationProvider buildingLocation.LocationProvider, mapProvider buildingMap.MapServiceProvider,
-	navigationProvider services.NavigationServiceProvider) *StudiGuideServer {
+	navigationProvider services.NavigationServiceProvider,
+	campusProvider campus.CampusProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -118,6 +120,17 @@ func NewStudiGuideServer(env *env.Env,
 			log.Fatal(err)
 		} else {
 			log.Println("Successfully initialized building controller")
+		}
+	}
+
+	campusRouter := router.Group("/campus")
+	{
+		log.Println("Creating campus controller")
+		err := campus.NewCampusController(campusRouter, campusProvider)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Println("Successfully initialized campus controller")
 		}
 	}
 
