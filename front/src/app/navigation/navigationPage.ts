@@ -1,4 +1,4 @@
-import {IBuilding, ILocation, IPathNode} from '../building-objects-if';
+import {IBuilding, ICampus, ILocation, IPathNode} from '../building-objects-if';
 import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
@@ -12,6 +12,7 @@ import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom
 import { Storage } from '@ionic/storage';
 import {Router} from '@angular/router';
 import {CanvasTouchHelper} from '../services/CanvasTouchHelper';
+import {CampusViewModel} from './campusViewModel';
 
 @Component({
     selector: 'app-navigation',
@@ -46,6 +47,8 @@ export class NavigationPage implements OnInit{
 
     private recentSearchesKey = 'searches';
     public recentSearches : string[] = [];
+
+    public availableCampus: CampusViewModel[] = [];
 
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
@@ -82,6 +85,11 @@ export class NavigationPage implements OnInit{
         if (searches !== null) {
             this.recentSearches = searches[0];
             console.log(this.recentSearches);
+        }
+
+        const campusModels = await this.dataService.get_campus().toPromise()
+        for (const campus of campusModels) {
+            this.availableCampus.push(new CampusViewModel(campus))
         }
     }
 

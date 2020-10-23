@@ -48,6 +48,28 @@ export interface ILocation {
   PathNode: IPathNode;
 }
 
+export interface IAddress {
+  City: string;
+  Country: string;
+  Number: string;
+  PLZ: number;
+  Street: string;
+  id: number;
+}
+
+export interface ICampusEdges {
+  Address: IAddress[];
+}
+
+export interface ICampus {
+  Latitude: number;
+  Longitude: number;
+  Name: string;
+  ShortName: string;
+  edges: ICampusEdges;
+  id: number;
+}
+
 export interface IRoom extends IMapItem, ILocation{
   Id: number;
 }

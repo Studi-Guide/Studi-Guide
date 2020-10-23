@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Env } from '../../environments/environment';
-import {IBuilding, ILocation, IMapItem} from '../building-objects-if';
+import {IBuilding, ICampus, ILocation, IMapItem} from '../building-objects-if';
 import {CacheService} from './cache.service';
 import {IReceivedRoute} from '../route-objects-if';
 
@@ -59,5 +59,9 @@ export class DataService {
 
     get_map_item(pathnodeid:number) {
         return this.cache.Get<IMapItem[]>(this.httpClient,this.baseUrl + '/maps?pathnodeid=' + pathnodeid);
+    }
+
+    get_campus() {
+        return this.cache.Get<ICampus[]>(this.httpClient, this.baseUrl + '/campus');
     }
 }
