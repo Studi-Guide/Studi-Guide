@@ -48,6 +48,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
     public recentSearches : string[] = [];
 
     public availableCampus: CampusViewModel[] = [];
+    private isSubscripted = false;
 
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
@@ -62,9 +63,10 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     ionViewDidEnter() {
-        CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
-        this.route.queryParams.subscribe(async params =>
-        {
+        if (this.isSubscripted === false){
+            CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
+            this.isSubscripted = true;
+            this.route.queryParams.subscribe(async params => {
                 // discover requested location
                 if (params != null && params.location != null && params.location.length > 0) {
                     this.searchInput.setDiscoverySearchbarValue(params.location);
@@ -74,7 +76,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
                 // launch requested navigation
                 if (params.start != null && params.start.length > 0 &&
-                        params.destination != null && params.destination.length >0) {
+                    params.destination != null && params.destination.length > 0) {
                     await this.showNavigation(params.start, params.destination);
                     return;
                 }
@@ -82,15 +84,16 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 if (params.building != null && params.building.length > 0) {
                     const building = await this.dataService.get_building(params.building).toPromise()
                     if (building !== null) {
-                        await this.mapView.showFloor (
+                        await this.mapView.showFloor(
                             building.Floors?.includes('EG') ? 'EG' : building.Floors[0],
-                            params.building);
+                            building.Name);
                         return;
                     }
                 }
 
                 await this.showDiscoveryMode();
-        });
+            });
+        }
     }
 
     async ngOnInit() {
