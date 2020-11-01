@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Output} from '@angular/core';
 import {DataService} from '../../services/data.service';
 import {CanvasResolutionConfigurator, TranslationPosition} from '../../services/CanvasResolutionConfigurator';
 import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
@@ -29,6 +29,8 @@ export class MapViewComponent implements AfterViewInit {
 
   @Output() locationClick = new EventEmitter<ILocation>();
 
+  @Output() mapScroll = new EventEmitter<any>();
+
   public get CurrentRoute():IReceivedRoute {
     return this.currentRoute;
   }
@@ -37,7 +39,7 @@ export class MapViewComponent implements AfterViewInit {
     return this.currentBuilding;
   }
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService, private element: ElementRef) {
   }
 
   ngAfterViewInit() {

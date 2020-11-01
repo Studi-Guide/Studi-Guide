@@ -274,4 +274,8 @@ export class NavigationPage implements OnInit, AfterViewInit{
     public async presentMapPage() {
         await this.router.navigate(['tabs/navigation/map']);
     }
+
+    public onCanvasMapperScroll(event:any) {
+        CanvasTouchHelper.Zoom(event.deltaY*-0.05, this.canvasWrapper, this.renderer);
+    }
 }

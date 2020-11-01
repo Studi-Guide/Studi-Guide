@@ -233,4 +233,18 @@ export class CanvasTouchHelper {
         }
         return output
     }
+
+    public static Zoom(inOut:number, element: ElementRef, renderer: Renderer2) {
+
+        let newSize = {x: element.nativeElement.getBoundingClientRect().width*(this.currentZoom.z+inOut),
+            y: element.nativeElement.getBoundingClientRect().height*(this.currentZoom.z+inOut)};
+
+        if (newSize.x < window.innerWidth*0.8 && newSize.y < window.innerHeight*0.5) {
+            console.log(newSize, {x: window.innerWidth*0.8, y: window.innerHeight*0.5});
+            return;
+        }
+
+        this.currentZoom.z += inOut;
+        this.update(this.currentZoom, element, renderer);
+    }
 }
