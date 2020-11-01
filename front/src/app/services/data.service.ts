@@ -22,9 +22,9 @@ export class DataService {
     }
 
     get_map_items(campus:string, floor: string, building:string) {
-        const campusStr = campus ?? ''
-        const buildingStr = building ?? ''
-        const floorStr = floor ?? ''
+        const campusStr = campus ?? '';
+        const buildingStr = building ?? '';
+        const floorStr = floor ?? '';
         const request = this.baseUrl + '/maps?floor=' + floorStr + '&campus=' + campusStr + '&building=' + buildingStr;
         return this.cache.Get<IMapItem[]>(
             this.httpClient,
@@ -64,8 +64,8 @@ export class DataService {
         return this.cache.Get<IBuilding[]>(this.httpClient, this.baseUrl + '/buildings');
     }
 
-    get_map_item(pathnodeid:number) {
-        return this.cache.Get<IMapItem[]>(this.httpClient,this.baseUrl + '/maps?pathnodeid=' + pathnodeid);
+    get_map_item(pathNodeId:number) {
+        return this.cache.Get<IMapItem[]>(this.httpClient,this.baseUrl + '/maps?pathnodeid=' + pathNodeId);
     }
 
     get_campus() {
