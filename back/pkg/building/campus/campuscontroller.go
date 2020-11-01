@@ -36,7 +36,7 @@ func NewCampusController(router *gin.RouterGroup, campusProvider CampusProvider)
 func (c CampusController) GetCampus(context *gin.Context) {
 	name := context.Query("search")
 
-	var campusArray []ent.Campus
+	var campusArray []*ent.Campus
 	var err error
 
 	var useFilterApi bool

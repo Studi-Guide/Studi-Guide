@@ -3,6 +3,7 @@ package entitymapper
 import (
 	"os"
 	"reflect"
+	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/db/ent/location"
 	"studi-guide/pkg/building/db/ent/mapitem"
 	"studi-guide/pkg/building/db/ent/room"
@@ -129,7 +130,6 @@ func TestMapRoom(t *testing.T) {
 			},
 			Floor:    "1",
 			Building: "main",
-			Campus:   "testcampus",
 		},
 
 		Location: Location{
@@ -240,7 +240,6 @@ func TestMapRoom(t *testing.T) {
 			},
 			Floor:    "1",
 			Building: "main",
-			Campus:   "testcampus",
 		},
 
 		Location: Location{
@@ -367,7 +366,6 @@ func TestMapRoom(t *testing.T) {
 			},
 			Floor:    "1",
 			Building: "main",
-			Campus:   "testcampus",
 		},
 		Location: Location{
 			Id:          2,
@@ -778,12 +776,36 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 	}
 	defer r.client.Close()
 
+	// client create test campus
+	address, err := r.client.Address.Create().
+		SetCity("Munich").
+		SetCountry("Germany").
+		SetStreet("Am Platzl").
+		SetNumber("1").
+		SetPLZ(80331).Save(r.context)
+
+	if err != nil {
+		t.Error(err)
+	}
+
+	campus, err := r.client.Campus.Create().
+		SetName("testcampus").
+		SetShortName("TC").
+		SetLatitude(0).
+		SetLongitude(0).
+		AddAddress(address).
+		Save(r.context)
+
+	if err != nil {
+		t.Error(err)
+	}
+
 	pNode, err := r.client.PathNode.Create().Save(r.context)
 	if err != nil {
 		t.Error(err)
 	}
 
-	building, err := r.client.Building.Create().SetName("building").SetCampus("testcampus").Save(r.context)
+	building, err := r.client.Building.Create().SetName("building").SetCampus(campus).Save(r.context)
 	if err != nil {
 		t.Error(err)
 	}
@@ -797,7 +819,8 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 	}
 
 	mItem, err = r.client.MapItem.Query().
-		WithBuilding().
+		WithBuilding(
+			func(buildingQuery *ent.BuildingQuery) { buildingQuery.WithCampus() }).
 		WithPathNodes().
 		Where(mapitem.ID(mItem.ID)).
 		First(r.context)
@@ -817,5 +840,32 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 
 	if !reflect.DeepEqual(mappedItem.PathNodes, checkItem.PathNodes) {
 		t.Error(mappedItem.PathNodes, checkItem.PathNodes)
+	}
+
+	floors, err := r.getFloorsFromBuilding(mItem.Edges.Building)
+	if len(floors) == 0 {
+		t.Error("expected something and got:", err)
+	}
+
+	if floors[0] != "0" {
+		t.Error("expected '0' and got:", floors[0])
+	}
+
+	_, err = r.GetAllBuildings()
+	if err != nil {
+		t.Error(err)
+	}
+
+	testbuilding, err := r.GetBuilding("building")
+	if err != nil {
+		t.Error(err)
+	}
+
+	if testbuilding.Name != building.Name {
+		t.Error("expected ", building.Name, " and got:", testbuilding.Name)
+	}
+	_, err = r.FilterBuildings("building")
+	if err != nil {
+		t.Error(err)
 	}
 }

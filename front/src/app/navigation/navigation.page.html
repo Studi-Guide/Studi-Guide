@@ -15,12 +15,14 @@
   </div>
   <app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)" #searchDrawer>
     <div class="nav-bottom-drawer">
-      <div class="ion-padding-top"></div>
-      <div class="nav-hbar"></div>
-      <app-search-input
-              (discovery)="onDiscovery($event)"
-              (route)="onRoute($event)">
-      </app-search-input>
+      <div class="drawer-grip">
+        <div class="ion-padding-top"></div>
+        <div class="nav-hbar"></div>
+        <app-search-input
+                (discovery)="onDiscovery($event)"
+                (route)="onRoute($event)">
+        </app-search-input>
+      </div>
       <ion-content color="light" #drawerContent>
 
           <ion-grid>
@@ -57,28 +59,10 @@
             <ion-list-header color="light">
               Choose a Campus
             </ion-list-header>
-            <ion-item color="light">
+            <ion-item color="light" *ngFor="let campus of availableCampus">
               <ion-label>
-                <h2>Technische Hochschule Nürnberg</h2>
-                <h3>Keßlerplatz 12</h3>
-              </ion-label>
-            </ion-item>
-            <ion-item color="light">
-              <ion-label>
-                <h2>Technische Hochschule Fakultät Design</h2>
-                <h3>Wassertorstraße 10</h3>
-              </ion-label>
-            </ion-item>
-            <ion-item color="light">
-              <ion-label>
-                <h2>Technische Hochschule Fakultät Informatik</h2>
-                <h3>Hohfelderstraße 40</h3>
-              </ion-label>
-            </ion-item>
-            <ion-item color="light">
-              <ion-label>
-                <h2>OHM Professional School</h2>
-                <h3>Keßlerstraße 1</h3>
+                <h2>{{campus.ShortName}}: {{campus.Name}}</h2>
+                <h3>{{campus.Address}}</h3>
               </ion-label>
             </ion-item>
           </ion-list>
@@ -91,8 +75,11 @@
 
   <app-ionic-bottom-drawer #locationDrawer state="DrawerState.Hidden">
     <div class="nav-bottom-drawer">
-      <div class="ion-padding-top"></div>
-      <div class="nav-hbar"></div>
+      <div class="drawer-grip">
+        <div class="ion-padding-top"></div>
+        <div class="nav-hbar"></div>
+        <div class="ion-padding-bottom"></div>
+      </div>
       <ion-content color="light">
         <ion-grid id="locationdrawerContent" >
           <ion-row class="ion-justify-content-between ion-align-self-center">

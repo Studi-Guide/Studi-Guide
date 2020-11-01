@@ -1,17 +1,17 @@
 import {IBuilding, ILocation} from '../building-objects-if';
-import {Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 import {MapViewComponent} from './map-view/map-view.component';
 import {HttpErrorResponse} from '@angular/common/http';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
-import { Storage } from '@ionic/storage';
-import {Router} from '@angular/router';
+import {Storage} from '@ionic/storage';
 import {CanvasTouchHelper} from '../services/CanvasTouchHelper';
+import {CampusViewModel} from './campusViewModel';
 
 @Component({
     selector: 'app-navigation',
@@ -19,7 +19,7 @@ import {CanvasTouchHelper} from '../services/CanvasTouchHelper';
     styleUrls: ['navigation.page.scss']
 })
 
-export class NavigationPage implements OnInit{
+export class NavigationPage implements OnInit, AfterViewInit{
 
     @ViewChild(MapViewComponent) mapView: MapViewComponent;
     @ViewChild(SearchInputComponent) searchInput: SearchInputComponent;
@@ -47,6 +47,9 @@ export class NavigationPage implements OnInit{
     private recentSearchesKey = 'searches';
     public recentSearches : string[] = [];
 
+    public availableCampus: CampusViewModel[] = [];
+    private isSubscripted = false;
+
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
                 private  route: ActivatedRoute,
@@ -55,10 +58,15 @@ export class NavigationPage implements OnInit{
                 private renderer: Renderer2) {
     }
 
+    ngAfterViewInit(): void {
+        this.locationDrawer.SetState(DrawerState.Hidden);
+    }
+
     ionViewDidEnter() {
-        CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
-        this.route.queryParams.subscribe(async params =>
-        {
+        if (this.isSubscripted === false){
+            CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
+            this.isSubscripted = true;
+            this.route.queryParams.subscribe(async params => {
                 // discover requested location
                 if (params != null && params.location != null && params.location.length > 0) {
                     this.searchInput.setDiscoverySearchbarValue(params.location);
@@ -68,13 +76,24 @@ export class NavigationPage implements OnInit{
 
                 // launch requested navigation
                 if (params.start != null && params.start.length > 0 &&
-                        params.destination != null && params.destination.length >0) {
+                    params.destination != null && params.destination.length > 0) {
                     await this.showNavigation(params.start, params.destination);
                     return;
                 }
 
+                if (params.building != null && params.building.length > 0) {
+                    const building = await this.dataService.get_building(params.building).toPromise()
+                    if (building !== null) {
+                        await this.mapView.showFloor(
+                            building.Floors?.includes('EG') ? 'EG' : building.Floors[0],
+                            building.Name);
+                        return;
+                    }
+                }
+
                 await this.showDiscoveryMode();
-        });
+            });
+        }
     }
 
     async ngOnInit() {
@@ -82,6 +101,11 @@ export class NavigationPage implements OnInit{
         if (searches !== null) {
             this.recentSearches = searches[0];
             console.log(this.recentSearches);
+        }
+
+        const campusModels = await this.dataService.get_campus().toPromise()
+        for (const campus of campusModels) {
+            this.availableCampus.push(new CampusViewModel(campus))
         }
     }
 
@@ -93,8 +117,7 @@ export class NavigationPage implements OnInit{
             this.addRecentSearch(searchInput);
             this.scrollToCoordinate(location.PathNode.Coordinate.X, location.PathNode.Coordinate.Y);
 
-            // Wenn man hier ein await einfügt spackt der drawer komplett. Keine ahnung wieso
-            this.showLocationDrawer(location);
+            await this.showLocationDrawer(location);
             this.availableFloorsBtnIsVisible = true;
         } catch (ex) {
             this.handleInputError(ex, searchInput);

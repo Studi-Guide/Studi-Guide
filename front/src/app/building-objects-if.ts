@@ -31,11 +31,18 @@ export interface IMapItem {
   Floor: string;
 }
 
+export interface IGpsCoordinate {
+  Longitude: number
+  Latitude: number
+}
+
 export interface IBuilding {
   Id: number;
   Name: string;
+  Color: string;
   Floors: string[];
   Campus: string;
+  Body: IGpsCoordinate[];
 }
 
 export interface ILocation {
@@ -46,6 +53,28 @@ export interface ILocation {
   Floor: string;
   Building: string;
   PathNode: IPathNode;
+}
+
+export interface IAddress {
+  City: string;
+  Country: string;
+  Number: string;
+  PLZ: number;
+  Street: string;
+  id: number;
+}
+
+export interface ICampusEdges {
+  Address: IAddress[];
+}
+
+export interface ICampus {
+  Latitude: number;
+  Longitude: number;
+  Name: string;
+  ShortName: string;
+  edges: ICampusEdges;
+  id: number;
 }
 
 export interface IRoom extends IMapItem, ILocation{
