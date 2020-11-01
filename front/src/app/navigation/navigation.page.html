@@ -1,5 +1,9 @@
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
+  <app-floor-button [hidden]="!availableFloorsBtnIsVisible || this.selectedLocation.Building===''">
+    <span id="current-building">{{this.selectedLocation.Building}}</span>
+    <span id="current-floor">{{this.selectedLocation.Floor}}</span>
+  </app-floor-button>
   <div id="map-content">
     <ion-text id="error-message" *ngIf="errorMessage" >
       <h5><span class="error">{{ errorMessage }}</span></h5>

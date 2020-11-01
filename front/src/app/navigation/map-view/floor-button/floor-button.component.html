@@ -1,7 +1,7 @@
-<ion-fab vertical="top" horizontal="start" slot="sticky">
+<ion-fab #fab vertical="top" horizontal="end" slot="fixed" (click)="loadAvailableFloors()">
   <!-- [hidden]="this.currentBuilding === undefined && this.currentFloor === undefined" -->
   <ion-fab-button>
-    <ng-content select="#current-building"></ng-content>.<ng-content select="#current-floor"></ng-content>
+    <ng-content #currentBuilding select="#current-building"></ng-content>.<ng-content select="#current-floor"></ng-content>
   </ion-fab-button>
   <!-- foreach (const f of floors) {append ion-fab-button to ion-fab-list} -->
   <ion-fab-list side="bottom">

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 
 @Component({
   selector: 'app-floor-button',
@@ -7,10 +7,20 @@ import {Component, OnInit} from '@angular/core';
 })
 export class FloorButtonComponent implements OnInit {
 
+  @ViewChild('fab') fab;
+  @ViewChild('currentBuilding') currentBuilding;
+
   public availableFloors:string[];
 
   constructor() { }
 
   ngOnInit() {}
+
+  loadAvailableFloors() {
+    if(this.fab.activated) {
+      // TODO load available floors for selected building
+      console.log(this.currentBuilding);
+    }
+  }
 
 }
