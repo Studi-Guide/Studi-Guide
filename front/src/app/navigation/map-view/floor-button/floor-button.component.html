@@ -1,0 +1,18 @@
+<ion-fab vertical="top" horizontal="start" slot="sticky">
+  <!-- [hidden]="this.currentBuilding === undefined && this.currentFloor === undefined" -->
+  <ion-fab-button>
+    <ng-content select="#current-building"></ng-content>.<ng-content select="#current-floor"></ng-content>
+  </ion-fab-button>
+  <!-- foreach (const f of floors) {append ion-fab-button to ion-fab-list} -->
+  <ion-fab-list side="bottom">
+    <ion-fab-button>
+      <ion-icon name="logo-github"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button>
+      <ion-icon name="logo-javascript"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-button>
+      <ion-icon name="logo-angular"></ion-icon>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>
