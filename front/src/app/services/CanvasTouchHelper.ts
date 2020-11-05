@@ -117,7 +117,7 @@ export class CanvasTouchHelper {
             const d = this.scaleFrom(pinchZoomOrigin, this.lastZoom.z, this.lastZoom.z * event.scale, originalSize)
             this.currentZoom.x = d.x + this.lastZoom.x + event.deltaX;
             this.currentZoom.y = d.y + this.lastZoom.y + event.deltaY;
-            this.currentZoom.z = d.z + this.lastZoom.z;
+            this.currentZoom.z = this.limitZoom(event.scale, canvasElement);// this.limitZoom(d.z + this.lastZoom.z, canvasElement);// + this.lastZoom.z;
             lastEvent = 'pinch';
             this.update(this.currentZoom, canvasElement, renderer);
         })
@@ -234,17 +234,39 @@ export class CanvasTouchHelper {
         return output
     }
 
-    public static Zoom(inOut:number, element: ElementRef, renderer: Renderer2) {
-
-        let newSize = {x: element.nativeElement.getBoundingClientRect().width*(this.currentZoom.z+inOut),
+    private static limitZoom(inOut:number, element: ElementRef) {
+        const newSize = {x: element.nativeElement.getBoundingClientRect().width*(this.currentZoom.z+inOut),
             y: element.nativeElement.getBoundingClientRect().height*(this.currentZoom.z+inOut)};
 
-        if (newSize.x < window.innerWidth*0.8 && newSize.y < window.innerHeight*0.5) {
-            console.log(newSize, {x: window.innerWidth*0.8, y: window.innerHeight*0.5});
-            return;
+        if (newSize.x < window.innerWidth*0.7 && newSize.y < window.innerHeight*0.4) {
+            // (this.currentZoom.z+?) == window.innerWidth*0.8
+            const factor1 = 0.7-this.currentZoom.z;
+            // (this.currentZoom.z+?) == window.innerHeight*0.5
+            const factor2 = 0.4-this.currentZoom.z;
+
+            console.log(this.currentZoom, factor1, factor2, inOut);
+            if (Math.abs(factor1) > Math.abs(factor2)) {
+                return this.currentZoom.z+factor2;
+            } else {
+                return this.currentZoom.z+factor1;
+            }
         }
 
-        this.currentZoom.z += inOut;
+        return (this.currentZoom.z+inOut);
+    }
+
+    public static Zoom(inOut:number, element: ElementRef, renderer: Renderer2) {
+
+        // const newSize = {x: element.nativeElement.getBoundingClientRect().width*(this.currentZoom.z+inOut),
+        //     y: element.nativeElement.getBoundingClientRect().height*(this.currentZoom.z+inOut)};
+        //
+        // if (newSize.x < window.innerWidth*0.8 && newSize.y < window.innerHeight*0.5) {
+        //     console.log(newSize, {x: window.innerWidth*0.8, y: window.innerHeight*0.5});
+        //     newSize.x = window.innerWidth*0.8;
+        //     newSize.y = window.innerHeight*0.5;
+        // }
+
+        this.currentZoom.z = this.limitZoom(inOut, element);// inOut;
         this.update(this.currentZoom, element, renderer);
     }
 }
