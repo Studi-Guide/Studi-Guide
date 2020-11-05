@@ -92,6 +92,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 }
 
                 await this.showDiscoveryMode();
+                CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
             });
         }
     }
