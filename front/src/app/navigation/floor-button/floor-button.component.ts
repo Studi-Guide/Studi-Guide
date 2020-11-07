@@ -1,4 +1,4 @@
-import {Component, ContentChild, OnInit, ViewChild} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {DataService} from '../../services/data.service';
 
 @Component({
@@ -6,11 +6,12 @@ import {DataService} from '../../services/data.service';
   templateUrl: './floor-button.component.html',
   styleUrls: ['./floor-button.component.scss'],
 })
-export class FloorButtonComponent implements OnInit {
+export class FloorButtonComponent implements OnInit, OnChanges {
 
+  @Input() currentBuilding:string;
+  @Input() currentFloor:string;
   @ViewChild('fab') fab;
-  // TODO
-  @ViewChild('currentBuilding') currentBuilding; // @ContentChild didn't work
+  @Output() floorWithBuilding = new EventEmitter<object>();
 
   public availableFloors:string[];
 
@@ -18,15 +19,26 @@ export class FloorButtonComponent implements OnInit {
 
   ngOnInit() {}
 
-  async loadAvailableFloors() {
-    console.log(this.fab.activated);
-    if(!this.fab.activated) {
-      const building = await this._dataService.get_building(this.currentBuilding.innerText).toPromise();
+  async ngOnChanges(changes: SimpleChanges) {
+    console.log(changes); // TODO remove logging
+    const hasCurrentBuildingChanged =
+        this.currentBuilding !== undefined && changes.currentBuilding.previousValue !== undefined
+        && changes.currentBuilding.previousValue !== changes.currentBuilding.currentValue;
+    const hasCurrentFloorChanged =
+        this.currentFloor !== undefined && changes.currentFloor.previousValue !== undefined
+        && changes.currentFloor.previousValue !== changes.currentFloor.currentValue;
+    if (hasCurrentBuildingChanged || hasCurrentFloorChanged) {
+      const building = await this._dataService.get_building(this.currentBuilding).toPromise();
       this.availableFloors = building.Floors;
-      this.fab.activated = true;
-    } else {
-      this.fab.activated = false;
     }
+  }
+
+  public async emitAnotherFloorToShow(index:number) {
+    this.floorWithBuilding.emit({
+      floor: this.availableFloors[index],
+      building: this.currentBuilding
+    });
+    this.currentFloor = this.availableFloors[index];
   }
 
 }

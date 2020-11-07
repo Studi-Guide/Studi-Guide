@@ -205,9 +205,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
         const data = await availableFloorModal.onDidDismiss()
         if (data.data) {
-            this.progressIsVisible = true;
-            await this.mapView.showFloor(data.data, this.mapView.CurrentBuilding);
-            this.progressIsVisible = false;
+            this.showAnotherFloorOfCurrentBuilding(data.data, this.mapView.CurrentBuilding)
         }
     }
 
@@ -282,5 +280,16 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     public async presentMapPage() {
         await this.router.navigate(['tabs/navigation/map']);
+    }
+
+    public async onFloorChangeByFloorButton(floorAndBuildingInput: object) {
+        // @ts-ignore
+        await this.showAnotherFloorOfCurrentBuilding(floorAndBuildingInput.floor, floorAndBuildingInput.building);
+    }
+
+    private async showAnotherFloorOfCurrentBuilding(floor: string, building: string) {
+        this.progressIsVisible = true;
+        await this.mapView.showFloor(floor, building);
+        this.progressIsVisible = false;
     }
 }

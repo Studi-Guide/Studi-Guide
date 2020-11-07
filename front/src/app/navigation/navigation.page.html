@@ -1,8 +1,10 @@
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
-  <app-floor-button [hidden]="!availableFloorsBtnIsVisible || this.selectedLocation.Building===''">
-    <span id="current-building">{{this.selectedLocation.Building}}</span>
-    <span id="current-floor">{{this.selectedLocation.Floor}}</span>
+  <app-floor-button [hidden]="!availableFloorsBtnIsVisible || this.selectedLocation.Building===''"
+                    [currentBuilding]="this.selectedLocation.Building"
+                    [currentFloor]="this.selectedLocation.Floor"
+                    (floorWithBuilding)="onFloorChangeByFloorButton($event)"
+  >
   </app-floor-button>
   <div id="map-content">
     <ion-text id="error-message" *ngIf="errorMessage" >
@@ -24,7 +26,8 @@
         <div class="nav-hbar"></div>
         <app-search-input
                 (discovery)="onDiscovery($event)"
-                (route)="onRoute($event)">
+                (route)="onRoute($event)"
+        >
         </app-search-input>
       </div>
       <ion-content color="light" #drawerContent>
