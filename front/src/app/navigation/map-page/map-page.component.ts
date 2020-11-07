@@ -4,6 +4,7 @@ import {LatLngExpression, LatLngLiteral, LeafletMouseEvent} from 'leaflet';
 import {DataService} from '../../services/data.service';
 import {IGpsCoordinate} from '../../building-objects-if';
 import {Router} from '@angular/router';
+import {NavigationModel} from '../navigationModel';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -31,7 +32,8 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
   constructor(
       private _dataService: DataService,
-      private router: Router) {
+      private router: Router,
+      public model: NavigationModel) {
   }
 
   ngOnInit() { }

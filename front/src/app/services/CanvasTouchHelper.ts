@@ -150,7 +150,7 @@ export class CanvasTouchHelper {
         const canvasHTMLElement = canvasElement.nativeElement as HTMLCanvasElement;
 
         const availableSize = {width: window.innerWidth, height: window.innerHeight};
-        this.currentZoom = this.validateZoom(this.currentZoom, canvasHTMLElement, availableSize, transition);
+        this.currentZoom = this.validateZoom(this.currentZoom, canvasHTMLElement, availableSize, transition, !isPan);
         this.update(this.currentZoom, canvasElement, renderer);
         if (!isPan) {
             this.lastZoom.x = this.currentZoom.x;
@@ -161,7 +161,7 @@ export class CanvasTouchHelper {
     private static validateZoom(currentZoom: { x: number; y: number; z: number;},
                                 canvasElement: HTMLCanvasElement,
                                 visibleSize: {width: number, height: number},
-                                transition: {x:number, y:number}) {
+                                transition: {x:number, y:number}, validateToMaxOnOver: boolean) {
         const rect = canvasElement.getBoundingClientRect();
         const natizeElementSize = {
             width: rect.width,
@@ -178,7 +178,7 @@ export class CanvasTouchHelper {
         const xTransitionMax = (natizeElementSize.width *1/currentZoom.z- visibleSize.width) * (-1) - 9000;
 
         // allow a little bit of overdrive because of the tab and drawers
-        const yTransitionMax = (natizeElementSize.height * 1/currentZoom.z - visibleSize.height * 0.9)  * (-1) - 9000;
+        const yTransitionMax = (natizeElementSize.height * 1/currentZoom.z - visibleSize.height * 0.7)  * (-1) - 9000;
 
         // Introduce origin (9000/9000)
         const x =  9000 - ((origin.x + 25)* (Math.pow(currentZoom.z, 3)));
@@ -190,22 +190,22 @@ export class CanvasTouchHelper {
         let yzoomValue = currentZoom.y - 9000;
         if (yzoomValue < yTransitionMax && transition.y < 0) {
 
-            yzoomValue = yvalueOld;
+            yzoomValue = validateToMaxOnOver ? yTransitionMax : yvalueOld;
         }
 
         if (yzoomValue > yTansistionMaxNegativ && transition.y > 0) {
             const valueToSet = yzoomValue -(transition.y * 3/4);
-            yzoomValue = yvalueOld;
+            yzoomValue = validateToMaxOnOver ? yTansistionMaxNegativ : yvalueOld;
         }
 
         let xzoomValue = currentZoom.x- 9000;
         if (xzoomValue > xTansistionMaxNegativ && transition.x > 0) {
             const valueToSet=  xzoomValue -(transition.x* 3/4);
-                xzoomValue = xvalueOld;
+                xzoomValue = validateToMaxOnOver ? xTansistionMaxNegativ : xvalueOld;
         }
 
         if (xzoomValue < xTransitionMax && transition.x < 0) {
-            xzoomValue  = xvalueOld;
+            xzoomValue  = validateToMaxOnOver ?  xTransitionMax: xvalueOld;
         }
 
         // console.log('Result Zoom x..:' + xzoomValue + ' y...' + yzoomValue);

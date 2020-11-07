@@ -24,9 +24,9 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
 
   @Input() distanceTop = 50;
 
-  @Input() dockedHeight = 250;
+  @Input() dockedHeight = 300;
 
-  @Input() minimumHeight = 150;
+  @Input() minimumHeight = 200;
 
   @Input() shouldBounce = true;
 

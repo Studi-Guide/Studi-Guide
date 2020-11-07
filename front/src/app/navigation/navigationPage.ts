@@ -12,6 +12,8 @@ import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom
 import {Storage} from '@ionic/storage';
 import {CanvasTouchHelper} from '../services/CanvasTouchHelper';
 import {CampusViewModel} from './campusViewModel';
+import {NavigationModel} from './navigationModel';
+import {SearchResultProvider} from '../services/searchResultProvider';
 
 @Component({
     selector: 'app-navigation',
@@ -31,21 +33,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
     public errorMessage: string;
-    public selectedLocation:ILocation = {
-        Building: '',
-        Description: '',
-        Floor: '',
-        Id: 0,
-        Name: '',
-        PathNode: {
-            Coordinate: {X: 0, Y: 0, Z: 0},
-            Id: 0
-            },
-        Tags: []
-    };
-
-    private recentSearchesKey = 'searches';
-    public recentSearches : string[] = [];
 
     public availableCampus: CampusViewModel[] = [];
     private isSubscripted = false;
@@ -55,7 +42,9 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 private  route: ActivatedRoute,
                 private router: Router,
                 private storage: Storage,
-                private renderer: Renderer2) {
+                private renderer: Renderer2,
+                public model: NavigationModel,
+                private searchProvider: SearchResultProvider) {
     }
 
     ngAfterViewInit(): void {
@@ -97,24 +86,24 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     async ngOnInit() {
-        const searches = JSON.parse(await this.storage.get(this.recentSearchesKey));
+        const searches = await this.searchProvider.readRecentSearch();
         if (searches !== null) {
-            this.recentSearches = searches[0];
-            console.log(this.recentSearches);
+            this.model.recentSearches = searches;
+            console.log(this.model.recentSearches);
         }
 
-        const campusModels = await this.dataService.get_campus().toPromise()
-        for (const campus of campusModels) {
+        this.model.availableCampus = await this.dataService.get_campus().toPromise()
+        for (const campus of this.model.availableCampus) {
             this.availableCampus.push(new CampusViewModel(campus))
         }
     }
 
     public async onDiscovery(searchInput: string) {
-        this.errorMessage = '';
+        this.model.errorMessage = '';
         this.progressIsVisible = true;
         try {
             const location = await this.mapView.showDiscoveryLocation(searchInput);
-            this.addRecentSearch(searchInput);
+            this.searchProvider.addRecentSearch(searchInput, this.model);
             this.scrollToCoordinate(location.PathNode.Coordinate.X, location.PathNode.Coordinate.Y);
 
             await this.showLocationDrawer(location);
@@ -173,7 +162,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     public async showLocationDrawer(location:ILocation) {
         await this.locationDrawer.SetState(DrawerState.Hidden);
-        this.selectedLocation = location;
+        this.model.selectedLocation = location;
         await this.searchDrawer.SetState(DrawerState.Hidden);
         await this.locationDrawer.SetState(DrawerState.Docked);
     }
@@ -235,9 +224,9 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     async navigationBtnClick() {
-        if (this.selectedLocation != null) {
+        if (this.model.selectedLocation != null) {
             // STDG 178 KV.001 wird als default start eingefügt
-            await this.showNavigation('KV.001', this.selectedLocation.Name);
+            await this.showNavigation('KV.001', this.model.selectedLocation.Name);
         }
     }
 
@@ -261,30 +250,19 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
-        CanvasTouchHelper.transistion({ x:CanvasTouchHelper.currentZoom.x - xCoordinate, y: CanvasTouchHelper.currentZoom.y - yCoordinate},
+        const availableSize = {width: window.innerWidth, height: window.innerHeight};
+
+        CanvasTouchHelper.transistion(
+            { x: CanvasTouchHelper.currentZoom.x - xCoordinate,
+                y: CanvasTouchHelper.currentZoom.y - yCoordinate},
             this.canvasWrapper, this.renderer, false);
     }
 
-    private addRecentSearch(location:string) {
-        if (this.recentSearches.includes(location)) {
-            this.recentSearches.splice(this.recentSearches.indexOf(location), 1);
-        }
-
-        this.recentSearches.unshift(location);
-
-        if (this.recentSearches.length > 3) {
-            this.recentSearches.pop();
-        }
-
-        this.storage.set(this.recentSearchesKey, JSON.stringify([this.recentSearches]));
-        console.log(this.recentSearches);
-    }
-
     public async recentSearchClick(locationStr:string) {
-        await this.router.navigate(['tabs/navigation'], { queryParams: { location: locationStr } });
+        await this.router.navigate(['tabs/navigation/detail'], { queryParams: { location: locationStr } });
     }
 
     public async presentMapPage() {
-        await this.router.navigate(['tabs/navigation/map']);
+        await this.router.navigate(['tabs/navigation/']);
     }
 }
