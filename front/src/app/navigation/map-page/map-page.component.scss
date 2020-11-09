@@ -1,5 +1,6 @@
 #map-content {
   height: 100%;
+  width: 100%;
   display: flex;
   flex-flow: column;
   position: absolute;
@@ -17,10 +18,13 @@
   padding: 2px;
   flex-grow: 1;
   position: absolute;
+  height: 100%;
+  width: 100%;
   overflow-y: scroll;
   overflow-x: scroll;
   scrollbar-width: none; // FF
   -ms-overflow-style: none; // IE
+  z-index: 0
 }
 
 #leafletMap::-webkit-scrollbar {
