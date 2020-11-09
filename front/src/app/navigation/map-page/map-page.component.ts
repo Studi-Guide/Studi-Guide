@@ -1,6 +1,6 @@
 import {Component, OnInit, OnDestroy} from '@angular/core';
 import * as Leaflet from 'leaflet';
-import {LatLngExpression, LatLngLiteral, LeafletMouseEvent} from 'leaflet';
+import {LatLngLiteral, LeafletMouseEvent} from 'leaflet';
 import {DataService} from '../../services/data.service';
 import {IGpsCoordinate} from '../../building-objects-if';
 import {Router} from '@angular/router';

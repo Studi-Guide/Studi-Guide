@@ -1,0 +1,10 @@
+<ion-fab #fab vertical="top" horizontal="end" slot="fixed">
+  <ion-fab-button>
+    <span>{{this.currentBuilding}}.{{this.currentFloor}}</span>
+  </ion-fab-button>
+  <ion-fab-list side="bottom">
+    <ion-fab-button *ngFor="let floor of availableFloors; let i = index;" (click)="emitAnotherFloorToShow(i)">
+      <span [innerHTML]="floor"></span>
+    </ion-fab-button>
+  </ion-fab-list>
+</ion-fab>

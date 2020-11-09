@@ -10,7 +10,7 @@ import {
   Renderer2,
   SimpleChanges
 } from '@angular/core';
-import {Animation, AnimationController, DomController, Gesture, GestureController, Platform} from '@ionic/angular';
+import {DomController, Gesture, GestureController, Platform} from '@ionic/angular';
 import {DrawerState} from './drawer-state';
 
 @Component({

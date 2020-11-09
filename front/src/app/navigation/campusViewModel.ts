@@ -1,4 +1,4 @@
-import {IAddress, ICampus} from '../building-objects-if';
+import {ICampus} from '../building-objects-if';
 export class CampusViewModel {
 
     private readonly _campus: ICampus
