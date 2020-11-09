@@ -33,7 +33,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
     public errorMessage: string;
-
     public availableCampus: CampusViewModel[] = [];
     private isSubscripted = false;
 
@@ -43,8 +42,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 private router: Router,
                 private storage: Storage,
                 private renderer: Renderer2,
-                public model: NavigationModel,
-                private searchProvider: SearchResultProvider) {
+                public model: NavigationModel) {;
     }
 
     ngAfterViewInit(): void {
@@ -86,13 +84,19 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     async ngOnInit() {
-        const searches = await this.searchProvider.readRecentSearch();
-        if (searches !== null) {
-            this.model.recentSearches = searches;
-            console.log(this.model.recentSearches);
+        if (this.model.recentSearches.length === 0) {
+            const searches = await SearchResultProvider.readRecentSearch(this.storage);
+            if (searches !== null) {
+                this.model.recentSearches = searches;
+                console.log(this.model.recentSearches);
+            }
         }
 
-        this.model.availableCampus = await this.dataService.get_campus().toPromise()
+        if (this.model.availableCampus.length === 0)
+        {
+            this.model.availableCampus = await this.dataService.get_campus().toPromise()
+        }
+
         for (const campus of this.model.availableCampus) {
             this.availableCampus.push(new CampusViewModel(campus))
         }
@@ -103,7 +107,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
         this.progressIsVisible = true;
         try {
             const location = await this.mapView.showDiscoveryLocation(searchInput);
-            this.searchProvider.addRecentSearch(searchInput, this.model);
+            SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
             this.scrollToCoordinate(location.PathNode.Coordinate.X, location.PathNode.Coordinate.Y);
 
             await this.showLocationDrawer(location);

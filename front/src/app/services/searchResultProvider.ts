@@ -1,17 +1,9 @@
-import {Injectable} from '@angular/core';
 import {NavigationModel} from '../navigation/navigationModel';
+import {Storage} from '@ionic/storage';
 
-@Injectable({
-    providedIn: 'root'
-})
 export class SearchResultProvider{
-    private recentSearchesKey = 'searches';
-
-    constructor(private storage: Storage) {
-    }
-
-
-    public addRecentSearch(location:string, model: NavigationModel) {
+    private static recentSearchesKey = 'searches';
+    public static addRecentSearch(location:string, model: NavigationModel, storage: Storage) {
         if (model.recentSearches.includes(location)) {
             model.recentSearches.splice(model.recentSearches.indexOf(location), 1);
         }
@@ -22,12 +14,12 @@ export class SearchResultProvider{
             model.recentSearches.pop();
         }
 
-        this.storage.set(this.recentSearchesKey, JSON.stringify([model.recentSearches]));
+        storage.set(this.recentSearchesKey, JSON.stringify([model.recentSearches]));
         console.log(model.recentSearches);
     }
 
-    public async readRecentSearch() {
-        const searches = JSON.parse(await this.storage.get(this.recentSearchesKey));
+    public static async readRecentSearch(storage: Storage) {
+        const searches = JSON.parse(await storage.get(this.recentSearchesKey));
         return searches != null ? searches[0] : null;
     }
 }

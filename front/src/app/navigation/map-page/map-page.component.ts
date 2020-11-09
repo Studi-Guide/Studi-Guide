@@ -1,10 +1,16 @@
-import {Component, OnInit, OnDestroy} from '@angular/core';
+import {Component, OnInit, OnDestroy, ViewChild, AfterViewInit} from '@angular/core';
+import {Storage} from '@ionic/storage';
 import * as Leaflet from 'leaflet';
 import {LatLngExpression, LatLngLiteral, LeafletMouseEvent} from 'leaflet';
 import {DataService} from '../../services/data.service';
-import {IGpsCoordinate} from '../../building-objects-if';
+import {IGpsCoordinate, ILocation} from '../../building-objects-if';
 import {Router} from '@angular/router';
 import {NavigationModel} from '../navigationModel';
+import {CampusViewModel} from '../campusViewModel';
+import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
+import {SearchResultProvider} from '../../services/searchResultProvider';
+import {IonContent} from '@ionic/angular';
+import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -26,17 +32,47 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
   templateUrl: './map-page.component.html',
   styleUrls: ['./map-page.component.scss'],
 })
-export class MapPageComponent implements OnInit, OnDestroy {
+export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   map: Leaflet.Map;
   private isInitialized = false;
+  public availableCampus: CampusViewModel[] = [];
+  public progressIsVisible = false;
+  @ViewChild('drawerContent') drawerContent : IonContent;
+  @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
+  @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
+  errorMessage: string;
 
   constructor(
       private _dataService: DataService,
       private router: Router,
-      public model: NavigationModel) {
+      public model: NavigationModel,
+      private storage: Storage,
+      private dataService: DataService) {
   }
 
-  ngOnInit() { }
+  async ngAfterViewInit() {
+    await this.locationDrawer.SetState(DrawerState.Hidden);
+  }
+
+  async ngOnInit() {
+    if (this.model.recentSearches === null) {
+      const searches = await SearchResultProvider.readRecentSearch(this.storage);
+      if (searches !== null) {
+        this.model.recentSearches = searches;
+        console.log(this.model.recentSearches);
+      }
+    }
+
+    if (this.model.availableCampus.length === 0)
+    {
+      this.model.availableCampus = await this.dataService.get_campus().toPromise()
+    }
+
+    for (const campus of this.model.availableCampus) {
+      this.availableCampus.push(new CampusViewModel(campus))
+    }
+  }
+
   async ionViewDidEnter() {
     if (!this.isInitialized) {
       await this.initializeMap(this.router);
@@ -50,7 +86,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
     const bounds = Leaflet.latLngBounds(southWest, northEast);
 
     // maxZoom for leaflet map is 18
-    this.map = Leaflet.map('mapId', {
+    this.map = Leaflet.map('leafletMap', {
       maxBounds:bounds,
       maxZoom: 18,
       minZoom: 14
@@ -97,5 +133,32 @@ export class MapPageComponent implements OnInit, OnDestroy {
     }
 
     return leafletBody;
+  }
+
+  onDiscovery($event: string) {
+  }
+
+  onRoute($event: string[]) {
+  }
+
+  recentSearchClick(s: string) {
+  }
+
+  onDrawerStateChange($event: DrawerState) {
+  }
+
+  public async onCloseLocationDrawer(event:any) {
+    await this.locationDrawer.SetState(DrawerState.Hidden);
+    await this.searchDrawer.SetState(DrawerState.Docked);
+  }
+
+  public async showLocationDrawer(location:ILocation) {
+    await this.locationDrawer.SetState(DrawerState.Hidden);
+    this.model.selectedLocation = location;
+    await this.searchDrawer.SetState(DrawerState.Hidden);
+    await this.locationDrawer.SetState(DrawerState.Docked);
+  }
+
+  navigationBtnClick() {
   }
 }
