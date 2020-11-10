@@ -8,6 +8,7 @@ import {SearchInputComponent} from './search-input/search-input.component';
 import {MapViewComponent} from './map-view/map-view.component';
 import {IonicBottomDrawerModule} from '../../ionic-bottom-drawer/ionic-bottom-drawer.module';
 import {MapPageComponent} from './map-page/map-page.component';
+import {FloorButtonComponent} from './floor-button/floor-button.component';
 
 @NgModule({
   imports: [
@@ -20,6 +21,6 @@ import {MapPageComponent} from './map-page/map-page.component';
         ]),
     IonicBottomDrawerModule
   ],
-    declarations: [NavigationPage, SearchInputComponent, MapViewComponent, MapPageComponent]
+    declarations: [NavigationPage, SearchInputComponent, MapViewComponent, MapPageComponent, FloorButtonComponent]
 })
 export class NavigationPageModule {}

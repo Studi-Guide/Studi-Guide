@@ -1,4 +1,4 @@
-import {IBuilding, ICampus, ILocation, IPathNode} from '../building-objects-if';
+import {IBuilding, ILocation} from '../building-objects-if';
 import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
@@ -157,11 +157,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
             return;
         }
 
-        if (state === DrawerState.Top) {
-            this.drawerContent.scrollY = true;
-        } else {
-            this.drawerContent.scrollY = false;
-        }
+        this.drawerContent.scrollY = state === DrawerState.Top;
     }
 
     public async showLocationDrawer(location:ILocation) {
@@ -202,9 +198,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
         const data = await availableFloorModal.onDidDismiss()
         if (data.data) {
-            this.progressIsVisible = true;
-            await this.mapView.showFloor(data.data, this.mapView.CurrentBuilding);
-            this.progressIsVisible = false;
+            this.showAnotherFloorOfCurrentBuilding(data.data, this.mapView.CurrentBuilding)
         }
     }
 
@@ -268,5 +262,16 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     public async presentMapPage() {
         await this.router.navigate(['tabs/navigation/']);
+    }
+
+    public async onFloorChangeByFloorButton(floorAndBuildingInput: object) {
+        // @ts-ignore
+        await this.showAnotherFloorOfCurrentBuilding(floorAndBuildingInput.floor, floorAndBuildingInput.building);
+    }
+
+    private async showAnotherFloorOfCurrentBuilding(floor: string, building: string) {
+        this.progressIsVisible = true;
+        await this.mapView.showFloor(floor, building);
+        this.progressIsVisible = false;
     }
 }
