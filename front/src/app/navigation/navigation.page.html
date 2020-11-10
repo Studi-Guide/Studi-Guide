@@ -7,9 +7,9 @@
 </ion-header>
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
-  <app-floor-button [hidden]="!availableFloorsBtnIsVisible || this.selectedLocation.Building===''"
-                    [currentBuilding]="this.selectedLocation.Building"
-                    [currentFloor]="this.selectedLocation.Floor"
+  <app-floor-button [hidden]="!availableFloorsBtnIsVisible || this.model.selectedLocation.Building===''"
+                    [currentBuilding]="this.model.selectedLocation.Building"
+                    [currentFloor]="this.model.selectedLocation.Floor"
                     (floorWithBuilding)="onFloorChangeByFloorButton($event)"
   >
   </app-floor-button>
