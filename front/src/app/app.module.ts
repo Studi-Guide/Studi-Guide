@@ -14,6 +14,8 @@ import {Env} from '../environments/environment';
 import {IonicStorageModule} from '@ionic/storage';
 import {WINDOW_PROVIDERS} from './services/windowProvider';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {GeolocationMock} from './services/GeolocationMock';
 
 @NgModule({
   declarations: [AppComponent],
@@ -31,7 +33,10 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     SplashScreen,
     Env,
     WINDOW_PROVIDERS,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+      // TODO remove on release
+    { provide: Geolocation, useClass: GeolocationMock}
+    // Geolocation
   ],
   bootstrap: [AppComponent]
 })
