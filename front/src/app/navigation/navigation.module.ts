@@ -16,9 +16,8 @@ import {FloorButtonComponent} from './floor-button/floor-button.component';
     CommonModule,
     FormsModule,
     RouterModule.forChild([
-        { path: '', component: NavigationPage},
-        { path: 'map', component: MapPageComponent },
-     //   { path: 'navigation/:start/:destination', component: NavigationPage}
+        { path: 'detail', component: NavigationPage},
+        { path: '', component: MapPageComponent },
         ]),
     IonicBottomDrawerModule
   ],

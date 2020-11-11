@@ -75,7 +75,7 @@ export class SchedulePage implements AfterViewInit {
   }
 
   public async onLocationClick(locationName: string) {
-    await this.router.navigate(['tabs/navigation'], { queryParams: { location: locationName } });
+    await this.router.navigate(['tabs/navigation/detail'], { queryParams: { location: locationName } });
   }
 
   ngAfterViewInit(): void {}
