@@ -10,7 +10,7 @@ import {
   Renderer2,
   SimpleChanges
 } from '@angular/core';
-import {Animation, AnimationController, DomController, Gesture, GestureController, Platform} from '@ionic/angular';
+import {DomController, Gesture, GestureController, Platform} from '@ionic/angular';
 import {DrawerState} from './drawer-state';
 
 @Component({
@@ -24,9 +24,9 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
 
   @Input() distanceTop = 50;
 
-  @Input() dockedHeight = 250;
+  @Input() dockedHeight = 300;
 
-  @Input() minimumHeight = 150;
+  @Input() minimumHeight = 200;
 
   @Input() shouldBounce = true;
 

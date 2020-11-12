@@ -1,5 +1,18 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button id="close-open-map" defaultHref="/"></ion-back-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
+  <app-floor-button [hidden]="!availableFloorsBtnIsVisible || this.model.selectedLocation.Building===''"
+                    [currentBuilding]="this.model.selectedLocation.Building"
+                    [currentFloor]="this.model.selectedLocation.Floor"
+                    (floorWithBuilding)="onFloorChangeByFloorButton($event)"
+  >
+  </app-floor-button>
   <div id="map-content">
     <ion-text id="error-message" *ngIf="errorMessage" >
       <h5><span class="error">{{ errorMessage }}</span></h5>
@@ -20,7 +33,8 @@
         <div class="nav-hbar"></div>
         <app-search-input
                 (discovery)="onDiscovery($event)"
-                (route)="onRoute($event)">
+                (route)="onRoute($event)"
+        >
         </app-search-input>
       </div>
       <ion-content color="light" #drawerContent>
@@ -51,7 +65,7 @@
             <ion-list-header color="light">
               Recent Searches
             </ion-list-header>
-            <ion-item color="light" *ngFor="let s of recentSearches;" button (click)="recentSearchClick(s)">
+            <ion-item color="light" *ngFor="let s of model.recentSearches;" button (click)="recentSearchClick(s)">
               <ion-label><h2>{{s}}</h2></ion-label>
             </ion-item>
           </ion-list>
@@ -84,7 +98,7 @@
         <ion-grid id="locationdrawerContent" >
           <ion-row class="ion-justify-content-between ion-align-self-center">
             <ion-col size="auto">
-              <ion-text id="locationdrawerName">{{selectedLocation.Name}}</ion-text>
+              <ion-text id="locationdrawerName">{{model.selectedLocation.Name}}</ion-text>
             </ion-col>
             <ion-col class="ion-justify-content-end ion-padding-horizontal">
               <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseLocationDrawer($event)">
@@ -101,11 +115,11 @@
           </ion-row>
           <ion-row>
             <ion-col>Description:</ion-col>
-            <ion-col>{{selectedLocation.Description}}</ion-col>
+            <ion-col>{{model.selectedLocation.Description}}</ion-col>
           </ion-row>
           <ion-row>
             <ion-col>Tags:</ion-col>
-            <ion-col>{{selectedLocation.Tags}}</ion-col>
+            <ion-col>{{model.selectedLocation.Tags}}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-content>
