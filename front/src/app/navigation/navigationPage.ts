@@ -50,6 +50,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     ionViewDidEnter() {
+        console.log("ionViewDidEnter");
         if (this.isSubscripted === false){
             CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
             this.isSubscripted = true;
@@ -65,22 +66,20 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 if (params.start != null && params.start.length > 0 &&
                     params.destination != null && params.destination.length > 0) {
                     await this.showNavigation(params.start, params.destination);
-                    return;
-                }
-
-                if (params.building != null && params.building.length > 0) {
+                } else if (params.building != null && params.building.length > 0) {
                     const building = await this.dataService.get_building(params.building).toPromise()
                     if (building !== null) {
                         await this.mapView.showFloor(
                             building.Floors?.includes('EG') ? 'EG' : building.Floors[0],
                             building.Name);
-                        return;
                     }
+                } else {
+                    await this.showDiscoveryMode();
                 }
-
-                await this.showDiscoveryMode();
                 CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
             });
+        } else {
+            CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
         }
     }
 
@@ -277,6 +276,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     public onCanvasMapperScroll(event:any) {
+        console.log(event);
         CanvasTouchHelper.Zoom(event.deltaY*-0.05, this.canvasWrapper, this.renderer);
     }
 }
