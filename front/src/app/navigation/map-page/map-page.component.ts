@@ -11,6 +11,7 @@ import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
 import {SearchResultProvider} from '../../services/searchResultProvider';
 import {IonContent} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
+import { Geolocation } from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
@@ -35,7 +36,6 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
 })
 export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   map: Leaflet.Map;
-  private isInitialized = false;
   private searchMarker: Leaflet.Marker[] = [];
   public availableCampus: CampusViewModel[] = [];
   public progressIsVisible = false;
@@ -43,13 +43,16 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
   @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
   errorMessage: string;
+  private currentPositionMarker: Leaflet.Marker = null;
+  private isInitialized = false;
 
   constructor(
       private _dataService: DataService,
       private router: Router,
       public model: NavigationModel,
       private storage: Storage,
-      private dataService: DataService) {
+      private dataService: DataService,
+      private geolocation: Geolocation) {
   }
 
   async ngAfterViewInit() {
@@ -79,6 +82,20 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     if (!this.isInitialized) {
       await this.initializeMap(this.router);
       this.isInitialized = true;
+    }
+
+    try {
+      const position = await this.geolocation.getCurrentPosition();
+      if (this.currentPositionMarker === null){
+        this.currentPositionMarker = Leaflet.marker([position.coords.latitude, position.coords.longitude]).
+        addTo(this.map).
+        bindPopup('Position');
+      } else {
+        this.currentPositionMarker.setLatLng([position.coords.latitude, position.coords.longitude]);
+      }
+    }
+    catch (error) {
+      console.log('Error getting location', error);
     }
   }
 
