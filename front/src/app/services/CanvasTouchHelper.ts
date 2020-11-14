@@ -239,16 +239,11 @@ export class CanvasTouchHelper {
             y: element.nativeElement.getBoundingClientRect().height*(this.currentZoom.z+inOut)};
 
         if (newSize.x < window.innerWidth*0.7 && newSize.y < window.innerHeight*0.4) {
-            // (this.currentZoom.z+?) == window.innerWidth*0.8
-            const factor1 = 0.7-this.currentZoom.z;
-            // (this.currentZoom.z+?) == window.innerHeight*0.5
-            const factor2 = 0.4-this.currentZoom.z;
-
-            console.log(this.currentZoom, factor1, factor2, inOut);
-            if (Math.abs(factor1) > Math.abs(factor2)) {
-                return this.currentZoom.z+factor2;
+            console.log(this.currentZoom, inOut);
+            if (window.innerWidth*0.7 < window.innerWidth*0.4) {
+                return 0.7;
             } else {
-                return this.currentZoom.z+factor1;
+                return 0.4;
             }
         }
 
