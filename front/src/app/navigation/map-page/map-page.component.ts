@@ -218,7 +218,13 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   recentSearchClick(s: string) {
   }
 
-  onDrawerStateChange($event: DrawerState) {
+  public onDrawerStateChange(state:DrawerState) {
+    // in case the view is not initialized
+    if (this.drawerContent === undefined) {
+      return;
+    }
+
+    this.drawerContent.scrollY = state === DrawerState.Top;
   }
 
   public async onCloseLocationDrawer(event:any) {
