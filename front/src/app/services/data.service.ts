@@ -60,15 +60,21 @@ export class DataService {
         return this.cache.Get<IBuilding>(this.httpClient,this.baseUrl + '/buildings/' + name);
     }
 
-    get_buildings() {
-        return this.cache.Get<IBuilding[]>(this.httpClient, this.baseUrl + '/buildings');
+    get_buildings_search(search: string = '') {
+        const searchParam = search ? '?name=' + search : '';
+        return this.cache.Get<IBuilding[]>(this.httpClient, this.baseUrl + '/buildings' + searchParam);
     }
 
     get_map_item(pathNodeId:number) {
         return this.cache.Get<IMapItem[]>(this.httpClient,this.baseUrl + '/maps?pathnodeid=' + pathNodeId);
     }
 
-    get_campus() {
-        return this.cache.Get<ICampus[]>(this.httpClient, this.baseUrl + '/campus');
+    get_campus(name: string) {
+        return this.cache.Get<ICampus>(this.httpClient, this.baseUrl + '/campus/' + name);
+    }
+
+    get_campus_search(search: string = '') {
+        const searchParam = search ? '?search=' + search : '';
+        return this.cache.Get<ICampus[]>(this.httpClient, this.baseUrl + '/campus' + searchParam);
     }
 }

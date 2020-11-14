@@ -94,7 +94,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
         if (this.model.availableCampus.length === 0)
         {
-            this.model.availableCampus = await this.dataService.get_campus().toPromise()
+            this.model.availableCampus = await this.dataService.get_campus_search().toPromise()
         }
 
         for (const campus of this.model.availableCampus) {
@@ -176,7 +176,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
         let floors = new Array<string>();
 
         // STDG-138 discovery mode ... get all floor of all displayed buildings
-        let buildings = await this.dataService.get_buildings().toPromise<IBuilding[]>();
+        let buildings = await this.dataService.get_buildings_search().toPromise<IBuilding[]>();
         buildings = buildings.filter((n, i) => buildings.indexOf(n) === i);
 
         for (const building of buildings) {
