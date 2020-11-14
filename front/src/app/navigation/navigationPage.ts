@@ -50,7 +50,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     ionViewDidEnter() {
-        console.log("ionViewDidEnter");
         if (this.isSubscripted === false){
             CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
             this.isSubscripted = true;

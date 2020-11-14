@@ -117,7 +117,7 @@ export class CanvasTouchHelper {
             const d = this.scaleFrom(pinchZoomOrigin, this.lastZoom.z, this.lastZoom.z * event.scale, originalSize)
             this.currentZoom.x = d.x + this.lastZoom.x + event.deltaX;
             this.currentZoom.y = d.y + this.lastZoom.y + event.deltaY;
-            this.currentZoom.z = this.limitZoom(event.scale, canvasElement);// this.limitZoom(d.z + this.lastZoom.z, canvasElement);// + this.lastZoom.z;
+            this.currentZoom.z = this.limitZoom(d.z, canvasElement);
             lastEvent = 'pinch';
             this.update(this.currentZoom, canvasElement, renderer);
         })
@@ -262,6 +262,7 @@ export class CanvasTouchHelper {
         // }
 
         this.currentZoom.z = this.limitZoom(inOut, element);// inOut;
+        this.lastZoom.z = this.currentZoom.z;
         this.update(this.currentZoom, element, renderer);
     }
 }
