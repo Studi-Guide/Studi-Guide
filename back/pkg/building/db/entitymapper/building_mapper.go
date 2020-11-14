@@ -8,7 +8,7 @@ import (
 )
 
 func (r *EntityMapper) GetAllBuildings() ([]Building, error) {
-	buildings, err := r.client.Building.Query().WithBody().All(r.context)
+	buildings, err := r.client.Building.Query().WithCampus().WithBody().All(r.context)
 	if err != nil {
 		return nil, err
 	}
@@ -16,7 +16,12 @@ func (r *EntityMapper) GetAllBuildings() ([]Building, error) {
 }
 
 func (r *EntityMapper) GetBuilding(name string) (Building, error) {
-	b, err := r.client.Building.Query().WithBody().Where(entbuilding.NameEqualFold(name)).First(r.context)
+	b, err := r.client.Building.
+		Query().
+		WithBody().
+		WithCampus().
+		Where(entbuilding.NameEqualFold(name)).First(r.context)
+
 	if err != nil {
 		return Building{}, err
 	}
@@ -28,7 +33,7 @@ func (r *EntityMapper) GetBuilding(name string) (Building, error) {
 }
 
 func (r *EntityMapper) FilterBuildings(name string) ([]Building, error) {
-	buildings, err := r.client.Building.Query().WithBody().Where(entbuilding.NameEqualFold(name)).All(r.context)
+	buildings, err := r.client.Building.Query().WithBody().WithCampus().Where(entbuilding.NameEqualFold(name)).All(r.context)
 	if err != nil {
 		return nil, err
 	}
