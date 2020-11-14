@@ -39,6 +39,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private searchMarker: Leaflet.Marker[] = [];
   public availableCampus: CampusViewModel[] = [];
   public progressIsVisible = false;
+  public selectedItem: {Description:string, Name:string, Type: string} = { Description: '', Name: '', Type:''};
   @ViewChild('drawerContent') drawerContent : IonContent;
   @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
   @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
@@ -143,15 +144,6 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.map.remove();
   }
 
-  convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
-    const leafletBody:LatLngLiteral[] = []
-    for (const coordinate of body){
-      leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});
-    }
-
-    return leafletBody;
-  }
-
   async onSearch(searchInput: string) {
     this.model.errorMessage = '';
     this.progressIsVisible = true;
@@ -160,23 +152,34 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       this.clearSearchMarkers();
 
       // look for indexed values
-      const building = await this.dataService.get_building(searchInput).toPromise();
-      if (building) {
-        const coordinates = this.getCoordinateFromBody(building.Body);
-        this.searchMarker.push(
-            this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
+      try {
+        const building = await this.dataService.get_building(searchInput, false).toPromise();
+        if (building) {
+          const coordinates = this.getCoordinateFromBody(building.Body);
+          this.searchMarker.push(
+              this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
 
-        this.map.setView([coordinates.Latitude, coordinates.Longitude], 17)
-        return;
+          this.map.setView([coordinates.Latitude, coordinates.Longitude], 17)
+
+          await this.showElementDrawer({Name: building.Name, Description: 'Campus:' + building.Campus, Type: 'Building'});
+          return;
+        }
+      } catch (e) {
+        console.log(e);
       }
 
-      const campus = await this.dataService.get_campus(searchInput).toPromise();
-      if (campus) {
-        this.searchMarker.push(
-          this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
+      try {
+        const campus = await this.dataService.get_campus(searchInput, false).toPromise();
+        if (campus) {
+          this.searchMarker.push(
+              this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
 
-        this.map.setView([campus.Latitude, campus.Longitude], 17)
-        return;
+          this.map.setView([campus.Latitude, campus.Longitude], 17)
+          await this.showElementDrawer({Name: campus.Name, Description: campus.ShortName, Type: 'Campus'});
+          return;
+        }
+      } catch (e) {
+        console.log(e);
       }
 
       // Look for all possible buildings via Search-API
@@ -223,9 +226,9 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.searchDrawer.SetState(DrawerState.Docked);
   }
 
-  public async showLocationDrawer(location:ILocation) {
+  public async showElementDrawer(location: { Description:string, Name:string, Type:string }) {
     await this.locationDrawer.SetState(DrawerState.Hidden);
-    this.model.selectedLocation = location;
+    this.selectedItem = location;
     await this.searchDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(DrawerState.Docked);
   }
@@ -275,5 +278,14 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     for (const marker of this.searchMarker) {
       this.map.removeLayer(marker);
     }
+  }
+
+  private convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
+    const leafletBody:LatLngLiteral[] = []
+    for (const coordinate of body){
+      leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});
+    }
+
+    return leafletBody;
   }
 }

@@ -56,8 +56,8 @@ export class DataService {
         return this.cache.Get<ILocation[]>(this.httpClient,this.baseUrl + '/buildings/'+ building +'/floors/' + floor + '/locations');
     }
 
-    get_building(name:string) {
-        return this.cache.Get<IBuilding>(this.httpClient,this.baseUrl + '/buildings/' + name);
+    get_building(name:string, logError: boolean = true) {
+        return this.cache.Get<IBuilding>(this.httpClient,this.baseUrl + '/buildings/' + name, logError);
     }
 
     get_buildings_search(search: string = '') {
@@ -69,8 +69,8 @@ export class DataService {
         return this.cache.Get<IMapItem[]>(this.httpClient,this.baseUrl + '/maps?pathnodeid=' + pathNodeId);
     }
 
-    get_campus(name: string) {
-        return this.cache.Get<ICampus>(this.httpClient, this.baseUrl + '/campus/' + name);
+    get_campus(name: string, logError: boolean = true) {
+        return this.cache.Get<ICampus>(this.httpClient, this.baseUrl + '/campus/' + name, logError);
     }
 
     get_campus_search(search: string = '') {
