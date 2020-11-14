@@ -86,12 +86,6 @@ export class CanvasTouchHelper {
                     y: event.deltaY
                 }
             }
-            else {
-                fixHammerjsDeltaIssue = {
-                    x: 0,
-                    y: 0
-                }
-            }
 
             const transition = {
                 x: event.deltaX - fixHammerjsDeltaIssue.x,
@@ -107,6 +101,9 @@ export class CanvasTouchHelper {
         })
 
         hammerTime.on('pinch', (event) => {
+            if (event.scale === Infinity){
+                return;
+            }
 
             const canvasHTMLElement = event.target as HTMLCanvasElement;
             const originalSize = {
@@ -127,13 +124,13 @@ export class CanvasTouchHelper {
             lastEvent = 'pinchstart';
         })
 
-        hammerTime.on('panend', (event: MSGestureEvent) => {
+        hammerTime.on('panend', (event) => {
             this.lastZoom.x = this.currentZoom.x;
             this.lastZoom.y = this.currentZoom.y;
             lastEvent = 'panend';
         })
 
-        hammerTime.on('pinchend', (event: MSGestureEvent) => {
+        hammerTime.on('pinchend', (event) => {
             this.lastZoom.x = this.currentZoom.x;
             this.lastZoom.y = this.currentZoom.y;
             this.lastZoom.z = this.currentZoom.z;
@@ -235,11 +232,11 @@ export class CanvasTouchHelper {
     }
 
     private static limitZoom(inOut:number, element: ElementRef) {
-        const newSize = {x: element.nativeElement.getBoundingClientRect().width*(this.currentZoom.z+inOut),
-            y: element.nativeElement.getBoundingClientRect().height*(this.currentZoom.z+inOut)};
+        const newSize = {x: element.nativeElement.getBoundingClientRect().width*(this.lastZoom.z+inOut),
+            y: element.nativeElement.getBoundingClientRect().height*(this.lastZoom.z+inOut)};
 
         if (newSize.x < window.innerWidth*0.7 && newSize.y < window.innerHeight*0.4) {
-            console.log(this.currentZoom, inOut);
+            console.log(this.lastZoom.z, inOut);
             if (window.innerWidth*0.7 < window.innerWidth*0.4) {
                 return 0.7;
             } else {
@@ -247,7 +244,7 @@ export class CanvasTouchHelper {
             }
         }
 
-        return (this.currentZoom.z+inOut);
+        return (this.lastZoom.z+inOut);
     }
 
     public static Zoom(inOut:number, element: ElementRef, renderer: Renderer2) {
