@@ -76,9 +76,11 @@ export class NavigationPage implements OnInit, AfterViewInit{
                     await this.showDiscoveryMode();
                 }
                 CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
+                this.scrollToCoordinate(0,300);
             });
         } else {
             CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
+            this.scrollToCoordinate(0,300);
         }
     }
 
@@ -247,6 +249,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
+        // TODO accept Coordinate 0,0 -> normalize coordinates
         const availableSize = {width: window.innerWidth, height: window.innerHeight};
 
         CanvasTouchHelper.transistion(
