@@ -122,12 +122,20 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
 
   private onMove(detail) {
 
-    if ((this.shouldBounce && detail.currentY < this.distanceTop - this.bounceDelta)
-        || (!this.shouldBounce && detail.currentY < this.distanceTop)) {
-      return;
-    } else if ((this.shouldBounce && detail.currentY > (this.platform.height() - this.minimumHeight) + this.bounceDelta)
-        || (!this.shouldBounce && detail.currentY > (this.platform.height() - this.minimumHeight))) {
-      return;
+    if (IonicBottomDrawerComponent.DrawerDocking) {
+      if ((this.shouldBounce && detail.currentY < this.distanceTop - this.bounceDelta)
+          || (!this.shouldBounce && detail.currentY < this.distanceTop)) {
+        return;
+      } else if ((this.shouldBounce && detail.currentY > (this.platform.height() - this.minimumHeight) + this.bounceDelta)
+          || (!this.shouldBounce && detail.currentY > (this.platform.height() - this.minimumHeight))) {
+        return;
+      }
+    } else {
+      if (detail.currentY < this.distanceTop) {
+        return;
+      } else if (detail.currentY > (this.platform.height() - this.minimumHeight)) {
+        return;
+      }
     }
 
     const translate = 'translateY('+detail.currentY+'px)';
