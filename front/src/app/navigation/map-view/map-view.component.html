@@ -1,1 +1,1 @@
-<canvas #map id="map" (click)="onClickTouch($event )"></canvas>
+<canvas #map id="map" (click)="onClickTouch($event)" (wheel)="mapScroll.emit($event)"></canvas>
