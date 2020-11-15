@@ -42,7 +42,11 @@
         <source>Make sure your search is spelled correctly.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/navigation/navigation.page.html</context>
-          <context context-type="linenumber">119</context>
+          <context context-type="linenumber">19</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/navigation/map-page/map-page.component.html</context>
+          <context context-type="linenumber">6</context>
         </context-group>
         <note priority="1" from="description">spelling check</note>
         <note priority="1" from="meaning">search error</note>
@@ -54,7 +58,11 @@
       </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/navigation/navigation.page.html</context>
-          <context context-type="linenumber">120</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/navigation/map-page/map-page.component.html</context>
+          <context context-type="linenumber">7</context>
         </context-group>
         <note priority="1" from="description">missing place request</note>
         <note priority="1" from="meaning">search error</note>
@@ -98,7 +106,7 @@
     </source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">31</context>
         </context-group>
         <note priority="1" from="description">Navigate to Language Selection</note>
         <note priority="1" from="meaning">Settings</note>
@@ -107,7 +115,7 @@
         <source>Help</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">37</context>
         </context-group>
         <note priority="1" from="description">Help</note>
         <note priority="1" from="meaning">Settings</note>
@@ -116,9 +124,18 @@
         <source>About</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">21</context>
+          <context context-type="linenumber">41</context>
         </context-group>
         <note priority="1" from="description">About</note>
+        <note priority="1" from="meaning">Settings</note>
+      </trans-unit>
+      <trans-unit id="54a38692b3cb01fd464eaff18a774cced79962ac" datatype="html">
+        <source>Drawer Docking</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
+          <context context-type="linenumber">45</context>
+        </context-group>
+        <note priority="1" from="description">DrawerDocking</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
     </body>
