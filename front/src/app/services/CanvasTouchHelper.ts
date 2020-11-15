@@ -86,12 +86,6 @@ export class CanvasTouchHelper {
                     y: event.deltaY
                 }
             }
-            else {
-                fixHammerjsDeltaIssue = {
-                    x: 0,
-                    y: 0
-                }
-            }
 
             const transition = {
                 x: event.deltaX - fixHammerjsDeltaIssue.x,
@@ -107,6 +101,9 @@ export class CanvasTouchHelper {
         })
 
         hammerTime.on('pinch', (event) => {
+            if (event.scale === Infinity){
+                return;
+            }
 
             const canvasHTMLElement = event.target as HTMLCanvasElement;
             const originalSize = {
@@ -117,7 +114,7 @@ export class CanvasTouchHelper {
             const d = this.scaleFrom(pinchZoomOrigin, this.lastZoom.z, this.lastZoom.z * event.scale, originalSize)
             this.currentZoom.x = d.x + this.lastZoom.x + event.deltaX;
             this.currentZoom.y = d.y + this.lastZoom.y + event.deltaY;
-            this.currentZoom.z = d.z + this.lastZoom.z;
+            this.currentZoom.z = this.limitZoom(d.z, canvasElement);
             lastEvent = 'pinch';
             this.update(this.currentZoom, canvasElement, renderer);
         })
@@ -127,13 +124,13 @@ export class CanvasTouchHelper {
             lastEvent = 'pinchstart';
         })
 
-        hammerTime.on('panend', (event: MSGestureEvent) => {
+        hammerTime.on('panend', (event) => {
             this.lastZoom.x = this.currentZoom.x;
             this.lastZoom.y = this.currentZoom.y;
             lastEvent = 'panend';
         })
 
-        hammerTime.on('pinchend', (event: MSGestureEvent) => {
+        hammerTime.on('pinchend', (event) => {
             this.lastZoom.x = this.currentZoom.x;
             this.lastZoom.y = this.currentZoom.y;
             this.lastZoom.z = this.currentZoom.z;
@@ -232,5 +229,37 @@ export class CanvasTouchHelper {
             z: zoomDistance
         }
         return output
+    }
+
+    private static limitZoom(inOut:number, element: ElementRef) {
+        const newSize = {x: element.nativeElement.getBoundingClientRect().width*(this.lastZoom.z+inOut),
+            y: element.nativeElement.getBoundingClientRect().height*(this.lastZoom.z+inOut)};
+
+        if (newSize.x < window.innerWidth*0.7 && newSize.y < window.innerHeight*0.4) {
+            console.log(this.lastZoom.z, inOut);
+            if (window.innerWidth*0.7 < window.innerWidth*0.4) {
+                return 0.7;
+            } else {
+                return 0.4;
+            }
+        }
+
+        return (this.lastZoom.z+inOut);
+    }
+
+    public static Zoom(inOut:number, element: ElementRef, renderer: Renderer2) {
+
+        // const newSize = {x: element.nativeElement.getBoundingClientRect().width*(this.currentZoom.z+inOut),
+        //     y: element.nativeElement.getBoundingClientRect().height*(this.currentZoom.z+inOut)};
+        //
+        // if (newSize.x < window.innerWidth*0.8 && newSize.y < window.innerHeight*0.5) {
+        //     console.log(newSize, {x: window.innerWidth*0.8, y: window.innerHeight*0.5});
+        //     newSize.x = window.innerWidth*0.8;
+        //     newSize.y = window.innerHeight*0.5;
+        // }
+
+        this.currentZoom.z = this.limitZoom(inOut, element);// inOut;
+        this.lastZoom.z = this.currentZoom.z;
+        this.update(this.currentZoom, element, renderer);
     }
 }

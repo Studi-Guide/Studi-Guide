@@ -65,21 +65,22 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 if (params.start != null && params.start.length > 0 &&
                     params.destination != null && params.destination.length > 0) {
                     await this.showNavigation(params.start, params.destination);
-                    return;
-                }
-
-                if (params.building != null && params.building.length > 0) {
+                } else if (params.building != null && params.building.length > 0) {
                     const building = await this.dataService.get_building(params.building).toPromise()
                     if (building !== null) {
                         await this.mapView.showFloor(
                             building.Floors?.includes('EG') ? 'EG' : building.Floors[0],
                             building.Name);
-                        return;
                     }
+                } else {
+                    await this.showDiscoveryMode();
                 }
-
-                await this.showDiscoveryMode();
+                CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
+                this.scrollToCoordinate(0,300);
             });
+        } else {
+            CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
+            this.scrollToCoordinate(0,300);
         }
     }
 
@@ -248,6 +249,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
+        // TODO accept Coordinate 0,0 -> normalize coordinates
         const availableSize = {width: window.innerWidth, height: window.innerHeight};
 
         CanvasTouchHelper.transistion(
@@ -273,5 +275,10 @@ export class NavigationPage implements OnInit, AfterViewInit{
         this.progressIsVisible = true;
         await this.mapView.showFloor(floor, building);
         this.progressIsVisible = false;
+    }
+
+    public onCanvasMapperScroll(event:any) {
+        console.log(event);
+        CanvasTouchHelper.Zoom(event.deltaY*-0.05, this.canvasWrapper, this.renderer);
     }
 }
