@@ -1,16 +1,17 @@
 import { Storage } from '@ionic/storage';
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import { MoodleService } from '../services/moodle.service';
 import { MoodleToken } from '../moodle-objects-if';
-import {SettingsModel} from "./settings.model";
-import {IonicBottomDrawerComponent} from "../../ionic-bottom-drawer/ionic-bottom-drawer.component";
+import {SettingsModel} from './settings.model';
+import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
+import {IonToggle} from '@ionic/angular';
 
 @Component({
   selector: 'app-settings',
   templateUrl: 'settings.page.html',
   styleUrls: ['settings.page.scss']
 })
-export class SettingsPage implements OnInit {
+export class SettingsPage implements AfterViewInit {
 
   constructor(
       private storage: Storage,
@@ -25,12 +26,14 @@ export class SettingsPage implements OnInit {
   private readonly MOODLE_TOKEN = 'moodle_token';
   private readonly MOODLE_USER = 'moodle_user';
 
+  @ViewChild('DrawerDockingToggle') drawerDockingToggle : IonToggle;
+
   actionSheetOptions: any = {
     header: 'Moodle'
   };
 
-  ngOnInit() {
-
+  ngAfterViewInit() {
+    this.drawerDockingToggle.checked = this.settingsModel.DrawerDocking;
   }
 
   async ionViewWillEnter() {
@@ -74,7 +77,6 @@ export class SettingsPage implements OnInit {
   }
 
   public onDrawerDockingToggleChange(event:any) {
-    console.log(event.detail.checked);
     this.settingsModel.DrawerDocking = event.detail.checked;
     IonicBottomDrawerComponent.DrawerDocking = this.settingsModel.DrawerDocking;
   }

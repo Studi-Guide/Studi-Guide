@@ -43,7 +43,7 @@
     <ion-item>
       <ion-icon slot="end" color="dark" name="information-circle-outline"></ion-icon>
       <ion-label i18n="Settings|DrawerDocking">Drawer Docking</ion-label>
-      <ion-toggle (ionChange)="onDrawerDockingToggleChange($event)"></ion-toggle>
+      <ion-toggle #DrawerDockingToggle (ionChange)="onDrawerDockingToggleChange($event)"></ion-toggle>
     </ion-item>
 
   </ion-list>
