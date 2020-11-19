@@ -12,6 +12,7 @@ import {SearchResultProvider} from '../../services/searchResultProvider';
 import {IonContent} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {HttpErrorResponse} from '@angular/common/http';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -35,9 +36,10 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
 })
 export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   map: Leaflet.Map;
-
+  private searchMarker: Leaflet.Marker[] = [];
   public availableCampus: CampusViewModel[] = [];
   public progressIsVisible = false;
+  public selectedItem: {Description:string, Name:string, Type: string} = { Description: '', Name: '', Type:''};
   @ViewChild('drawerContent') drawerContent : IonContent;
   @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
   @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
@@ -69,7 +71,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     if (this.model.availableCampus.length === 0)
     {
-      this.model.availableCampus = await this.dataService.get_campus().toPromise()
+      this.model.availableCampus = await this.dataService.get_campus_search().toPromise()
     }
 
     for (const campus of this.model.availableCampus) {
@@ -108,17 +110,19 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       maxBounds:bounds,
       maxZoom: 18,
       minZoom: 14
-    }).setView([49.452858, 11.093235], 17);
+    })
+        .setView([49.452368, 11.093299], 17);
 
     Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'edupala.com © Angular LeafLet',
     }).addTo(this.map);
 
 
-    const buildings = await this._dataService.get_buildings().toPromise();
+    const buildings = await this._dataService.get_buildings_search().toPromise();
 
     function onPolygonClick(event:LeafletMouseEvent) {
-      router.navigate(['tabs/navigation/detail'], {queryParams: {building: event.target.options.className}})
+      router.navigate(['tabs/navigation/detail'],
+          {queryParams: {building: event.target.options.className}})
           .then(r => console.log(event.latlng, event.target.options.className));
     }
 
@@ -132,11 +136,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     }
-
-     Leaflet.marker([49.452858, 11.093235]).
-      addTo(this.map).
-      bindPopup('Technische Hochschule Nürnberg Georg Simon Ohm').
-      openPopup();
+    // this.showMarker(49.452858, 11.093235, 'Technische Hochschule Nürnberg Georg Simon Ohm', true);
   }
 
   /** Remove map when we have multiple map object */
@@ -144,16 +144,72 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.map.remove();
   }
 
-  convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
-    const leafletBody:LatLngLiteral[] = []
-    for (const coordinate of body){
-      leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});
+  async onSearch(searchInput: string) {
+    this.model.errorMessage = '';
+    this.progressIsVisible = true;
+
+    try {
+      this.clearSearchMarkers();
+
+      // look for indexed values
+      try {
+        const building = await this.dataService.get_building(searchInput, false).toPromise();
+        if (building) {
+          const coordinates = this.getCoordinateFromBody(building.Body);
+          this.searchMarker.push(
+              this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
+
+          this.map.setView([coordinates.Latitude, coordinates.Longitude], 17)
+
+          await this.showElementDrawer({Name: building.Name, Description: 'Campus:' + building.Campus, Type: 'Building'});
+          return;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+
+      try {
+        const campus = await this.dataService.get_campus(searchInput, false).toPromise();
+        if (campus) {
+          this.searchMarker.push(
+              this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
+
+          this.map.setView([campus.Latitude, campus.Longitude], 17)
+          await this.showElementDrawer({Name: campus.Name, Description: campus.ShortName, Type: 'Campus'});
+          return;
+        }
+      } catch (e) {
+        console.log(e);
+      }
+
+      // Look for all possible buildings via Search-API
+      const buildings = await this.dataService.get_buildings_search(searchInput).toPromise();
+      if (buildings !== null && buildings.length > 0) {
+
+          // found building
+          for (const buld of buildings) {
+            const coordinates = this.getCoordinateFromBody(buld.Body);
+            this.searchMarker.push(
+              this.showMarker(coordinates.Latitude, coordinates.Longitude, buld.Name, false));
+          }
+      }
+      else {
+        // look for campus on Search-API if no building is found
+        const campusArray = await this.dataService.get_campus_search(searchInput).toPromise();
+        if (campusArray !== null && campusArray.length > 0) {
+
+          // found building
+          for (const camp of campusArray) {
+            this.searchMarker.push(
+              this.showMarker(camp.Latitude, camp.Longitude, camp.Name, false));
+          }
+        }
+      }
+    } catch (ex) {
+      this.handleInputError(ex, searchInput);
+    } finally {
+      this.progressIsVisible = false;
     }
-
-    return leafletBody;
-  }
-
-  onDiscovery($event: string) {
   }
 
   onRoute($event: string[]) {
@@ -162,7 +218,13 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   recentSearchClick(s: string) {
   }
 
-  onDrawerStateChange($event: DrawerState) {
+  public onDrawerStateChange(state:DrawerState) {
+    // in case the view is not initialized
+    if (this.drawerContent === undefined) {
+      return;
+    }
+
+    this.drawerContent.scrollY = state === DrawerState.Top;
   }
 
   public async onCloseLocationDrawer(event:any) {
@@ -170,13 +232,66 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.searchDrawer.SetState(DrawerState.Docked);
   }
 
-  public async showLocationDrawer(location:ILocation) {
+  public async showElementDrawer(location: { Description:string, Name:string, Type:string }) {
     await this.locationDrawer.SetState(DrawerState.Hidden);
-    this.model.selectedLocation = location;
+    this.selectedItem = location;
     await this.searchDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(DrawerState.Docked);
   }
 
   navigationBtnClick() {
+  }
+
+  private handleInputError(ex, searchInput: string) {
+    if (ex instanceof HttpErrorResponse) {
+      const httpError = ex as HttpErrorResponse;
+      if (httpError.status === 400) {
+        this.errorMessage = 'Studi-Guide can\'t find ' + searchInput;
+      } else {
+        this.errorMessage = httpError.message;
+      }
+    } else {
+      this.errorMessage = (ex as Error).message;
+    }
+  }
+
+  private showMarker(lat: number, long: number, popupText: string  = '', showPopUp: boolean) {
+    const marker = Leaflet.marker([lat, long]).
+    addTo(this.map)
+
+    return popupText ?
+        (showPopUp ? marker.bindPopup(popupText).openPopup() : marker.bindPopup(popupText))
+        : marker;
+  }
+
+  private getCoordinateFromBody(body: IGpsCoordinate[]) {
+    let totalLat = 0, totalLong = 0;
+    for (const coordinate of body)
+    {
+      totalLat += coordinate.Latitude;
+      totalLong += coordinate.Longitude;
+    }
+    const centerLat = totalLat / body.length;
+    const centerLong = totalLong / body.length;
+
+    return {
+      Longitude: centerLong,
+      Latitude: centerLat
+    }
+  }
+
+  private clearSearchMarkers() {
+    for (const marker of this.searchMarker) {
+      this.map.removeLayer(marker);
+    }
+  }
+
+  private convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
+    const leafletBody:LatLngLiteral[] = []
+    for (const coordinate of body){
+      leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});
+    }
+
+    return leafletBody;
   }
 }
