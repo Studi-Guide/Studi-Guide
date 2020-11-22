@@ -50,9 +50,8 @@ export class MapViewComponent implements AfterViewInit {
             initialZoom: 1.0,
             bounds: true,
             boundsPadding: 0.1,
+            // Enable touch recognition on child events
             onTouch(e) {
-              // `e` - is current touch event.
-
               return false; // tells the library to not preventDefault.
             }
           });
