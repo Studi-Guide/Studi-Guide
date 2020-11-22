@@ -49,7 +49,12 @@ export class MapViewComponent implements AfterViewInit {
             minZoom: 0.25,
             initialZoom: 1.0,
             bounds: true,
-            boundsPadding: 0.1
+            boundsPadding: 0.1,
+            onTouch(e) {
+              // `e` - is current touch event.
+
+              return false; // tells the library to not preventDefault.
+            }
           });
     }
   }
