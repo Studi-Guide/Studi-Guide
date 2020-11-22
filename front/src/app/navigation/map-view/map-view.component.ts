@@ -323,6 +323,6 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   public MoveTo(x: number, y:number) {
-    this.panZoomController.moveTo(x, y);
+    this.panZoomController.moveTo(-x, -y);
   }
 }
