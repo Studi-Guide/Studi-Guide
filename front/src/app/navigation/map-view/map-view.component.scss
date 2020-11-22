@@ -1,3 +1,20 @@
+html,
+body {
+  height: 100%;
+  width: 100%;
+}
+
 #map {
   // margin: 100px;
+}
+
+#canvas-wrapper {
+  padding: 2px;
+  overflow: hidden;
+  scrollbar-width: none; // FF
+  -ms-overflow-style: none; // IE
+}
+
+#canvas-wrapper::-webkit-scrollbar {
+  display: none; // Chrome, Safari, Opera
 }

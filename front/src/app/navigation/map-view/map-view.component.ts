@@ -4,13 +4,14 @@ import {CanvasResolutionConfigurator, TranslationPosition} from '../../services/
 import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import * as pip from 'point-in-polygon';
-import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 import {IReceivedRoute} from '../../route-objects-if';
 import {MapItemRendererCanvas} from './map-item-renderer.canvas';
 import {LocationRendererCanvas} from './location-renderer.canvas';
 import {RouteRendererCanvas} from './route-renderer.canvas';
 import {RendererProvider} from './renderer-provider';
 import {NavigationPage} from '../navigationPage';
+import panzoom, {PanZoom} from 'panzoom';
+import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 
 @Component({
   selector: 'app-map-view',
@@ -27,6 +28,10 @@ export class MapViewComponent implements AfterViewInit {
   private mapItemRenderer:MapItemRendererCanvas[] = [];
   private locationRenderer:LocationRendererCanvas[] = [];
   private routeRenderer:RouteRendererCanvas[] = [];
+  panZoomController: PanZoom;
+  zoomLevels: number[];
+
+  currentZoomLevel: number;
 
   @Output() locationClick = new EventEmitter<ILocation>();
   @Output() mapScroll = new EventEmitter<any>();
@@ -43,7 +48,18 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-
+    this.zoomLevels = [0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
+    this.currentZoomLevel = this.zoomLevels[4];
+    if (!this.panZoomController) {
+      this.panZoomController = panzoom(document.getElementById('map'),
+          {
+            maxZoom: 2.0,
+            minZoom: 0.25,
+            initialZoom: 1.2,
+            bounds: true,
+            boundsPadding: 0.1
+          });
+    }
   }
 
   public async showRoute(route:IReceivedRoute, startLocation:ILocation) {
@@ -71,11 +87,12 @@ export class MapViewComponent implements AfterViewInit {
 
     // TODO shift map got get res.PathNode into focus
     this.clearMapCanvas();
-    this.createNewCanvasMap(0, 0);
+    this.createNewCanvasMap();
     this.renderMapItems();
     this.renderLocations();
     this.displayPin(res.PathNode);
     this.currentFloor = res.Floor;
+    this.MoveTo(res.PathNode.Coordinate.X, res.PathNode.Coordinate.Y);
     return res;
   }
 
@@ -86,7 +103,7 @@ export class MapViewComponent implements AfterViewInit {
     } else {
       const res = await this.dataService.get_map_items('', floor, building).toPromise()
       this.mapItemRenderer = RendererProvider.GetMapItemRendererCanvas(...res);
-      this.createNewCanvasMap(0,0);
+      this.createNewCanvasMap();
 
       const locations = await this.dataService.get_locations_items('', floor, building).toPromise();
       this.locationRenderer = RendererProvider.GetLocationRendererCanvas(...locations);
@@ -105,7 +122,7 @@ export class MapViewComponent implements AfterViewInit {
       const locations = await this.dataService.get_locations_items(campus, floor, '').toPromise();
       this.locationRenderer = RendererProvider.GetLocationRendererCanvas(...locations);
 
-      this.createNewCanvasMap(0,0);
+      this.createNewCanvasMap();
 
       this.renderMapItems();
       this.renderLocations();
@@ -123,7 +140,7 @@ export class MapViewComponent implements AfterViewInit {
   public async onClickTouch(event:MouseEvent) {
 
     const coordinate = CanvasTouchHelper.transformInOriginCoordinate({
-      x: event.clientX, y:event.clientY}, event.target as HTMLCanvasElement);
+      x: event.clientX, y:event.clientY}, this.currentZoomLevel, event.target as HTMLCanvasElement);
     const point = [coordinate.x, coordinate.y];
     if(this.currentRoute != null) {
       const items: IMapItem[] = [];
@@ -171,7 +188,7 @@ export class MapViewComponent implements AfterViewInit {
     this.locationRenderer = RendererProvider.GetLocationRendererCanvas(...locations);
     this.routeRenderer = RendererProvider.GetRouteRendererCanvas(route);
 
-    this.createNewCanvasMap(0, 0);
+    this.createNewCanvasMap();
     this.currentBuilding = building;
 
     this.renderMapItems();
@@ -188,7 +205,7 @@ export class MapViewComponent implements AfterViewInit {
     this.currentFloor = floor;
   }
 
-  private createNewCanvasMap(positionX: number, positionY: number, scale: number = 1) {
+  private createNewCanvasMap() {
     const mapCanvas = document.getElementById('map') as HTMLCanvasElement;
     let mapHeightNeeded = 0;
     let mapWidthNeeded = 0;
@@ -207,12 +224,7 @@ export class MapViewComponent implements AfterViewInit {
     }
 
     // increase map size
-    mapWidthNeeded += Math.abs(positionX);
-    mapHeightNeeded += Math.abs(positionY);
-    const position = new TranslationPosition();
-    position.X = positionX;
-    position.Y = positionY;
-    this.renderingContext = CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded,scale, position);
+    this.renderingContext = CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
   }
 
   private displayPin(pathNode:IPathNode) {
@@ -291,5 +303,40 @@ export class MapViewComponent implements AfterViewInit {
     NavigationPage.progressIsVisible = true;
     await this.showFloor(floor, building);
     NavigationPage.progressIsVisible = false;
+  }
+
+  zoomToggle(zoomIn: boolean) {
+    const idx = this.zoomLevels.indexOf(this.currentZoomLevel);
+    if (zoomIn) {
+      if (typeof this.zoomLevels[idx + 1] !== 'undefined') {
+        this.currentZoomLevel = this.zoomLevels[idx + 1];
+      }
+    } else {
+      if (typeof this.zoomLevels[idx - 1] !== 'undefined') {
+        this.currentZoomLevel = this.zoomLevels[idx - 1];
+      }
+    }
+    if (this.currentZoomLevel === 1) {
+      this.panZoomController.moveTo(0, 0);
+      this.panZoomController.zoomAbs(0, 0, 1);
+    } else {
+      this.zoom();
+    }
+  }
+  zoom() {
+    const scale = this.currentZoomLevel;
+
+    if (scale) {
+      const transform = this.panZoomController.getTransform();
+      const deltaX = transform.x;
+      const deltaY = transform.y;
+      const offsetX = scale + deltaX;
+      const offsetY = scale + deltaY;
+      this.panZoomController.zoomTo(offsetX, offsetY, scale);
+    }
+  }
+
+  public MoveTo(x: number, y:number) {
+    this.panZoomController.moveTo(x, y);
   }
 }

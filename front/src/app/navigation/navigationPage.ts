@@ -30,7 +30,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     @ViewChild('drawerContent') drawerContent : IonContent;
     @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
     @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
-    @ViewChild('canvasWrapper', {read: ElementRef}) private canvasWrapper: ElementRef;
 
     public errorMessage: string;
     public availableCampus: CampusViewModel[] = [];
@@ -41,7 +40,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 private  route: ActivatedRoute,
                 private router: Router,
                 private storage: Storage,
-                private renderer: Renderer2,
                 public model: NavigationModel) {
     }
 
@@ -51,7 +49,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     ionViewDidEnter() {
         if (this.isSubscripted === false){
-            CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
+            // CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
             this.isSubscripted = true;
             this.route.queryParams.subscribe(async params => {
                 // discover requested location
@@ -62,10 +60,10 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 }
 
                 // launch requested navigation
-                if (params.start != null && params.start.length > 0 &&
+                if (params != null && params.start != null && params.start.length > 0 &&
                     params.destination != null && params.destination.length > 0) {
                     await this.showNavigation(params.start, params.destination);
-                } else if (params.building != null && params.building.length > 0) {
+                } else if (params != null && params.building != null && params.building.length > 0) {
                     const building = await this.dataService.get_building(params.building).toPromise()
                     if (building !== null) {
                         await this.mapView.showFloor(
@@ -75,12 +73,12 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 } else {
                     await this.showDiscoveryMode();
                 }
-                CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
-                this.scrollToCoordinate(0,300);
+                // CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
+                this.mapView.MoveTo(0,300);
             });
         } else {
-            CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
-            this.scrollToCoordinate(0,300);
+            // CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
+            this.mapView.MoveTo(0,300);
         }
     }
 
@@ -109,7 +107,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
         try {
             const location = await this.mapView.showDiscoveryLocation(searchInput);
             SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
-            this.scrollToCoordinate(location.PathNode.Coordinate.X, location.PathNode.Coordinate.Y);
 
             await this.showLocationDrawer(location);
         } catch (ex) {
@@ -126,7 +123,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
             const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<ILocation>();
             const route = await this.dataService.get_route(routeInput[0], routeInput[1]).toPromise();
             await this.mapView.showRoute(route, startLocation);
-            this.scrollToCoordinate(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
+            this.mapView.MoveTo(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
         } catch (ex) {
             let inputError = '';
             if (ex instanceof HttpErrorResponse) {
@@ -240,18 +237,8 @@ export class NavigationPage implements OnInit, AfterViewInit{
             await this.mapView.showDiscoveryMap('', 'EG')
 
             // Coordinates of KA.013
-            this.scrollToCoordinate(310, 550);
+            this.mapView.MoveTo(310, 550);
         }
-    }
-
-    private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
-        // TODO accept Coordinate 0,0 -> normalize coordinates
-        const availableSize = {width: window.innerWidth, height: window.innerHeight};
-
-        CanvasTouchHelper.transistion(
-            { x: CanvasTouchHelper.currentZoom.x - xCoordinate,
-                y: CanvasTouchHelper.currentZoom.y - yCoordinate},
-            this.canvasWrapper, this.renderer, false);
     }
 
     public async recentSearchClick(locationStr:string) {
@@ -260,11 +247,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     public async presentMapPage() {
         await this.router.navigate(['tabs/navigation/']);
-    }
-
-    public onCanvasMapperScroll(event:any) {
-        console.log(event);
-        CanvasTouchHelper.Zoom(event.deltaY*-0.05, this.canvasWrapper, this.renderer);
     }
 
     public get ProgressIsVisible(): boolean {

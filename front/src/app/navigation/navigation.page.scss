@@ -1,5 +1,6 @@
 #map-content {
     height: 100%;
+    width: 100%;
     display: flex;
     flex-flow: column;
     position: absolute;
@@ -11,20 +12,6 @@
 
 #error-message {
     margin-left: 20px;
-}
-
-#canvas-wrapper {
-    padding: 2px;
-    flex-grow: 1;
-    position: absolute;
-    overflow-y: scroll;
-    overflow-x: scroll;
-    scrollbar-width: none; // FF
-    -ms-overflow-style: none; // IE
-}
-
-#canvas-wrapper::-webkit-scrollbar {
-    display: none; // Chrome, Safari, Opera
 }
 
 #available-floors-btn {
@@ -62,7 +49,7 @@ ion-progress-bar {
     border-top: 2px solid var(--ion-color-medium, #9d9fa6);
     border-bottom: 2px solid var(--ion-color-medium, #9d9fa6);
     border-radius: 2px;
-    height: 0px;
+    height: 0;
     width: auto;
     margin: 0 45% 0 45%;
 }
