@@ -56,6 +56,8 @@ export class MapViewComponent implements AfterViewInit {
               if (e.touches.length === 1){
                 await element.onElementClick(e.touches[0].clientX, e.touches[0].clientY, e.target as HTMLElement);
               }
+
+              return false;
             }
           });
     }
