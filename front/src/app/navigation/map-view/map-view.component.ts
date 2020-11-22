@@ -10,6 +10,7 @@ import {MapItemRendererCanvas} from './map-item-renderer.canvas';
 import {LocationRendererCanvas} from './location-renderer.canvas';
 import {RouteRendererCanvas} from './route-renderer.canvas';
 import {RendererProvider} from './renderer-provider';
+import {NavigationPage} from '../navigationPage';
 
 @Component({
   selector: 'app-map-view',
@@ -28,7 +29,6 @@ export class MapViewComponent implements AfterViewInit {
   private routeRenderer:RouteRendererCanvas[] = [];
 
   @Output() locationClick = new EventEmitter<ILocation>();
-
   @Output() mapScroll = new EventEmitter<any>();
 
   public get CurrentRoute():IReceivedRoute {
@@ -83,8 +83,7 @@ export class MapViewComponent implements AfterViewInit {
     this.stopAllAnimations();
     if (this.currentRoute != null) {
       await this.renderNavigationPage(this.currentRoute, this.currentBuilding, floor);
-    }
-    else {
+    } else {
       const res = await this.dataService.get_map_items('', floor, building).toPromise()
       this.mapItemRenderer = RendererProvider.GetMapItemRendererCanvas(...res);
       this.createNewCanvasMap(0,0);
@@ -96,6 +95,7 @@ export class MapViewComponent implements AfterViewInit {
       this.renderLocations();
     }
     this.currentFloor = floor;
+    this.currentBuilding = building;
   }
 
   public async showDiscoveryMap(campus:string, floor: string) {
@@ -280,5 +280,16 @@ export class MapViewComponent implements AfterViewInit {
   private renderRoutes(args:any) {
     for (const r of this.routeRenderer)
       r.render(this.renderingContext, args);
+  }
+
+  public async onFloorChangeByFloorButton(floorAndBuildingInput: object) {
+    // @ts-ignore
+    await this.showAnotherFloorOfCurrentBuilding(floorAndBuildingInput.floor, floorAndBuildingInput.building);
+  }
+
+  public async showAnotherFloorOfCurrentBuilding(floor: string, building: string) {
+    NavigationPage.progressIsVisible = true;
+    await this.showFloor(floor, building);
+    NavigationPage.progressIsVisible = false;
   }
 }

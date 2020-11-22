@@ -23,6 +23,8 @@ import {SearchResultProvider} from '../services/searchResultProvider';
 
 export class NavigationPage implements OnInit, AfterViewInit{
 
+    public static progressIsVisible = false;
+
     @ViewChild(MapViewComponent) mapView: MapViewComponent;
     @ViewChild(SearchInputComponent) searchInput: SearchInputComponent;
     @ViewChild('drawerContent') drawerContent : IonContent;
@@ -30,8 +32,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
     @ViewChild('canvasWrapper', {read: ElementRef}) private canvasWrapper: ElementRef;
 
-    public progressIsVisible = false;
-    public availableFloorsBtnIsVisible = false;
     public errorMessage: string;
     public availableCampus: CampusViewModel[] = [];
     private isSubscripted = false;
@@ -42,7 +42,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 private router: Router,
                 private storage: Storage,
                 private renderer: Renderer2,
-                public model: NavigationModel) {;
+                public model: NavigationModel) {
     }
 
     ngAfterViewInit(): void {
@@ -105,30 +105,28 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     public async onDiscovery(searchInput: string) {
         this.model.errorMessage = '';
-        this.progressIsVisible = true;
+        NavigationPage.progressIsVisible = true;
         try {
             const location = await this.mapView.showDiscoveryLocation(searchInput);
             SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
             this.scrollToCoordinate(location.PathNode.Coordinate.X, location.PathNode.Coordinate.Y);
 
             await this.showLocationDrawer(location);
-            this.availableFloorsBtnIsVisible = true;
         } catch (ex) {
             this.handleInputError(ex, searchInput);
         } finally {
-            this.progressIsVisible = false;
+            NavigationPage.progressIsVisible = false;
         }
     }
 
     public async onRoute(routeInput: string[]) {
         this.errorMessage = '';
-        this.progressIsVisible = true;
+        NavigationPage.progressIsVisible = true;
         try {
             const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<ILocation>();
             const route = await this.dataService.get_route(routeInput[0], routeInput[1]).toPromise();
             await this.mapView.showRoute(route, startLocation);
             this.scrollToCoordinate(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
-            this.availableFloorsBtnIsVisible = true;
         } catch (ex) {
             let inputError = '';
             if (ex instanceof HttpErrorResponse) {
@@ -148,7 +146,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
             this.handleInputError(ex, inputError.length === 0 ? routeInput.toString() : inputError);
         } finally {
-            this.progressIsVisible = false;
+            NavigationPage.progressIsVisible = false;
         }
     }
 
@@ -199,12 +197,11 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
         const data = await availableFloorModal.onDidDismiss()
         if (data.data) {
-            this.showAnotherFloorOfCurrentBuilding(data.data, this.mapView.CurrentBuilding)
+            await this.mapView.showAnotherFloorOfCurrentBuilding(data.data, this.mapView.CurrentBuilding)
         }
     }
 
     private handleInputError(ex, searchInput: string) {
-        this.availableFloorsBtnIsVisible = false;
         if (ex instanceof HttpErrorResponse) {
             const httpError = ex as HttpErrorResponse;
             if (httpError.status === 400) {
@@ -241,7 +238,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
         if (this.mapView.CurrentRoute == null && this.mapView.CurrentBuilding == null) {
             // STDG-138 load base map
             await this.mapView.showDiscoveryMap('', 'EG')
-            this.availableFloorsBtnIsVisible = true;
 
             // Coordinates of KA.013
             this.scrollToCoordinate(310, 550);
@@ -266,19 +262,12 @@ export class NavigationPage implements OnInit, AfterViewInit{
         await this.router.navigate(['tabs/navigation/']);
     }
 
-    public async onFloorChangeByFloorButton(floorAndBuildingInput: object) {
-        // @ts-ignore
-        await this.showAnotherFloorOfCurrentBuilding(floorAndBuildingInput.floor, floorAndBuildingInput.building);
-    }
-
-    private async showAnotherFloorOfCurrentBuilding(floor: string, building: string) {
-        this.progressIsVisible = true;
-        await this.mapView.showFloor(floor, building);
-        this.progressIsVisible = false;
-    }
-
     public onCanvasMapperScroll(event:any) {
         console.log(event);
         CanvasTouchHelper.Zoom(event.deltaY*-0.05, this.canvasWrapper, this.renderer);
+    }
+
+    public get ProgressIsVisible(): boolean {
+        return NavigationPage.progressIsVisible;
     }
 }

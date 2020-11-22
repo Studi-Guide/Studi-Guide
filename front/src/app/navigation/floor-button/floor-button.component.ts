@@ -20,14 +20,7 @@ export class FloorButtonComponent implements OnInit, OnChanges {
   ngOnInit() {}
 
   async ngOnChanges(changes: SimpleChanges) {
-    console.log(changes); // TODO remove logging
-    const hasCurrentBuildingChanged =
-        this.currentBuilding !== undefined && changes.currentBuilding.previousValue !== undefined
-        && changes.currentBuilding.previousValue !== changes.currentBuilding.currentValue;
-    const hasCurrentFloorChanged =
-        this.currentFloor !== undefined && changes.currentFloor.previousValue !== undefined
-        && changes.currentFloor.previousValue !== changes.currentFloor.currentValue;
-    if (hasCurrentBuildingChanged || hasCurrentFloorChanged) {
+    if (changes.currentBuilding !== undefined && this.currentBuilding !== undefined) {
       const building = await this._dataService.get_building(this.currentBuilding).toPromise();
       this.availableFloors = building.Floors;
     }

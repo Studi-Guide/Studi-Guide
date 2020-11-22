@@ -1,1 +1,6 @@
+<app-floor-button [currentBuilding]="this.CurrentBuilding"
+                  [currentFloor]="this.currentFloor"
+                  (floorWithBuilding)="onFloorChangeByFloorButton($event)"
+>
+</app-floor-button>
 <canvas #map id="map" (click)="onClickTouch($event)" (wheel)="mapScroll.emit($event)"></canvas>
