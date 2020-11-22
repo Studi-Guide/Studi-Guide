@@ -13,6 +13,7 @@ import {IonContent} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
+import {GraphHopperService} from "../../services/graph-hopper/graph-hopper.service";
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -53,7 +54,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       public model: NavigationModel,
       private storage: Storage,
       private dataService: DataService,
-      private geolocation: Geolocation) {
+      private geolocation: Geolocation,
+      private ghService: GraphHopperService) {
   }
 
   async ngAfterViewInit() {
@@ -293,5 +295,14 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     return leafletBody;
+  }
+
+  // TODO remove this method
+  public async TestGetRouteEndPoint() {
+    console.log('Hello World');
+    const position = await this.geolocation.getCurrentPosition();
+    console.log(position);
+    const route = await this.ghService.GetRouteEndpoint({lat: position.coords.latitude, lng: position.coords.longitude}, {lat: 49.45281, lng: 11.09347});
+    console.log(route);
   }
 }
