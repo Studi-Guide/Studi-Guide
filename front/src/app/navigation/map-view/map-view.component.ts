@@ -42,6 +42,7 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    const element: MapViewComponent = this;
     if (!this.panZoomController) {
       this.panZoomController = panzoom(document.getElementById('map'),
           {
@@ -51,8 +52,10 @@ export class MapViewComponent implements AfterViewInit {
             bounds: true,
             boundsPadding: 0.1,
             // Enable touch recognition on child events
-            onTouch(e) {
-              return false; // tells the library to not preventDefault.
+            async onTouch(e) {
+              if (e.touches.length === 1){
+                await element.onElementClick(e.touches[0].clientX, e.touches[0].clientY, e.target as HTMLElement);
+              }
             }
           });
     }
@@ -133,11 +136,14 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  public async onClickTouch(event:MouseEvent) {
+  public async onClick(event:MouseEvent) {
+    await this.onElementClick(event.clientX, event.clientY, event.target as HTMLElement)
+  }
 
+  public async onElementClick(clientX:number, clientY:number, target: HTMLElement) {
     const transform = this.panZoomController.getTransform();
     const coordinate = CanvasTouchHelper.transformInOriginCoordinate({
-      x: event.clientX, y:event.clientY}, transform.scale, event.target as HTMLElement );
+      x: clientX, y:clientY}, transform.scale, target as HTMLElement );
     const point = [coordinate.x, coordinate.y];
     if(this.currentRoute != null) {
       const items: IMapItem[] = [];
