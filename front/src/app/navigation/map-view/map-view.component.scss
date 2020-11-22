@@ -18,3 +18,11 @@ body {
 #canvas-wrapper::-webkit-scrollbar {
   display: none; // Chrome, Safari, Opera
 }
+
+.draggable {
+  cursor: grab; /* W3C standards syntax, all modern browser */
+}
+
+.draggable:active {
+  cursor: grabbing;
+}

@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output} from '@angular/core';
 import {DataService} from '../../services/data.service';
-import {CanvasResolutionConfigurator, TranslationPosition} from '../../services/CanvasResolutionConfigurator';
+import {CanvasResolutionConfigurator} from '../../services/CanvasResolutionConfigurator';
 import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import * as pip from 'point-in-polygon';
@@ -41,10 +41,11 @@ export class MapViewComponent implements AfterViewInit {
     return this.currentBuilding;
   }
 
-  constructor(private dataService: DataService, private element: ElementRef) {
+  constructor(private dataService: DataService) {
   }
 
   ngAfterViewInit() {
+    const element: MapViewComponent = this;
     if (!this.panZoomController) {
       this.panZoomController = panzoom(document.getElementById('map'),
           {
@@ -54,8 +55,12 @@ export class MapViewComponent implements AfterViewInit {
             bounds: true,
             boundsPadding: 0.1,
             // Enable touch recognition on child events
-            onTouch(e) {
-              return false; // tells the library to not preventDefault.
+            async onTouch(e) {
+              if (e.touches.length === 1){
+                await element.onElementClick(e.touches[0].clientX, e.touches[0].clientY, e.target as HTMLElement);
+              }
+
+              return false;
             }
           });
     }
@@ -136,11 +141,14 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  public async onClickTouch(event:MouseEvent) {
+  public async onClick(event:MouseEvent) {
+    await this.onElementClick(event.clientX, event.clientY, event.target as HTMLElement)
+  }
 
+  public async onElementClick(clientX:number, clientY:number, target: HTMLElement) {
     const transform = this.panZoomController.getTransform();
     const coordinate = CanvasTouchHelper.transformInOriginCoordinate({
-      x: event.clientX, y:event.clientY}, transform.scale, event.target as HTMLElement );
+      x: clientX, y:clientY}, transform.scale, target as HTMLElement );
     const point = [coordinate.x, coordinate.y];
     if(this.currentRoute != null) {
       const items: IMapItem[] = [];
