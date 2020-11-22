@@ -9,7 +9,7 @@ import {MapItemRendererCanvas} from './map-item-renderer.canvas';
 import {LocationRendererCanvas} from './location-renderer.canvas';
 import {RouteRendererCanvas} from './route-renderer.canvas';
 import {RendererProvider} from './renderer-provider';
-import panzoom from 'panzoom';
+import panzoom, {PanZoom} from 'panzoom';
 import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 
 @Component({
@@ -27,7 +27,7 @@ export class MapViewComponent implements AfterViewInit {
   private mapItemRenderer:MapItemRendererCanvas[] = [];
   private locationRenderer:LocationRendererCanvas[] = [];
   private routeRenderer:RouteRendererCanvas[] = [];
-  panZoomController;
+  panZoomController: PanZoom;
   zoomLevels: number[];
 
   currentZoomLevel: number;
@@ -51,8 +51,8 @@ export class MapViewComponent implements AfterViewInit {
       this.panZoomController = panzoom(document.getElementById('map'),
           {
             maxZoom: 2.0,
-            minZoom: 0.5,
-            initialZoom: 1,
+            minZoom: 0.25,
+            initialZoom: 1.2,
             bounds: true,
             boundsPadding: 0.1
           });
@@ -89,6 +89,7 @@ export class MapViewComponent implements AfterViewInit {
     this.renderLocations();
     this.displayPin(res.PathNode);
     this.currentFloor = res.Floor;
+    this.MoveTo(res.PathNode.Coordinate.X, res.PathNode.Coordinate.Y);
     return res;
   }
 
@@ -220,8 +221,6 @@ export class MapViewComponent implements AfterViewInit {
     }
 
     // increase map size
-    mapWidthNeeded = mapWidthNeeded
-    mapHeightNeeded = mapHeightNeeded;
     this.renderingContext = CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
   }
 
@@ -311,9 +310,7 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
   zoom() {
-    const isSmooth = false;
     const scale = this.currentZoomLevel;
-
 
     if (scale) {
       const transform = this.panZoomController.getTransform();
@@ -321,12 +318,11 @@ export class MapViewComponent implements AfterViewInit {
       const deltaY = transform.y;
       const offsetX = scale + deltaX;
       const offsetY = scale + deltaY;
-
-      if (isSmooth) {
-        this.panZoomController.smoothZoom(0, 0, scale);
-      } else {
-        this.panZoomController.zoomTo(offsetX, offsetY, scale);
-      }
+      this.panZoomController.zoomTo(offsetX, offsetY, scale);
     }
+  }
+
+  public MoveTo(x: number, y:number) {
+    this.panZoomController.moveTo(x, y);
   }
 }
