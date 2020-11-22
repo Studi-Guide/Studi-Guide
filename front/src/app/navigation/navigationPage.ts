@@ -10,7 +10,6 @@ import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Storage} from '@ionic/storage';
-import {CanvasTouchHelper} from '../services/CanvasTouchHelper';
 import {CampusViewModel} from './campusViewModel';
 import {NavigationModel} from './navigationModel';
 import {SearchResultProvider} from '../services/searchResultProvider';
@@ -51,7 +50,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     ionViewDidEnter() {
         if (this.isSubscripted === false){
-            CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
+            // CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
             this.isSubscripted = true;
             this.route.queryParams.subscribe(async params => {
                 // discover requested location
@@ -75,11 +74,11 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 } else {
                     await this.showDiscoveryMode();
                 }
-                CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
+                // CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
                 this.scrollToCoordinate(0,300);
             });
         } else {
-            CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
+            // CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
             this.scrollToCoordinate(0,300);
         }
     }
@@ -252,10 +251,10 @@ export class NavigationPage implements OnInit, AfterViewInit{
         // TODO accept Coordinate 0,0 -> normalize coordinates
         const availableSize = {width: window.innerWidth, height: window.innerHeight};
 
-        CanvasTouchHelper.transistion(
-            { x: CanvasTouchHelper.currentZoom.x - xCoordinate,
-                y: CanvasTouchHelper.currentZoom.y - yCoordinate},
-            this.canvasWrapper, this.renderer, false);
+        //CanvasTouchHelper.transistion(
+        //    { x: CanvasTouchHelper.currentZoom.x - xCoordinate,
+        //        y: CanvasTouchHelper.currentZoom.y - yCoordinate},
+        //    this.canvasWrapper, this.renderer, false);
     }
 
     public async recentSearchClick(locationStr:string) {
@@ -275,10 +274,5 @@ export class NavigationPage implements OnInit, AfterViewInit{
         this.progressIsVisible = true;
         await this.mapView.showFloor(floor, building);
         this.progressIsVisible = false;
-    }
-
-    public onCanvasMapperScroll(event:any) {
-        console.log(event);
-        CanvasTouchHelper.Zoom(event.deltaY*-0.05, this.canvasWrapper, this.renderer);
     }
 }

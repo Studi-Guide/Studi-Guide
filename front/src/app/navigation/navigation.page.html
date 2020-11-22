@@ -23,7 +23,7 @@
       </p>
     </ion-text>
     <div id="canvas-wrapper" #canvasWrapper class="draggable">
-      <app-map-view (locationClick)="showLocationDrawer($event)" (mapScroll)="onCanvasMapperScroll($event)"></app-map-view>
+      <app-map-view (locationClick)="showLocationDrawer($event)"></app-map-view>
     </div>
   </div>
   <app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)" #searchDrawer>
