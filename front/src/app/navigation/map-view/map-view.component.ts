@@ -28,9 +28,6 @@ export class MapViewComponent implements AfterViewInit {
   private locationRenderer:LocationRendererCanvas[] = [];
   private routeRenderer:RouteRendererCanvas[] = [];
   panZoomController: PanZoom;
-  zoomLevels: number[];
-
-  currentZoomLevel: number;
 
   @Output() locationClick = new EventEmitter<ILocation>();
   public get CurrentRoute():IReceivedRoute {
@@ -45,14 +42,12 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.zoomLevels = [0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
-    this.currentZoomLevel = this.zoomLevels[4];
     if (!this.panZoomController) {
       this.panZoomController = panzoom(document.getElementById('map'),
           {
             maxZoom: 2.0,
             minZoom: 0.25,
-            initialZoom: 1.2,
+            initialZoom: 1.0,
             bounds: true,
             boundsPadding: 0.1
           });
@@ -136,8 +131,9 @@ export class MapViewComponent implements AfterViewInit {
 
   public async onClickTouch(event:MouseEvent) {
 
+    const transform = this.panZoomController.getTransform();
     const coordinate = CanvasTouchHelper.transformInOriginCoordinate({
-      x: event.clientX, y:event.clientY}, this.currentZoomLevel, event.target as HTMLCanvasElement);
+      x: event.clientX, y:event.clientY}, transform.scale, event.target as HTMLElement );
     const point = [coordinate.x, coordinate.y];
     if(this.currentRoute != null) {
       const items: IMapItem[] = [];
@@ -289,37 +285,6 @@ export class MapViewComponent implements AfterViewInit {
   private renderRoutes(args:any) {
     for (const r of this.routeRenderer)
       r.render(this.renderingContext, args);
-  }
-
-  zoomToggle(zoomIn: boolean) {
-    const idx = this.zoomLevels.indexOf(this.currentZoomLevel);
-    if (zoomIn) {
-      if (typeof this.zoomLevels[idx + 1] !== 'undefined') {
-        this.currentZoomLevel = this.zoomLevels[idx + 1];
-      }
-    } else {
-      if (typeof this.zoomLevels[idx - 1] !== 'undefined') {
-        this.currentZoomLevel = this.zoomLevels[idx - 1];
-      }
-    }
-    if (this.currentZoomLevel === 1) {
-      this.panZoomController.moveTo(0, 0);
-      this.panZoomController.zoomAbs(0, 0, 1);
-    } else {
-      this.zoom();
-    }
-  }
-  zoom() {
-    const scale = this.currentZoomLevel;
-
-    if (scale) {
-      const transform = this.panZoomController.getTransform();
-      const deltaX = transform.x;
-      const deltaY = transform.y;
-      const offsetX = scale + deltaX;
-      const offsetY = scale + deltaY;
-      this.panZoomController.zoomTo(offsetX, offsetY, scale);
-    }
   }
 
   public MoveTo(x: number, y:number) {
