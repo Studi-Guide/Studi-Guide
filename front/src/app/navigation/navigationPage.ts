@@ -1,5 +1,5 @@
 import {IBuilding, ILocation} from '../building-objects-if';
-import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
@@ -10,7 +10,6 @@ import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Storage} from '@ionic/storage';
-import {CanvasTouchHelper} from '../services/CanvasTouchHelper';
 import {CampusViewModel} from './campusViewModel';
 import {NavigationModel} from './navigationModel';
 import {SearchResultProvider} from '../services/searchResultProvider';
@@ -28,7 +27,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     @ViewChild('drawerContent') drawerContent : IonContent;
     @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
     @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
-    @ViewChild('canvasWrapper', {read: ElementRef}) private canvasWrapper: ElementRef;
 
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
@@ -41,8 +39,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 private  route: ActivatedRoute,
                 private router: Router,
                 private storage: Storage,
-                private renderer: Renderer2,
-                public model: NavigationModel) {;
+                public model: NavigationModel) {
     }
 
     ngAfterViewInit(): void {
@@ -51,7 +48,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     ionViewDidEnter() {
         if (this.isSubscripted === false){
-            CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
+            // CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
             this.isSubscripted = true;
             this.route.queryParams.subscribe(async params => {
                 // discover requested location
@@ -62,10 +59,10 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 }
 
                 // launch requested navigation
-                if (params.start != null && params.start.length > 0 &&
+                if (params != null && params.start != null && params.start.length > 0 &&
                     params.destination != null && params.destination.length > 0) {
                     await this.showNavigation(params.start, params.destination);
-                } else if (params.building != null && params.building.length > 0) {
+                } else if (params != null && params.building != null && params.building.length > 0) {
                     const building = await this.dataService.get_building(params.building).toPromise()
                     if (building !== null) {
                         await this.mapView.showFloor(
@@ -75,12 +72,12 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 } else {
                     await this.showDiscoveryMode();
                 }
-                CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
-                this.scrollToCoordinate(0,300);
+                // CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
+                this.mapView.MoveTo(0,300);
             });
         } else {
-            CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
-            this.scrollToCoordinate(0,300);
+            // CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
+            this.mapView.MoveTo(0,300);
         }
     }
 
@@ -109,7 +106,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
         try {
             const location = await this.mapView.showDiscoveryLocation(searchInput);
             SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
-            this.scrollToCoordinate(location.PathNode.Coordinate.X, location.PathNode.Coordinate.Y);
 
             await this.showLocationDrawer(location);
             this.availableFloorsBtnIsVisible = true;
@@ -127,7 +123,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
             const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<ILocation>();
             const route = await this.dataService.get_route(routeInput[0], routeInput[1]).toPromise();
             await this.mapView.showRoute(route, startLocation);
-            this.scrollToCoordinate(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
+            this.mapView.MoveTo(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
             this.availableFloorsBtnIsVisible = true;
         } catch (ex) {
             let inputError = '';
@@ -242,20 +238,9 @@ export class NavigationPage implements OnInit, AfterViewInit{
             // STDG-138 load base map
             await this.mapView.showDiscoveryMap('', 'EG')
             this.availableFloorsBtnIsVisible = true;
-
             // Coordinates of KA.013
-            this.scrollToCoordinate(310, 550);
+            this.mapView.MoveTo(310, 550);
         }
-    }
-
-    private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
-        // TODO accept Coordinate 0,0 -> normalize coordinates
-        const availableSize = {width: window.innerWidth, height: window.innerHeight};
-
-        CanvasTouchHelper.transistion(
-            { x: CanvasTouchHelper.currentZoom.x - xCoordinate,
-                y: CanvasTouchHelper.currentZoom.y - yCoordinate},
-            this.canvasWrapper, this.renderer, false);
     }
 
     public async recentSearchClick(locationStr:string) {
@@ -275,10 +260,5 @@ export class NavigationPage implements OnInit, AfterViewInit{
         this.progressIsVisible = true;
         await this.mapView.showFloor(floor, building);
         this.progressIsVisible = false;
-    }
-
-    public onCanvasMapperScroll(event:any) {
-        console.log(event);
-        CanvasTouchHelper.Zoom(event.deltaY*-0.05, this.canvasWrapper, this.renderer);
     }
 }

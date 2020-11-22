@@ -4,12 +4,13 @@ import {CanvasResolutionConfigurator, TranslationPosition} from '../../services/
 import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import * as pip from 'point-in-polygon';
-import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 import {IReceivedRoute} from '../../route-objects-if';
 import {MapItemRendererCanvas} from './map-item-renderer.canvas';
 import {LocationRendererCanvas} from './location-renderer.canvas';
 import {RouteRendererCanvas} from './route-renderer.canvas';
 import {RendererProvider} from './renderer-provider';
+import panzoom, {PanZoom} from 'panzoom';
+import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 
 @Component({
   selector: 'app-map-view',
@@ -26,11 +27,9 @@ export class MapViewComponent implements AfterViewInit {
   private mapItemRenderer:MapItemRendererCanvas[] = [];
   private locationRenderer:LocationRendererCanvas[] = [];
   private routeRenderer:RouteRendererCanvas[] = [];
+  panZoomController: PanZoom;
 
   @Output() locationClick = new EventEmitter<ILocation>();
-
-  @Output() mapScroll = new EventEmitter<any>();
-
   public get CurrentRoute():IReceivedRoute {
     return this.currentRoute;
   }
@@ -43,7 +42,25 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
+    const element: MapViewComponent = this;
+    if (!this.panZoomController) {
+      this.panZoomController = panzoom(document.getElementById('map'),
+          {
+            maxZoom: 2.0,
+            minZoom: 0.25,
+            initialZoom: 1.0,
+            bounds: true,
+            boundsPadding: 0.1,
+            // Enable touch recognition on child events
+            async onTouch(e) {
+              if (e.touches.length === 1){
+                await element.onElementClick(e.touches[0].clientX, e.touches[0].clientY, e.target as HTMLElement);
+              }
 
+              return false;
+            }
+          });
+    }
   }
 
   public async showRoute(route:IReceivedRoute, startLocation:ILocation) {
@@ -71,11 +88,12 @@ export class MapViewComponent implements AfterViewInit {
 
     // TODO shift map got get res.PathNode into focus
     this.clearMapCanvas();
-    this.createNewCanvasMap(0, 0);
+    this.createNewCanvasMap();
     this.renderMapItems();
     this.renderLocations();
     this.displayPin(res.PathNode);
     this.currentFloor = res.Floor;
+    this.MoveTo(res.PathNode.Coordinate.X, res.PathNode.Coordinate.Y);
     return res;
   }
 
@@ -87,7 +105,7 @@ export class MapViewComponent implements AfterViewInit {
     else {
       const res = await this.dataService.get_map_items('', floor, building).toPromise()
       this.mapItemRenderer = RendererProvider.GetMapItemRendererCanvas(...res);
-      this.createNewCanvasMap(0,0);
+      this.createNewCanvasMap();
 
       const locations = await this.dataService.get_locations_items('', floor, building).toPromise();
       this.locationRenderer = RendererProvider.GetLocationRendererCanvas(...locations);
@@ -105,7 +123,7 @@ export class MapViewComponent implements AfterViewInit {
       const locations = await this.dataService.get_locations_items(campus, floor, '').toPromise();
       this.locationRenderer = RendererProvider.GetLocationRendererCanvas(...locations);
 
-      this.createNewCanvasMap(0,0);
+      this.createNewCanvasMap();
 
       this.renderMapItems();
       this.renderLocations();
@@ -120,10 +138,14 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  public async onClickTouch(event:MouseEvent) {
+  public async onClick(event:MouseEvent) {
+    await this.onElementClick(event.clientX, event.clientY, event.target as HTMLElement)
+  }
 
+  public async onElementClick(clientX:number, clientY:number, target: HTMLElement) {
+    const transform = this.panZoomController.getTransform();
     const coordinate = CanvasTouchHelper.transformInOriginCoordinate({
-      x: event.clientX, y:event.clientY}, event.target as HTMLCanvasElement);
+      x: clientX, y:clientY}, transform.scale, target as HTMLElement );
     const point = [coordinate.x, coordinate.y];
     if(this.currentRoute != null) {
       const items: IMapItem[] = [];
@@ -171,7 +193,7 @@ export class MapViewComponent implements AfterViewInit {
     this.locationRenderer = RendererProvider.GetLocationRendererCanvas(...locations);
     this.routeRenderer = RendererProvider.GetRouteRendererCanvas(route);
 
-    this.createNewCanvasMap(0, 0);
+    this.createNewCanvasMap();
     this.currentBuilding = building;
 
     this.renderMapItems();
@@ -188,7 +210,7 @@ export class MapViewComponent implements AfterViewInit {
     this.currentFloor = floor;
   }
 
-  private createNewCanvasMap(positionX: number, positionY: number, scale: number = 1) {
+  private createNewCanvasMap() {
     const mapCanvas = document.getElementById('map') as HTMLCanvasElement;
     let mapHeightNeeded = 0;
     let mapWidthNeeded = 0;
@@ -207,12 +229,7 @@ export class MapViewComponent implements AfterViewInit {
     }
 
     // increase map size
-    mapWidthNeeded += Math.abs(positionX);
-    mapHeightNeeded += Math.abs(positionY);
-    const position = new TranslationPosition();
-    position.X = positionX;
-    position.Y = positionY;
-    this.renderingContext = CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded,scale, position);
+    this.renderingContext = CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
   }
 
   private displayPin(pathNode:IPathNode) {
@@ -280,5 +297,9 @@ export class MapViewComponent implements AfterViewInit {
   private renderRoutes(args:any) {
     for (const r of this.routeRenderer)
       r.render(this.renderingContext, args);
+  }
+
+  public MoveTo(x: number, y:number) {
+    this.panZoomController.moveTo(-x, -y);
   }
 }
