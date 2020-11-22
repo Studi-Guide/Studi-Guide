@@ -12,6 +12,7 @@ export class CanvasResolutionConfigurator {
     public static getContext(canvas: HTMLCanvasElement) {
         const dpr = this.GetPixelRatio();
         const ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
         return ctx;
     }
 
