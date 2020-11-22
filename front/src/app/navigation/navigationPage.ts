@@ -27,7 +27,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     @ViewChild('drawerContent') drawerContent : IonContent;
     @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
     @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
-    @ViewChild('canvasWrapper', {read: ElementRef}) private canvasWrapper: ElementRef;
 
     public progressIsVisible = false;
     public availableFloorsBtnIsVisible = false;
@@ -250,11 +249,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     private scrollToCoordinate(xCoordinate: number, yCoordinate:number) {
         // TODO accept Coordinate 0,0 -> normalize coordinates
         const availableSize = {width: window.innerWidth, height: window.innerHeight};
-
-        //CanvasTouchHelper.transistion(
-        //    { x: CanvasTouchHelper.currentZoom.x - xCoordinate,
-        //        y: CanvasTouchHelper.currentZoom.y - yCoordinate},
-        //    this.canvasWrapper, this.renderer, false);
     }
 
     public async recentSearchClick(locationStr:string) {

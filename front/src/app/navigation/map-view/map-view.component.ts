@@ -47,14 +47,16 @@ export class MapViewComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.zoomLevels = [0.1, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3];
     this.currentZoomLevel = this.zoomLevels[4];
-    this.panZoomController = panzoom(document.getElementById('map'),
-        {
-          maxZoom: 1.3,
-          minZoom: 0.1,
-          initialZoom: 1,
-          bounds: true,
-          boundsPadding: 0.1
-        });
+    if (!this.panZoomController) {
+      this.panZoomController = panzoom(document.getElementById('map'),
+          {
+            maxZoom: 2.0,
+            minZoom: 0.5,
+            initialZoom: 1,
+            bounds: true,
+            boundsPadding: 0.1
+          });
+    }
   }
 
   public async showRoute(route:IReceivedRoute, startLocation:ILocation) {
@@ -218,8 +220,8 @@ export class MapViewComponent implements AfterViewInit {
     }
 
     // increase map size
-    mapWidthNeeded = Math.max(mapWidthNeeded)
-    mapHeightNeeded += Math.max(mapHeightNeeded);
+    mapWidthNeeded = mapWidthNeeded
+    mapHeightNeeded = mapHeightNeeded;
     this.renderingContext = CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
   }
 

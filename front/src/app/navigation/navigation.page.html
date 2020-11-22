@@ -22,9 +22,7 @@
         <a href="https://github.com/Studi-Guide/Studi-Guide/issues/new/choose">Request a missing place</a>
       </p>
     </ion-text>
-    <div id="canvas-wrapper" #canvasWrapper class="draggable">
-      <app-map-view (locationClick)="showLocationDrawer($event)"></app-map-view>
-    </div>
+    <app-map-view (locationClick)="showLocationDrawer($event)"></app-map-view>
   </div>
   <app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)" #searchDrawer>
     <div class="nav-bottom-drawer">
