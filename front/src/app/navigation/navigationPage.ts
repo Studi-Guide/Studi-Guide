@@ -1,5 +1,5 @@
 import {IBuilding, ILocation} from '../building-objects-if';
-import {AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
@@ -10,7 +10,6 @@ import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Storage} from '@ionic/storage';
-import {CanvasTouchHelper} from '../services/CanvasTouchHelper';
 import {CampusViewModel} from './campusViewModel';
 import {NavigationModel} from './navigationModel';
 import {SearchResultProvider} from '../services/searchResultProvider';
