@@ -121,25 +121,27 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   }
 
   private onMove(detail) {
+    const isMovementSensibilityBufferExceeded = detail.deltaY > 10 || detail.deltaX > 10;
+    if (isMovementSensibilityBufferExceeded) {
+      if (IonicBottomDrawerComponent.DrawerDocking) {
+        if ((this.shouldBounce && detail.currentY < this.distanceTop - this.bounceDelta)
+            || (!this.shouldBounce && detail.currentY < this.distanceTop)) {
+          return;
+        } else if ((this.shouldBounce && detail.currentY > (this.platform.height() - this.minimumHeight) + this.bounceDelta)
+            || (!this.shouldBounce && detail.currentY > (this.platform.height() - this.minimumHeight))) {
+          return;
+        }
+      } else {
+        if (detail.currentY < this.distanceTop) {
+          return;
+        } else if (detail.currentY > (this.platform.height() - this.minimumHeight)) {
+          return;
+        }
+      }
 
-    if (IonicBottomDrawerComponent.DrawerDocking) {
-      if ((this.shouldBounce && detail.currentY < this.distanceTop - this.bounceDelta)
-          || (!this.shouldBounce && detail.currentY < this.distanceTop)) {
-        return;
-      } else if ((this.shouldBounce && detail.currentY > (this.platform.height() - this.minimumHeight) + this.bounceDelta)
-          || (!this.shouldBounce && detail.currentY > (this.platform.height() - this.minimumHeight))) {
-        return;
-      }
-    } else {
-      if (detail.currentY < this.distanceTop) {
-        return;
-      } else if (detail.currentY > (this.platform.height() - this.minimumHeight)) {
-        return;
-      }
+      const translate = 'translateY('+detail.currentY+'px)';
+      this.renderer.setStyle(this.element.nativeElement, 'transform', translate);
     }
-
-    const translate = 'translateY('+detail.currentY+'px)';
-    this.renderer.setStyle(this.element.nativeElement, 'transform', translate);
   }
 
   private onEnd(detail) {
