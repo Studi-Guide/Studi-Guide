@@ -11,7 +11,8 @@ This go example uses mux of the gorilla webkit.
  - optionally generate mocks `go generate ./pkg/map ./pkg/navigation/services ./pkg/location`
 
 ## Run
- - import data `go run ./cmd/studi-guide-ctl migrate import rooms internal/rooms.json`
+ - import data(rooms) `go run ./cmd/studi-guide-ctl migrate import rooms internal/rooms.json`
+ - import data(campus) `go run ./cmd/studi-guide-ctl migrate import campus internal/campus.json`
  - verify that no other process runs on port 8080
  - run server `DEVELOP=TRUE go run ./cmd/studi-guide`
 
