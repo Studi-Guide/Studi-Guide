@@ -1,4 +1,4 @@
-import {IBuilding, ILocation} from '../building-objects-if';
+import {DrawerObject, IBuilding, ILocation} from '../building-objects-if';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
@@ -157,7 +157,10 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     public async showLocationDrawer(location:ILocation) {
         await this.locationDrawer.SetState(DrawerState.Hidden);
-        this.model.selectedLocation = location;
+        this.model.selectedObject.Name = location.Name;
+        this.model.selectedObject.Description = location.Description;
+        this.model.selectedObject.Information = location.Tags;
+
         await this.searchDrawer.SetState(DrawerState.Hidden);
         await this.locationDrawer.SetState(DrawerState.Docked);
     }
@@ -216,9 +219,9 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     async navigationBtnClick() {
-        if (this.model.selectedLocation != null) {
+        if (this.model.selectedObject != null) {
             // STDG 178 KV.001 wird als default start eingefügt
-            await this.showNavigation('KV.001', this.model.selectedLocation.Name);
+            await this.showNavigation('KV.001', this.model.selectedObject.Name);
         }
     }
 
