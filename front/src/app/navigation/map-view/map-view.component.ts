@@ -51,7 +51,7 @@ export class MapViewComponent implements AfterViewInit {
           {
             maxZoom: 2.0,
             minZoom: 0.25,
-            initialZoom: 1.0,
+            initialZoom: 0.7,
             bounds: true,
             boundsPadding: 0.1,
             // Enable touch recognition on child events
@@ -96,7 +96,7 @@ export class MapViewComponent implements AfterViewInit {
     this.renderLocations();
     this.displayPin(res.PathNode);
     this.currentFloor = res.Floor;
-    this.MoveTo(res.PathNode.Coordinate.X, res.PathNode.Coordinate.Y);
+    this.CenterMap(res.PathNode.Coordinate.X, res.PathNode.Coordinate.Y);
     return res;
   }
 
@@ -324,9 +324,9 @@ export class MapViewComponent implements AfterViewInit {
     NavigationPage.progressIsVisible = false;
   }
 
-  public MoveTo(x: number, y:number) {
+  public CenterMap(x: number, y:number) {
     const positionToMove = this.calulateMovePosition(x, y);
-    this.panZoomController.moveTo(positionToMove.x, positionToMove.y);
+    this.panZoomController.smoothMoveTo(positionToMove.x, positionToMove.y);
   }
 
   private calulateMovePosition(x: number, y:number) {
