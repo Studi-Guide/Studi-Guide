@@ -555,7 +555,7 @@ func TestEntityService_GetAllLocations(t *testing.T) {
 func TestEntityService_FilterLocations(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
-	getLocations, err := dbService.FilterLocations("1", "", "1", "main", "3")
+	getLocations, err := dbService.FilterLocations("1", "", "1", "main", "testcampus")
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
 	}
