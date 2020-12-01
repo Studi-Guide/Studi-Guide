@@ -79,10 +79,10 @@ func (r *EntityMapper) GetLocation(name, buildingStr, campus string) (Location, 
 
 	if len(buildingStr) > 0 {
 		q = q.Where(location.HasBuildingWith(building.NameEqualFold(buildingStr)))
+	}
 
-		if len(campus) > 0 {
-			q = q.Where(location.HasBuildingWith(building.HasCampusWith(entcampus.NameEqualFold(campus))))
-		}
+	if len(campus) > 0 {
+		q = q.Where(location.HasBuildingWith(building.HasCampusWith(entcampus.NameEqualFold(campus))))
 	}
 
 	entLocation, err := q.First(r.context)
@@ -119,7 +119,7 @@ func (r *EntityMapper) FilterLocations(searchStr, tagStr, floor, buildingStr, ca
 	}
 
 	if len(campusStr) > 0 {
-		// Todo query campus
+		query = query.Where(location.HasBuildingWith(building.HasCampusWith(entcampus.NameEqualFold(campusStr))))
 	}
 
 	return r.queryLocations(query)
