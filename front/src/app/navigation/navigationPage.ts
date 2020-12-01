@@ -159,7 +159,9 @@ export class NavigationPage implements OnInit, AfterViewInit{
         await this.locationDrawer.SetState(DrawerState.Hidden);
         this.model.selectedObject.Name = location.Name;
         this.model.selectedObject.Description = location.Description;
-        this.model.selectedObject.Information = [['Tags: ', location.Tags.join(',')]] ;
+        this.model.selectedObject.Information = location.Tags ?
+            [['Tags: ', location.Tags.join(',')]] :
+            [];
 
         await this.searchDrawer.SetState(DrawerState.Hidden);
         await this.locationDrawer.SetState(DrawerState.Docked);
@@ -201,6 +203,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     private handleInputError(ex, searchInput: string) {
+        console.log(ex);
         if (ex instanceof HttpErrorResponse) {
             const httpError = ex as HttpErrorResponse;
             if (httpError.status === 400) {
@@ -220,8 +223,21 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     async navigationBtnClick() {
         if (this.model.selectedObject != null) {
-            // STDG 178 KV.001 wird als default start eingefügt
-            await this.showNavigation('KV.001', this.model.selectedObject.Name);
+            try {
+                const startLocation = await this.dataService.get_location(this.model.selectedObject.Name).toPromise<ILocation>();
+                await this.showNavigation(startLocation.Building + '.Entrance', startLocation.Name);
+            }catch (ex) {
+                let inputError = '';
+                if (ex instanceof HttpErrorResponse) {
+                    const errorString = (ex as HttpErrorResponse).error.message;
+                    if (errorString.includes(this.model.selectedObject.Name)) {
+                        inputError = this.model.selectedObject.Name;
+                    }
+                }
+                this.handleInputError(ex, inputError.length === 0 ? this.model.selectedObject.Name : inputError);
+            } finally {
+                NavigationPage.progressIsVisible = false;
+            }
         }
     }
 
