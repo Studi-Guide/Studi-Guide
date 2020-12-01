@@ -91,7 +91,7 @@ func (l LocationController) GetLocationByName(c *gin.Context) {
 
 	location, err := l.provider.GetLocation(locationName, buildingName, campusName)
 	if err != nil {
-		fmt.Println("GetMapItemsFromFloor() failed with error", err)
+		fmt.Println("GetLocationByName() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": err.Error(),

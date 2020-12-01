@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/db/ent/building"
+	entcampus "studi-guide/pkg/building/db/ent/campus"
 	"studi-guide/pkg/building/db/ent/location"
 	"studi-guide/pkg/building/db/ent/tag"
 	"studi-guide/pkg/navigation"
@@ -72,16 +73,16 @@ func (r *EntityMapper) GetAllLocations() ([]Location, error) {
 	return r.locationArrayMapper(entLocations), nil
 }
 
-func (r *EntityMapper) GetLocation(name, buildingstr, campus string) (Location, error) {
+func (r *EntityMapper) GetLocation(name, buildingStr, campus string) (Location, error) {
 
 	q := r.getLocationQuery().Where(location.NameEqualFold(name))
 
-	if len(buildingstr) > 0 {
-		q.Where(location.HasBuildingWith(building.NameEqualFold(buildingstr)))
-	}
+	if len(buildingStr) > 0 {
+		q = q.Where(location.HasBuildingWith(building.NameEqualFold(buildingStr)))
 
-	if len(campus) > 0 {
-		// TODO implement campus
+		if len(campus) > 0 {
+			q = q.Where(location.HasBuildingWith(building.HasCampusWith(entcampus.NameEqualFold(campus))))
+		}
 	}
 
 	entLocation, err := q.First(r.context)
