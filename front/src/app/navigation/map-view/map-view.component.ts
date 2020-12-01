@@ -1,6 +1,6 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Output} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output} from '@angular/core';
 import {DataService} from '../../services/data.service';
-import {CanvasResolutionConfigurator, TranslationPosition} from '../../services/CanvasResolutionConfigurator';
+import {CanvasResolutionConfigurator} from '../../services/CanvasResolutionConfigurator';
 import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 import * as pip from 'point-in-polygon';
@@ -9,6 +9,7 @@ import {MapItemRendererCanvas} from './map-item-renderer.canvas';
 import {LocationRendererCanvas} from './location-renderer.canvas';
 import {RouteRendererCanvas} from './route-renderer.canvas';
 import {RendererProvider} from './renderer-provider';
+import {NavigationPage} from '../navigationPage';
 import panzoom, {PanZoom} from 'panzoom';
 import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 
@@ -30,6 +31,8 @@ export class MapViewComponent implements AfterViewInit {
   panZoomController: PanZoom;
 
   @Output() locationClick = new EventEmitter<ILocation>();
+  @Output() mapScroll = new EventEmitter<any>();
+
   public get CurrentRoute():IReceivedRoute {
     return this.currentRoute;
   }
@@ -38,7 +41,7 @@ export class MapViewComponent implements AfterViewInit {
     return this.currentBuilding;
   }
 
-  constructor(private dataService: DataService, private element: ElementRef) {
+  constructor(private dataService: DataService) {
   }
 
   ngAfterViewInit() {
@@ -101,8 +104,7 @@ export class MapViewComponent implements AfterViewInit {
     this.stopAllAnimations();
     if (this.currentRoute != null) {
       await this.renderNavigationPage(this.currentRoute, this.currentBuilding, floor);
-    }
-    else {
+    } else {
       const res = await this.dataService.get_map_items('', floor, building).toPromise()
       this.mapItemRenderer = RendererProvider.GetMapItemRendererCanvas(...res);
       this.createNewCanvasMap();
@@ -114,6 +116,7 @@ export class MapViewComponent implements AfterViewInit {
       this.renderLocations();
     }
     this.currentFloor = floor;
+    this.currentBuilding = building;
   }
 
   public async showDiscoveryMap(campus:string, floor: string) {
@@ -297,6 +300,17 @@ export class MapViewComponent implements AfterViewInit {
   private renderRoutes(args:any) {
     for (const r of this.routeRenderer)
       r.render(this.renderingContext, args);
+  }
+
+  public async onFloorChangeByFloorButton(floorAndBuildingInput: object) {
+    // @ts-ignore
+    await this.showAnotherFloorOfCurrentBuilding(floorAndBuildingInput.floor, floorAndBuildingInput.building);
+  }
+
+  public async showAnotherFloorOfCurrentBuilding(floor: string, building: string) {
+    NavigationPage.progressIsVisible = true;
+    await this.showFloor(floor, building);
+    NavigationPage.progressIsVisible = false;
   }
 
   public MoveTo(x: number, y:number) {
