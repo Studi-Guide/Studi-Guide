@@ -219,13 +219,24 @@ export class MapViewComponent implements AfterViewInit {
     let mapWidthNeeded = 0;
     for (const m of this.mapItemRenderer) {
       const mapItem = m.MapItem;
-      if (mapItem.Sections != null) {
+      if (mapItem.Sections) {
         for (const section of mapItem.Sections) {
           if (section.End.X > mapWidthNeeded) {
             mapWidthNeeded = section.End.X;
           }
           if (section.End.Y > mapHeightNeeded) {
             mapHeightNeeded = section.End.Y;
+          }
+        }
+      }
+
+      if (mapItem.PathNodes) {
+        for (const node of mapItem.PathNodes) {
+          if (node.Coordinate.X > mapWidthNeeded) {
+            mapWidthNeeded = node.Coordinate.X;
+          }
+          if (node.Coordinate.Y > mapHeightNeeded) {
+            mapHeightNeeded = node.Coordinate.Y;
           }
         }
       }
