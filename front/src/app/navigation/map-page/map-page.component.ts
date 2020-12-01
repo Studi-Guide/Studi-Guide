@@ -163,8 +163,11 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
             this.map.setView([coordinates.Latitude, coordinates.Longitude], 17)
 
-            const details = ['Building: ' + locationBuilding.Name];
-            details.push(...location.Tags);
+            const details: [string, any][] = [['Building: ',  locationBuilding.Name]];
+            if (location.Tags) {
+              details.push(['Tags: ', location.Tags.join(', ')]);
+            }
+
             await this.showElementDrawer(
                 {
                   Name: location.Name,
@@ -206,9 +209,9 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
             Description: campus.ShortName,
             Details:
                 [
-                    'ShortName: ' + campus.ShortName,
-                    'Longitude: ' + campus.Longitude,
-                    'Latitude: ' + campus.Latitude,
+                    ['ShortName: ', campus.ShortName],
+                    ['Longitude: ',  campus.Longitude],
+                    ['Latitude: ', campus.Latitude],
                 ]});
           return;
         }
@@ -266,7 +269,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.searchDrawer.SetState(DrawerState.Docked);
   }
 
-  public async showElementDrawer(location: { Description:string, Name:string, Details:string[] }) {
+  public async showElementDrawer(location: { Description:string, Name:string, Details:[string, any][] }) {
     await this.locationDrawer.SetState(DrawerState.Hidden);
     this.model.selectedObject.Name = location.Name;
     this.model.selectedObject.Description = location.Description;

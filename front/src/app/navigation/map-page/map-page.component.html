@@ -101,8 +101,9 @@
           <ion-row>
             <ion-text>{{this.model.selectedObject.Description}}</ion-text>
           </ion-row>
-          <ion-row>
-            <ion-col>{{this.model.selectedObject.Information}}</ion-col>
+          <ion-row *ngFor="let item of model.selectedObject.Information">
+            <ion-col>{{item[0]}}</ion-col>
+            <ion-col>{{item[1]}}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-content>

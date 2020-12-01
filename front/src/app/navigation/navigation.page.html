@@ -109,9 +109,9 @@
             <ion-col>Description:</ion-col>
             <ion-col>{{model.selectedObject.Description}}</ion-col>
           </ion-row>
-          <ion-row>
-            <ion-col>Tags:</ion-col>
-            <ion-col>{{model.selectedObject.Information}}</ion-col>
+          <ion-row *ngFor="let item of model.selectedObject.Information">
+            <ion-col>{{item[0]}}</ion-col>
+            <ion-col>{{item[1]}}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-content>
