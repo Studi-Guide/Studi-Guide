@@ -314,6 +314,17 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   public MoveTo(x: number, y:number) {
-    this.panZoomController.moveTo(-x, -y);
+    const positionToMove = this.calulateMovePosition(x, y);
+    this.panZoomController.moveTo(positionToMove.x, positionToMove.y);
+  }
+
+  private calulateMovePosition(x: number, y:number) {
+    const element = document.getElementById('canvas-wrapper');
+
+    const parentElement = element.parentElement.parentElement;
+    // TODO: Desktop hat andere params
+    const height = parentElement.clientHeight/2;
+    const width = element.clientWidth/2;
+    return {x: width - x, y: height - y};
   }
 }

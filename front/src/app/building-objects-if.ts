@@ -90,5 +90,5 @@ export interface IRenderer {
 export class DrawerObject {
   Name: string;
   Description: string;
-  Information: string[];
+  Information: [string, any][];
 }

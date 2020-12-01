@@ -159,7 +159,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
         await this.locationDrawer.SetState(DrawerState.Hidden);
         this.model.selectedObject.Name = location.Name;
         this.model.selectedObject.Description = location.Description;
-        this.model.selectedObject.Information = location.Tags;
+        this.model.selectedObject.Information = [['Tags: ', location.Tags.join(',')]] ;
 
         await this.searchDrawer.SetState(DrawerState.Hidden);
         await this.locationDrawer.SetState(DrawerState.Docked);
