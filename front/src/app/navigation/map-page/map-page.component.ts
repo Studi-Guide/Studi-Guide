@@ -1,9 +1,9 @@
-import {Component, OnInit, OnDestroy, ViewChild, AfterViewInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import * as Leaflet from 'leaflet';
-import {LatLng, latLng, LatLngLiteral, LeafletMouseEvent} from 'leaflet';
+import {LatLngLiteral, LeafletMouseEvent} from 'leaflet';
 import {DataService} from '../../services/data.service';
-import {IGpsCoordinate, ILocation} from '../../building-objects-if';
+import {IGpsCoordinate} from '../../building-objects-if';
 import {Router} from '@angular/router';
 import {NavigationModel} from '../navigationModel';
 import {CampusViewModel} from '../campusViewModel';
@@ -11,9 +11,10 @@ import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
 import {SearchResultProvider} from '../../services/searchResultProvider';
 import {IonContent} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
-import {GraphHopperService} from '../../services/graph-hopper/graph-hopper.service';
+import {GraphHopperService, GraphHopperRoute} from '../../services/graph-hopper/graph-hopper.service';
+import {SearchInputComponent} from '../search-input/search-input.component';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -38,12 +39,14 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
 export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   map: Leaflet.Map;
   private searchMarker: Leaflet.Marker[] = [];
+  private routes: Leaflet.Polyline[] = [];
   public availableCampus: CampusViewModel[] = [];
   public progressIsVisible = false;
   public selectedItem: {Description:string, Name:string, Type: string} = { Description: '', Name: '', Type:''};
   @ViewChild('drawerContent') drawerContent : IonContent;
   @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
   @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
+  @ViewChild('searchInput') searchInput : SearchInputComponent
   errorMessage: string;
   private currentPositionMarker: Leaflet.Marker = null;
   private isInitialized = false;
@@ -157,11 +160,11 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       try {
         const building = await this.dataService.get_building(searchInput, false).toPromise();
         if (building) {
-          const coordinates = this.getCoordinateFromBody(building.Body);
+          this.model.selectedBuilding = building;
+          const coordinates = this.getCenterCoordinateFromBody(building.Body);
+          this.centerBuilding();
           this.searchMarker.push(
               this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
-
-          this.map.setView([coordinates.Latitude, coordinates.Longitude], 17)
 
           await this.showElementDrawer({Name: building.Name, Description: 'Campus:' + building.Campus, Type: 'Building'});
           return;
@@ -190,7 +193,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
           // found building
           for (const buld of buildings) {
-            const coordinates = this.getCoordinateFromBody(buld.Body);
+            const coordinates = this.getCenterCoordinateFromBody(buld.Body);
             this.searchMarker.push(
               this.showMarker(coordinates.Latitude, coordinates.Longitude, buld.Name, false));
           }
@@ -230,6 +233,9 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public async onCloseLocationDrawer(event:any) {
+    this.searchInput.clearDestinationInput();
+    this.clearRoutes();
+    this.centerBuilding();
     await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(DrawerState.Docked);
   }
@@ -241,7 +247,23 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.locationDrawer.SetState(DrawerState.Docked);
   }
 
-  navigationBtnClick() {
+  public async onNavigationBtnClick() {
+    const position = await this.geolocation.getCurrentPosition();
+    const buildingCenter = this.getCenterCoordinateFromBody(this.model.selectedBuilding.Body);
+    console.log(position);
+    const route:GraphHopperRoute = await this.ghService.GetRouteEndpoint(
+        {lat: position.coords.latitude, lng: position.coords.longitude},
+        {lat: buildingCenter.Latitude, lng: buildingCenter.Longitude});
+
+    console.log(route);
+    const leafletLatLng = [];
+    for(const coordinate of route.paths[0].points.coordinates) {
+      leafletLatLng.push([coordinate[1], coordinate[0]]);
+    }
+    const polyline = Leaflet.polyline(leafletLatLng, {color: 'red'}).addTo(this.map);
+    this.map.setView(polyline.getCenter(), 17);
+    await this.map.fitBounds(polyline.getBounds());
+    this.routes.push(polyline);
   }
 
   private handleInputError(ex, searchInput: string) {
@@ -266,26 +288,41 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         : marker;
   }
 
-  private getCoordinateFromBody(body: IGpsCoordinate[]) {
-    let totalLat = 0, totalLong = 0;
-    for (const coordinate of body)
-    {
-      totalLat += coordinate.Latitude;
-      totalLong += coordinate.Longitude;
+  private getCenterCoordinateFromBody(body: IGpsCoordinate[]) {
+    const leafletLatLng = []
+    for (const c of body) {
+      leafletLatLng.push([c.Latitude, c.Longitude]);
     }
-    const centerLat = totalLat / body.length;
-    const centerLong = totalLong / body.length;
 
-    return {
-      Longitude: centerLong,
-      Latitude: centerLat
-    }
+    // cannot use getCenter if polygon is not added to layer (map)
+    const p = new Leaflet.Polygon(leafletLatLng).addTo(this.map);
+
+    const ret:IGpsCoordinate = {
+      Longitude: p.getCenter().lng,
+      Latitude: p.getCenter().lat
+    };
+
+    p.remove();
+
+    return ret;
   }
 
   private clearSearchMarkers() {
     for (const marker of this.searchMarker) {
       this.map.removeLayer(marker);
     }
+  }
+
+  private centerBuilding() {
+    const coordinates = this.getCenterCoordinateFromBody(this.model.selectedBuilding.Body);
+    this.map.setView([coordinates.Latitude, coordinates.Longitude], 17);
+  }
+
+  private clearRoutes() {
+    for (const p of this.routes) {
+      p.remove();
+    }
+    this.routes = [];
   }
 
   private convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
@@ -295,26 +332,5 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     return leafletBody;
-  }
-
-  // TODO remove this method
-  public async TestGetRouteEndPoint() {
-    console.log('Hello World');
-    const position = await this.geolocation.getCurrentPosition();
-    console.log(position);
-    const route = await this.ghService.GetRouteEndpoint(
-        {lat: position.coords.latitude, lng: position.coords.longitude},
-        {lat: 49.45281, lng: 11.09347});
-    console.log(route);
-    //console.log(route.paths[0].points.coordinates);
-
-    const leafletLatLng = [];
-    for(const coordinate of route.paths[0].points.coordinates) {
-      console.log(coordinate[0], coordinate[1]);
-      leafletLatLng.push([coordinate[1], coordinate[0]]);
-    }
-    console.log(leafletLatLng);
-    const polyline = Leaflet.polyline(leafletLatLng, {color: 'red'}).addTo(this.map);
-
   }
 }

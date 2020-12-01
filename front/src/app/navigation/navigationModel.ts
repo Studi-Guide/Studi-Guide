@@ -1,4 +1,4 @@
-import {ICampus, ILocation} from '../building-objects-if';
+import {IBuilding, ICampus, ILocation} from '../building-objects-if';
 import {Injectable} from '@angular/core';
 
 @Injectable({
@@ -19,6 +19,13 @@ export class NavigationModel {
         },
         Tags: []
     };
-
+    public selectedBuilding: IBuilding = {
+        Body: [],
+        Campus: '',
+        Color: '',
+        Floors: [],
+        Id: 0,
+        Name: ''
+    };
     public availableCampus: ICampus[] = [];
 }

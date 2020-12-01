@@ -17,7 +17,7 @@
       <div class="drawer-grip">
         <div class="ion-padding-top"></div>
         <div class="nav-hbar"></div>
-        <app-search-input
+        <app-search-input #searchInput
                 (discovery)="onSearch($event)"
                 (route)="onRoute($event)">
         </app-search-input>
@@ -38,7 +38,7 @@
               </ion-button>
             </ion-col>
             <ion-col>
-              <ion-button class="square-md ion-no-padding" shape="round" color="dark" (click)="TestGetRouteEndPoint()">
+              <ion-button class="square-md ion-no-padding" shape="round" color="dark">
                 <ion-icon slot="icon-only" name="library-outline" size="large"></ion-icon>
               </ion-button>
             </ion-col>
@@ -97,13 +97,13 @@
           <ion-row>
             <ion-col>{{selectedItem.Description}}</ion-col>
           </ion-row>
-          <!--<ion-row >
+          <ion-row >
             <ion-col>
-              <ion-button id="routeBtn" color="primary" expand="block" (click)="navigationBtnClick()">
+              <ion-button id="routeBtn" color="primary" expand="block" (click)="onNavigationBtnClick()">
                 Route
               </ion-button>
             </ion-col>
-          </ion-row>-->
+          </ion-row>
         </ion-grid>
       </ion-content>
     </div>
