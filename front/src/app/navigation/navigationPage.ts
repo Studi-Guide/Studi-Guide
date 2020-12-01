@@ -72,12 +72,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 } else {
                     await this.showDiscoveryMode();
                 }
-                // CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
-                this.mapView.MoveTo(0,300);
             });
-        } else {
-            // CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
-            this.mapView.MoveTo(0,300);
         }
     }
 
@@ -122,7 +117,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
             const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<ILocation>();
             const route = await this.dataService.get_route(routeInput[0], routeInput[1]).toPromise();
             await this.mapView.showRoute(route, startLocation);
-            this.mapView.MoveTo(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
+            this.mapView.CenterMap(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
         } catch (ex) {
             let inputError = '';
             if (ex instanceof HttpErrorResponse) {
@@ -255,7 +250,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
             await this.mapView.showDiscoveryMap('', 'EG')
 
             // Coordinates of KA.013
-            this.mapView.MoveTo(310, 550);
+            this.mapView.CenterMap(310, 550);
         }
     }
 
