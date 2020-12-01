@@ -1,7 +1,7 @@
 import {Component, OnInit, OnDestroy, ViewChild, AfterViewInit} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import * as Leaflet from 'leaflet';
-import {LatLngLiteral, LeafletMouseEvent} from 'leaflet';
+import {LatLng, latLng, LatLngLiteral, LeafletMouseEvent} from 'leaflet';
 import {DataService} from '../../services/data.service';
 import {IGpsCoordinate, ILocation} from '../../building-objects-if';
 import {Router} from '@angular/router';
@@ -13,7 +13,7 @@ import {IonContent} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
-import {GraphHopperService} from "../../services/graph-hopper/graph-hopper.service";
+import {GraphHopperService} from '../../services/graph-hopper/graph-hopper.service';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -302,7 +302,19 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     console.log('Hello World');
     const position = await this.geolocation.getCurrentPosition();
     console.log(position);
-    const route = await this.ghService.GetRouteEndpoint({lat: position.coords.latitude, lng: position.coords.longitude}, {lat: 49.45281, lng: 11.09347});
+    const route = await this.ghService.GetRouteEndpoint(
+        {lat: position.coords.latitude, lng: position.coords.longitude},
+        {lat: 49.45281, lng: 11.09347});
     console.log(route);
+    //console.log(route.paths[0].points.coordinates);
+
+    const leafletLatLng = [];
+    for(const coordinate of route.paths[0].points.coordinates) {
+      console.log(coordinate[0], coordinate[1]);
+      leafletLatLng.push([coordinate[1], coordinate[0]]);
+    }
+    console.log(leafletLatLng);
+    const polyline = Leaflet.polyline(leafletLatLng, {color: 'red'}).addTo(this.map);
+
   }
 }
