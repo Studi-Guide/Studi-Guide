@@ -8752,6 +8752,21 @@
     "floor": "3"
   },
   {
+    "name": "KA.Entrance",
+    "building": "KA",
+    "tags": [],
+    "pathNodes": [
+      { "Id": 1000000,
+        "ConnectedPathNodes" : [
+          900088,
+          1000001
+        ],
+        "X": 265, "Y": 1210, "Z": 0 }
+    ],
+    "Color": "#FFFFFF",
+    "floor": "EG"
+  },
+  {
     "name": "K-Campus-Hof",
     "building": "none",
     "tags": [],
@@ -8774,12 +8789,6 @@
       }
     ],
     "pathNodes": [
-      { "Id": 1000000,
-        "ConnectedPathNodes" : [
-          900088,
-          1000001
-        ],
-        "X": 265, "Y": 1080, "Z": 0 },
       { "Id": 1000001,
         "ConnectedPathNodes" : [
           1000000,
@@ -8797,13 +8806,22 @@
           1000002,
           1000004
         ],
-        "X": 750 , "Y": 1100, "Z": 0 },
+        "X": 750 , "Y": 1100, "Z": 0 }
+    ],
+    "Color": "#FFFFFF",
+    "floor": "EG"
+  },
+  {
+    "name": "KV.Entrance",
+    "building": "KV",
+    "tags": [],
+    "pathNodes": [
       { "Id": 1000004,
         "ConnectedPathNodes" : [
           1000003,
           1000005
         ],
-        "X": 750 , "Y": 1080, "Z": 0 }
+        "X": 750 , "Y": 1210, "Z": 0 }
     ],
     "Color": "#FFFFFF",
     "floor": "EG"

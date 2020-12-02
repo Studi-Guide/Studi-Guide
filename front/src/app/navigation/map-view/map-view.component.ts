@@ -51,7 +51,7 @@ export class MapViewComponent implements AfterViewInit {
           {
             maxZoom: 2.0,
             minZoom: 0.25,
-            initialZoom: 1.0,
+            initialZoom: 0.7,
             bounds: true,
             boundsPadding: 0.1,
             // Enable touch recognition on child events
@@ -96,7 +96,7 @@ export class MapViewComponent implements AfterViewInit {
     this.renderLocations();
     this.displayPin(res.PathNode);
     this.currentFloor = res.Floor;
-    this.MoveTo(res.PathNode.Coordinate.X, res.PathNode.Coordinate.Y);
+    this.CenterMap(res.PathNode.Coordinate.X, res.PathNode.Coordinate.Y);
     return res;
   }
 
@@ -219,13 +219,24 @@ export class MapViewComponent implements AfterViewInit {
     let mapWidthNeeded = 0;
     for (const m of this.mapItemRenderer) {
       const mapItem = m.MapItem;
-      if (mapItem.Sections != null) {
+      if (mapItem.Sections) {
         for (const section of mapItem.Sections) {
           if (section.End.X > mapWidthNeeded) {
             mapWidthNeeded = section.End.X;
           }
           if (section.End.Y > mapHeightNeeded) {
             mapHeightNeeded = section.End.Y;
+          }
+        }
+      }
+
+      if (mapItem.PathNodes) {
+        for (const node of mapItem.PathNodes) {
+          if (node.Coordinate.X > mapWidthNeeded) {
+            mapWidthNeeded = node.Coordinate.X;
+          }
+          if (node.Coordinate.Y > mapHeightNeeded) {
+            mapHeightNeeded = node.Coordinate.Y;
           }
         }
       }
@@ -313,7 +324,18 @@ export class MapViewComponent implements AfterViewInit {
     NavigationPage.progressIsVisible = false;
   }
 
-  public MoveTo(x: number, y:number) {
-    this.panZoomController.moveTo(-x, -y);
+  public CenterMap(x: number, y:number) {
+    const positionToMove = this.calulateMovePosition(x, y);
+    this.panZoomController.smoothMoveTo(positionToMove.x, positionToMove.y);
+  }
+
+  private calulateMovePosition(x: number, y:number) {
+    const element = document.getElementById('canvas-wrapper');
+
+    const parentElement = element.parentElement.parentElement;
+    // TODO: Desktop hat andere params
+    const height = parentElement.clientHeight/2;
+    const width = element.clientWidth/2;
+    return {x: width - x, y: height - y};
   }
 }

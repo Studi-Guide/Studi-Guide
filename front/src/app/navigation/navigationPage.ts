@@ -1,4 +1,4 @@
-import {IBuilding, ILocation} from '../building-objects-if';
+import {DrawerObject, IBuilding, ILocation} from '../building-objects-if';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
@@ -72,12 +72,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 } else {
                     await this.showDiscoveryMode();
                 }
-                // CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
-                this.mapView.MoveTo(0,300);
             });
-        } else {
-            // CanvasTouchHelper.Zoom(-1000, this.canvasWrapper, this.renderer);
-            this.mapView.MoveTo(0,300);
         }
     }
 
@@ -122,7 +117,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
             const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<ILocation>();
             const route = await this.dataService.get_route(routeInput[0], routeInput[1]).toPromise();
             await this.mapView.showRoute(route, startLocation);
-            this.mapView.MoveTo(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
+            this.mapView.CenterMap(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
         } catch (ex) {
             let inputError = '';
             if (ex instanceof HttpErrorResponse) {
@@ -157,7 +152,12 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     public async showLocationDrawer(location:ILocation) {
         await this.locationDrawer.SetState(DrawerState.Hidden);
-        this.model.selectedLocation = location;
+        this.model.selectedObject.Name = location.Name;
+        this.model.selectedObject.Description = location.Description;
+        this.model.selectedObject.Information = location.Tags ?
+            [['Tags: ', location.Tags.join(',')]] :
+            [];
+
         await this.searchDrawer.SetState(DrawerState.Hidden);
         await this.locationDrawer.SetState(DrawerState.Docked);
     }
@@ -198,6 +198,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     private handleInputError(ex, searchInput: string) {
+        console.log(ex);
         if (ex instanceof HttpErrorResponse) {
             const httpError = ex as HttpErrorResponse;
             if (httpError.status === 400) {
@@ -216,9 +217,22 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     async navigationBtnClick() {
-        if (this.model.selectedLocation != null) {
-            // STDG 178 KV.001 wird als default start eingefügt
-            await this.showNavigation('KV.001', this.model.selectedLocation.Name);
+        if (this.model.selectedObject != null) {
+            try {
+                const startLocation = await this.dataService.get_location(this.model.selectedObject.Name).toPromise<ILocation>();
+                await this.showNavigation(startLocation.Building + '.Entrance', startLocation.Name);
+            }catch (ex) {
+                let inputError = '';
+                if (ex instanceof HttpErrorResponse) {
+                    const errorString = (ex as HttpErrorResponse).error.message;
+                    if (errorString.includes(this.model.selectedObject.Name)) {
+                        inputError = this.model.selectedObject.Name;
+                    }
+                }
+                this.handleInputError(ex, inputError.length === 0 ? this.model.selectedObject.Name : inputError);
+            } finally {
+                NavigationPage.progressIsVisible = false;
+            }
         }
     }
 
@@ -236,7 +250,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
             await this.mapView.showDiscoveryMap('', 'EG')
 
             // Coordinates of KA.013
-            this.mapView.MoveTo(310, 550);
+            this.mapView.CenterMap(310, 550);
         }
     }
 

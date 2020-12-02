@@ -13,13 +13,15 @@ export class MapItemRendererCanvas implements IRenderer {
     }
 
     render(renderingContext: CanvasRenderingContext2D) {
-        renderingContext.beginPath();
-        this.renderSections(renderingContext);
-        renderingContext.strokeStyle = '#FFF';
-        renderingContext.fillStyle = this.mapItem.Color;
-        renderingContext.stroke();
-        renderingContext.fill();
-        renderingContext.closePath();
+        if(this.mapItem.Sections && this.mapItem.Sections.length > 0) {
+            renderingContext.beginPath();
+            this.renderSections(renderingContext);
+            renderingContext.strokeStyle = '#FFF';
+            renderingContext.fillStyle = this.mapItem.Color;
+            renderingContext.stroke();
+            renderingContext.fill();
+            renderingContext.closePath();
+        }
     }
 
     startAnimation(renderingContext: CanvasRenderingContext2D, args?:any) {
