@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import { Env } from '../../environments/environment';
 import {IBuilding, ICampus, ILocation, IMapItem} from '../building-objects-if';
 import {CacheService} from './cache.service';
@@ -76,5 +76,35 @@ export class DataService {
     get_campus_search(search: string = '') {
         const searchParam = search ? '?search=' + search : '';
         return this.cache.Get<ICampus[]>(this.httpClient, this.baseUrl + '/campus' + searchParam);
+    }
+
+    get_proxy_request_asText(url: string, options: {
+        headers?: HttpHeaders | {
+            [header: string]: string | string[];
+        };
+        observe?: 'body';
+        params?: HttpParams | {
+            [param: string]: string | string[];
+        };
+        reportProgress?: boolean;
+        responseType: 'text';
+        withCredentials?: boolean;
+    }){
+        return this.httpClient.get(this.baseUrl + '/proxy/' + url, options).toPromise()
+    }
+
+    get_proxy_request(url: string, options: {
+        headers?: HttpHeaders | {
+            [header: string]: string | string[];
+        };
+        observe?: 'body';
+        params?: HttpParams | {
+            [param: string]: string | string[];
+        };
+        reportProgress?: boolean;
+        responseType?: 'json';
+        withCredentials?: boolean;
+    }){
+        return this.httpClient.get(this.baseUrl + '/proxy/' + url, options).toPromise()
     }
 }
