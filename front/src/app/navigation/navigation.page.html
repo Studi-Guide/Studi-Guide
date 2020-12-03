@@ -90,7 +90,7 @@
         <ion-grid id="locationdrawerContent" >
           <ion-row class="ion-justify-content-between ion-align-self-center">
             <ion-col size="auto">
-              <ion-text id="locationdrawerName">{{model.selectedObject.Name}}</ion-text>
+              <ion-text id="locationdrawerName">{{model.latestSearchResult.Name}}</ion-text>
             </ion-col>
             <ion-col class="ion-justify-content-end ion-padding-horizontal">
               <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseLocationDrawer($event)">
@@ -107,9 +107,9 @@
           </ion-row>
           <ion-row>
             <ion-col>Description:</ion-col>
-            <ion-col>{{model.selectedObject.Description}}</ion-col>
+            <ion-col>{{model.latestSearchResult.Description}}</ion-col>
           </ion-row>
-          <ion-row *ngFor="let item of model.selectedObject.Information">
+          <ion-row *ngFor="let item of model.latestSearchResult.Information">
             <ion-col>{{item[0]}}</ion-col>
             <ion-col>{{item[1]}}</ion-col>
           </ion-row>
