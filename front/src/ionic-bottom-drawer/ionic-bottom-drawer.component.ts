@@ -60,8 +60,15 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
 
   ngOnInit() {
 
+    const element = this.element.nativeElement.querySelector('.'+this.gripElementsClass);
+
+    if (element === null) {
+      throw new Error('can not find any element with the class name "'
+          +this.gripElementsClass+'" for gesture initialization of IonicBottomDrawer');
+    }
+
     this.gesture = this.gestureCtrl.create({
-      el: this.element.nativeElement.querySelector('.'+this.gripElementsClass),
+      el: element,
       threshold: 0,
       gestureName: 'push-pull-drawer',
       direction: 'y',
