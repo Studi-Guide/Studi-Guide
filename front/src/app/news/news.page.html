@@ -1,2 +1,20 @@
 <ion-content>
+    <ion-refresher slot="fixed" (ionRefresh)="doRefreshEvents($event)">
+        <ion-refresher-content>
+        </ion-refresher-content>
+    </ion-refresher>
+    <ion-list lines="none">
+        <ion-item-sliding *ngFor="let element of rssFeed">
+            <ion-item>
+                <ion-card>
+                    <ion-card-header>
+                        <ion-card-title [innerHTML]="element.title"></ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <div [innerHTML]="element.description"></div>
+                    </ion-card-content>
+                </ion-card>
+            </ion-item>
+        </ion-item-sliding>
+    </ion-list>
 </ion-content>
