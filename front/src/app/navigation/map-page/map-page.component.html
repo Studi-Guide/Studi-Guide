@@ -83,7 +83,7 @@
         <ion-grid id="locationdrawerContent" >
           <ion-row class="ion-justify-content-between ion-align-self-center">
             <ion-col size="auto">
-              <ion-text id="locationdrawerName">{{this.model.selectedObject.Name}}</ion-text>
+              <ion-text id="locationdrawerName">{{this.model.latestSearchResult.Name}}</ion-text>
             </ion-col>
             <ion-col class="ion-justify-content-end ion-padding-horizontal">
               <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseLocationDrawer($event)">
@@ -93,24 +93,22 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <ion-button *ngIf="detailButtonIsVisible" color="primary" expand="block" (click)="detailsBtnClick()">
+              <ion-button color="primary" expand="block" (click)="detailsBtnClick()">
                 Details
               </ion-button>
             </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-text>{{this.model.selectedObject.Description}}</ion-text>
-          </ion-row>
-          <ion-row *ngFor="let item of model.selectedObject.Information">
-            <ion-col>{{item[0]}}</ion-col>
-            <ion-col>{{item[1]}}</ion-col>
-          </ion-row>
-          <ion-row>
             <ion-col>
               <ion-button id="routeBtn" color="primary" expand="block" (click)="onNavigationBtnClick()">
                 Route
               </ion-button>
             </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-text>{{this.model.latestSearchResult.Description}}</ion-text>
+          </ion-row>
+          <ion-row *ngFor="let item of model.latestSearchResult.Information">
+            <ion-col>{{item[0]}}</ion-col>
+            <ion-col>{{item[1]}}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-content>
