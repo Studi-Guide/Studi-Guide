@@ -1,15 +1,14 @@
-import {Component} from '@angular/core';
+import {AfterViewInit, Component} from '@angular/core';
 import {LoadingController} from '@ionic/angular';
 import {FeedItem} from './rssElement';
-import {RssFeedService} from "../services/rss-feed.service";
-import {forEach} from "@angular-devkit/schematics";
+import {RssFeedService} from '../services/rss-feed.service';
 
 @Component({
   selector: 'app-schedule',
   templateUrl: 'news.page.html',
   styleUrls: ['news.page.scss']
 })
-export class NewsPage {
+export class NewsPage implements AfterViewInit{
 
   private rssFeeds:string[] = [
       'https://www.th-nuernberg.de/news-archiv/rss.xml',
@@ -23,6 +22,10 @@ export class NewsPage {
       public loadingController: LoadingController,
       private rssFeedService: RssFeedService
   ) {}
+
+  async ngAfterViewInit() {
+    await this.fetchNewsData();
+  }
 
   public async fetchNewsData() {
     const loading = await this.loadingController.create({
@@ -41,10 +44,13 @@ export class NewsPage {
       }
     }
 
+    this.rssFeed = items;
     await loading.dismiss();
+
   }
 
   public async doRefreshEvents(event) {
     await this.fetchNewsData();
+    event.target.complete();
   }
 }
