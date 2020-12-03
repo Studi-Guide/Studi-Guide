@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {FeedItem} from '../news/rssElement';
 import {Parser} from 'xml2js';
 import {DataService} from './data.service';
@@ -35,7 +34,7 @@ export class RssFeedService {
                         item.link[0],
                         item.title[0],
                         new Date(item.pubDate[0]),
-                        ''));
+                        item['content:encoded'][0]));
               }
             }
           }
