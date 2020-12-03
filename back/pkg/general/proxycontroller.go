@@ -36,9 +36,9 @@ func (c ProxyController) GetProxyRequest(context *gin.Context) {
 		return
 	}
 
-	urlstring := string(encodedUrl)
-	fmt.Printf("GetProxyRequest with url: %v", urlstring)
-	resp, err := http.Get(urlstring)
+	urlString := string(encodedUrl)
+	fmt.Printf("GetProxyRequest with url: %v\n", urlString)
+	resp, err := http.Get(urlString)
 	if err != nil {
 		fmt.Println("GetProxyRequest failed with error", err)
 		statusCode := http.StatusBadRequest
