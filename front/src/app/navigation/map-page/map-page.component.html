@@ -1,5 +1,6 @@
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
+  <app-navigation-instruction-slides></app-navigation-instruction-slides>
   <div id="map-content">
     <ion-text id="error-message" *ngIf="errorMessage" >
       <h5><span class="error">{{ errorMessage }}</span></h5>
@@ -9,9 +10,9 @@
         <a href="https://github.com/Studi-Guide/Studi-Guide/issues/new/choose">Request a missing place</a>
       </p>
     </ion-text>
-    <div id="leafletMap">
-    </div>
+    <div id="leafletMap"></div>
   </div>
+
   <app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)" #searchDrawer>
     <div class="nav-bottom-drawer">
       <div class="drawer-grip">
@@ -114,4 +115,5 @@
       </ion-content>
     </div>
   </app-ionic-bottom-drawer>
+
 </ion-content>
