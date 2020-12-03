@@ -6,9 +6,10 @@
     <ion-list lines="none">
         <ion-item-sliding *ngFor="let element of rssFeed">
             <ion-item>
-                <ion-card>
+                <ion-card >
                     <ion-card-header>
-                        <ion-card-title [innerHTML]="element.title"></ion-card-title>
+                        <ion-card-subtitle>{{element.published | date : 'dd.MM.yyyy hh:mm'}}</ion-card-subtitle>
+                        <ion-card-title>{{element.title}}</ion-card-title>
                     </ion-card-header>
                     <ion-card-content>
                         <div [innerHTML]="element.description"></div>
