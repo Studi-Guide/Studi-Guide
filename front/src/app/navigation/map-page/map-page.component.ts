@@ -133,7 +133,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     if (buildings !== null) {
       for (const building of buildings) {
         if (building.Body !== null && building.Body.length > 0) {
-          Leaflet.polygon(this.convertToLeafLetCoordinates(building.Body),
+          Leaflet.polygon(MapPageComponent.convertToLeafLetCoordinates(building.Body),
               {className: building.Name, color: building.Color ?? '#0083C6'})
               .addTo(this.map)
               .on('click', onPolygonClick);
@@ -283,7 +283,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async detailsBtnClick() {
       await this.router.navigate(['tabs/navigation/detail'],
-          {queryParams: this.model.latestSearchResult.RouterParams});
+          {queryParams: this.routes.length == 0
+                ? this.model.latestSearchResult.DetailRouterParams : this.model.latestSearchResult.RouteRouterParams});
   }
 
   private handleInputError(ex, searchInput: string) {
@@ -340,7 +341,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.routes = [];
   }
 
-  private convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
+  private static convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
     const leafletBody:LatLngLiteral[] = []
     for (const coordinate of body){
       leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});

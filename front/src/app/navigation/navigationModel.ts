@@ -9,7 +9,8 @@ export interface ISearchResultObject {
     Name: string;
     Description: string;
     Information: [string, any][];
-    RouterParams: Params;
+    DetailRouterParams: Params;
+    RouteRouterParams: Params;
     LatLng: LatLngLiteral;
 }
 
@@ -23,7 +24,8 @@ export class NavigationModel {
         Name: '',
         Description: '',
         Information: [],
-        RouterParams: {},
+        DetailRouterParams: {},
+        RouteRouterParams: {},
         LatLng: {lat: 0, lng: 0}
     };
     public availableCampus: ICampus[] = [];
@@ -38,7 +40,8 @@ export class NavigationModel {
                     ['Longitude: ', c.Longitude],
                     ['Latitude: ', c.Latitude],
                 ],
-            RouterParams: {},
+            DetailRouterParams: {},
+            RouteRouterParams: {},
             LatLng: {lat: c.Latitude, lng: c.Longitude}
         };
     }
@@ -48,7 +51,8 @@ export class NavigationModel {
             Name: b.Name,
             Description: 'Campus:' + b.Campus,
             Information: [],
-            RouterParams: {building: b.Name},
+            DetailRouterParams: {building: b.Name},
+            RouteRouterParams: {},
             LatLng: latLng
         }
     }
@@ -61,7 +65,8 @@ export class NavigationModel {
             Name: l.Name,
             Description: l.Description,
             Information: details,
-            RouterParams: {location: l.Name},
+            DetailRouterParams: {location: l.Name},
+            RouteRouterParams: {start: l.Building+'.Entrance', destination: l.Name},
             LatLng: latLng
         };
     }
