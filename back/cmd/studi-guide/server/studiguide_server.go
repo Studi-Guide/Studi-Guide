@@ -16,6 +16,7 @@ import (
 	"studi-guide/pkg/building/room/controllers"
 	buildingRoom "studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/env"
+	"studi-guide/pkg/general"
 	"studi-guide/pkg/ion18n"
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
@@ -127,6 +128,17 @@ func NewStudiGuideServer(env *env.Env,
 	{
 		log.Println("Creating campus controller")
 		err := campus.NewCampusController(campusRouter, campusProvider)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Println("Successfully initialized campus controller")
+		}
+	}
+
+	proxyRouter := router.Group("/proxy")
+	{
+		log.Println("Creating proxy controller")
+		err := general.NewProxyController(proxyRouter)
 		if err != nil {
 			log.Fatal(err)
 		} else {
