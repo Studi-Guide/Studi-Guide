@@ -53,4 +53,8 @@ export class NewsPage implements AfterViewInit{
     await this.fetchNewsData();
     event.target.complete();
   }
+
+  onFeedClick(element: FeedItem) {
+    element.isExpanded = !element.isExpanded;
+  }
 }
