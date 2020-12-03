@@ -16,10 +16,10 @@ import (
 	"studi-guide/pkg/building/room/controllers"
 	buildingRoom "studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/env"
-	"studi-guide/pkg/general"
 	"studi-guide/pkg/ion18n"
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
+	"studi-guide/pkg/rssFeed"
 )
 
 type StudiGuideServer struct {
@@ -30,7 +30,8 @@ func NewStudiGuideServer(env *env.Env,
 	buildingProvider buildingInfo.BuildingProvider, roomProvider buildingRoom.RoomServiceProvider,
 	locationProvider buildingLocation.LocationProvider, mapProvider buildingMap.MapServiceProvider,
 	navigationProvider services.NavigationServiceProvider,
-	campusProvider campus.CampusProvider) *StudiGuideServer {
+	campusProvider campus.CampusProvider,
+	rssFeedProvider rssFeed.Provider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -138,7 +139,7 @@ func NewStudiGuideServer(env *env.Env,
 	proxyRouter := router.Group("/proxy")
 	{
 		log.Println("Creating proxy controller")
-		err := general.NewProxyController(proxyRouter)
+		err := rssFeed.NewRssFeedController(proxyRouter, rssFeedProvider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
