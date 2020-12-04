@@ -58,6 +58,7 @@ func TestRssFeedController_GetRssFeedByName_Negative(t *testing.T) {
 	_ = NewRssFeedController(mapRouter, provider, mockhttpclient)
 
 	provider.EXPECT().GetRssFeed(gomock.Any()).Return(&ent.RssFeed{}, errors.New("not found"))
+
 	router.ServeHTTP(rec, req)
 
 	if http.StatusBadRequest != rec.Code {
@@ -65,7 +66,7 @@ func TestRssFeedController_GetRssFeedByName_Negative(t *testing.T) {
 	}
 }
 
-func TestRssFeedController_GetRssFeedByName_InvalidUrl(t *testing.T) {
+func TestRssFeedController_GetRssFeedByName_HttpError(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/rssfeed/testfeed", nil)
 
@@ -78,10 +79,19 @@ func TestRssFeedController_GetRssFeedByName_InvalidUrl(t *testing.T) {
 	mapRouter := router.Group("/rssfeed")
 	_ = NewRssFeedController(mapRouter, provider, mockhttpclient)
 
-	provider.EXPECT().GetRssFeed(gomock.Any()).Return(&ent.RssFeed{URL: "http://invalid.com/perl.cgi?key= | http://web-site.com/cgi-bin/perl.cgi?key1=value1&key2"}, nil)
+	feed := ent.RssFeed{
+		ID:   1,
+		URL:  "http://www.testfeed/rss.xml",
+		Name: "testfeed",
+	}
+
+	provider.EXPECT().GetRssFeed("testfeed").Return(&feed, nil)
+	mockhttpclient.EXPECT().Do(gomock.Any()).Return(&http.Response{
+		StatusCode: http.StatusBadGateway,
+	}, errors.New("dummy error"))
 	router.ServeHTTP(rec, req)
 
-	if http.StatusInternalServerError != rec.Code {
-		t.Error("expected ", http.StatusInternalServerError, "got", rec.Code)
+	if http.StatusBadGateway != rec.Code {
+		t.Error("expected ", http.StatusBadGateway, "got", rec.Code)
 	}
 }
