@@ -29,11 +29,9 @@ RUN go generate ./...
 # Force the go compiler to use modules
 RUN go build  -a -tags netgo -v  -ldflags '-w -extldflags "-static"' -o /go/bin ./cmd/...
 
-# import rooms
+# prepare db
 WORKDIR /go/bin
-RUN rm -f ./db.sqlite3
-RUN studi-guide-ctl migrate import campus /go/src/studi-guide/internal/campus.json;
-RUN studi-guide-ctl migrate import rooms /go/src/studi-guide/internal/rooms.json;
+RUN sh ./preparedb.sh
 FROM scratch
 
 WORKDIR /go/bin/ionic
