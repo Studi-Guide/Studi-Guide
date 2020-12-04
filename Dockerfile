@@ -31,7 +31,7 @@ RUN go build  -a -tags netgo -v  -ldflags '-w -extldflags "-static"' -o /go/bin 
 
 # prepare db
 RUN sh ./preparedb.sh
-COPY ./db.sqlite3 /go/bin
+RUN cp ./db.sqlite3 ./../bin
 WORKDIR /go/bin
 
 FROM scratch
