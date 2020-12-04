@@ -9,8 +9,8 @@ export class RssFeedService {
 
   constructor(private dataService: DataService) { }
 
-  public async getArticlesForUrl(feedUrl: string) {
-    const res = await this.dataService.get_proxy_request_asText(btoa(feedUrl), {responseType: 'text'});
+  public async getArticles(feed: string) {
+    const res = await this.dataService.get_rssFeed(feed);
     return this.parseXml(res);
   }
 

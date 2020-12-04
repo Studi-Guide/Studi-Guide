@@ -11,8 +11,8 @@ import {RssFeedService} from '../services/rss-feed.service';
 export class NewsPage implements AfterViewInit{
 
   private rssFeeds:string[] = [
-      'https://www.th-nuernberg.de/news-archiv/rss.xml',
-      'https://www.th-nuernberg.de/calendarRSS.xml'
+      'TH-Ohm-News-Archiv',
+      'TH-Ohm-Calendar'
   ]
 
   public isMoodleUserSignedIn: boolean;
@@ -37,7 +37,7 @@ export class NewsPage implements AfterViewInit{
     for(const feed of this.rssFeeds)
     {
       try {
-        const rssFeedItems = await this.rssFeedService.getArticlesForUrl(feed);
+        const rssFeedItems = await this.rssFeedService.getArticles(feed);
         items.push(...rssFeedItems);
       }catch (e) {
         console.log(e);
