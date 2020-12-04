@@ -58,7 +58,7 @@ func TestRoomJsonImporter_RunImport(t *testing.T) {
 	os.Remove(tmpFile)
 }
 
-func TestRoomJsonImporter_ImportRealFile(t *testing.T) {
+func TestRssFeedJsonImporter_ImportRealFile(t *testing.T) {
 	ctrl := gomock.NewController(t)
 	defer ctrl.Finish()
 
