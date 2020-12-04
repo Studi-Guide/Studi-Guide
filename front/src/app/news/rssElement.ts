@@ -5,12 +5,19 @@ export class FeedItem {
     content: string;
     published: Date;
     isExpanded: boolean;
-    constructor(description: string, link: string, title: string, published: Date,content:string) {
+    rootUrl: string;
+    constructor(description: string, link: string, rootUrl:string, title: string, published: Date,content:string) {
         this.description = description;
         this.link = link;
         this.title = title;
         this.published = published;
-        this.content = content;
+        this.rootUrl = rootUrl;
+        this.content = this.cleanUpContent(content);
+    }
+
+    private cleanUpContent(content: string) {
+        // Cleanup relative hrefs to link to main root page
+        return content.replace('href="/', 'href="' + this.rootUrl + '/');
     }
 }
 

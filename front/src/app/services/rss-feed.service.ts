@@ -32,6 +32,7 @@ export class RssFeedService {
                     new FeedItem(
                         item.description[0],
                         item.link[0],
+                        channel.link[0],
                         item.title[0],
                         new Date(item.pubDate[0]),
                         item['content:encoded'][0]));
