@@ -14,6 +14,8 @@ import (
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/navigation/services"
+	"studi-guide/pkg/rssFeed"
+	"studi-guide/pkg/utils"
 
 	"go.uber.org/dig"
 )
@@ -44,7 +46,10 @@ func BuildContainer() *dig.Container {
 
 	container := dig.New()
 
-	container.Provide(http.DefaultClient)
+	container.Provide(func() utils.HttpClient {
+		return http.DefaultClient
+	})
+
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
 	container.Provide(entitymapper.NewEntityMapper)
@@ -73,6 +78,10 @@ func BuildContainer() *dig.Container {
 		})
 
 		container.Provide(func() campus.CampusProvider {
+			return entityserver
+		})
+
+		container.Provide(func() rssFeed.Provider {
 			return entityserver
 		})
 	})
