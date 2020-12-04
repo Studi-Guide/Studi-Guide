@@ -31,7 +31,7 @@ func NewRssFeedController(router *gin.RouterGroup, provider Provider, client uti
 // @Description Get one RssFeed by name
 // @ID get-rssfeed
 // @Accept  json
-// @Produce  text
+// @Produce  plain
 // @Tags RssFeedController
 // @Param rssFeedId path string true "rssFeed of the campus"
 // @Success 200
