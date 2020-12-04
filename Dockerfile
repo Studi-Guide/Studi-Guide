@@ -30,8 +30,10 @@ RUN go generate ./...
 RUN go build  -a -tags netgo -v  -ldflags '-w -extldflags "-static"' -o /go/bin ./cmd/...
 
 # prepare db
-WORKDIR /go/bin
 RUN sh ./preparedb.sh
+COPY db.sqlite3 /go/bin
+WORKDIR /go/bin
+
 FROM scratch
 
 WORKDIR /go/bin/ionic
