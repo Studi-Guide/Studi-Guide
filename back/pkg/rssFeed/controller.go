@@ -29,15 +29,14 @@ func NewRssFeedController(router *gin.RouterGroup, provider Provider, client uti
 // GetRssFeedByName godoc
 // @Summary Get RssFeed by a certain name
 // @Description Get one RssFeed by name
-// @ID get-campus-name
+// @ID get-rssfeed
 // @Accept  json
-// @Produce  json
-// @Tags CampusController
-// @Param rss Feed path string true "rssFeed of the campus"
-// @Success 200 {object} ent.RssFeed
+// @Produce  text
+// @Tags RssFeedController
+// @Param rssFeedId path string true "rssFeed of the campus"
+// @Success 200
 // @Router /rssfeed/{rssFeedId} [get]
 func (c Controller) GetRssFeed(context *gin.Context) {
-	// url ist base64 url encodiert
 	rssFeedID := context.Param("rssFeedId")
 	feed, err := c.rssProvider.GetRssFeed(rssFeedID)
 	if err != nil {
