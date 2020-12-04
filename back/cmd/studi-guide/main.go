@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/http"
 	"studi-guide/cmd/studi-guide/server"
 	"studi-guide/docs"
 	"studi-guide/pkg/building/campus"
@@ -43,6 +44,7 @@ func BuildContainer() *dig.Container {
 
 	container := dig.New()
 
+	container.Provide(http.DefaultClient)
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
 	container.Provide(entitymapper.NewEntityMapper)
