@@ -45,28 +45,19 @@ func (c Controller) GetRssFeed(context *gin.Context) {
 		return
 	}
 
-	uri, err := url.Parse(feed.URL)
-	if err != nil {
-		returnErrorCode(err, http.StatusInternalServerError, context)
-		return
-	}
-
+	uri, _ := url.Parse(feed.URL)
 	resp, err := c.httpClient.Do(&http.Request{
 		Method: "GET",
 		URL:    uri,
 	})
 
 	if err != nil {
-		fmt.Println("GetRssFeed failed with error", err)
 		statusCode := http.StatusBadRequest
 		if resp != nil {
 			statusCode = resp.StatusCode
 		}
-		context.JSON(statusCode, gin.H{
-			"code":    statusCode,
-			"message": err.Error(),
-		})
 
+		returnErrorCode(err, statusCode, context)
 		return
 	}
 
