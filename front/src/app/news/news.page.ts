@@ -15,7 +15,6 @@ export class NewsPage implements AfterViewInit{
       'TH-Ohm-Calendar'
   ]
 
-  public isMoodleUserSignedIn: boolean;
   rssFeed: FeedItem[] = [];
 
   constructor(
