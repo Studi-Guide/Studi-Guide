@@ -35,12 +35,18 @@ func TestRssFeedController_GetRssFeedByName(t *testing.T) {
 	teststring := "hello world"
 	r := ioutil.NopCloser(strings.NewReader(teststring)) // r type is io.ReadCloser
 	provider.EXPECT().GetRssFeed("testfeed").Return(&feed, nil)
-	mockhttpclient.EXPECT().Do(gomock.Any()).Return(&http.Response{Body: r}, nil)
+	resp := http.Response{Body: r}
+	resp.Header.Set("Content-Type", "text")
+	mockhttpclient.EXPECT().Do(gomock.Any()).Return(&resp, nil)
 	router.ServeHTTP(rec, req)
 
 	actual := rec.Body.String()
 	if teststring != actual {
 		t.Errorf("expected = %v; actual = %v", string(teststring), rec.Body.String())
+	}
+
+	if rec.Header().Get("Content-Type") == "text" {
+		t.Errorf("expected = %v; actual = %v", "text", rec.Header().Get("Content-Type"))
 	}
 }
 
