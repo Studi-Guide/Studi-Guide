@@ -1,5 +1,7 @@
 import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {Injectable} from '@angular/core';
 
+@Injectable()
 export class GeolocationMock extends Geolocation {
     latitude = 49.44667;
     longitude = 11.08164;
