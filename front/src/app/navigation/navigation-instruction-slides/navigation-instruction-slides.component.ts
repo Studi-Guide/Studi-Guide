@@ -1,10 +1,11 @@
 import {Component, ElementRef, Input, OnInit} from '@angular/core';
 import {INavigationInstruction} from './navigation-instruction-if';
 
+
 @Component({
   selector: 'app-navigation-instruction-slides',
   templateUrl: './navigation-instruction-slides.component.html',
-  styleUrls: ['./navigation-instruction-slides.component.scss'],
+  styleUrls: ['./navigation-instruction-slides.component.scss']
 })
 export class NavigationInstructionSlidesComponent implements OnInit {
 
