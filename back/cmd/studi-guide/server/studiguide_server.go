@@ -31,7 +31,8 @@ func NewStudiGuideServer(env *env.Env,
 	locationProvider buildingLocation.LocationProvider, mapProvider buildingMap.MapServiceProvider,
 	navigationProvider services.NavigationServiceProvider,
 	campusProvider campus.CampusProvider,
-	rssFeedProvider rssFeed.Provider) *StudiGuideServer {
+	rssFeedProvider rssFeed.Provider,
+	httpClient http.Client) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -136,10 +137,10 @@ func NewStudiGuideServer(env *env.Env,
 		}
 	}
 
-	proxyRouter := router.Group("/proxy")
+	rssfeedRouter := router.Group("/rssfeed")
 	{
 		log.Println("Creating proxy controller")
-		err := rssFeed.NewRssFeedController(proxyRouter, rssFeedProvider)
+		err := rssFeed.NewRssFeedController(rssfeedRouter, rssFeedProvider, httpClient)
 		if err != nil {
 			log.Fatal(err)
 		} else {
