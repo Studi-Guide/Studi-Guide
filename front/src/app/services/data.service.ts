@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import { Env } from '../../environments/environment';
 import {IBuilding, ICampus, ILocation, IMapItem} from '../building-objects-if';
 import {CacheService} from './cache.service';
