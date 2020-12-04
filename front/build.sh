@@ -1,4 +1,4 @@
 #npm install -g @ionic/cli
 #npm install
-ionic build --engine=browser --prod --localize
+ionic build --engine=browser --localize
 ditto  www ../bin/ionic
