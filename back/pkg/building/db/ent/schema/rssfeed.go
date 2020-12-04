@@ -1,6 +1,8 @@
 package schema
 
 import (
+	"errors"
+	"github.com/asaskevich/govalidator"
 	"github.com/facebook/ent"
 	"github.com/facebook/ent/schema/field"
 	"github.com/facebook/ent/schema/index"
@@ -14,7 +16,15 @@ type RssFeed struct {
 // Fields of the RssFeed.
 func (RssFeed) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("Url"),
+		field.String("Url").
+			NotEmpty().Validate(func(s string) error {
+			if !govalidator.IsURL(s) {
+				return errors.New("url is invalid")
+			}
+
+			return nil
+		}),
+
 		field.String("Name").Unique(),
 	}
 }
