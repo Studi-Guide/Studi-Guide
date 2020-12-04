@@ -1,9 +1,9 @@
-import {Component, OnInit, OnDestroy, ViewChild, AfterViewInit} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import * as Leaflet from 'leaflet';
 import {LatLngLiteral, LeafletMouseEvent} from 'leaflet';
 import {DataService} from '../../services/data.service';
-import {IGpsCoordinate, ILocation} from '../../building-objects-if';
+import {IGpsCoordinate} from '../../building-objects-if';
 import {Router} from '@angular/router';
 import {NavigationModel} from '../navigationModel';
 import {CampusViewModel} from '../campusViewModel';
@@ -11,8 +11,10 @@ import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
 import {SearchResultProvider} from '../../services/searchResultProvider';
 import {IonContent} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
+import {GraphHopperService, GraphHopperRoute} from '../../services/graph-hopper/graph-hopper.service';
+import {SearchInputComponent} from '../search-input/search-input.component';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -37,12 +39,13 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
 export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   map: Leaflet.Map;
   private searchMarker: Leaflet.Marker[] = [];
+  private routes: Leaflet.Polyline[] = [];
   public availableCampus: CampusViewModel[] = [];
   public progressIsVisible = false;
-  public detailButtonIsVisible = false;
   @ViewChild('drawerContent') drawerContent : IonContent;
   @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
   @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
+  @ViewChild('searchInput') searchInput : SearchInputComponent
   errorMessage: string;
   private currentPositionMarker: Leaflet.Marker = null;
   private isInitialized = false;
@@ -53,7 +56,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       public model: NavigationModel,
       private storage: Storage,
       private dataService: DataService,
-      private geolocation: Geolocation) {
+      private geolocation: Geolocation,
+      private ghService: GraphHopperService) {
   }
 
   async ngAfterViewInit() {
@@ -129,7 +133,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     if (buildings !== null) {
       for (const building of buildings) {
         if (building.Body !== null && building.Body.length > 0) {
-          Leaflet.polygon(this.convertToLeafLetCoordinates(building.Body),
+          Leaflet.polygon(MapPageComponent.convertToLeafLetCoordinates(building.Body),
               {className: building.Name, color: building.Color ?? '#0083C6'})
               .addTo(this.map)
               .on('click', onPolygonClick);
@@ -147,7 +151,6 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   async onSearch(searchInput: string) {
     this.model.errorMessage = '';
     this.progressIsVisible = true;
-    this.detailButtonIsVisible = false;
 
     try {
       this.clearSearchMarkers();
@@ -157,24 +160,14 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         const location = await this.dataService.get_location(searchInput).toPromise();
           if (location) {
             const locationBuilding = await this.dataService.get_building(location.Building).toPromise();
-            const coordinates = this.getCoordinateFromBody(locationBuilding.Body);
+            const coordinates = this.getCenterCoordinateFromBody(locationBuilding.Body);
+            this.model.SetLocationAsSearchResultObject(location, {lat: coordinates.Latitude, lng: coordinates.Longitude});
             this.searchMarker.push(
                 this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Room ' + location.Name, true));
 
             this.map.setView([coordinates.Latitude, coordinates.Longitude], 17)
 
-            const details: [string, any][] = [['Building: ',  locationBuilding.Name]];
-            if (location.Tags) {
-              details.push(['Tags: ', location.Tags.join(', ')]);
-            }
-
-            await this.showElementDrawer(
-                {
-                  Name: location.Name,
-                  Description: location.Description,
-                  Details: details
-                });
-            this.detailButtonIsVisible = true;
+            await this.showElementDrawer();
             return;
           }
         } catch (e) {
@@ -184,13 +177,13 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       try {
         const building = await this.dataService.get_building(searchInput, false).toPromise();
         if (building) {
-          const coordinates = this.getCoordinateFromBody(building.Body);
+          const coordinates = this.getCenterCoordinateFromBody(building.Body);
+          this.model.SetBuildingAsSearchResultObject(building, {lat: coordinates.Latitude, lng: coordinates.Longitude});
+          this.map.setView(this.model.latestSearchResult.LatLng, 17);
           this.searchMarker.push(
               this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
 
-          this.map.setView([coordinates.Latitude, coordinates.Longitude], 17)
-
-          await this.showElementDrawer({Name: building.Name, Description: 'Campus:' + building.Campus, Details: []});
+          await this.showElementDrawer();
           return;
         }
       } catch (e) {
@@ -204,15 +197,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
               this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
 
           this.map.setView([campus.Latitude, campus.Longitude], 17)
-          await this.showElementDrawer({
-            Name: campus.Name,
-            Description: campus.ShortName,
-            Details:
-                [
-                    ['ShortName: ', campus.ShortName],
-                    ['Longitude: ',  campus.Longitude],
-                    ['Latitude: ', campus.Latitude],
-                ]});
+          await this.showElementDrawer();
           return;
         }
       } catch (e) {
@@ -225,7 +210,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
           // found building
           for (const buld of buildings) {
-            const coordinates = this.getCoordinateFromBody(buld.Body);
+            const coordinates = this.getCenterCoordinateFromBody(buld.Body);
             this.searchMarker.push(
               this.showMarker(coordinates.Latitude, coordinates.Longitude, buld.Name, false));
           }
@@ -265,22 +250,41 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public async onCloseLocationDrawer(event:any) {
+    this.searchInput.clearDestinationInput();
+    this.clearRoutes();
+    this.map.setView(this.model.latestSearchResult.LatLng, 17);
     await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(DrawerState.Docked);
   }
 
-  public async showElementDrawer(location: { Description:string, Name:string, Details:[string, any][] }) {
+  public async showElementDrawer() {
     await this.locationDrawer.SetState(DrawerState.Hidden);
-    this.model.selectedObject.Name = location.Name;
-    this.model.selectedObject.Description = location.Description;
-    this.model.selectedObject.Information = location.Details;
     await this.searchDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(DrawerState.Docked);
   }
 
+  public async onNavigationBtnClick() {
+    const position = await this.geolocation.getCurrentPosition();
+    console.log(position);
+    const route:GraphHopperRoute = await this.ghService.GetRouteEndpoint(
+        {lat: position.coords.latitude, lng: position.coords.longitude},
+        this.model.latestSearchResult.LatLng);
+
+    console.log(route);
+    const leafletLatLng = [];
+    for(const coordinate of route.paths[0].points.coordinates) {
+      leafletLatLng.push([coordinate[1], coordinate[0]]);
+    }
+    const polyline = Leaflet.polyline(leafletLatLng, {color: 'red'}).addTo(this.map);
+    this.map.setView(polyline.getCenter(), 17);
+    await this.map.fitBounds(polyline.getBounds());
+    this.routes.push(polyline);
+  }
+
   async detailsBtnClick() {
-    await this.router.navigate(['tabs/navigation/detail'],
-        {queryParams: {location: this.model.selectedObject.Name}})
+      await this.router.navigate(['tabs/navigation/detail'],
+          {queryParams: this.routes.length == 0
+                ? this.model.latestSearchResult.DetailRouterParams : this.model.latestSearchResult.RouteRouterParams});
   }
 
   private handleInputError(ex, searchInput: string) {
@@ -305,20 +309,23 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         : marker;
   }
 
-  private getCoordinateFromBody(body: IGpsCoordinate[]) {
-    let totalLat = 0, totalLong = 0;
-    for (const coordinate of body)
-    {
-      totalLat += coordinate.Latitude;
-      totalLong += coordinate.Longitude;
+  private getCenterCoordinateFromBody(body: IGpsCoordinate[]) {
+    const leafletLatLng = []
+    for (const c of body) {
+      leafletLatLng.push([c.Latitude, c.Longitude]);
     }
-    const centerLat = totalLat / body.length;
-    const centerLong = totalLong / body.length;
 
-    return {
-      Longitude: centerLong,
-      Latitude: centerLat
-    }
+    // cannot use getCenter if polygon is not added to layer (map)
+    const p = new Leaflet.Polygon(leafletLatLng).addTo(this.map);
+
+    const ret:IGpsCoordinate = {
+      Longitude: p.getCenter().lng,
+      Latitude: p.getCenter().lat
+    };
+
+    p.remove();
+
+    return ret;
   }
 
   private clearSearchMarkers() {
@@ -327,7 +334,14 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
+  private clearRoutes() {
+    for (const p of this.routes) {
+      p.remove();
+    }
+    this.routes = [];
+  }
+
+  private static convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
     const leafletBody:LatLngLiteral[] = []
     for (const coordinate of body){
       leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});

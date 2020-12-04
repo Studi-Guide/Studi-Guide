@@ -68,6 +68,14 @@ export class SearchInputComponent implements OnInit {
     }
   }
 
+  public clearDestinationInput() {
+    this.destinationSearchbar.value = '';
+  }
+
+  public clearStartInput() {
+    this.startSearchBar.value = '';
+  }
+
   public setDiscoverySearchbarValue(value:string) {
     this.destinationSearchbarValue = value;
   }

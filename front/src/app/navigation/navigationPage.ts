@@ -152,9 +152,9 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     public async showLocationDrawer(location:ILocation) {
         await this.locationDrawer.SetState(DrawerState.Hidden);
-        this.model.selectedObject.Name = location.Name;
-        this.model.selectedObject.Description = location.Description;
-        this.model.selectedObject.Information = location.Tags ?
+        this.model.latestSearchResult.Name = location.Name;
+        this.model.latestSearchResult.Description = location.Description;
+        this.model.latestSearchResult.Information = location.Tags ?
             [['Tags: ', location.Tags.join(',')]] :
             [];
 
@@ -217,19 +217,19 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     async navigationBtnClick() {
-        if (this.model.selectedObject != null) {
+        if (this.model.latestSearchResult != null) {
             try {
-                const startLocation = await this.dataService.get_location(this.model.selectedObject.Name).toPromise<ILocation>();
+                const startLocation = await this.dataService.get_location(this.model.latestSearchResult.Name).toPromise<ILocation>();
                 await this.showNavigation(startLocation.Building + '.Entrance', startLocation.Name);
             }catch (ex) {
                 let inputError = '';
                 if (ex instanceof HttpErrorResponse) {
                     const errorString = (ex as HttpErrorResponse).error.message;
-                    if (errorString.includes(this.model.selectedObject.Name)) {
-                        inputError = this.model.selectedObject.Name;
+                    if (errorString.includes(this.model.latestSearchResult.Name)) {
+                        inputError = this.model.latestSearchResult.Name;
                     }
                 }
-                this.handleInputError(ex, inputError.length === 0 ? this.model.selectedObject.Name : inputError);
+                this.handleInputError(ex, inputError.length === 0 ? this.model.latestSearchResult.Name : inputError);
             } finally {
                 NavigationPage.progressIsVisible = false;
             }
