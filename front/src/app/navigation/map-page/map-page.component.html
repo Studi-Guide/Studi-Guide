@@ -1,6 +1,6 @@
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
-  <app-navigation-instruction-slides></app-navigation-instruction-slides>
+  <app-navigation-instruction-slides #navSlides></app-navigation-instruction-slides>
   <div id="map-content">
     <ion-text id="error-message" *ngIf="errorMessage" >
       <h5><span class="error">{{ errorMessage }}</span></h5>

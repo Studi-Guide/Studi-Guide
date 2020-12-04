@@ -15,6 +15,7 @@ import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
 import {GraphHopperService, GraphHopperRoute} from '../../services/graph-hopper/graph-hopper.service';
 import {SearchInputComponent} from '../search-input/search-input.component';
+import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -37,18 +38,6 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
   styleUrls: ['./map-page.component.scss'],
 })
 export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
-  map: Leaflet.Map;
-  private searchMarker: Leaflet.Marker[] = [];
-  private routes: Leaflet.Polyline[] = [];
-  public availableCampus: CampusViewModel[] = [];
-  public progressIsVisible = false;
-  @ViewChild('drawerContent') drawerContent : IonContent;
-  @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
-  @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
-  @ViewChild('searchInput') searchInput : SearchInputComponent
-  errorMessage: string;
-  private currentPositionMarker: Leaflet.Marker = null;
-  private isInitialized = false;
 
   constructor(
       private _dataService: DataService,
@@ -58,6 +47,28 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       private dataService: DataService,
       private geolocation: Geolocation,
       private ghService: GraphHopperService) {
+  }
+  map: Leaflet.Map;
+  private searchMarker: Leaflet.Marker[] = [];
+  private routes: Leaflet.Polyline[] = [];
+  public availableCampus: CampusViewModel[] = [];
+  public progressIsVisible = false;
+  @ViewChild('drawerContent') drawerContent : IonContent;
+  @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
+  @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
+  @ViewChild('searchInput') searchInput : SearchInputComponent
+  @ViewChild('navSlides') navSlides : NavigationInstructionSlidesComponent;
+  errorMessage: string;
+  private currentPositionMarker: Leaflet.Marker = null;
+  private isInitialized = false;
+
+  private static convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
+    const leafletBody:LatLngLiteral[] = []
+    for (const coordinate of body){
+      leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});
+    }
+
+    return leafletBody;
   }
 
   async ngAfterViewInit() {
@@ -271,6 +282,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.model.latestSearchResult.LatLng);
 
     console.log(route);
+    this.navSlides.instructions = route.paths[0].instructions
+    this.navSlides.show();
     const leafletLatLng = [];
     for(const coordinate of route.paths[0].points.coordinates) {
       leafletLatLng.push([coordinate[1], coordinate[0]]);
@@ -283,7 +296,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async detailsBtnClick() {
       await this.router.navigate(['tabs/navigation/detail'],
-          {queryParams: this.routes.length == 0
+          {queryParams: this.routes.length === 0
                 ? this.model.latestSearchResult.DetailRouterParams : this.model.latestSearchResult.RouteRouterParams});
   }
 
@@ -339,14 +352,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       p.remove();
     }
     this.routes = [];
+    this.navSlides.hide();
   }
 
-  private static convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
-    const leafletBody:LatLngLiteral[] = []
-    for (const coordinate of body){
-      leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});
-    }
-
-    return leafletBody;
-  }
 }

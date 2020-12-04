@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, ElementRef, Input, OnInit} from '@angular/core';
+import {INavigationInstruction} from './navigation-instruction-if';
 
 @Component({
   selector: 'app-navigation-instruction-slides',
@@ -7,15 +8,27 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavigationInstructionSlidesComponent implements OnInit {
 
+  @Input() instructions: INavigationInstruction[];
+
   // Optional parameters to pass to the swiper instance.
   // See http://idangero.us/swiper/api/ for valid options.
   slideOpts = {
-    initialSlide: 1,
+    initialSlide: 0,
     speed: 400
   };
 
-  constructor() { }
+  constructor(private element: ElementRef) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.hide();
+  }
+
+  public async hide() {
+    this.element.nativeElement.hidden = true;
+  }
+
+  public async show() {
+    this.element.nativeElement.hidden = false;
+  }
 
 }

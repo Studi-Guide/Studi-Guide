@@ -1,16 +1,8 @@
 <ion-slides pager="true" [options]="slideOpts">
-    <ion-slide>
-        <h1>Slide 1</h1>
-        <p>Content</p>
-    </ion-slide>
-    <ion-slide>
-        <h1>Slide 2</h1>
-        <br>
-        <p>Content</p>
-    </ion-slide>
-    <ion-slide>
-        <h1>Slide 3</h1>
-        <br>
-        <p>Content</p>
+    <ion-slide *ngFor="let i of instructions">
+        <ion-text>
+            <h1>{{i.text}}</h1>
+            <h6>{{i.distance}}m</h6>
+        </ion-text>
     </ion-slide>
 </ion-slides>

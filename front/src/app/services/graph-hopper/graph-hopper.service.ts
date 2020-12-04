@@ -2,7 +2,16 @@ import {LOCALE_ID, Injectable, Inject} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Env} from '../../../environments/environment';
 import {LatLngLiteral} from 'leaflet';
-import {catchError} from "rxjs/operators";
+
+export interface GraphHopperInstruction {
+  distance: number;
+  heading: number;
+  interval: [number, number][];
+  sign: number;
+  street_name: string;
+  text: string;
+  time: number;
+}
 
 export interface GraphHopperPoints {
   coordinates: [number, number][];
@@ -11,6 +20,7 @@ export interface GraphHopperPoints {
 
 export interface GraphHopperPath {
   points: GraphHopperPoints;
+  instructions: GraphHopperInstruction[];
 }
 
 export interface GraphHopperRoute {
