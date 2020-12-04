@@ -140,7 +140,7 @@ func NewStudiGuideServer(env *env.Env,
 	rssfeedRouter := router.Group("/rssfeed")
 	{
 		log.Println("Creating proxy controller")
-		err := rssFeed.NewRssFeedController(rssfeedRouter, rssFeedProvider, httpClient)
+		err := rssFeed.NewRssFeedController(rssfeedRouter, rssFeedProvider, &httpClient)
 		if err != nil {
 			log.Fatal(err)
 		} else {
