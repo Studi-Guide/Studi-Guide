@@ -44,6 +44,12 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 		log.Fatalf("failed creating schema resources: %v", err)
 	}
 
+	_, err = client.RssFeed.
+		Create().
+		SetName("testfeed").
+		SetURL("http://www.testfeed.de/rss.xml").
+		Save(ctx)
+
 	address, err := client.Address.Create().
 		SetCity("Munich").
 		SetCountry("Germany").
@@ -809,6 +815,71 @@ func TestEntityMapper_AddCampus_InvalidAddress(t *testing.T) {
 	}
 
 	err := dbService.AddCampus(testcampus)
+	if err == nil {
+		t.Error("expected error got: ", nil)
+	}
+}
+
+func TestEntityService_RssFeedEntity(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	rssfeed, err := dbService.GetRssFeed("testfeed")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	if rssfeed.Name != "testfeed" {
+		t.Error("expected: ", "testfeed", "; got: ", rssfeed.Name)
+	}
+
+	if rssfeed.URL != "http://www.testfeed.de/rss.xml" {
+		t.Error("expected: ", "http://www.testfeed.de/rss.xml", "; got: ", rssfeed.URL)
+	}
+}
+func TestEntityService_RssFeed_Negative(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+	_, err := dbService.GetRssFeed("tesutatoha")
+	if err == nil {
+		t.Error("expected error got: ", nil)
+	}
+}
+
+func TestEntityMapper_AddRssFeed(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	testfeed := ent.RssFeed{
+		URL:  "http://www.testtestfeed.de/rss.xml",
+		Name: "Tesitjaoistgnaj",
+	}
+
+	err := dbService.AddRssFeed(testfeed)
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	rssfeed, err := dbService.GetRssFeed("Tesitjaoistgnaj")
+	if err != nil {
+		t.Error("expected: ", nil, "; got: ", err)
+	}
+
+	if rssfeed.Name != "Tesitjaoistgnaj" {
+		t.Error("expected: ", "Tesitjaoistgnaj", "; got: ", rssfeed.Name)
+	}
+
+	if rssfeed.URL != "http://www.testtestfeed.de/rss.xml" {
+		t.Error("expected: ", "http://www.testtestfeed.de/rss.xml", "; got: ", rssfeed.URL)
+	}
+}
+
+func TestEntityMapper_AddRssFeed_InvalidAddress(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	testfeed := ent.RssFeed{
+		URL:  "http://invalid.com/perl.cgi?key= | http://web-site.com/cgi-bin/perl.cgi?key1=value1&key2",
+		Name: "Tesitjaoistgnaj",
+	}
+
+	err := dbService.AddRssFeed(testfeed)
 	if err == nil {
 		t.Error("expected error got: ", nil)
 	}
