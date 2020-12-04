@@ -27,7 +27,7 @@ export class Env {
     console.log(plt.platforms());
     if (plt.is('hybrid')){
       console.log('Android or iOS app recognized');
-      if (plt.is('capacitor')){
+      if (plt.platforms().includes('capacitor')){
         console.log('Native app running setting backend to https://studi-guide.azurewebsites.net');
         this.serverUrl ='https://studi-guide.azurewebsites.net';
       }
