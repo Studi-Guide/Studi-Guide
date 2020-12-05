@@ -1,5 +1,5 @@
-<ion-content scroll-y="false">
-  <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
+<ion-content data-tap-disabled="true">
+    <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
   <div id="map-content">
     <ion-text id="error-message" *ngIf="errorMessage" >
       <h5><span class="error">{{ errorMessage }}</span></h5>
@@ -70,9 +70,9 @@
         <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
       </ion-content>
     </div>
-  </app-ionic-bottom-drawer>
+    </app-ionic-bottom-drawer>
 
-  <app-ionic-bottom-drawer #locationDrawer state="DrawerState.Hidden">
+    <app-ionic-bottom-drawer #locationDrawer state="DrawerState.Hidden">
     <div class="nav-bottom-drawer">
       <div class="drawer-grip">
         <div class="ion-padding-top"></div>

@@ -133,7 +133,11 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.map.on('moveend', event => {
       LastOpenStreetMapCenterPersistence.persist(this.storage, event.target.getCenter());
+      if (this.platform.is('hybrid')) {
+        this.map.invalidateSize();
+      }
     });
+
     await this.lastOpenStreetMapCenterPersistence.load(this.map, this.ZOOM);
 
     Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
