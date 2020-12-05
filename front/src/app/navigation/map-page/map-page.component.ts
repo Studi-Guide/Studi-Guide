@@ -73,6 +73,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async ngAfterViewInit() {
     await this.locationDrawer.SetState(DrawerState.Hidden);
+    await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
   async ngOnInit() {
@@ -265,13 +266,13 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clearRoutes();
     this.map.setView(this.model.latestSearchResult.LatLng, 17);
     await this.locationDrawer.SetState(DrawerState.Hidden);
-    await this.searchDrawer.SetState(DrawerState.Docked);
+    await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
   public async showElementDrawer() {
     await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(DrawerState.Hidden);
-    await this.locationDrawer.SetState(DrawerState.Docked);
+    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
   public async onNavigationBtnClick() {

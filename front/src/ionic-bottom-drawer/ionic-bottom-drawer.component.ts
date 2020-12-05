@@ -20,6 +20,20 @@ import {DrawerState} from './drawer-state';
 })
 export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChanges {
 
+  public static GetRecommendedDrawerStateForDevice():DrawerState {
+    const isSmallDevice: boolean = window.matchMedia('(max-width: 767.98px)').matches;
+    const isMediumDevice: boolean = window.matchMedia('(min-width: 768px)').matches;
+    const isBigDevice: boolean = window.matchMedia('(min-width: 1200px)').matches;
+
+    if (isSmallDevice) {
+      return DrawerState.Bottom;
+    } else if (isMediumDevice && !isBigDevice) {
+      return DrawerState.Docked;
+    } else if (isMediumDevice && isBigDevice) {
+      return DrawerState.Top;
+    }
+  }
+
   constructor(
       private element: ElementRef,
       private renderer: Renderer2,
