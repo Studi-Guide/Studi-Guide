@@ -7,24 +7,25 @@ import * as Leaflet from 'leaflet';
 })
 export class LastOpenStreetMapCenterPersistence {
 
-    constructor(private storage: Storage) {}
+    private static readonly LAST_MAP_EVENT_KEY = 'lastOpenStreetMapEventTarget';
 
-    private static readonly LAST_CENTER_KEY = 'lastOpenStreetMapCenter';
-
-    public static async persist(storage: Storage, newCenter: Leaflet.LatLng) {
-        await storage.set(this.LAST_CENTER_KEY, newCenter);
+    public static async persist(storage: Storage, mapEventData: PersistedOpenStreetMapData) {
+        await storage.set(this.LAST_MAP_EVENT_KEY, mapEventData);
     }
 
-    public async load(map: Leaflet.Map, zoom: number) {
-        this.storage.ready().then(async () => {
-            await this.storage.get(LastOpenStreetMapCenterPersistence.LAST_CENTER_KEY).then(lastCenter => {
-                const center = lastCenter == null ? [49.452368, 11.093299] : lastCenter;
-                map.setView(center, zoom);
+    public async load(storage: Storage, map: Leaflet.Map, defaultZoom: number) {
+        storage.ready().then(async () => {
+            await storage.get(LastOpenStreetMapCenterPersistence.LAST_MAP_EVENT_KEY).then(lastMapEventData => {
+                map.setView([49.452368, 11.093299], defaultZoom);
+                if (lastMapEventData != null) {
+                    map.flyTo(lastMapEventData.center, lastMapEventData.zoom);
+                }
             });
         });
     }
+}
 
-    public test(map: Leaflet.Map) {
-        console.log(map.getCenter().toString());
-    }
+class PersistedOpenStreetMapData {
+    center: Leaflet.LatLng;
+    zoom: number;
 }

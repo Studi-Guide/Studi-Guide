@@ -69,7 +69,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private currentPositionMarker: Leaflet.Marker = null;
   private isInitialized = false;
 
-  private readonly ZOOM = 17;
+  private readonly DEFAULT_ZOOM = 17;
   private readonly MAX_ZOOM = 18;
   private readonly MIN_ZOOM = 14;
 
@@ -142,9 +142,12 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.map.on('moveend', event => {
-      LastOpenStreetMapCenterPersistence.persist(this.storage, event.target.getCenter());
+      LastOpenStreetMapCenterPersistence.persist(this.storage, {
+        center: event.target.getCenter(),
+        zoom: event.target.getZoom()
+      });
     });
-    await this.lastOpenStreetMapCenterPersistence.load(this.map, this.ZOOM);
+    await this.lastOpenStreetMapCenterPersistence.load(this.storage, this.map, this.DEFAULT_ZOOM);
 
     Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'edupala.com © Angular LeafLet',
@@ -194,7 +197,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.searchMarker.push(
                 this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Room ' + location.Name, true));
 
-            this.map.setView(this.model.latestSearchResult.LatLng, this.ZOOM);
+            this.map.setView(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
 
             await this.showElementDrawer();
             return;
@@ -208,7 +211,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (building) {
           const coordinates = this.getCenterCoordinateFromBody(building.Body);
           this.model.SetBuildingAsSearchResultObject(building, {lat: coordinates.Latitude, lng: coordinates.Longitude});
-          this.map.setView(this.model.latestSearchResult.LatLng, this.ZOOM);
+          this.map.setView(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
           this.searchMarker.push(
               this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
 
@@ -226,7 +229,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
           this.searchMarker.push(
               this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
 
-          this.map.setView([campus.Latitude, campus.Longitude], this.ZOOM)
+          this.map.setView([campus.Latitude, campus.Longitude], this.DEFAULT_ZOOM)
           await this.showElementDrawer();
           return;
         }
@@ -290,7 +293,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clearRoutes();
     await this.routeDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
-    this.map.setView(this.model.latestSearchResult.LatLng, this.ZOOM);
+    this.map.setView(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
   }
 
   public async showElementDrawer() {
@@ -313,7 +316,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
 
     const polyline = Leaflet.polyline(this.model.Route.Coordinates, {color: 'red'}).addTo(this.map);
-    this.map.setView(polyline.getCenter(), this.ZOOM);
+    this.map.setView(polyline.getCenter(), this.DEFAULT_ZOOM);
     await this.map.fitBounds(polyline.getBounds());
     this.routes.push(polyline);
   }
@@ -337,7 +340,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.inNavigationDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     this.clearRoutes();
-    this.map.setView(this.model.latestSearchResult.LatLng, this.ZOOM);
+    this.map.setView(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
   }
 
   async detailsBtnClick() {
