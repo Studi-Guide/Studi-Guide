@@ -79,6 +79,6 @@ export class DataService {
     }
 
     get_rssFeed(feedId: string){
-        return this.httpClient.get(this.baseUrl + '/rssfeed/' + feedId,  {responseType: 'text'}).toPromise()
+        return this.httpClient.get(this.baseUrl + '/rssfeed/' + feedId,  {responseType: 'text'})
     }
 }
