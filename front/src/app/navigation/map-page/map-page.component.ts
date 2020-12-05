@@ -361,13 +361,4 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.routes = [];
   }
-
-  private static convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
-    const leafletBody:LatLngLiteral[] = []
-    for (const coordinate of body){
-      leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});
-    }
-
-    return leafletBody;
-  }
 }
