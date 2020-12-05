@@ -340,7 +340,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.inNavigationDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     this.clearRoutes();
-    this.map.setView(this.model.latestSearchResult.LatLng, this.ZOOM);
+    this.map.setView(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
   }
 
   async detailsBtnClick() {
