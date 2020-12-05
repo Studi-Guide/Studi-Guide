@@ -1,7 +1,41 @@
 :host {
-  width: 100%;
   height: 100%;
   position: absolute;
   left: 0;
   z-index: 9999999;
+}
+
+// media queries copied from @ionic/angular/css/display.css
+@media (min-width: 576px) {
+
+}
+@media (max-width: 575.98px) {
+
+}
+@media (min-width: 768px) {
+  :host {
+    padding-left: 3em;
+    width: 50%;
+    max-width: 475px;
+  }
+}
+@media (max-width: 767.98px) {
+  :host {
+    width: 100%;
+  }
+}
+@media (min-width: 992px) {
+
+}
+@media (max-width: 991.98px) {
+
+}
+@media (min-width: 1200px) {
+  :host {
+    padding-left: 3em;
+    max-width: 475px;
+  }
+}
+@media (max-width: 1199.98px) {
+
 }
