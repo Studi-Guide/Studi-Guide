@@ -1,4 +1,11 @@
 # Dockerfile References: https://docs.docker.com/engine/reference/builder/
+
+#install certs
+FROM ubuntu:latest as ubuntu
+RUN apt-get update
+RUN apt-get install ca-certificates -y
+RUN update-ca-certificates
+
 # --------------------- IONIC Build ------------------------
 FROM node:latest as ionicbuilder
 
@@ -44,6 +51,10 @@ COPY --from=golangbuilder /go/src .
 
 WORKDIR /go/bin
 COPY --from=golangbuilder /go/bin .
+
+# copy cert files
+WORKDIR /etc/ssl/certs
+COPY --from=ubuntu /etc/ssl/certs .
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
