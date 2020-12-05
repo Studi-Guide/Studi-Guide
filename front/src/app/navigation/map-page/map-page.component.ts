@@ -13,9 +13,10 @@ import {IonContent} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
-import {GraphHopperService, GraphHopperRoute} from '../../services/graph-hopper/graph-hopper.service';
+import {GraphHopperRoute, GraphHopperService} from '../../services/graph-hopper/graph-hopper.service';
 import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
+import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -48,6 +49,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       private geolocation: Geolocation,
       private ghService: GraphHopperService) {
   }
+
   map: Leaflet.Map;
   private searchMarker: Leaflet.Marker[] = [];
   private routes: Leaflet.Polyline[] = [];
@@ -56,6 +58,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('drawerContent') drawerContent : IonContent;
   @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
   @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
+  @ViewChild('routeDrawer') routeDrawer : IonicBottomDrawerComponent;
   @ViewChild('searchInput') searchInput : SearchInputComponent
   @ViewChild('navSlides') navSlides : NavigationInstructionSlidesComponent;
   errorMessage: string;
@@ -73,6 +76,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async ngAfterViewInit() {
     await this.locationDrawer.SetState(DrawerState.Hidden);
+    await this.routeDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
@@ -263,10 +267,15 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public async onCloseLocationDrawer(event:any) {
     this.searchInput.clearDestinationInput();
-    this.clearRoutes();
-    this.map.setView(this.model.latestSearchResult.LatLng, 17);
     await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+  }
+
+  public async onCloseRouteDrawer(event:any) {
+    this.clearRoutes();
+    await this.routeDrawer.SetState(DrawerState.Hidden);
+    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    this.map.setView(this.model.latestSearchResult.LatLng, 17);
   }
 
   public async showElementDrawer() {
@@ -275,7 +284,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
-  public async onNavigationBtnClick() {
+  public async onRouteBtnClick() {
     const position = await this.geolocation.getCurrentPosition();
     console.log(position);
     const route:GraphHopperRoute = await this.ghService.GetRouteEndpoint(
@@ -283,8 +292,12 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.model.latestSearchResult.LatLng);
 
     console.log(route);
-    this.navSlides.instructions = route.paths[0].instructions
-    this.navSlides.show();
+    this.model.NavigationInstructions = route.paths[0].instructions;
+    // this.navSlides.instructions = route.paths[0].instructions
+    // this.navSlides.show();
+    await this.locationDrawer.SetState(DrawerState.Hidden);
+    await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+
     const leafletLatLng = [];
     for(const coordinate of route.paths[0].points.coordinates) {
       leafletLatLng.push([coordinate[1], coordinate[0]]);
@@ -299,6 +312,10 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       await this.router.navigate(['tabs/navigation/detail'],
           {queryParams: this.routes.length === 0
                 ? this.model.latestSearchResult.DetailRouterParams : this.model.latestSearchResult.RouteRouterParams});
+  }
+
+  public onNavigationInstructionClick(instruction:INavigationInstruction) {
+    console.log(instruction);
   }
 
   private handleInputError(ex, searchInput: string) {

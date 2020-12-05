@@ -2,6 +2,7 @@ import {IBuilding, ICampus, ILocation} from '../building-objects-if';
 import {Injectable} from '@angular/core';
 import {Params} from '@angular/router';
 import {LatLngLiteral} from 'leaflet';
+import {INavigationInstruction} from "./navigation-instruction-slides/navigation-instruction-if";
 
 
 
@@ -29,6 +30,7 @@ export class NavigationModel {
         LatLng: {lat: 0, lng: 0}
     };
     public availableCampus: ICampus[] = [];
+    public NavigationInstructions: INavigationInstruction[] = [];
 
     public SetCampusAsSearchResultObject(c:ICampus) {
         this.latestSearchResult = {

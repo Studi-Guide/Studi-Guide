@@ -102,7 +102,7 @@
             </ion-button>
           </ion-col>
           <ion-col>
-            <ion-button id="routeBtn" color="primary" expand="block" (click)="onNavigationBtnClick()">
+            <ion-button id="routeBtn" color="primary" expand="block" (click)="onRouteBtnClick()">
               Route
             </ion-button>
           </ion-col>
@@ -115,6 +115,44 @@
           <ion-col>{{item[1]}}</ion-col>
         </ion-row>
       </ion-grid>
+    </ion-content>
+  </div>
+</app-ionic-bottom-drawer>
+
+<app-ionic-bottom-drawer #routeDrawer state="DrawerState.Hidden">
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+      <div class="ion-padding-bottom"></div>
+    </div>
+    <ion-grid>
+      <ion-row class="ion-justify-content-between ion-align-self-center">
+        <ion-col>
+          <ion-label><h1>To {{this.model.latestSearchResult.Name}}</h1></ion-label>
+          <ion-text>From My Location</ion-text>
+        </ion-col>
+        <ion-col class="ion-justify-content-end ion-padding-horizontal">
+          <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseRouteDrawer($event)">
+            <ion-icon slot="icon-only" name="close-outline" size="small"></ion-icon>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-button color="success" expand="block">
+            Go
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <ion-content>
+      <ion-list>
+        <ion-item *ngFor="let i of model.NavigationInstructions" button (click)="onNavigationInstructionClick(i)">
+          <ion-label>{{i.text}}</ion-label>
+          <ion-text>{{i.distance}}m</ion-text>
+        </ion-item>
+      </ion-list>
     </ion-content>
   </div>
 </app-ionic-bottom-drawer>
