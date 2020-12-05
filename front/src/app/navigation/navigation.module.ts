@@ -9,6 +9,7 @@ import {MapViewComponent} from './map-view/map-view.component';
 import {IonicBottomDrawerModule} from '../../ionic-bottom-drawer/ionic-bottom-drawer.module';
 import {MapPageComponent} from './map-page/map-page.component';
 import {FloorButtonComponent} from './floor-button/floor-button.component';
+import {NavigationInstructionSlidesComponent} from './navigation-instruction-slides/navigation-instruction-slides.component';
 
 @NgModule({
   imports: [
@@ -21,6 +22,13 @@ import {FloorButtonComponent} from './floor-button/floor-button.component';
         ]),
     IonicBottomDrawerModule
   ],
-    declarations: [NavigationPage, SearchInputComponent, MapViewComponent, MapPageComponent, FloorButtonComponent]
+    declarations: [
+        NavigationPage,
+        SearchInputComponent,
+        MapViewComponent,
+        MapPageComponent,
+        FloorButtonComponent,
+        NavigationInstructionSlidesComponent
+    ]
 })
 export class NavigationPageModule {}

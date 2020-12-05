@@ -1,3 +1,4 @@
+<app-navigation-instruction-slides #navSlides (nextSlide)="onSlideChange($event)" (previousSlide)="onSlideChange($event)"></app-navigation-instruction-slides>
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
   <div id="map-content">
@@ -9,109 +10,178 @@
         <a href="https://github.com/Studi-Guide/Studi-Guide/issues/new/choose">Request a missing place</a>
       </p>
     </ion-text>
-    <div id="leafletMap">
+    <div id="leafletMap"></div>
+  </div>
+
+
+</ion-content>
+
+<app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)" #searchDrawer>
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+    </div>
+    <app-search-input #searchInput
+                      (discovery)="onSearch($event)"
+                      (route)="onRoute($event)">
+    </app-search-input>
+    <ion-content #drawerContent>
+
+      <ion-grid>
+        <ion-list-header>Current Campus</ion-list-header>
+        <ion-row>
+          <ion-col>
+            <ion-button class="square-md ion-no-padding" shape="round">
+              <ion-icon slot="icon-only" name="business-outline" size="large"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button class="square-md ion-no-padding" shape="round" color="medium">
+              <ion-icon slot="icon-only" name="layers-outline" size="large"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button class="square-md ion-no-padding" shape="round" color="dark">
+              <ion-icon slot="icon-only" name="library-outline" size="large"></ion-icon>
+            </ion-button>
+          </ion-col>
+          <ion-col></ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <ion-list class="ion-no-padding">
+        <ion-list-header>
+          Recent Searches
+        </ion-list-header>
+        <ion-item *ngFor="let s of model.recentSearches;" button (click)="recentSearchClick(s)">
+          <ion-label><h2>{{s}}</h2></ion-label>
+        </ion-item>
+      </ion-list>
+      <ion-list class="ion-no-padding">
+        <ion-list-header>
+          Choose a Campus
+        </ion-list-header>
+        <ion-item *ngFor="let campus of availableCampus">
+          <ion-label>
+            <h2>{{campus.ShortName}}: {{campus.Name}}</h2>
+            <h3>{{campus.Address}}</h3>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+    </ion-content>
+  </div>
+</app-ionic-bottom-drawer>
+
+<app-ionic-bottom-drawer #locationDrawer state="DrawerState.Hidden">
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+      <div class="ion-padding-bottom"></div>
+    </div>
+    <ion-content>
+      <ion-grid id="locationdrawerContent" >
+        <ion-row class="ion-justify-content-between ion-align-self-center">
+          <ion-col>
+            <ion-label><h1>{{this.model.latestSearchResult.Name}}</h1></ion-label>
+            <ion-text>{{this.model.latestSearchResult.Description}}</ion-text>
+          </ion-col>
+          <ion-col class="ion-justify-content-end ion-padding-horizontal">
+            <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseLocationDrawer($event)">
+              <ion-icon slot="icon-only" name="close-outline" size="small"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button color="primary" expand="block" (click)="detailsBtnClick()">
+              Details
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button id="routeBtn" color="primary" expand="block" (click)="onRouteBtnClick()">
+              Route
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let item of model.latestSearchResult.Information">
+          <ion-col>{{item[0]}}</ion-col>
+          <ion-col>{{item[1]}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+  </div>
+</app-ionic-bottom-drawer>
+
+<app-ionic-bottom-drawer #routeDrawer state="DrawerState.Hidden">
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+      <div class="ion-padding-bottom"></div>
+      <ion-grid>
+        <ion-row class="ion-justify-content-between ion-align-self-center">
+          <ion-col>
+            <ion-label><h1>To {{this.model.latestSearchResult.Name}}</h1></ion-label>
+            <ion-text>From My Location</ion-text>
+          </ion-col>
+          <ion-col class="ion-justify-content-end ion-padding-horizontal">
+            <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseRouteDrawer($event)">
+              <ion-icon slot="icon-only" name="close-outline" size="small"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-label><h2>{{this.model.Route.Time}} min</h2></ion-label>
+            <ion-text>{{this.model.Route.Distance}} m</ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-button *ngIf="!UseDrawerForNavigation()" color="success" expand="block" (click)="onLaunchNavigation()">
+              Go
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <ion-content>
+      <ion-list>
+        <ion-item *ngFor="let i of model.Route.NavigationInstructions" button (click)="onNavigationInstructionClick(i)">
+          <ion-label>{{i.text}}</ion-label>
+          <ion-text>{{i.distance}}m</ion-text>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+    </ion-content>
+  </div>
+</app-ionic-bottom-drawer>
+
+<app-ionic-bottom-drawer #inNavigationDrawer state="DrawerState.Hidden">
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+      <div class="ion-padding-bottom"></div>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-label><h2>{{this.model.Route.Time}} min</h2></ion-label>
+            <ion-text>{{this.model.Route.Distance}} m</ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-button color="danger" (click)="onEndRouteClick()" expand="block">
+              End Route
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
     </div>
   </div>
-  <app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)" #searchDrawer>
-    <div class="nav-bottom-drawer">
-      <div class="drawer-grip">
-        <div class="ion-padding-top"></div>
-        <div class="nav-hbar"></div>
-        <app-search-input #searchInput
-                (discovery)="onSearch($event)"
-                (route)="onRoute($event)">
-        </app-search-input>
-      </div>
-      <ion-content color="light" #drawerContent>
-
-        <ion-grid>
-          <ion-list-header>Current Campus</ion-list-header>
-          <ion-row>
-            <ion-col>
-              <ion-button class="square-md ion-no-padding" shape="round">
-                <ion-icon slot="icon-only" name="business-outline" size="large"></ion-icon>
-              </ion-button>
-            </ion-col>
-            <ion-col>
-              <ion-button class="square-md ion-no-padding" shape="round" color="medium">
-                <ion-icon slot="icon-only" name="layers-outline" size="large"></ion-icon>
-              </ion-button>
-            </ion-col>
-            <ion-col>
-              <ion-button class="square-md ion-no-padding" shape="round" color="dark">
-                <ion-icon slot="icon-only" name="library-outline" size="large"></ion-icon>
-              </ion-button>
-            </ion-col>
-            <ion-col></ion-col>
-          </ion-row>
-        </ion-grid>
-
-        <ion-list class="ion-no-padding">
-          <ion-list-header color="light">
-            Recent Searches
-          </ion-list-header>
-          <ion-item color="light" *ngFor="let s of model.recentSearches;" button (click)="recentSearchClick(s)">
-            <ion-label><h2>{{s}}</h2></ion-label>
-          </ion-item>
-        </ion-list>
-        <ion-list class="ion-no-padding">
-          <ion-list-header color="light">
-            Choose a Campus
-          </ion-list-header>
-          <ion-item color="light" *ngFor="let campus of availableCampus">
-            <ion-label>
-              <h2>{{campus.ShortName}}: {{campus.Name}}</h2>
-              <h3>{{campus.Address}}</h3>
-            </ion-label>
-          </ion-item>
-        </ion-list>
-        <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
-        <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
-        <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
-      </ion-content>
-    </div>
-  </app-ionic-bottom-drawer>
-
-  <app-ionic-bottom-drawer #locationDrawer state="DrawerState.Hidden">
-    <div class="nav-bottom-drawer">
-      <div class="drawer-grip">
-        <div class="ion-padding-top"></div>
-        <div class="nav-hbar"></div>
-        <div class="ion-padding-bottom"></div>
-      </div>
-      <ion-content color="light">
-        <ion-grid id="locationdrawerContent" >
-          <ion-row class="ion-justify-content-between ion-align-self-center">
-            <ion-col size="auto">
-              <ion-text id="locationdrawerName">{{this.model.latestSearchResult.Name}}</ion-text>
-            </ion-col>
-            <ion-col class="ion-justify-content-end ion-padding-horizontal">
-              <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseLocationDrawer($event)">
-                <ion-icon slot="icon-only" name="close-outline" size="small"></ion-icon>
-              </ion-button>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>
-              <ion-button color="primary" expand="block" (click)="detailsBtnClick()">
-                Details
-              </ion-button>
-            </ion-col>
-            <ion-col>
-              <ion-button id="routeBtn" color="primary" expand="block" (click)="onNavigationBtnClick()">
-                Route
-              </ion-button>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-text>{{this.model.latestSearchResult.Description}}</ion-text>
-          </ion-row>
-          <ion-row *ngFor="let item of model.latestSearchResult.Information">
-            <ion-col>{{item[0]}}</ion-col>
-            <ion-col>{{item[1]}}</ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-content>
-    </div>
-  </app-ionic-bottom-drawer>
-</ion-content>
+</app-ionic-bottom-drawer>
