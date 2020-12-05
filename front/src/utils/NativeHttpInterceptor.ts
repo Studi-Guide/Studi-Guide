@@ -39,14 +39,22 @@ export class NativeHttpInterceptor implements HttpInterceptor {
                 data: request.body,
                 headers: header,
                 serializer: 'json',
-        });
+            });
 
             let reqbody;
 
             try {
-                reqbody = JSON.parse(nativeHttpResponse.data);
+                if (!request.responseType || request.responseType === 'json'){
+                    reqbody = JSON.parse(nativeHttpResponse.data);
+                } else {
+                   if (request.responseType === 'text'){
+                       reqbody = nativeHttpResponse.data;
+                   }
+                }
+
             } catch (error) {
-                reqbody = { response: nativeHttpResponse.data };
+                console.log(error);
+                reqbody = nativeHttpResponse.data;
             }
 
             const reqHeader = new HttpHeaders(nativeHttpResponse.headers);
