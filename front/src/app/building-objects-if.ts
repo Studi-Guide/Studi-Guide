@@ -86,9 +86,3 @@ export interface IRenderer {
   startAnimation(renderingContext:any, args?:any)
   stopAnimation(renderingContext:any, args?:any)
 }
-
-export class DrawerObject {
-  Name: string;
-  Description: string;
-  Information: [string, any][];
-}
