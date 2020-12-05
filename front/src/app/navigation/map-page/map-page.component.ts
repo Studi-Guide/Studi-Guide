@@ -301,7 +301,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async detailsBtnClick() {
       await this.router.navigate(['tabs/navigation/detail'],
-          {queryParams: this.routes.length == 0
+          {queryParams: this.routes.length === 0
                 ? this.model.latestSearchResult.DetailRouterParams : this.model.latestSearchResult.RouteRouterParams});
   }
 
