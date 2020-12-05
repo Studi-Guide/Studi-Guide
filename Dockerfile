@@ -1,4 +1,11 @@
 # Dockerfile References: https://docs.docker.com/engine/reference/builder/
+
+#install certs
+FROM ubuntu:latest as ubuntu
+RUN apt-get update
+RUN apt-get install ca-certificates -y
+RUN update-ca-certificates
+
 # --------------------- IONIC Build ------------------------
 FROM node:latest as ionicbuilder
 
@@ -35,6 +42,10 @@ RUN cp ./db.sqlite3 ./../../bin
 WORKDIR /go/bin
 
 FROM scratch
+
+# copy cert files
+WORKDIR /etc/ssl/certs
+COPY --from=ubuntu /etc/ssl/certs .
 
 WORKDIR /go/bin/ionic
 COPY --from=ionicbuilder /www/app/www .
