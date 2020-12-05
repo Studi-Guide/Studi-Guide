@@ -1,4 +1,4 @@
-<app-navigation-instruction-slides #navSlides></app-navigation-instruction-slides>
+<app-navigation-instruction-slides #navSlides (nextSlide)="onSlideChange($event)" (previousSlide)="onSlideChange($event)"></app-navigation-instruction-slides>
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
   <div id="map-content">

@@ -329,6 +329,10 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.map.setView(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].interval[0]], this.MAX_ZOOM);
   }
 
+  public onSlideChange(index:number) {
+    this.onNavigationInstructionClick(this.model.Route.NavigationInstructions[index]);
+  }
+
   public async onEndRouteClick() {
     await this.inNavigationDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
@@ -343,7 +347,6 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onNavigationInstructionClick(instruction:INavigationInstruction) {
-    console.log(instruction, instruction.interval[0], this.model.Route.Coordinates[instruction.interval[0]]);
     this.map.setView(this.model.Route.Coordinates[instruction.interval[0]], this.MAX_ZOOM);
   }
 
