@@ -13,10 +13,11 @@ import {IonContent} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
-import {GraphHopperRoute, GraphHopperService} from '../../services/graph-hopper/graph-hopper.service';
+import {GraphHopperService, GraphHopperRoute} from '../../services/graph-hopper/graph-hopper.service';
 import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
+import {LastOpenStreetMapCenterPersistence} from './LastOpenStreetMapCenterPersistence';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -47,8 +48,9 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       private storage: Storage,
       private dataService: DataService,
       private geolocation: Geolocation,
-      private ghService: GraphHopperService) {
-  }
+      private ghService: GraphHopperService,
+      private lastOpenStreetMapCenterPersistence: LastOpenStreetMapCenterPersistence
+  ) {}
 
   map: Leaflet.Map;
   private searchMarker: Leaflet.Marker[] = [];
@@ -65,6 +67,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private currentPositionMarker: Leaflet.Marker = null;
   private isInitialized = false;
 
+  private readonly ZOOM = 17;
+
   private static convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
     const leafletBody:LatLngLiteral[] = []
     for (const coordinate of body){
@@ -75,8 +79,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    await this.locationDrawer.SetState(DrawerState.Hidden);
-    await this.routeDrawer.SetState(DrawerState.Hidden);
+    this.locationDrawer.SetState(DrawerState.Hidden);
+    this.routeDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
@@ -130,8 +134,12 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       maxBounds:bounds,
       maxZoom: 18,
       minZoom: 14
-    })
-        .setView([49.452368, 11.093299], 17);
+    });
+
+    this.map.on('moveend', event => {
+      LastOpenStreetMapCenterPersistence.persist(this.storage, event.target.getCenter());
+    });
+    await this.lastOpenStreetMapCenterPersistence.load(this.map, this.ZOOM);
 
     Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'edupala.com © Angular LeafLet',
@@ -181,7 +189,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.searchMarker.push(
                 this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Room ' + location.Name, true));
 
-            this.map.setView([coordinates.Latitude, coordinates.Longitude], 17)
+            this.map.setView([coordinates.Latitude, coordinates.Longitude], this.ZOOM)
 
             await this.showElementDrawer();
             return;
@@ -195,7 +203,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (building) {
           const coordinates = this.getCenterCoordinateFromBody(building.Body);
           this.model.SetBuildingAsSearchResultObject(building, {lat: coordinates.Latitude, lng: coordinates.Longitude});
-          this.map.setView(this.model.latestSearchResult.LatLng, 17);
+          this.map.setView(this.model.latestSearchResult.LatLng, this.ZOOM);
           this.searchMarker.push(
               this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
 
@@ -212,7 +220,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
           this.searchMarker.push(
               this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
 
-          this.map.setView([campus.Latitude, campus.Longitude], 17)
+          this.map.setView([campus.Latitude, campus.Longitude], this.ZOOM)
           await this.showElementDrawer();
           return;
         }
@@ -275,7 +283,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clearRoutes();
     await this.routeDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
-    this.map.setView(this.model.latestSearchResult.LatLng, 17);
+    this.map.setView(this.model.latestSearchResult.LatLng, this.ZOOM);
   }
 
   public async showElementDrawer() {
@@ -303,7 +311,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       leafletLatLng.push([coordinate[1], coordinate[0]]);
     }
     const polyline = Leaflet.polyline(leafletLatLng, {color: 'red'}).addTo(this.map);
-    this.map.setView(polyline.getCenter(), 17);
+    this.map.setView(polyline.getCenter(), this.ZOOM);
     await this.map.fitBounds(polyline.getBounds());
     this.routes.push(polyline);
   }
@@ -372,5 +380,4 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.routes = [];
     this.navSlides.hide();
   }
-
 }
