@@ -1,4 +1,4 @@
-import {DrawerObject, IBuilding, ILocation} from '../building-objects-if';
+import {IBuilding, ILocation} from '../building-objects-if';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {IonContent, ModalController} from '@ionic/angular';
 import {DataService} from '../services/data.service';
