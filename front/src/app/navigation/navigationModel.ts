@@ -1,7 +1,7 @@
-import {DrawerObject, IBuilding, ICampus, ILocation} from '../building-objects-if';
+import {IBuilding, ICampus, ILocation} from '../building-objects-if';
 import {Injectable} from '@angular/core';
-import {Params} from "@angular/router";
-import {LatLngLiteral} from "leaflet";
+import {Params} from '@angular/router';
+import {LatLngLiteral} from 'leaflet';
 
 
 
