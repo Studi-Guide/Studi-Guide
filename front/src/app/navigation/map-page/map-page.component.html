@@ -1,4 +1,4 @@
-<app-navigation-instruction-slides #navSlides style="z-index: 99999"></app-navigation-instruction-slides>
+<app-navigation-instruction-slides #navSlides></app-navigation-instruction-slides>
 <ion-content scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
   <div id="map-content">
@@ -21,11 +21,11 @@
     <div class="drawer-grip">
       <div class="ion-padding-top"></div>
       <div class="nav-hbar"></div>
-      <app-search-input #searchInput
-                        (discovery)="onSearch($event)"
-                        (route)="onRoute($event)">
-      </app-search-input>
     </div>
+    <app-search-input #searchInput
+                      (discovery)="onSearch($event)"
+                      (route)="onRoute($event)">
+    </app-search-input>
     <ion-content color="light" #drawerContent>
 
       <ion-grid>
