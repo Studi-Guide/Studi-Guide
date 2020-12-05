@@ -2,7 +2,7 @@ import {Injectable, Injector} from '@angular/core';
 import {HttpInterceptor, HttpRequest, HttpHandler, HttpEvent, HttpResponse, HttpHeaders} from '@angular/common/http';
 import { Observable, from } from 'rxjs';
 import { Platform } from '@ionic/angular';
-import { HTTP } from '@ionic-native/http/ngx';
+import {HTTP, HTTPResponse} from '@ionic-native/http/ngx';
 
 type HttpMethod = 'get' | 'post' | 'put' | 'patch' | 'head' | 'delete' | 'upload' | 'download';
 

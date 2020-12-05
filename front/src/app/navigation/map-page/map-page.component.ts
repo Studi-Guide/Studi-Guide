@@ -80,7 +80,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async ngOnInit() {
-    if (this.model.recentSearches === null) {
+    if (!this.model.recentSearches) {
       const searches = await SearchResultProvider.readRecentSearch(this.storage);
       if (searches !== null) {
         this.model.recentSearches = searches;
@@ -88,13 +88,14 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
-    if (this.model.availableCampus.length === 0)
-    {
+    if (!this.model.availableCampus || this.model.availableCampus.length === 0) {
       this.model.availableCampus = await this.dataService.get_campus_search().toPromise()
     }
 
-    for (const campus of this.model.availableCampus) {
-      this.availableCampus.push(new CampusViewModel(campus))
+    if (this.model.availableCampus) {
+      for (const campus of this.model.availableCampus) {
+        this.availableCampus.push(new CampusViewModel(campus))
+      }
     }
   }
 
