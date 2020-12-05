@@ -43,6 +43,10 @@ WORKDIR /go/bin
 
 FROM scratch
 
+# copy cert files
+WORKDIR /etc/ssl/certs
+COPY --from=ubuntu /etc/ssl/certs .
+
 WORKDIR /go/bin/ionic
 COPY --from=ionicbuilder /www/app/www .
 
@@ -51,10 +55,6 @@ COPY --from=golangbuilder /go/src .
 
 WORKDIR /go/bin
 COPY --from=golangbuilder /go/bin .
-
-# copy cert files
-WORKDIR /etc/ssl/certs
-COPY --from=ubuntu /etc/ssl/certs .
 
 # Expose port 8080 to the outside world
 EXPOSE 8080
