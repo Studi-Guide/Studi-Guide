@@ -1,0 +1,9 @@
+<ion-slides #ionSlides (ionSlideNextEnd)="onNextSlide()"
+            (ionSlidePrevEnd)="onPrevSlide()" pager="true" [options]="slideOpts">
+    <ion-slide *ngFor="let i of instructions">
+        <ion-text>
+            <h2>{{i.text}}</h2>
+            <p>{{i.distance}}m</p>
+        </ion-text>
+    </ion-slide>
+</ion-slides>

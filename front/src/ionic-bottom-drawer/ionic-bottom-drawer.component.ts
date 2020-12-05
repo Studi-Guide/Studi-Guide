@@ -19,7 +19,6 @@ import {DrawerState} from './drawer-state';
   styleUrls: ['./ionic-bottom-drawer.component.scss'],
 })
 export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChanges {
-
   constructor(
       private element: ElementRef,
       private renderer: Renderer2,
@@ -58,10 +57,31 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   private startPositionTop: number;
   private gesture: Gesture;
 
+  public static GetRecommendedDrawerStateForDevice():DrawerState {
+    const isSmallDevice: boolean = window.matchMedia('(max-width: 767.98px)').matches;
+    const isMediumDevice: boolean = window.matchMedia('(min-width: 768px)').matches;
+    const isBigDevice: boolean = window.matchMedia('(min-width: 1200px)').matches;
+
+    if (isSmallDevice) {
+      return DrawerState.Bottom;
+    } else if (isMediumDevice && !isBigDevice) {
+      return DrawerState.Docked;
+    } else if (isMediumDevice && isBigDevice) {
+      return DrawerState.Top;
+    }
+  }
+
   ngOnInit() {
 
+    const element = this.element.nativeElement.querySelector('.'+this.gripElementsClass);
+
+    if (element === null) {
+      throw new Error('can not find any element with the class name "'
+          +this.gripElementsClass+'" for gesture initialization of IonicBottomDrawer');
+    }
+
     this.gesture = this.gestureCtrl.create({
-      el: this.element.nativeElement.querySelector('.'+this.gripElementsClass),
+      el: element,
       threshold: 0,
       gestureName: 'push-pull-drawer',
       direction: 'y',
