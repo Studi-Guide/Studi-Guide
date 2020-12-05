@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import { Env } from '../../environments/environment';
 import {IBuilding, ICampus, ILocation, IMapItem} from '../building-objects-if';
 import {CacheService} from './cache.service';
@@ -76,5 +76,9 @@ export class DataService {
     get_campus_search(search: string = '') {
         const searchParam = search ? '?search=' + search : '';
         return this.cache.Get<ICampus[]>(this.httpClient, this.baseUrl + '/campus' + searchParam);
+    }
+
+    get_rssFeed(feedId: string){
+        return this.httpClient.get(this.baseUrl + '/rssfeed/' + feedId,  {responseType: 'text'}).toPromise()
     }
 }

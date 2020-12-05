@@ -19,6 +19,8 @@ import (
 	"studi-guide/pkg/ion18n"
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
+	"studi-guide/pkg/rssFeed"
+	"studi-guide/pkg/utils"
 )
 
 type StudiGuideServer struct {
@@ -29,7 +31,9 @@ func NewStudiGuideServer(env *env.Env,
 	buildingProvider buildingInfo.BuildingProvider, roomProvider buildingRoom.RoomServiceProvider,
 	locationProvider buildingLocation.LocationProvider, mapProvider buildingMap.MapServiceProvider,
 	navigationProvider services.NavigationServiceProvider,
-	campusProvider campus.CampusProvider) *StudiGuideServer {
+	campusProvider campus.CampusProvider,
+	rssFeedProvider rssFeed.Provider,
+	httpClient utils.HttpClient) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -127,6 +131,17 @@ func NewStudiGuideServer(env *env.Env,
 	{
 		log.Println("Creating campus controller")
 		err := campus.NewCampusController(campusRouter, campusProvider)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Println("Successfully initialized campus controller")
+		}
+	}
+
+	rssfeedRouter := router.Group("/rssfeed")
+	{
+		log.Println("Creating proxy controller")
+		err := rssFeed.NewRssFeedController(rssfeedRouter, rssFeedProvider, httpClient)
 		if err != nil {
 			log.Fatal(err)
 		} else {

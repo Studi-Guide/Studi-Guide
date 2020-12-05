@@ -1,4 +1,11 @@
 # Dockerfile References: https://docs.docker.com/engine/reference/builder/
+
+#install certs
+FROM ubuntu:latest as ubuntu
+RUN apt-get update
+RUN apt-get install ca-certificates -y
+RUN update-ca-certificates
+
 # --------------------- IONIC Build ------------------------
 FROM node:latest as ionicbuilder
 
@@ -29,12 +36,16 @@ RUN go generate ./...
 # Force the go compiler to use modules
 RUN go build  -a -tags netgo -v  -ldflags '-w -extldflags "-static"' -o /go/bin ./cmd/...
 
-# import rooms
+# prepare db
+RUN sh ./preparedb.sh
+RUN cp ./db.sqlite3 ./../../bin
 WORKDIR /go/bin
-RUN rm -f ./db.sqlite3
-RUN studi-guide-ctl migrate import campus /go/src/studi-guide/internal/campus.json;
-RUN studi-guide-ctl migrate import rooms /go/src/studi-guide/internal/rooms.json;
+
 FROM scratch
+
+# copy cert files
+WORKDIR /etc/ssl/certs
+COPY --from=ubuntu /etc/ssl/certs .
 
 WORKDIR /go/bin/ionic
 COPY --from=ionicbuilder /www/app/www .

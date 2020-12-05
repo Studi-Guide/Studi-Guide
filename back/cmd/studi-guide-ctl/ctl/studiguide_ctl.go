@@ -5,6 +5,7 @@ import (
 	"studi-guide/pkg/building/campus"
 	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/building/room/models"
+	"studi-guide/pkg/rssFeed"
 )
 
 //StudiGuideCtlCli
@@ -39,6 +40,17 @@ func StudiGuideCtlCli(dbService *entitymapper.EntityMapper) *cli.App {
 								Usage: "import campus data",
 								Action: func(context *cli.Context) error {
 									importer, err := campus.NewCampusImporter(context.Args().First(), dbService)
+									if err != nil {
+										return err
+									}
+									return importer.RunImport()
+								},
+							},
+							{
+								Name:  "rssfeed",
+								Usage: "import rssfeed data",
+								Action: func(context *cli.Context) error {
+									importer, err := rssFeed.NewRssFeedImporter(context.Args().First(), dbService)
 									if err != nil {
 										return err
 									}
