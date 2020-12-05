@@ -197,7 +197,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.searchMarker.push(
                 this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Room ' + location.Name, true));
 
-            this.map.setView(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
+            this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
 
             await this.showElementDrawer();
             return;
@@ -211,7 +211,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         if (building) {
           const coordinates = this.getCenterCoordinateFromBody(building.Body);
           this.model.SetBuildingAsSearchResultObject(building, {lat: coordinates.Latitude, lng: coordinates.Longitude});
-          this.map.setView(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
+          this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
           this.searchMarker.push(
               this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
 
@@ -229,7 +229,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
           this.searchMarker.push(
               this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
 
-          this.map.setView([campus.Latitude, campus.Longitude], this.DEFAULT_ZOOM)
+          this.map.flyTo([campus.Latitude, campus.Longitude], this.DEFAULT_ZOOM)
           await this.showElementDrawer();
           return;
         }
@@ -293,7 +293,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.clearRoutes();
     await this.routeDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
-    this.map.setView(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
+    this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
   }
 
   public async showElementDrawer() {
@@ -316,7 +316,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
 
     const polyline = Leaflet.polyline(this.model.Route.Coordinates, {color: 'red'}).addTo(this.map);
-    this.map.setView(polyline.getCenter(), this.DEFAULT_ZOOM);
+    this.map.flyTo(polyline.getCenter(), this.DEFAULT_ZOOM);
     await this.map.fitBounds(polyline.getBounds());
     this.routes.push(polyline);
   }
@@ -329,7 +329,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
     await this.inNavigationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
 
-    this.map.setView(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].interval[0]], this.MAX_ZOOM);
+    this.map.flyTo(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].interval[0]], this.MAX_ZOOM);
   }
 
   public onSlideChange(index:number) {
@@ -340,7 +340,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.inNavigationDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     this.clearRoutes();
-    this.map.setView(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
+    this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
   }
 
   async detailsBtnClick() {
@@ -350,7 +350,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onNavigationInstructionClick(instruction:INavigationInstruction) {
-    this.map.setView(this.model.Route.Coordinates[instruction.interval[0]], this.MAX_ZOOM);
+    this.map.flyTo(this.model.Route.Coordinates[instruction.interval[0]], this.MAX_ZOOM);
   }
 
   private handleInputError(ex, searchInput: string) {
