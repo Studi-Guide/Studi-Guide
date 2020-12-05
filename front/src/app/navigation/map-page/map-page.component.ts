@@ -17,7 +17,7 @@ import {GraphHopperRoute, GraphHopperService} from '../../services/graph-hopper/
 import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
-import {LastOpenStreetMapCenterPersistence} from './LastOpenStreetMapCenterPersistence';
+import {LastOpenStreetMapCenterPersistenceService} from '../../services/LastOpenStreetMapCenterPersistence.service';
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -49,7 +49,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       private dataService: DataService,
       private geolocation: Geolocation,
       private ghService: GraphHopperService,
-      private lastOpenStreetMapCenterPersistence: LastOpenStreetMapCenterPersistence
+      private lastOpenStreetMapCenterPersistence: LastOpenStreetMapCenterPersistenceService
   ) {}
 
   map: Leaflet.Map;
@@ -142,7 +142,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.map.on('moveend', event => {
-      LastOpenStreetMapCenterPersistence.persist(this.storage, {
+      LastOpenStreetMapCenterPersistenceService.persist(this.storage, {
         center: event.target.getCenter(),
         zoom: event.target.getZoom()
       });

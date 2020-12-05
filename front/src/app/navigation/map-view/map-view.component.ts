@@ -9,7 +9,7 @@ import {MapItemRendererCanvas} from './map-item-renderer.canvas';
 import {LocationRendererCanvas} from './location-renderer.canvas';
 import {RouteRendererCanvas} from './route-renderer.canvas';
 import {RendererProvider} from './renderer-provider';
-import {NavigationPage} from '../navigationPage';
+import {NavigationPage} from '../navigation.page';
 import panzoom, {PanZoom} from 'panzoom';
 import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 

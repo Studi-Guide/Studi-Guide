@@ -5,7 +5,7 @@ import * as Leaflet from 'leaflet';
 @Injectable({
     providedIn: 'root'
 })
-export class LastOpenStreetMapCenterPersistence {
+export class LastOpenStreetMapCenterPersistenceService {
 
     private static readonly LAST_MAP_EVENT_KEY = 'lastOpenStreetMapEventTarget';
 
@@ -15,7 +15,7 @@ export class LastOpenStreetMapCenterPersistence {
 
     public async load(storage: Storage, map: Leaflet.Map, defaultZoom: number) {
         storage.ready().then(async () => {
-            await storage.get(LastOpenStreetMapCenterPersistence.LAST_MAP_EVENT_KEY).then(lastMapEventData => {
+            await storage.get(LastOpenStreetMapCenterPersistenceService.LAST_MAP_EVENT_KEY).then(lastMapEventData => {
                 map.setView([49.452368, 11.093299], defaultZoom);
                 if (lastMapEventData != null) {
                     map.flyTo(lastMapEventData.center, lastMapEventData.zoom);
