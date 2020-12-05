@@ -13,7 +13,7 @@ import {IonContent} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
-import {GraphHopperService, GraphHopperRoute} from '../../services/graph-hopper/graph-hopper.service';
+import {GraphHopperRoute, GraphHopperService} from '../../services/graph-hopper/graph-hopper.service';
 import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
@@ -61,6 +61,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
   @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
   @ViewChild('routeDrawer') routeDrawer : IonicBottomDrawerComponent;
+  @ViewChild('inNavigationDrawer') inNavigationDrawer : IonicBottomDrawerComponent;
+
   @ViewChild('searchInput') searchInput : SearchInputComponent
   @ViewChild('navSlides') navSlides : NavigationInstructionSlidesComponent;
   errorMessage: string;
@@ -68,6 +70,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   private isInitialized = false;
 
   private readonly ZOOM = 17;
+  private readonly MAX_ZOOM = 18;
+  private readonly MIN_ZOOM = 14;
 
   private static convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
     const leafletBody:LatLngLiteral[] = []
@@ -81,6 +85,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   async ngAfterViewInit() {
     this.locationDrawer.SetState(DrawerState.Hidden);
     this.routeDrawer.SetState(DrawerState.Hidden);
+    this.inNavigationDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
@@ -132,8 +137,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     // maxZoom for leaflet map is 18
     this.map = Leaflet.map('leafletMap', {
       maxBounds:bounds,
-      maxZoom: 18,
-      minZoom: 14
+      maxZoom: this.MAX_ZOOM,
+      minZoom: this.MIN_ZOOM
     });
 
     this.map.on('moveend', event => {
@@ -189,7 +194,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.searchMarker.push(
                 this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Room ' + location.Name, true));
 
-            this.map.setView([coordinates.Latitude, coordinates.Longitude], this.ZOOM)
+            this.map.setView(this.model.latestSearchResult.LatLng, this.ZOOM);
 
             await this.showElementDrawer();
             return;
@@ -217,6 +222,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       try {
         const campus = await this.dataService.get_campus(searchInput, false).toPromise();
         if (campus) {
+          this.model.SetCampusAsSearchResultObject(campus);
           this.searchMarker.push(
               this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
 
@@ -277,6 +283,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.searchInput.clearDestinationInput();
     await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    this.clearSearchMarkers();
   }
 
   public async onCloseRouteDrawer(event:any) {
@@ -300,20 +307,33 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.model.latestSearchResult.LatLng);
 
     console.log(route);
-    this.model.NavigationInstructions = route.paths[0].instructions;
-    // this.navSlides.instructions = route.paths[0].instructions
-    // this.navSlides.show();
+    this.model.SetGraphHopperRouteAsRoute(route);
+
     await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
 
-    const leafletLatLng = [];
-    for(const coordinate of route.paths[0].points.coordinates) {
-      leafletLatLng.push([coordinate[1], coordinate[0]]);
-    }
-    const polyline = Leaflet.polyline(leafletLatLng, {color: 'red'}).addTo(this.map);
+    const polyline = Leaflet.polyline(this.model.Route.Coordinates, {color: 'red'}).addTo(this.map);
     this.map.setView(polyline.getCenter(), this.ZOOM);
     await this.map.fitBounds(polyline.getBounds());
     this.routes.push(polyline);
+  }
+
+  public async onLaunchNavigation() {
+    await this.routeDrawer.SetState(DrawerState.Hidden);
+
+    this.navSlides.instructions = this.model.Route.NavigationInstructions;
+    this.navSlides.show();
+
+    await this.inNavigationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+
+    this.map.setView(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].interval[0]], this.MAX_ZOOM);
+  }
+
+  public async onEndRouteClick() {
+    await this.inNavigationDrawer.SetState(DrawerState.Hidden);
+    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    this.clearRoutes();
+    this.map.setView(this.model.latestSearchResult.LatLng, this.ZOOM);
   }
 
   async detailsBtnClick() {
@@ -323,7 +343,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public onNavigationInstructionClick(instruction:INavigationInstruction) {
-    console.log(instruction);
+    console.log(instruction, instruction.interval[0], this.model.Route.Coordinates[instruction.interval[0]]);
+    this.map.setView(this.model.Route.Coordinates[instruction.interval[0]], this.MAX_ZOOM);
   }
 
   private handleInputError(ex, searchInput: string) {
@@ -379,5 +400,9 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.routes = [];
     this.navSlides.hide();
+  }
+
+  public UseDrawerForNavigation() :boolean {
+    return !(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice() === DrawerState.Bottom);
   }
 }

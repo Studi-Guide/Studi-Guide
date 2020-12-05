@@ -3,6 +3,7 @@ import {Injectable} from '@angular/core';
 import {Params} from '@angular/router';
 import {LatLngLiteral} from 'leaflet';
 import {INavigationInstruction} from "./navigation-instruction-slides/navigation-instruction-if";
+import {GraphHopperRoute} from "../services/graph-hopper/graph-hopper.service";
 
 
 
@@ -13,6 +14,13 @@ export interface ISearchResultObject {
     DetailRouterParams: Params;
     RouteRouterParams: Params;
     LatLng: LatLngLiteral;
+}
+
+export interface INavigationRoute {
+    Coordinates: [number, number][];
+    Distance: number;
+    NavigationInstructions: INavigationInstruction[];
+    Time: number;
 }
 
 @Injectable({
@@ -30,7 +38,12 @@ export class NavigationModel {
         LatLng: {lat: 0, lng: 0}
     };
     public availableCampus: ICampus[] = [];
-    public NavigationInstructions: INavigationInstruction[] = [];
+    public Route: INavigationRoute = {
+        Coordinates: [],
+        Distance: 0,
+        NavigationInstructions: [],
+        Time: 0
+    }
 
     public SetCampusAsSearchResultObject(c:ICampus) {
         this.latestSearchResult = {
@@ -47,7 +60,6 @@ export class NavigationModel {
             LatLng: {lat: c.Latitude, lng: c.Longitude}
         };
     }
-
     public SetBuildingAsSearchResultObject(b:IBuilding, latLng: LatLngLiteral) {
         this.latestSearchResult = {
             Name: b.Name,
@@ -71,5 +83,19 @@ export class NavigationModel {
             RouteRouterParams: {start: l.Building+'.Entrance', destination: l.Name},
             LatLng: latLng
         };
+    }
+
+    public SetGraphHopperRouteAsRoute(route:GraphHopperRoute) {
+        const leafletLatLng: [number, number][] = [];
+        for(const coordinate of route.paths[0].points.coordinates) {
+            leafletLatLng.push([coordinate[1], coordinate[0]]);
+        }
+
+        this.Route = {
+            Coordinates: leafletLatLng,
+            Distance: Math.round(route.paths[0].distance),
+            NavigationInstructions: route.paths[0].instructions,
+            Time: Math.round(route.paths[0].time/1000/60)
+        }
     }
 }

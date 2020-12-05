@@ -6,7 +6,7 @@ import {LatLngLiteral} from 'leaflet';
 export interface GraphHopperInstruction {
   distance: number;
   heading: number;
-  interval: [number, number][];
+  interval: number[];
   sign: number;
   street_name: string;
   text: string;
@@ -19,6 +19,8 @@ export interface GraphHopperPoints {
 }
 
 export interface GraphHopperPath {
+  distance: number;
+  time: number;
   points: GraphHopperPoints;
   instructions: GraphHopperInstruction[];
 }
