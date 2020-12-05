@@ -9,7 +9,7 @@ import {NavigationModel} from '../navigationModel';
 import {CampusViewModel} from '../campusViewModel';
 import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
 import {SearchResultProvider} from '../../services/searchResultProvider';
-import {IonContent} from '@ionic/angular';
+import {IonContent, Platform} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -47,7 +47,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       private dataService: DataService,
       private geolocation: Geolocation,
       private ghService: GraphHopperService,
-      private lastOpenStreetMapCenterPersistence: LastOpenStreetMapCenterPersistence
+      private lastOpenStreetMapCenterPersistence: LastOpenStreetMapCenterPersistence,
+      private platform: Platform
   ) {}
 
   map: Leaflet.Map;
@@ -139,6 +140,10 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       attribution: 'edupala.com © Angular LeafLet',
     }).addTo(this.map);
 
+    if (this.platform.is('hybrid')) {
+      await this.delay(500);
+      this.map.invalidateSize();
+    }
 
     const buildings = await this._dataService.get_buildings_search().toPromise();
 
@@ -357,5 +362,9 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       p.remove();
     }
     this.routes = [];
+  }
+
+  private delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
   }
 }
