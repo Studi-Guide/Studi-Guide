@@ -45,7 +45,7 @@ func Test_NewEnv_1(t *testing.T) {
 
 func Test_NewEnv_2(t *testing.T) {
 
-	graphHopperApiKeyVar := "???"
+	graphHopperApiKeyVar := ""
 	developVar := "TRUE"
 
 	// reset env variables
