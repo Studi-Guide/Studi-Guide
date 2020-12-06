@@ -2,7 +2,7 @@ package graphhopper
 
 import (
 	"studi-guide/pkg/env"
-	"studi-guide/pkg/osmnavigation"
+	"studi-guide/pkg/osm"
 	"studi-guide/pkg/utils"
 )
 
@@ -15,7 +15,7 @@ type GraphHopper struct {
 	httpClient utils.HttpClient
 }
 
-func NewGraphHopper(env *env.Env, httpClient utils.HttpClient) (osmnavigation.OpenStreetMapNavigationProvider, error) {
+func NewGraphHopper(env *env.Env, httpClient utils.HttpClient) (osm.OpenStreetMapNavigationProvider, error) {
 	g := GraphHopper{
 		apiKey:     env.GraphHopperApiKey(),
 		httpClient: httpClient,

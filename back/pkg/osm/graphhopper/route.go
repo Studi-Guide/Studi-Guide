@@ -5,10 +5,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"studi-guide/pkg/osmnavigation"
+	"studi-guide/pkg/osm"
 )
 
-func (g *GraphHopper) GetRoute(start, end osmnavigation.LatLngLiteral, locale string) ([]byte, error) {
+func (g *GraphHopper) GetRoute(start, end osm.LatLngLiteral, locale string) ([]byte, error) {
 
 	if len(g.apiKey) == 0 {
 		return nil, errors.New("no api key was provided")

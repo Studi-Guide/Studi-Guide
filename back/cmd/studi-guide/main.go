@@ -14,7 +14,7 @@ import (
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/navigation/services"
-	"studi-guide/pkg/osmnavigation/graphhopper"
+	"studi-guide/pkg/osm/graphhopper"
 	"studi-guide/pkg/rssFeed"
 	"studi-guide/pkg/utils"
 

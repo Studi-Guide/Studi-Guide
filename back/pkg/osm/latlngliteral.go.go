@@ -1,4 +1,4 @@
-package osmnavigation
+package osm
 
 import "strconv"
 
