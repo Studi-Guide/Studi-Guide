@@ -304,14 +304,14 @@ export class MapPageComponent implements OnInit, OnDestroy {
   public async onCloseLocationDrawer(event:any) {
     this.searchInput.clearDestinationInput();
     await this.locationDrawer.SetState(DrawerState.Hidden);
-    await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice(this.isHybridPlatform));
+    await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     this.clearSearchMarkers();
   }
 
   public async onCloseRouteDrawer(event:any) {
     this.clearRoutes();
     await this.routeDrawer.SetState(DrawerState.Hidden);
-    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice(this.isHybridPlatform));
+    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
   }
 
@@ -321,7 +321,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
     }
 
     await this.searchDrawer.SetState(DrawerState.Hidden);
-    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice(this.isHybridPlatform));
+    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
   public onCampusClick(c:CampusViewModel) {
@@ -339,7 +339,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
     this.model.SetGraphHopperRouteAsRoute(route);
 
     await this.locationDrawer.SetState(DrawerState.Hidden);
-    await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice(this.isHybridPlatform));
+    await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
 
     const polyline = Leaflet.polyline(this.model.Route.Coordinates, {color: 'red'}).addTo(this.map);
     this.map.flyTo(polyline.getCenter(), this.DEFAULT_ZOOM);
@@ -353,7 +353,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
     this.navSlides.instructions = this.model.Route.NavigationInstructions;
     this.navSlides.show();
 
-    await this.inNavigationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice(this.isHybridPlatform));
+    await this.inNavigationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
 
     this.map.flyTo(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].interval[0]], this.MAX_ZOOM);
   }
@@ -364,7 +364,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
   public async onEndRouteClick() {
     await this.inNavigationDrawer.SetState(DrawerState.Hidden);
-    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice(this.isHybridPlatform));
+    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     this.clearRoutes();
     this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
   }

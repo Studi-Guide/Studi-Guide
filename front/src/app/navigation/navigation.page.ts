@@ -169,7 +169,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
         }
 
         await this.searchDrawer.SetState(DrawerState.Hidden);
-        await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice(isHybrid));
+        await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     }
 
     public async onCloseLocationDrawer(event:any) {

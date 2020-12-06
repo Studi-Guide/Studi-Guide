@@ -25,12 +25,18 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
       private domCtrl: DomController,
       private platform: Platform,
       private gestureCtrl: GestureController
-  ) { }
+  ) {
+    if (!IonicBottomDrawerComponent.PLATFORM) {
+      IonicBottomDrawerComponent.PLATFORM = platform;
+    }
+  }
 
   /**
    * Application Wide Drawer Docking Setting
    */
   public static DrawerDocking = true;
+
+  private static PLATFORM: Platform;
 
   @Input() gripElementsClass = 'drawer-grip';
 
@@ -57,7 +63,8 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   private startPositionTop: number;
   private gesture: Gesture;
 
-  public static GetRecommendedDrawerStateForDevice(isHybrid:boolean = false):DrawerState {
+  public static GetRecommendedDrawerStateForDevice():DrawerState {
+    const isHybrid:boolean = this.PLATFORM?.is('hybrid');
     const isSmallDevice: boolean = window.matchMedia('(max-width: 767.98px)').matches;
     const isMediumDevice: boolean = window.matchMedia('(min-width: 768px)').matches;
     const isBigDevice: boolean = window.matchMedia('(min-width: 1200px)').matches;
