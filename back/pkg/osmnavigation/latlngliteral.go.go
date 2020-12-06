@@ -1,0 +1,15 @@
+package osmnavigation
+
+import "strconv"
+
+type LatLngLiteral struct {
+	Lat, Lng float64
+}
+
+func (l *LatLngLiteral) LatStr() string {
+	return strconv.FormatFloat(l.Lat, 'f', -1, 64)
+}
+
+func (l *LatLngLiteral) LngStr() string {
+	return strconv.FormatFloat(l.Lng, 'f', -1, 64)
+}

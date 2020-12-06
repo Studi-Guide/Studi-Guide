@@ -14,6 +14,7 @@ import (
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/navigation/services"
+	"studi-guide/pkg/osmnavigation/graphhopper"
 	"studi-guide/pkg/rssFeed"
 	"studi-guide/pkg/utils"
 
@@ -53,6 +54,7 @@ func BuildContainer() *dig.Container {
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
 	container.Provide(entitymapper.NewEntityMapper)
+	container.Provide(graphhopper.NewGraphHopper)
 	container.Provide(server.NewStudiGuideServer)
 
 	// Register entity service for multiple interfaces
