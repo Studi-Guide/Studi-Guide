@@ -322,7 +322,6 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
     await this.searchDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
-    this.locationDrawer.element.nativeElement.focus();
   }
 
   public onCampusClick(c:CampusViewModel) {

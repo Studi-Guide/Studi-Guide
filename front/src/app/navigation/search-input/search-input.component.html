@@ -1,8 +1,9 @@
 <ion-item lines="none">
   <ion-searchbar #destinationSearchbar search-icon="navigate-circle-outline" inputmode="text"
                  mode="ios" placeholder="destination" color="" icon-color="dark"
-                 (keyup.enter)="emitDiscoveryEvent()" [value]="destinationSearchbarValue"
-                 (click)="onSearchBarHasFocus('destinationSearchbar')">
+                 [value]="destinationSearchbarValue"
+                 (click)="onSearchBarHasFocus('destinationSearchbar')"
+                 (window:keydown)="onKey($event, 'destinationSearchbar')">
   </ion-searchbar>
   <ion-button size="default" mode="ios" color="medium" (click)="emitDiscoveryEvent()" *ngIf="searchBtnIsVisible">
     <ion-icon size="large" slot="icon-only" name="search" color=""></ion-icon>
@@ -13,7 +14,10 @@
   </ion-button>
 </ion-item>
 <ion-item *ngIf="routeInputIsVisible" lines="none">
-  <ion-searchbar #startSearchBar (click)="onSearchBarHasFocus('startSearchBar')" (keyup.enter)="emitRouteEvent()" [value]="startSearchBarValue" animated="true"
+  <ion-searchbar #startSearchBar
+                 (click)="onSearchBarHasFocus('startSearchBar')"
+                 [value]="startSearchBarValue" animated="true"
+                 (window:keydown)="onKey($event, 'startSearchBar')"
                  color="" icon-color="dark" inputmode="text"
                  mode="ios" placeholder="start"
                  search-icon="locate-outline">
