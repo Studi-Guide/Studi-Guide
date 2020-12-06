@@ -90,7 +90,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async ngOnInit() {
-    if (this.model.recentSearches === null) {
+    if (this.model.recentSearches === null || this.model.recentSearches.length === 0) {
       const searches = await SearchResultProvider.readRecentSearch(this.storage);
       if (searches !== null) {
         this.model.recentSearches = searches;
@@ -188,6 +188,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       this.clearSearchMarkers();
 
       // look for indexed values
+      // location
       try {
         const location = await this.dataService.get_location(searchInput).toPromise();
           if (location) {
@@ -200,12 +201,13 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
             this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
 
             await this.showElementDrawer();
+            SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
             return;
           }
         } catch (e) {
           console.log(e);
       }
-
+      // building
       try {
         const building = await this.dataService.get_building(searchInput, false).toPromise();
         if (building) {
@@ -216,12 +218,13 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
               this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
 
           await this.showElementDrawer();
+          SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
           return;
         }
       } catch (e) {
         console.log(e);
       }
-
+      // campus
       try {
         const campus = await this.dataService.get_campus(searchInput, false).toPromise();
         if (campus) {
@@ -229,8 +232,9 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
           this.searchMarker.push(
               this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
 
-          this.map.flyTo([campus.Latitude, campus.Longitude], this.DEFAULT_ZOOM)
+          this.map.flyTo([campus.Latitude, campus.Longitude], this.DEFAULT_ZOOM);
           await this.showElementDrawer();
+          SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
           return;
         }
       } catch (e) {
@@ -240,20 +244,20 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       // Look for all possible buildings via Search-API
       const buildings = await this.dataService.get_buildings_search(searchInput).toPromise();
       if (buildings !== null && buildings.length > 0) {
-
-          // found building
-          for (const buld of buildings) {
-            const coordinates = this.getCenterCoordinateFromBody(buld.Body);
-            this.searchMarker.push(
-              this.showMarker(coordinates.Latitude, coordinates.Longitude, buld.Name, false));
-          }
+        // found building
+        SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
+        for (const buld of buildings) {
+          const coordinates = this.getCenterCoordinateFromBody(buld.Body);
+          this.searchMarker.push(
+            this.showMarker(coordinates.Latitude, coordinates.Longitude, buld.Name, false));
+        }
       }
       else {
         // look for campus on Search-API if no building is found
         const campusArray = await this.dataService.get_campus_search(searchInput).toPromise();
         if (campusArray !== null && campusArray.length > 0) {
-
           // found building
+          SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
           for (const camp of campusArray) {
             this.searchMarker.push(
               this.showMarker(camp.Latitude, camp.Longitude, camp.Name, false));
@@ -271,6 +275,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   recentSearchClick(s: string) {
+
   }
 
   public onDrawerStateChange(state:DrawerState) {
