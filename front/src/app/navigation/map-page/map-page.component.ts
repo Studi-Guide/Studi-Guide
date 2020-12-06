@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import * as Leaflet from 'leaflet';
 import {LatLngLiteral, LeafletMouseEvent} from 'leaflet';
@@ -43,7 +43,7 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
   templateUrl: './map-page.component.html',
   styleUrls: ['./map-page.component.scss'],
 })
-export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MapPageComponent implements OnInit, OnDestroy {
 
   constructor(
       private _dataService: DataService,
@@ -87,13 +87,6 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     return leafletBody;
   }
 
-  async ngAfterViewInit() {
-    await this.locationDrawer.SetState(DrawerState.Hidden);
-    await this.routeDrawer.SetState(DrawerState.Hidden);
-    await this.inNavigationDrawer.SetState(DrawerState.Hidden);
-    await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
-  }
-
   async ngOnInit() {
     if (!this.model.recentSearches || this.model.recentSearches.length === 0) {
       const searches = await SearchResultProvider.readRecentSearch(this.storage);
@@ -112,6 +105,12 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         this.availableCampus.push(new CampusViewModel(campus))
       }
     }
+
+    await Promise.all([
+        this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice()),
+        this.locationDrawer.SetState(DrawerState.Hidden),
+        this.routeDrawer.SetState(DrawerState.Hidden),
+        this.inNavigationDrawer.SetState(DrawerState.Hidden)]);
   }
 
   async ionViewDidEnter() {

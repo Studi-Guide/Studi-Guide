@@ -13,7 +13,7 @@
     <div id="leafletMap"></div>
   </div>
 </ion-content>
-<app-ionic-bottom-drawer (stateChange)="onDrawerStateChange($event)" #searchDrawer>
+<app-ionic-bottom-drawer id="searchDrawer" (stateChange)="onDrawerStateChange($event)" #searchDrawer>
   <div class="nav-bottom-drawer">
     <div class="drawer-grip">
       <div class="ion-padding-top"></div>
@@ -51,7 +51,7 @@
     </div>
     </app-ionic-bottom-drawer>
 
-<app-ionic-bottom-drawer #locationDrawer state="DrawerState.Hidden">
+<app-ionic-bottom-drawer id="locationDrawer" #locationDrawer state="DrawerState.Hidden">
     <div class="nav-bottom-drawer">
       <div class="drawer-grip">
         <div class="ion-padding-top"></div>
@@ -92,7 +92,7 @@
   </div>
 </app-ionic-bottom-drawer>
 
-<app-ionic-bottom-drawer #routeDrawer state="DrawerState.Hidden">
+<app-ionic-bottom-drawer id="routeDrawer" #routeDrawer state="DrawerState.Hidden">
   <div class="nav-bottom-drawer">
     <div class="drawer-grip">
       <div class="ion-padding-top"></div>
@@ -138,7 +138,7 @@
   </div>
 </app-ionic-bottom-drawer>
 
-<app-ionic-bottom-drawer #inNavigationDrawer state="DrawerState.Hidden">
+<app-ionic-bottom-drawer id="inNavigationDrawer" #inNavigationDrawer state="DrawerState.Hidden">
   <div class="nav-bottom-drawer">
     <div class="drawer-grip">
       <div class="ion-padding-top"></div>

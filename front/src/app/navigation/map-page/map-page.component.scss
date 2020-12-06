@@ -94,3 +94,19 @@ ion-progress-bar {
 #locationdrawerName {
   font-weight: bold;
 }
+
+#inNavigationDrawer {
+  z-index: 1;
+}
+
+#locationDrawer {
+  z-index: 2;
+}
+
+#routeDrawer {
+  z-index: 3;
+}
+
+#searchDrawer {
+  z-index: 4;
+}
