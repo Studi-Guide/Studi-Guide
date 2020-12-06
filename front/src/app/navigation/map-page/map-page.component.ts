@@ -300,9 +300,9 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
   public async onCloseLocationDrawer(event:any) {
     this.searchInput.clearDestinationInput();
+    await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     this.clearSearchMarkers();
-    await this.locationDrawer.SetState(DrawerState.Hidden);
   }
 
   public async onCloseRouteDrawer(event:any) {
