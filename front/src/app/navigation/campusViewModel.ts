@@ -1,4 +1,5 @@
 import {ICampus} from '../building-objects-if';
+import {LatLngLiteral} from 'leaflet';
 export class CampusViewModel {
 
     private readonly _campus: ICampus
@@ -18,6 +19,10 @@ export class CampusViewModel {
 
     public get ShortName() {
         return this._campus.ShortName;
+    }
+
+    public get LatLng() : LatLngLiteral {
+        return {lat: this._campus.Latitude, lng: this._campus.Longitude};
     }
 
     private getAddressString(campus: ICampus) {

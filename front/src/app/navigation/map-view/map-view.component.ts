@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Output} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
 import {DataService} from '../../services/data.service';
 import {CanvasResolutionConfigurator} from '../../services/CanvasResolutionConfigurator';
 import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
@@ -117,6 +117,8 @@ export class MapViewComponent implements AfterViewInit {
     }
     this.currentFloor = floor;
     this.currentBuilding = building;
+
+    this.FitMap();
   }
 
   public async showDiscoveryMap(campus:string, floor: string) {
@@ -132,6 +134,8 @@ export class MapViewComponent implements AfterViewInit {
       this.renderLocations();
 
       this.currentFloor = floor;
+
+      this.FitMap();
   }
 
   public clearMapCanvas() {
@@ -337,5 +341,18 @@ export class MapViewComponent implements AfterViewInit {
     const height = parentElement.clientHeight/2;
     const width = element.clientWidth/2;
     return {x: width - x, y: height - y};
+  }
+
+  public MapSize() : DOMRect {
+    const element = document.getElementById('map');
+    return element.getBoundingClientRect();
+  }
+
+  public FitMap() {
+    // Using this before centering the map results in a map which is moved to the top not the center
+    // const element = document.getElementById('map');
+    // this.panZoomController.zoomTo(element.clientWidth, element.clientHeight, 0.7);
+    const size = this.MapSize();
+    this.CenterMap(size.width/2, size.height/2);
   }
 }
