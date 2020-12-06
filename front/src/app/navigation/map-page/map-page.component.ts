@@ -13,7 +13,7 @@ import {IonContent, Platform} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
-import {GraphHopperRoute, GraphHopperService} from '../../services/graph-hopper/graph-hopper.service';
+import {GraphHopperRoute, OpenStreetMapService} from '../../services/osm/open-street-map.service';
 import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
@@ -52,7 +52,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
       private storage: Storage,
       private dataService: DataService,
       private geolocation: Geolocation,
-      private ghService: GraphHopperService,
+      private openStreetMapService: OpenStreetMapService,
       private lastOpenStreetMapCenterPersistence: LastOpenStreetMapCenterPersistenceService,
       private platform: Platform
   ) {
@@ -331,7 +331,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   public async onRouteBtnClick() {
     const position = await this.geolocation.getCurrentPosition();
     console.log(position);
-    const route:GraphHopperRoute = await this.ghService.GetRouteEndpoint(
+    const route:GraphHopperRoute = await this.openStreetMapService.GetRoute(
         {lat: position.coords.latitude, lng: position.coords.longitude},
         this.model.latestSearchResult.LatLng);
 

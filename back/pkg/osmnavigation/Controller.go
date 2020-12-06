@@ -1,7 +1,6 @@
 package osmnavigation
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"regexp"
@@ -43,8 +42,6 @@ func (c *Controller) GetRoute(context *gin.Context) {
 
 	startStr := context.Query("start")
 	endStr := context.Query("end")
-
-	fmt.Println(startStr, endStr)
 
 	if match, err := regexp.MatchString(regex, startStr); err != nil || !match {
 		context.JSON(http.StatusBadRequest, gin.H{
