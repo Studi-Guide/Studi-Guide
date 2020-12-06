@@ -140,7 +140,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.map = Leaflet.map('leafletMap', {
       maxBounds:bounds,
       maxZoom: this.MAX_ZOOM,
-      minZoom: this.MIN_ZOOM
+      minZoom: this.MIN_ZOOM,
+      zoomControl: !this.platform.is('hybrid')
     });
 
     this.map.on('moveend', event => {
@@ -148,9 +149,6 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         center: event.target.getCenter(),
         zoom: event.target.getZoom()
       });
-      if (this.platform.is('hybrid')) {
-        this.map.invalidateSize();
-      }
     });
 
     await this.lastOpenStreetMapCenterPersistence.load(this.storage, this.map, this.DEFAULT_ZOOM);
@@ -169,7 +167,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     function onPolygonClick(event:LeafletMouseEvent) {
       router.navigate(['tabs/navigation/detail'],
           {queryParams: {building: event.target.options.className}})
-          .then(r => console.log(event.latlng, event.target.options.className));
+          .then(() => console.log(event.latlng, event.target.options.className));
     }
 
     if (buildings !== null) {
@@ -277,7 +275,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  onRoute($event: string[]) {
+  onRoute(event: string[]) {
   }
 
   recentSearchClick(s: string) {
