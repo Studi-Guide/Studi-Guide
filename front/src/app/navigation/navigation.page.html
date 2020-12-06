@@ -5,7 +5,7 @@
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
-<ion-content scroll-y="false">
+<ion-content data-tap-disabled="true">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="this.ProgressIsVisible"></ion-progress-bar>
   <div id="map-content">
     <ion-text id="error-message" *ngIf="errorMessage" >

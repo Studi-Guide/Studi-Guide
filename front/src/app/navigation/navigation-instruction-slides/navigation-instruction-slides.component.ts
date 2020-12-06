@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {INavigationInstruction} from './navigation-instruction-if';
-import {IonSlides} from "@ionic/angular";
+import {IonSlides} from '@ionic/angular';
 
 
 @Component({

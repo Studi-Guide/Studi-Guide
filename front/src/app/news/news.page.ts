@@ -37,7 +37,10 @@ export class NewsPage implements AfterViewInit{
     {
       try {
         const rssFeedItems = await this.rssFeedService.getArticles(feed);
-        items.push(...rssFeedItems);
+        if (rssFeedItems) {
+          console.log('Received ' + rssFeedItems.length + ' itens')
+          items.push(...rssFeedItems);
+        }
       }catch (e) {
         console.log(e);
       }
@@ -45,7 +48,6 @@ export class NewsPage implements AfterViewInit{
 
     this.rssFeed = items;
     await loading.dismiss();
-
   }
 
   public async doRefreshEvents(event) {

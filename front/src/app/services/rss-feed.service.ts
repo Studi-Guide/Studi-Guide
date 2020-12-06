@@ -10,7 +10,7 @@ export class RssFeedService {
   constructor(private dataService: DataService) { }
 
   public async getArticles(feed: string) {
-    const res = await this.dataService.get_rssFeed(feed);
+    const res = await this.dataService.get_rssFeed(feed).toPromise();
     return this.parseXml(res);
   }
 

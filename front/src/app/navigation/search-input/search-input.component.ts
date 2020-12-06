@@ -9,6 +9,7 @@ export class SearchInputComponent implements OnInit {
 
   @Output() discovery = new EventEmitter<string>();
   @Output() route = new EventEmitter<string[]>();
+  @Output() searchBarFocus = new EventEmitter<string>();
 
   @ViewChild('destinationSearchbar') destinationSearchbar;
   @ViewChild('startSearchBar') startSearchBar;
@@ -82,5 +83,9 @@ export class SearchInputComponent implements OnInit {
 
   public setStartSearchbarValue(value:string) {
     this.startSearchBarValue = value;
+  }
+
+  onSearchBarHasFocus(searchBar: string) {
+    this.searchBarFocus.emit(searchBar);
   }
 }
