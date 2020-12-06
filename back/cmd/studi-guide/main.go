@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 	"studi-guide/cmd/studi-guide/server"
 	"studi-guide/docs"
 	"studi-guide/pkg/building/campus"
@@ -43,6 +44,10 @@ func main() {
 	log.Fatal(error)
 }
 
+func defaultLogger() *log.Logger {
+	return log.New(os.Stdout, log.Prefix(), log.Flags())
+}
+
 func BuildContainer() *dig.Container {
 
 	container := dig.New()
@@ -53,6 +58,7 @@ func BuildContainer() *dig.Container {
 
 	container.Provide(env.NewEnv)
 	container.Provide(env.NewArgs)
+	container.Provide(defaultLogger)
 	container.Provide(entitymapper.NewEntityMapper)
 	container.Provide(graphhopper.NewGraphHopper)
 	container.Provide(server.NewStudiGuideServer)

@@ -28,7 +28,12 @@ func (g *GraphHopper) GetRoute(start, end osm.LatLngLiteral, locale string) ([]b
 		return nil, err
 	}
 
-	if resp.StatusCode != http.StatusOK {
+	g.logRequestStats(resp.Header)
+
+	if resp.StatusCode == http.StatusTooManyRequests {
+		g.logger.Println("graphhopper rate limit reached")
+		return nil, errors.New("currently not available")
+	} else if resp.StatusCode != http.StatusOK {
 		return nil, errors.New("get route error on endpoint")
 	}
 
@@ -39,4 +44,13 @@ func (g *GraphHopper) GetRoute(start, end osm.LatLngLiteral, locale string) ([]b
 	}
 
 	return body, nil
+}
+
+func (g *GraphHopper) logRequestStats(h http.Header) {
+	g.logger.Println("GraphHopper Request Stats: ",
+		xRateLimitCredits+":"+h.Get(xRateLimitCredits),
+		xRateLimitLimit+":"+h.Get(xRateLimitLimit),
+		xRateLimitRemaining+":"+h.Get(xRateLimitRemaining),
+		xRateLimitReset+":"+h.Get(xRateLimitReset),
+	)
 }
