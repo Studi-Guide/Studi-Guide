@@ -2,8 +2,8 @@ import {IBuilding, ICampus, ILocation} from '../building-objects-if';
 import {Injectable} from '@angular/core';
 import {Params} from '@angular/router';
 import {LatLngLiteral} from 'leaflet';
-import {INavigationInstruction} from "./navigation-instruction-slides/navigation-instruction-if";
-import {GraphHopperRoute} from "../services/graph-hopper/graph-hopper.service";
+import {INavigationInstruction} from './navigation-instruction-slides/navigation-instruction-if';
+import {GraphHopperRoute} from '../services/graph-hopper/graph-hopper.service';
 
 
 

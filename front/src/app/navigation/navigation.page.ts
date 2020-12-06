@@ -1,6 +1,6 @@
 import {IBuilding, ILocation} from '../building-objects-if';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
-import {IonContent, ModalController} from '@ionic/angular';
+import {IonContent, ModalController, Platform} from '@ionic/angular';
 import {DataService} from '../services/data.service';
 import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 import {MapViewComponent} from './map-view/map-view.component';
@@ -13,6 +13,9 @@ import {Storage} from '@ionic/storage';
 import {CampusViewModel} from './campusViewModel';
 import {NavigationModel} from './navigationModel';
 import {SearchResultProvider} from '../services/searchResultProvider';
+import {Plugins} from '@capacitor/core';
+
+const { Keyboard } = Plugins;
 
 @Component({
     selector: 'app-navigation',
@@ -39,7 +42,8 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 private  route: ActivatedRoute,
                 private router: Router,
                 private storage: Storage,
-                public model: NavigationModel) {
+                public model: NavigationModel,
+                private  platform: Platform) {
     }
 
     ngAfterViewInit(): void {
@@ -158,6 +162,11 @@ export class NavigationPage implements OnInit, AfterViewInit{
         this.model.latestSearchResult.Information = location.Tags ?
             [['Tags: ', location.Tags.join(',')]] :
             [];
+
+        const isHybrid = this.platform.is('hybrid');
+        if (isHybrid) {
+            await Keyboard.hide();
+        }
 
         await this.searchDrawer.SetState(DrawerState.Hidden);
         await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());

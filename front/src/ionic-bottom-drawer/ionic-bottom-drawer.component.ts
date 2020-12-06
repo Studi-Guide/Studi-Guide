@@ -19,33 +19,24 @@ import {DrawerState} from './drawer-state';
   styleUrls: ['./ionic-bottom-drawer.component.scss'],
 })
 export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChanges {
-
-  public static GetRecommendedDrawerStateForDevice():DrawerState {
-    const isSmallDevice: boolean = window.matchMedia('(max-width: 767.98px)').matches;
-    const isMediumDevice: boolean = window.matchMedia('(min-width: 768px)').matches;
-    const isBigDevice: boolean = window.matchMedia('(min-width: 1200px)').matches;
-
-    if (isSmallDevice) {
-      return DrawerState.Bottom;
-    } else if (isMediumDevice && !isBigDevice) {
-      return DrawerState.Docked;
-    } else if (isMediumDevice && isBigDevice) {
-      return DrawerState.Top;
-    }
-  }
-
   constructor(
       private element: ElementRef,
       private renderer: Renderer2,
       private domCtrl: DomController,
       private platform: Platform,
       private gestureCtrl: GestureController
-  ) { }
+  ) {
+    if (!IonicBottomDrawerComponent.PLATFORM) {
+      IonicBottomDrawerComponent.PLATFORM = platform;
+    }
+  }
 
   /**
    * Application Wide Drawer Docking Setting
    */
   public static DrawerDocking = true;
+
+  private static PLATFORM: Platform;
 
   @Input() gripElementsClass = 'drawer-grip';
 
@@ -71,6 +62,21 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
 
   private startPositionTop: number;
   private gesture: Gesture;
+
+  public static GetRecommendedDrawerStateForDevice():DrawerState {
+    const isHybrid:boolean = this.PLATFORM?.is('hybrid');
+    const isSmallDevice: boolean = window.matchMedia('(max-width: 767.98px)').matches;
+    const isMediumDevice: boolean = window.matchMedia('(min-width: 768px)').matches;
+    const isBigDevice: boolean = window.matchMedia('(min-width: 1200px)').matches;
+
+    if (isSmallDevice && !isHybrid) {
+      return DrawerState.Bottom;
+    } else if ((isHybrid || isMediumDevice) && !isBigDevice) {
+      return DrawerState.Docked;
+    } else if (isMediumDevice && isBigDevice) {
+      return DrawerState.Top;
+    }
+  }
 
   ngOnInit() {
 

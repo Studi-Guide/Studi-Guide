@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import * as Leaflet from 'leaflet';
 import {LatLngLiteral, LeafletMouseEvent} from 'leaflet';
@@ -9,7 +9,7 @@ import {NavigationModel} from '../navigationModel';
 import {CampusViewModel} from '../campusViewModel';
 import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
 import {SearchResultProvider} from '../../services/searchResultProvider';
-import {IonContent} from '@ionic/angular';
+import {IonContent, Platform} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
@@ -18,6 +18,10 @@ import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
 import {LastOpenStreetMapCenterPersistenceService} from '../../services/LastOpenStreetMapCenterPersistence.service';
+import {Plugins} from '@capacitor/core';
+
+const { Keyboard } = Plugins;
+
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -39,7 +43,7 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
   templateUrl: './map-page.component.html',
   styleUrls: ['./map-page.component.scss'],
 })
-export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
+export class MapPageComponent implements OnInit, OnDestroy {
 
   constructor(
       private _dataService: DataService,
@@ -49,9 +53,13 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       private dataService: DataService,
       private geolocation: Geolocation,
       private ghService: GraphHopperService,
-      private lastOpenStreetMapCenterPersistence: LastOpenStreetMapCenterPersistenceService
-  ) {}
+      private lastOpenStreetMapCenterPersistence: LastOpenStreetMapCenterPersistenceService,
+      private platform: Platform
+  ) {
+     this.isHybridPlatform = this.platform.is('hybrid');
+  }
 
+  private readonly isHybridPlatform: boolean;
   map: Leaflet.Map;
   private searchMarker: Leaflet.Marker[] = [];
   private routes: Leaflet.Polyline[] = [];
@@ -82,15 +90,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     return leafletBody;
   }
 
-  async ngAfterViewInit() {
-    this.locationDrawer.SetState(DrawerState.Hidden);
-    this.routeDrawer.SetState(DrawerState.Hidden);
-    this.inNavigationDrawer.SetState(DrawerState.Hidden);
-    await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
-  }
-
   async ngOnInit() {
-    if (this.model.recentSearches === null || this.model.recentSearches.length === 0) {
+    if (!this.model.recentSearches || this.model.recentSearches.length === 0) {
       const searches = await SearchResultProvider.readRecentSearch(this.storage);
       if (searches !== null) {
         this.model.recentSearches = searches;
@@ -98,14 +99,21 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
 
-    if (this.model.availableCampus.length === 0)
-    {
+    if (!this.model.availableCampus || this.model.availableCampus.length === 0) {
       this.model.availableCampus = await this.dataService.get_campus_search().toPromise()
     }
 
-    for (const campus of this.model.availableCampus) {
-      this.availableCampus.push(new CampusViewModel(campus))
+    if (this.model.availableCampus) {
+      for (const campus of this.model.availableCampus) {
+        this.availableCampus.push(new CampusViewModel(campus))
+      }
     }
+
+    await Promise.all([
+        this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice()),
+        this.locationDrawer.SetState(DrawerState.Hidden),
+        this.routeDrawer.SetState(DrawerState.Hidden),
+        this.inNavigationDrawer.SetState(DrawerState.Hidden)]);
   }
 
   async ionViewDidEnter() {
@@ -138,7 +146,8 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     this.map = Leaflet.map('leafletMap', {
       maxBounds:bounds,
       maxZoom: this.MAX_ZOOM,
-      minZoom: this.MIN_ZOOM
+      minZoom: this.MIN_ZOOM,
+      zoomControl: !this.platform.is('hybrid')
     });
 
     this.map.on('moveend', event => {
@@ -147,19 +156,24 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
         zoom: event.target.getZoom()
       });
     });
+
     await this.lastOpenStreetMapCenterPersistence.load(this.storage, this.map, this.DEFAULT_ZOOM);
 
     Leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: 'edupala.com © Angular LeafLet',
     }).addTo(this.map);
 
+    if (this.platform.is('hybrid')) {
+      await this.delay(500);
+      this.map.invalidateSize();
+    }
 
     const buildings = await this._dataService.get_buildings_search().toPromise();
 
     function onPolygonClick(event:LeafletMouseEvent) {
       router.navigate(['tabs/navigation/detail'],
           {queryParams: {building: event.target.options.className}})
-          .then(r => console.log(event.latlng, event.target.options.className));
+          .then(() => console.log(event.latlng, event.target.options.className));
     }
 
     if (buildings !== null) {
@@ -271,7 +285,7 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  onRoute($event: string[]) {
+  onRoute(event: string[]) {
   }
 
   recentSearchClick(s: string) {
@@ -302,7 +316,10 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public async showElementDrawer() {
-    await this.locationDrawer.SetState(DrawerState.Hidden);
+    if (this.isHybridPlatform) {
+        await Keyboard.hide();
+    }
+
     await this.searchDrawer.SetState(DrawerState.Hidden);
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
@@ -419,5 +436,15 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public UseDrawerForNavigation() :boolean {
     return !(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice() === DrawerState.Bottom);
+  }
+
+  private delay(ms: number) {
+    return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
+  async onSearchFocus($event: string) {
+    if (this.platform.is('hybrid')) {
+      await this.searchDrawer.SetState(DrawerState.Top)
+    }
   }
 }
