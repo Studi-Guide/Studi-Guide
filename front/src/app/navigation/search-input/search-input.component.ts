@@ -11,8 +11,8 @@ export class SearchInputComponent implements OnInit {
   @Output() route = new EventEmitter<string[]>();
   @Output() searchBarFocus = new EventEmitter<string>();
 
-  @ViewChild('destinationSearchbar') destinationSearchbar;
-  @ViewChild('startSearchBar') startSearchBar;
+  @ViewChild('destinationSearchbar') destinationSearchbar : HTMLIonSearchbarElement;
+  @ViewChild('startSearchBar') startSearchBar : HTMLIonSearchbarElement;
 
   public searchBtnIsVisible = true;
   public routeInputIsVisible = false;
@@ -54,6 +54,12 @@ export class SearchInputComponent implements OnInit {
     let isInputEmpty = this.destinationSearchbar.value === '' || this.destinationSearchbar.value === undefined;
     isInputEmpty = isInputEmpty || this.destinationSearchbar.value === null;
     if (!isInputEmpty) {
+      // Workaround for https://github.com/ionic-team/ionic-v3/issues/217
+      const activeElement = document.activeElement as HTMLElement;
+      if (activeElement && activeElement.blur){
+        activeElement.blur();
+      }
+
       this.discovery.emit(this.destinationSearchbar.value);
     }
   }
@@ -65,6 +71,13 @@ export class SearchInputComponent implements OnInit {
     isDestinationEmpty = isDestinationEmpty || this.startSearchBar.value === null;
     if (!isStartEmpty && !isDestinationEmpty) {
       const route:string[] = [this.startSearchBar.value, this.destinationSearchbar.value];
+
+      // Workaround for https://github.com/ionic-team/ionic-v3/issues/217
+      const activeElement = document.activeElement as HTMLElement;
+      if (activeElement && activeElement.blur){
+        activeElement.blur();
+      }
+
       this.route.emit(route);
     }
   }
@@ -87,5 +100,17 @@ export class SearchInputComponent implements OnInit {
 
   onSearchBarHasFocus(searchBar: string) {
     this.searchBarFocus.emit(searchBar);
+  }
+
+  onKey(e: KeyboardEvent, inputElement: string) {
+    if (e.key === 'Enter') {
+      if (inputElement === 'destinationSearchbar') {
+          this.emitDiscoveryEvent();
+      }
+
+      if (inputElement === 'startSearchBar') {
+          this.emitRouteEvent();
+      }
+    }
   }
 }
