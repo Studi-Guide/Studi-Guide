@@ -20,7 +20,7 @@ import {DrawerState} from './drawer-state';
 })
 export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChanges {
   constructor(
-      private element: ElementRef,
+      public element: ElementRef,
       private renderer: Renderer2,
       private domCtrl: DomController,
       private platform: Platform,
@@ -69,6 +69,7 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
     const isMediumDevice: boolean = window.matchMedia('(min-width: 768px)').matches;
     const isBigDevice: boolean = window.matchMedia('(min-width: 1200px)').matches;
 
+    console.log(isSmallDevice, )
     if (isSmallDevice && !isHybrid) {
       return DrawerState.Bottom;
     } else if ((isHybrid || isMediumDevice) && !isBigDevice) {
