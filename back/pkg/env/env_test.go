@@ -78,3 +78,24 @@ func Test_NewEnv_2(t *testing.T) {
 	}
 
 }
+
+func Test_NewEnv_3(t *testing.T) {
+	latLngBounds1 := "49.4126,11.0111;49.5118,11.2167"
+	latLngBounds2 := "49.4126,11.0111 49.5118,11.2167"
+
+	os.Setenv(openStreetMapBounds, latLngBounds1)
+
+	env := NewEnv()
+
+	if env.OpenStreetMapBounds() != latLngBounds1 {
+		t.Error("expected:", latLngBounds1)
+	}
+
+	os.Setenv(openStreetMapBounds, latLngBounds2)
+
+	env = NewEnv()
+
+	if len(env.OpenStreetMapBounds()) != 0 {
+		t.Error("expected no bounds")
+	}
+}

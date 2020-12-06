@@ -4,11 +4,13 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"os"
+	"regexp"
+	"studi-guide/pkg/osm"
 )
 
 type Env struct {
 	dbDriverName, dbDataSource, frontendPath string
-	graphHopperApiKey                        string
+	graphHopperApiKey, openStreetMapBounds   string
 	develop                                  bool
 }
 
@@ -16,6 +18,7 @@ var dBDriverNameKey string = "DB_DRIVER_NAME"
 var dbDataSourceKey string = "DB_DATA_SOURCE"
 var frontendPath string = "FRONTEND_PATH"
 var graphHopperApiKey = "GRAPHHOPPER_API_KEY"
+var openStreetMapBounds = "OPENSTREETMAP_BOUNDS"
 var develop string = "DEVELOP"
 
 var defaultDbDriverName = "sqlite3"
@@ -29,6 +32,7 @@ func NewEnv() *Env {
 		dbDataSource:      os.Getenv(dbDataSourceKey),
 		frontendPath:      os.Getenv(frontendPath),
 		graphHopperApiKey: os.Getenv(graphHopperApiKey),
+		openStreetMapBounds: os.Getenv(openStreetMapBounds),
 		develop:           false,
 	}
 
@@ -45,6 +49,17 @@ func NewEnv() *Env {
 
 	if len(env.graphHopperApiKey) == 0 {
 		log.Println("No Graphhopper API key provided. Openstreetmap route calculation will not be possible.")
+	}
+
+	if len(env.openStreetMapBounds) == 0 {
+		log.Println("No OpenStreetMap bounds were given! Make sure to provide bounds via environment variables in production.")
+	} else {
+		// check bounds format
+		regexStr := osm.LatLngLiteralRegex+";"+osm.LatLngLiteralRegex
+		if match, err := regexp.MatchString(regexStr, env.openStreetMapBounds); err != nil || !match {
+			env.openStreetMapBounds = ""
+			log.Println("Regex match of OpenStreetMap bounds failed. Check your configuration. Bounds for OpenStreetMap are now disabled.")
+		}
 	}
 
 	if os.Getenv(develop) == "TRUE" {
@@ -79,6 +94,10 @@ func (e *Env) FrontendPath() string {
 
 func (e *Env) GraphHopperApiKey() string {
 	return e.graphHopperApiKey
+}
+
+func (e *Env) OpenStreetMapBounds() string {
+	return e.openStreetMapBounds
 }
 
 func (e *Env) Develop() bool {
