@@ -319,9 +319,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
     }
 
     await this.searchDrawer.SetState(DrawerState.Hidden);
-    await this.locationDrawer.SetState(isHybrid ?
-        DrawerState.Docked :
-        IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice(isHybrid));
   }
 
   public onCampusClick(c:CampusViewModel) {

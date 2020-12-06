@@ -57,14 +57,14 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   private startPositionTop: number;
   private gesture: Gesture;
 
-  public static GetRecommendedDrawerStateForDevice():DrawerState {
+  public static GetRecommendedDrawerStateForDevice(isHybrid:boolean = false):DrawerState {
     const isSmallDevice: boolean = window.matchMedia('(max-width: 767.98px)').matches;
     const isMediumDevice: boolean = window.matchMedia('(min-width: 768px)').matches;
     const isBigDevice: boolean = window.matchMedia('(min-width: 1200px)').matches;
 
-    if (isSmallDevice) {
+    if (isSmallDevice && !isHybrid) {
       return DrawerState.Bottom;
-    } else if (isMediumDevice && !isBigDevice) {
+    } else if ((isHybrid || isMediumDevice) && !isBigDevice) {
       return DrawerState.Docked;
     } else if (isMediumDevice && isBigDevice) {
       return DrawerState.Top;
