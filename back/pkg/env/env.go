@@ -8,7 +8,7 @@ import (
 
 type Env struct {
 	dbDriverName, dbDataSource, frontendPath string
-	graphHopperApiKey						 string
+	graphHopperApiKey                        string
 	develop                                  bool
 }
 
@@ -25,11 +25,11 @@ var defaultFrontendPath = "./ionic"
 func NewEnv() *Env {
 
 	env := &Env{
-		dbDriverName: os.Getenv(dBDriverNameKey),
-		dbDataSource: os.Getenv(dbDataSourceKey),
-		frontendPath: os.Getenv(frontendPath),
+		dbDriverName:      os.Getenv(dBDriverNameKey),
+		dbDataSource:      os.Getenv(dbDataSourceKey),
+		frontendPath:      os.Getenv(frontendPath),
 		graphHopperApiKey: os.Getenv(graphHopperApiKey),
-		develop: false,
+		develop:           false,
 	}
 
 	if len(env.dbDriverName) == 0 && len(env.dbDataSource) == 0 {

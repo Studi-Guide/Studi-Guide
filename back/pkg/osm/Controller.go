@@ -45,14 +45,14 @@ func (c *Controller) GetRoute(context *gin.Context) {
 
 	if match, err := regexp.MatchString(regex, startStr); err != nil || !match {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"code": http.StatusBadRequest,
+			"code":    http.StatusBadRequest,
 			"message": "start does not match required format",
 		})
 		return
 	}
 	if match, err := regexp.MatchString(regex, endStr); err != nil || !match {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"code": http.StatusBadRequest,
+			"code":    http.StatusBadRequest,
 			"message": "end does not match required format",
 		})
 		return
@@ -64,7 +64,7 @@ func (c *Controller) GetRoute(context *gin.Context) {
 	startLiteral, err := ParseLatLngLiteral(start[0], start[1])
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"code": http.StatusBadRequest,
+			"code":    http.StatusBadRequest,
 			"message": "start does not match required format",
 		})
 		return
@@ -73,7 +73,7 @@ func (c *Controller) GetRoute(context *gin.Context) {
 	endLiteral, err := ParseLatLngLiteral(end[0], end[1])
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"code": http.StatusBadRequest,
+			"code":    http.StatusBadRequest,
 			"message": "start does not match required format",
 		})
 		return
@@ -83,7 +83,7 @@ func (c *Controller) GetRoute(context *gin.Context) {
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
-			"code": http.StatusInternalServerError,
+			"code":    http.StatusInternalServerError,
 			"message": err.Error(),
 		})
 		return
