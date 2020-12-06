@@ -44,6 +44,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     ngAfterViewInit(): void {
         this.locationDrawer.SetState(DrawerState.Hidden);
+        this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     }
 
     ionViewDidEnter() {
@@ -159,12 +160,12 @@ export class NavigationPage implements OnInit, AfterViewInit{
             [];
 
         await this.searchDrawer.SetState(DrawerState.Hidden);
-        await this.locationDrawer.SetState(DrawerState.Docked);
+        await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     }
 
     public async onCloseLocationDrawer(event:any) {
         await this.locationDrawer.SetState(DrawerState.Hidden);
-        await this.searchDrawer.SetState(DrawerState.Docked);
+        await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     }
 
     async presentAvailableFloorModal() {
