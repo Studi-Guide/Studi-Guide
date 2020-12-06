@@ -302,6 +302,10 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
+  public onCampusClick(c:CampusViewModel) {
+    this.map.flyTo(c.LatLng, this.DEFAULT_ZOOM);
+  }
+
   public async onRouteBtnClick() {
     const position = await this.geolocation.getCurrentPosition();
     console.log(position);
