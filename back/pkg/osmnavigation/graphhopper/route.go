@@ -8,10 +8,10 @@ import (
 	"studi-guide/pkg/osmnavigation"
 )
 
-func (g *GraphHopper) GetRoute(start, end osmnavigation.LatLngLiteral, locale string) (error, []byte) {
+func (g *GraphHopper) GetRoute(start, end osmnavigation.LatLngLiteral, locale string) ([]byte, error) {
 
 	if len(g.apiKey) == 0 {
-		return errors.New("no api key was provided"), nil
+		return nil, errors.New("no api key was provided")
 	}
 
 	query := ghRootUrl + ghRouteUrl +
@@ -25,18 +25,18 @@ func (g *GraphHopper) GetRoute(start, end osmnavigation.LatLngLiteral, locale st
 	})
 
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return errors.New("get route error on endpoint"), nil
+		return nil, errors.New("get route error on endpoint")
 	}
 
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err, nil
+		return nil, err
 	}
 
-	return nil, body
+	return body, nil
 }
