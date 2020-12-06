@@ -18,6 +18,10 @@ import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
 import {LastOpenStreetMapCenterPersistenceService} from '../../services/LastOpenStreetMapCenterPersistence.service';
+import {Plugins} from '@capacitor/core';
+
+const { Keyboard } = Plugins;
+
 
 const iconRetinaUrl = 'leaflet/marker-icon-2x.png';
 const iconUrl = 'leaflet/marker-icon.png';
@@ -84,9 +88,9 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    this.locationDrawer.SetState(DrawerState.Hidden);
-    this.routeDrawer.SetState(DrawerState.Hidden);
-    this.inNavigationDrawer.SetState(DrawerState.Hidden);
+    await this.locationDrawer.SetState(DrawerState.Hidden);
+    await this.routeDrawer.SetState(DrawerState.Hidden);
+    await this.inNavigationDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
@@ -297,9 +301,9 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public async onCloseLocationDrawer(event:any) {
     this.searchInput.clearDestinationInput();
-    await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     this.clearSearchMarkers();
+    await this.locationDrawer.SetState(DrawerState.Hidden);
   }
 
   public async onCloseRouteDrawer(event:any) {
@@ -310,9 +314,15 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public async showElementDrawer() {
-    await this.locationDrawer.SetState(DrawerState.Hidden);
+    const isHybrid = this.platform.is('hybrid');
+    if (isHybrid) {
+        await Keyboard.hide();
+    }
+
     await this.searchDrawer.SetState(DrawerState.Hidden);
-    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    await this.locationDrawer.SetState(isHybrid ?
+        DrawerState.Docked :
+        IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
   }
 
   public onCampusClick(c:CampusViewModel) {
@@ -431,5 +441,11 @@ export class MapPageComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
+  }
+
+  async onSearchFocus($event: string) {
+    if (this.platform.is('hybrid')) {
+      await this.searchDrawer.SetState(DrawerState.Top)
+    }
   }
 }

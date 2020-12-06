@@ -21,7 +21,8 @@
     </div>
     <app-search-input #searchInput
                       (discovery)="onSearch($event)"
-                      (route)="onRoute($event)">
+                      (route)="onRoute($event)"
+                      (searchBarFocus)="onSearchFocus($event)" >
     </app-search-input>
     <ion-content #drawerContent>
       <ion-list *ngIf="model.recentSearches.length > 0" class="ion-no-padding">
