@@ -2,8 +2,14 @@ package osm
 
 import "strconv"
 
+var LatLngLiteralRegex = "([0-9]+\\.?[0-9]+,[0-9]+\\.?[0-9]+)"
+
 type LatLngLiteral struct {
 	Lat, Lng float64
+}
+
+type LatLngBounds struct {
+	A, B LatLngLiteral
 }
 
 func (l *LatLngLiteral) LatStr() string {

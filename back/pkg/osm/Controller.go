@@ -8,8 +8,6 @@ import (
 	"studi-guide/pkg/utils"
 )
 
-var regex = "([0-9]+\\.?[0-9]+,[0-9]+\\.?[0-9]+)"
-
 type Controller struct {
 	router        *gin.RouterGroup
 	routeProvider OpenStreetMapNavigationProvider
@@ -43,14 +41,14 @@ func (c *Controller) GetRoute(context *gin.Context) {
 	startStr := context.Query("start")
 	endStr := context.Query("end")
 
-	if match, err := regexp.MatchString(regex, startStr); err != nil || !match {
+	if match, err := regexp.MatchString(LatLngLiteralRegex, startStr); err != nil || !match {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": "start does not match required format",
 		})
 		return
 	}
-	if match, err := regexp.MatchString(regex, endStr); err != nil || !match {
+	if match, err := regexp.MatchString(LatLngLiteralRegex, endStr); err != nil || !match {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": "end does not match required format",

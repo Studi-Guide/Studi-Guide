@@ -14,6 +14,10 @@ func (g *GraphHopper) GetRoute(start, end osm.LatLngLiteral, locale string) ([]b
 		return nil, errors.New("no api key was provided")
 	}
 
+	if err := g.checkBounds(start, end); err != nil {
+		return nil, err
+	}
+
 	query := ghRootUrl + ghRouteUrl +
 		"?point=" + start.LatStr() + "," + start.LngStr() + "&point=" + end.LatStr() + "," + end.LngStr() +
 		"&vehicle=" + ghVehicle + "&key=" + g.apiKey + "&locale=" + locale + "&points_encoded=false"
@@ -44,6 +48,10 @@ func (g *GraphHopper) GetRoute(start, end osm.LatLngLiteral, locale string) ([]b
 	}
 
 	return body, nil
+}
+
+func (g *GraphHopper) checkBounds(start, end osm.LatLngLiteral) error {
+	return nil
 }
 
 func (g *GraphHopper) logRequestStats(h http.Header) {
