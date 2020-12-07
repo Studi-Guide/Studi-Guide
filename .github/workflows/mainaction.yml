@@ -47,7 +47,7 @@ jobs:
       - name: Build frontend
         working-directory: ${{env.IONIC}}
         run: |
-          ionic build --engine=browser --localize
+          ionic build --engine=browser --localize --prod
 
       - name: Upload frontend artifact
         uses: actions/upload-artifact@v1.0.0
