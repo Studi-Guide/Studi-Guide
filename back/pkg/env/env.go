@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"studi-guide/pkg/osm"
+	"studi-guide/pkg/osm/latlng"
 )
 
 type Env struct {
@@ -55,7 +55,7 @@ func NewEnv() *Env {
 		log.Println("No OpenStreetMap bounds were given! Make sure to provide bounds via environment variables in production.")
 	} else {
 		// check bounds format
-		regexStr := osm.LatLngLiteralRegex+";"+osm.LatLngLiteralRegex
+		regexStr := latlng.LatLngLiteralRegex +";"+ latlng.LatLngLiteralRegex
 		if match, err := regexp.MatchString(regexStr, env.openStreetMapBounds); err != nil || !match {
 			env.openStreetMapBounds = ""
 			log.Println("Regex match of OpenStreetMap bounds failed. Check your configuration. Bounds for OpenStreetMap are now disabled.")

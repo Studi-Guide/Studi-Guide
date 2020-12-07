@@ -1,4 +1,4 @@
-package osm
+package latlng
 
 import "testing"
 
@@ -14,7 +14,7 @@ func TestNewLatLngLiteral(t *testing.T) {
 	lng = 180.00000001
 
 	if _, err := NewLatLngLiteral(lat, lng); err == nil {
-		t.Error("expected error because of out of range lat/lng")
+		t.Error("expected error because of out of range Lat/Lng")
 	}
 
 	lat = -90.0
@@ -28,7 +28,7 @@ func TestNewLatLngLiteral(t *testing.T) {
 	lng = -180.000000000000001
 
 	if _, err := NewLatLngLiteral(lat, lng); err == nil {
-		t.Error("expected error because of out of range lat/lng")
+		t.Error("expected error because of out of range Lat/Lng")
 	}
 }
 

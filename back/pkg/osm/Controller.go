@@ -6,12 +6,13 @@ import (
 	"regexp"
 	"strings"
 	"studi-guide/pkg/env"
+	"studi-guide/pkg/osm/latlng"
 	"studi-guide/pkg/utils"
 )
 
 type Controller struct {
 	router        *gin.RouterGroup
-	bounds        LatLngBounds
+	bounds        latlng.LatLngBounds
 	routeProvider OpenStreetMapNavigationProvider
 	httpClient    utils.HttpClient
 }
@@ -19,9 +20,9 @@ type Controller struct {
 func NewOpenStreetMapController(router *gin.RouterGroup, provider OpenStreetMapNavigationProvider,
 	client utils.HttpClient, env *env.Env) error {
 
-	southWest , _ := NewLatLngLiteral(0, 0)
-	northEast, _ := NewLatLngLiteral(0, 0)
-	boundLiteral, _ := NewLatLngBounds(southWest, northEast)
+	southWest , _ := latlng.NewLatLngLiteral(0, 0)
+	northEast, _ := latlng.NewLatLngLiteral(0, 0)
+	boundLiteral, _ := latlng.NewLatLngBounds(southWest, northEast)
 
 	if len(env.OpenStreetMapBounds()) != 0 {
 
@@ -29,17 +30,17 @@ func NewOpenStreetMapController(router *gin.RouterGroup, provider OpenStreetMapN
 		a := strings.Split(bounds[0], ",")
 		b := strings.Split(bounds[1], ",")
 
-		southWest, err := ParseLatLngLiteral(a[0], a[1])
+		southWest, err := latlng.ParseLatLngLiteral(a[0], a[1])
 		if err != nil {
 			return err
 		}
 
-		northEast, err := ParseLatLngLiteral(b[0], b[1])
+		northEast, err := latlng.ParseLatLngLiteral(b[0], b[1])
 		if err != nil {
 			return err
 		}
 
-		boundLiteral, err = NewLatLngBounds(southWest, northEast)
+		boundLiteral, err = latlng.NewLatLngBounds(southWest, northEast)
 		if err != nil {
 			return err
 		}
@@ -53,6 +54,8 @@ func NewOpenStreetMapController(router *gin.RouterGroup, provider OpenStreetMapN
 	}
 
 	b.router.GET("/route", b.GetRoute)
+	b.router.GET("/bounds", b.GetBounds)
+
 	return nil
 }
 
@@ -85,14 +88,14 @@ func (c *Controller) GetRoute(context *gin.Context) {
 	startStr := context.Query("start")
 	endStr := context.Query("end")
 
-	if match, err := regexp.MatchString(LatLngLiteralRegex, startStr); err != nil || !match {
+	if match, err := regexp.MatchString(latlng.LatLngLiteralRegex, startStr); err != nil || !match {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": "start does not match required format",
 		})
 		return
 	}
-	if match, err := regexp.MatchString(LatLngLiteralRegex, endStr); err != nil || !match {
+	if match, err := regexp.MatchString(latlng.LatLngLiteralRegex, endStr); err != nil || !match {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": "end does not match required format",
@@ -103,7 +106,7 @@ func (c *Controller) GetRoute(context *gin.Context) {
 	start := strings.Split(startStr, ",")
 	end := strings.Split(endStr, ",")
 
-	startLiteral, err := ParseLatLngLiteral(start[0], start[1])
+	startLiteral, err := latlng.ParseLatLngLiteral(start[0], start[1])
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
@@ -112,7 +115,7 @@ func (c *Controller) GetRoute(context *gin.Context) {
 		return
 	}
 
-	endLiteral, err := ParseLatLngLiteral(end[0], end[1])
+	endLiteral, err := latlng.ParseLatLngLiteral(end[0], end[1])
 	if err != nil {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,

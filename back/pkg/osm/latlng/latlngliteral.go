@@ -1,4 +1,4 @@
-package osm
+package latlng
 
 import (
 	"errors"
@@ -8,7 +8,7 @@ import (
 var LatLngLiteralRegex = "([0-9]+\\.?[0-9]+,[0-9]+\\.?[0-9]+)"
 
 type LatLngLiteral struct {
-	lat, lng float64
+	Lat, Lng float64
 }
 
 func NewLatLngLiteral(lat, lng float64) (LatLngLiteral, error) {
@@ -17,25 +17,17 @@ func NewLatLngLiteral(lat, lng float64) (LatLngLiteral, error) {
 	}
 
 	return LatLngLiteral{
-		lat: lat,
-		lng: lng,
+		Lat: lat,
+		Lng: lng,
 	}, nil
 }
 
-func (l* LatLngLiteral) Lat() float64 {
-	return l.lat
-}
-
-func (l* LatLngLiteral) Lng() float64 {
-	return l.lng
-}
-
 func (l *LatLngLiteral) LatStr() string {
-	return strconv.FormatFloat(l.lat, 'f', -1, 64)
+	return strconv.FormatFloat(l.Lat, 'f', -1, 64)
 }
 
 func (l *LatLngLiteral) LngStr() string {
-	return strconv.FormatFloat(l.lng, 'f', -1, 64)
+	return strconv.FormatFloat(l.Lng, 'f', -1, 64)
 }
 
 func ParseLatLngLiteral(lat, lng string) (LatLngLiteral, error) {

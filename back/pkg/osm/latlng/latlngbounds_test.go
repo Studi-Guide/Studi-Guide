@@ -1,4 +1,4 @@
-package osm
+package latlng
 
 import (
 	"reflect"
