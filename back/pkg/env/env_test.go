@@ -7,7 +7,7 @@ import (
 
 func Test_NewEnv_1(t *testing.T) {
 
-	dBDriverNameVar := "A"
+	dBDriverNameVar := "SouthWest"
 	dbDataSourceVar := "b"
 	frontendPathVar := "3"
 	graphHopperApiKeyVar := "D"

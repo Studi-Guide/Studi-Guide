@@ -26,16 +26,9 @@ type GraphHopper struct {
 
 func NewGraphHopper(env *env.Env, httpClient utils.HttpClient, logger *log.Logger) (osm.OpenStreetMapNavigationProvider, error) {
 
-	boundLiteral := osm.LatLngBounds{
-		A: osm.LatLngLiteral{
-			Lat: 0,
-			Lng: 0,
-		},
-		B: osm.LatLngLiteral{
-			Lat: 0,
-			Lng: 0,
-		},
-	}
+	southWest , _ := osm.NewLatLngLiteral(0, 0)
+	northEast, _ := osm.NewLatLngLiteral(0, 0)
+	boundLiteral, _ := osm.NewLatLngBounds(southWest, northEast)
 
 	if len(env.OpenStreetMapBounds()) != 0 {
 
@@ -43,18 +36,20 @@ func NewGraphHopper(env *env.Env, httpClient utils.HttpClient, logger *log.Logge
 		a := strings.Split(bounds[0], ",")
 		b := strings.Split(bounds[1], ",")
 
-		aLiteral, err := osm.ParseLatLngLiteral(a[0], a[1])
+		southWest, err := osm.ParseLatLngLiteral(a[0], a[1])
 		if err != nil {
 			return nil, err
 		}
 
-		bLiteral, err := osm.ParseLatLngLiteral(b[0], b[1])
+		northEast, err := osm.ParseLatLngLiteral(b[0], b[1])
 		if err != nil {
 			return nil, err
 		}
 
-		boundLiteral.A = aLiteral
-		boundLiteral.B = bLiteral
+		boundLiteral, err = osm.NewLatLngBounds(southWest, northEast)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 

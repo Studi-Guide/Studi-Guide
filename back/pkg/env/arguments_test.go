@@ -7,7 +7,7 @@ import (
 )
 
 func Test_NewArgs(t *testing.T) {
-	myArgs := []string{"A", "B"}
+	myArgs := []string{"SouthWest", "NorthEast"}
 	os.Args = myArgs
 
 	args := NewArgs()

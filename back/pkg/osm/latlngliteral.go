@@ -1,23 +1,41 @@
 package osm
 
-import "strconv"
+import (
+	"errors"
+	"strconv"
+)
 
 var LatLngLiteralRegex = "([0-9]+\\.?[0-9]+,[0-9]+\\.?[0-9]+)"
 
 type LatLngLiteral struct {
-	Lat, Lng float64
+	lat, lng float64
 }
 
-type LatLngBounds struct {
-	A, B LatLngLiteral
+func NewLatLngLiteral(lat, lng float64) (LatLngLiteral, error) {
+	if lat < -90.0 || lat > 90.0 || lng < -180.0 || lng > 180.0{
+		return LatLngLiteral{}, errors.New("values do not match required bounds")
+	}
+
+	return LatLngLiteral{
+		lat: lat,
+		lng: lng,
+	}, nil
+}
+
+func (l* LatLngLiteral) Lat() float64 {
+	return l.lat
+}
+
+func (l* LatLngLiteral) Lng() float64 {
+	return l.lng
 }
 
 func (l *LatLngLiteral) LatStr() string {
-	return strconv.FormatFloat(l.Lat, 'f', -1, 64)
+	return strconv.FormatFloat(l.lat, 'f', -1, 64)
 }
 
 func (l *LatLngLiteral) LngStr() string {
-	return strconv.FormatFloat(l.Lng, 'f', -1, 64)
+	return strconv.FormatFloat(l.lng, 'f', -1, 64)
 }
 
 func ParseLatLngLiteral(lat, lng string) (LatLngLiteral, error) {
@@ -32,8 +50,5 @@ func ParseLatLngLiteral(lat, lng string) (LatLngLiteral, error) {
 		return LatLngLiteral{}, err
 	}
 
-	return LatLngLiteral{
-		Lat: latF,
-		Lng: lngF,
-	}, nil
+	return NewLatLngLiteral(latF, lngF)
 }
