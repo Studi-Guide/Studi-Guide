@@ -203,6 +203,6 @@ func TestNavigationCalculatefromString_Negativ(t *testing.T) {
 
 	expected := http.StatusBadRequest
 	if rec.Code != expected {
-		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+		t.Errorf("expected = %v; actual = %v", string(rune(expected)), rec.Body.String())
 	}
 }

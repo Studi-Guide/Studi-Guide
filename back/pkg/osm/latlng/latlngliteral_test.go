@@ -84,7 +84,7 @@ func TestLatLngLiteral_LatLng(t *testing.T) {
 		t.Error("strings not equal")
 	}
 
-	if literal.Lat() != 49.5118 || literal.Lng() != 11.2167 {
+	if literal.Lat != 49.5118 || literal.Lng != 11.2167 {
 		t.Error("conversion failed")
 	}
 }

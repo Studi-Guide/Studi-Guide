@@ -20,7 +20,7 @@ func TestNewLatLngBounds(t *testing.T) {
 		t.Error(err)
 	}
 
-	if !reflect.DeepEqual(bounds.SouthWest(), southWest) || !reflect.DeepEqual(bounds.NorthEast(), northEast) {
+	if !reflect.DeepEqual(bounds.SouthWest, southWest) || !reflect.DeepEqual(bounds.NorthEast, northEast) {
 		t.Error("expected equality")
 	}
 
