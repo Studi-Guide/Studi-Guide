@@ -7,18 +7,15 @@ import (
 	"strings"
 	"studi-guide/pkg/env"
 	"studi-guide/pkg/osm/latlng"
-	"studi-guide/pkg/utils"
 )
 
 type Controller struct {
 	router        *gin.RouterGroup
 	bounds        latlng.LatLngBounds
 	routeProvider OpenStreetMapNavigationProvider
-	httpClient    utils.HttpClient
 }
 
-func NewOpenStreetMapController(router *gin.RouterGroup, provider OpenStreetMapNavigationProvider,
-	client utils.HttpClient, env *env.Env) error {
+func NewOpenStreetMapController(router *gin.RouterGroup, provider OpenStreetMapNavigationProvider, env *env.Env) error {
 
 	southWest , _ := latlng.NewLatLngLiteral(0, 0)
 	northEast, _ := latlng.NewLatLngLiteral(0, 0)
@@ -50,7 +47,6 @@ func NewOpenStreetMapController(router *gin.RouterGroup, provider OpenStreetMapN
 		router:        router,
 		bounds:        boundLiteral,
 		routeProvider: provider,
-		httpClient:    client,
 	}
 
 	b.router.GET("/route", b.GetRoute)
@@ -59,9 +55,9 @@ func NewOpenStreetMapController(router *gin.RouterGroup, provider OpenStreetMapN
 	return nil
 }
 
-// Get Route for Open Street Map godoc
-// @Summary Get Route for Open Street Map
-// @Description Route for Open Street Map only possible for configured bounds
+// Get Bounds for Open Street Map godoc
+// @Summary Get Bounds for Open Street Map
+// @Description Bounds for Open Street Map
 // @ID get-osmbounds
 // @Accept  json
 // @Produce  plain
