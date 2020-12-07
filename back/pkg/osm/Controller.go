@@ -5,24 +5,68 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+	"studi-guide/pkg/env"
 	"studi-guide/pkg/utils"
 )
 
 type Controller struct {
 	router        *gin.RouterGroup
+	bounds        LatLngBounds
 	routeProvider OpenStreetMapNavigationProvider
 	httpClient    utils.HttpClient
 }
 
-func NewOpenStreetMapController(router *gin.RouterGroup, provider OpenStreetMapNavigationProvider, client utils.HttpClient) error {
+func NewOpenStreetMapController(router *gin.RouterGroup, provider OpenStreetMapNavigationProvider,
+	client utils.HttpClient, env *env.Env) error {
+
+	southWest , _ := NewLatLngLiteral(0, 0)
+	northEast, _ := NewLatLngLiteral(0, 0)
+	boundLiteral, _ := NewLatLngBounds(southWest, northEast)
+
+	if len(env.OpenStreetMapBounds()) != 0 {
+
+		bounds := strings.Split(env.OpenStreetMapBounds(), ";")
+		a := strings.Split(bounds[0], ",")
+		b := strings.Split(bounds[1], ",")
+
+		southWest, err := ParseLatLngLiteral(a[0], a[1])
+		if err != nil {
+			return err
+		}
+
+		northEast, err := ParseLatLngLiteral(b[0], b[1])
+		if err != nil {
+			return err
+		}
+
+		boundLiteral, err = NewLatLngBounds(southWest, northEast)
+		if err != nil {
+			return err
+		}
+	}
+
 	b := Controller{
 		router:        router,
+		bounds:        boundLiteral,
 		routeProvider: provider,
 		httpClient:    client,
 	}
 
 	b.router.GET("/route", b.GetRoute)
 	return nil
+}
+
+// Get Route for Open Street Map godoc
+// @Summary Get Route for Open Street Map
+// @Description Route for Open Street Map only possible for configured bounds
+// @ID get-osmbounds
+// @Accept  json
+// @Produce  plain
+// @Tags OsmRouteController
+// @Success 200
+// @Router /osm/bounds [get]
+func (c *Controller) GetBounds(context *gin.Context) {
+	context.JSON(http.StatusOK, c.bounds)
 }
 
 // Get Route for Open Street Map godoc
@@ -73,6 +117,14 @@ func (c *Controller) GetRoute(context *gin.Context) {
 		context.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": "start does not match required format",
+		})
+		return
+	}
+
+	if !c.bounds.IncludeLiteral(startLiteral) || !c.bounds.IncludeLiteral(endLiteral) {
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code": http.StatusBadRequest,
+			"message": "start or end not included in navigation bounds",
 		})
 		return
 	}
