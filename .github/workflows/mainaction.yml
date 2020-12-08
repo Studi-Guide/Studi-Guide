@@ -66,16 +66,16 @@ jobs:
           path: ${{env.GO_HTTP}}
           
           
-      - name: Deploy to S3
-        if: github.ref == 'refs/heads/master'
-        uses: jakejarvis/s3-sync-action@master
-        with:
-          args: --acl public-read --delete
-        env:
-          AWS_S3_BUCKET: ${{ secrets.AWS_PRODUCTION_BUCKET_NAME }}
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          SOURCE_DIR: "${{env.IONIC}}/www"
+      #- name: Deploy to S3
+      #  if: github.ref == 'refs/heads/master'
+      #  uses: jakejarvis/s3-sync-action@master
+      #  with:
+      #    args: --acl public-read --delete
+      #  env:
+       #   AWS_S3_BUCKET: ${{ secrets.AWS_PRODUCTION_BUCKET_NAME }}
+       #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        #  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         # SOURCE_DIR: "${{env.IONIC}}/www"
 
   test:
     name: Test
