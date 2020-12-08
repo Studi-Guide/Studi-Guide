@@ -154,7 +154,7 @@ func NewStudiGuideServer(env *env.Env,
 	osmRouter := router.Group("/osm")
 	{
 		log.Println("Creating open street map controller")
-		err := osm.NewOpenStreetMapController(osmRouter, osmNav, httpClient, env)
+		err := osm.NewOpenStreetMapController(osmRouter, osmNav, env)
 		if err != nil {
 			log.Fatal(err)
 		} else {
