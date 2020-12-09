@@ -28,6 +28,7 @@ require (
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/net v0.0.0-20201006153459-a7d1128ccaa0 // indirect
 	golang.org/x/sys v0.0.0-20201007082116-8445cc04cbdf // indirect
+	golang.org/x/text v0.3.3
 	golang.org/x/tools v0.0.0-20201007032633-0806396f153e // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
