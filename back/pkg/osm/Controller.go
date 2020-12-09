@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strings"
 	"studi-guide/pkg/env"
+	"studi-guide/pkg/locales"
 	"studi-guide/pkg/osm/latlng"
 )
 
@@ -77,6 +78,7 @@ func (c *Controller) GetBounds(context *gin.Context) {
 // @Tags OsmRouteController
 // @Param start query string true "start point of route"
 // @Param end query string true "end point of route"
+// @Param locale query string false "locale for route instructions"
 // @Success 200
 // @Router /osm/route [get]
 func (c *Controller) GetRoute(context *gin.Context) {
@@ -128,7 +130,9 @@ func (c *Controller) GetRoute(context *gin.Context) {
 		return
 	}
 
-	data, err := c.routeProvider.GetRoute(startLiteral, endLiteral, "en-US")
+	locale := locales.GetBestSupportedLocale(context.Query("locale"))
+
+	data, err := c.routeProvider.GetRoute(startLiteral, endLiteral, locale)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
