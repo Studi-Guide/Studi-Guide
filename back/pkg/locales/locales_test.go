@@ -29,4 +29,8 @@ func TestGetBestSupportedLocale(t *testing.T) {
 		t.Error("fallback for english should be american english")
 	}
 
+	if GetBestSupportedLocale("") != "en-US" {
+		t.Error("fallback for no locale should be american english")
+	}
+
 }
