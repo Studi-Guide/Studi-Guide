@@ -13,7 +13,7 @@ export interface OpenStreetMapBounds {
   NorthEast: OpenStreetMapLiteral
 }
 
-export interface GraphHopperInstruction {
+export interface OsmRouteInstruction {
   distance: number;
   heading: number;
   interval: number[];
@@ -23,20 +23,16 @@ export interface GraphHopperInstruction {
   time: number;
 }
 
-export interface GraphHopperPoints {
-  coordinates: [number, number][];
+export interface OsmRoutePoints {
+  coordinates: OpenStreetMapLiteral[];
   type: string;
 }
 
-export interface GraphHopperPath {
+export interface OsmRoute {
   distance: number;
   time: number;
-  points: GraphHopperPoints;
-  instructions: GraphHopperInstruction[];
-}
-
-export interface GraphHopperRoute {
-  paths: GraphHopperPath[];
+  points: OsmRoutePoints;
+  instructions: OsmRouteInstruction[];
 }
 
 @Injectable({
@@ -52,10 +48,11 @@ export class OpenStreetMapService {
               private httpClient : HttpClient,
               private env : Env) { }
 
-  public async GetRoute(startPoint:LatLngLiteral, endPoint:LatLngLiteral) : Promise<GraphHopperRoute> {
+  public async GetRoute(startPoint:LatLngLiteral, endPoint:LatLngLiteral) : Promise<OsmRoute[]> {
     // curl "https://graphhopper.com/api/1/route?point=51.131,12.414&point=48.224,3.867&vehicle=car&locale=de&calc_points=false&key=api_key"
     const r = await this.httpClient.get(this.env.serverUrl+OpenStreetMapService.serverPathPrefix+OpenStreetMapService.routePath
-        +'?start='+startPoint.lat+','+startPoint.lng+'&end='+endPoint.lat+','+endPoint.lng+'&locale='+this.locale).toPromise() as GraphHopperRoute;
+        +'?start='+startPoint.lat+','+startPoint.lng+'&end='+endPoint.lat+','+endPoint.lng+'&locale='+this.locale)
+        .toPromise() as OsmRoute[];
     return r;
   }
 

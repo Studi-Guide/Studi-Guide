@@ -13,7 +13,7 @@ import {IonContent, Platform} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
-import {GraphHopperRoute, OpenStreetMapBounds, OpenStreetMapService} from '../../services/osm/open-street-map.service';
+import {OsmRoute, OpenStreetMapBounds, OpenStreetMapService} from '../../services/osm/open-street-map.service';
 import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
@@ -335,12 +335,12 @@ export class MapPageComponent implements OnInit, OnDestroy {
   public async onRouteBtnClick() {
     const position = await this.geolocation.getCurrentPosition();
     console.log(position);
-    const route:GraphHopperRoute = await this.openStreetMapService.GetRoute(
+    const routes:OsmRoute[] = await this.openStreetMapService.GetRoute(
         {lat: position.coords.latitude, lng: position.coords.longitude},
         this.model.latestSearchResult.LatLng);
 
-    console.log(route);
-    this.model.SetGraphHopperRouteAsRoute(route);
+    console.log(routes);
+    this.model.SetGraphHopperRouteAsRoute(routes[0]);
 
     await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
