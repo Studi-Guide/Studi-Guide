@@ -1,7 +1,6 @@
 package graphhopper
 
 import (
-	"fmt"
 	"studi-guide/pkg/osm"
 	"studi-guide/pkg/osm/latlng"
 )
@@ -56,7 +55,6 @@ func (r *GraphHopperRoute) ToOsmRoute() []osm.Route {
 				Lat: coordinate.([]interface{})[1].(float64),
 				Lng: coordinate.([]interface{})[0].(float64),
 			})
-			fmt.Println(coordinate)
 		}
 
 		for _, instruction := range path.Instructions {
