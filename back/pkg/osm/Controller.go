@@ -143,15 +143,6 @@ func (c *Controller) GetRoute(context *gin.Context) {
 		return
 	}
 
-	var data []byte
-	data, err = json.Marshal(routes);
-	if  err != nil {
-		context.JSON(http.StatusInternalServerError, gin.H{
-			"code": http.StatusInternalServerError,
-			"message": err.Error(),
-		})
-	}
-
-
+	data, _ := json.Marshal(routes)
 	context.Data(http.StatusOK, "application/json;charset=utf-8", data)
 }
