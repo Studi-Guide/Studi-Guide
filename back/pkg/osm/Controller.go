@@ -1,6 +1,7 @@
 package osm
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"regexp"
@@ -18,7 +19,7 @@ type Controller struct {
 
 func NewOpenStreetMapController(router *gin.RouterGroup, provider OpenStreetMapNavigationProvider, env *env.Env) error {
 
-	southWest , _ := latlng.NewLatLngLiteral(0, 0)
+	southWest, _ := latlng.NewLatLngLiteral(0, 0)
 	northEast, _ := latlng.NewLatLngLiteral(0, 0)
 	boundLiteral, _ := latlng.NewLatLngBounds(southWest, northEast)
 
@@ -124,7 +125,7 @@ func (c *Controller) GetRoute(context *gin.Context) {
 
 	if !c.bounds.IncludeLiteral(startLiteral) || !c.bounds.IncludeLiteral(endLiteral) {
 		context.JSON(http.StatusBadRequest, gin.H{
-			"code": http.StatusBadRequest,
+			"code":    http.StatusBadRequest,
 			"message": "start or end not included in navigation bounds",
 		})
 		return
@@ -132,7 +133,7 @@ func (c *Controller) GetRoute(context *gin.Context) {
 
 	locale := locales.GetBestSupportedLocale(context.Query("locale"))
 
-	data, err := c.routeProvider.GetRoute(startLiteral, endLiteral, locale)
+	routes, err := c.routeProvider.GetRoute(startLiteral, endLiteral, locale)
 
 	if err != nil {
 		context.JSON(http.StatusInternalServerError, gin.H{
@@ -141,6 +142,16 @@ func (c *Controller) GetRoute(context *gin.Context) {
 		})
 		return
 	}
+
+	var data []byte
+	data, err = json.Marshal(routes);
+	if  err != nil {
+		context.JSON(http.StatusInternalServerError, gin.H{
+			"code": http.StatusInternalServerError,
+			"message": err.Error(),
+		})
+	}
+
 
 	context.Data(http.StatusOK, "application/json;charset=utf-8", data)
 }

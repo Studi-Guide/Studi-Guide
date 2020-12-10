@@ -48,24 +48,24 @@ func TestController_GetBounds(t *testing.T) {
 }
 
 func TestController_GetRoute_1(t *testing.T) {
-        rec := httptest.NewRecorder()
-        req, _ := http.NewRequest("GET", "/osm/route", nil)
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/osm/route", nil)
 
-        ctrl := gomock.NewController(t)
-        defer ctrl.Finish()
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
 
-        navProvider := NewMockOpenStreetMapNavigationProvider(ctrl)
-        os.Setenv("OPENSTREETMAP_BOUNDS", "49.4126,11.0111;49.5118,11.2167")
-        env := env2.NewEnv()
-        router := gin.Default()
-        osmRouter := router.Group("/osm")
-        _ = NewOpenStreetMapController(osmRouter, navProvider, env)
+	navProvider := NewMockOpenStreetMapNavigationProvider(ctrl)
+	os.Setenv("OPENSTREETMAP_BOUNDS", "49.4126,11.0111;49.5118,11.2167")
+	env := env2.NewEnv()
+	router := gin.Default()
+	osmRouter := router.Group("/osm")
+	_ = NewOpenStreetMapController(osmRouter, navProvider, env)
 
-        router.ServeHTTP(rec, req)
+	router.ServeHTTP(rec, req)
 
-        if rec.Code != http.StatusBadRequest {
-                t.Error("expected status bad request as code")
-        }
+	if rec.Code != http.StatusBadRequest {
+		t.Error("expected status bad request as code")
+	}
 }
 
 func TestController_GetRoute_2(t *testing.T) {
@@ -103,7 +103,7 @@ func TestController_GetRoute_3(t *testing.T) {
 	}, latlng.LatLngLiteral{
 		Lat: 49.50,
 		Lng: 11.2,
-	}, "en-US").Return([]byte("no route lol"), nil)
+	}, "en-US").Return([]Route{{}}, nil)
 	os.Setenv("OPENSTREETMAP_BOUNDS", "49.4126,11.0111;49.5118,11.2167")
 	env := env2.NewEnv()
 	router := gin.Default()
@@ -112,7 +112,8 @@ func TestController_GetRoute_3(t *testing.T) {
 
 	router.ServeHTTP(rec, req)
 
-	if rec.Body.String() != "no route lol" {
+	expected, _ := json.Marshal([]Route{{}})
+	if rec.Body.String() != string(expected) {
 		t.Error("expected 'no route lol'")
 	}
 }

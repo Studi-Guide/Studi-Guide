@@ -12,7 +12,7 @@ type LatLngLiteral struct {
 }
 
 func NewLatLngLiteral(lat, lng float64) (LatLngLiteral, error) {
-	if lat < -90.0 || lat > 90.0 || lng < -180.0 || lng > 180.0{
+	if lat < -90.0 || lat > 90.0 || lng < -180.0 || lng > 180.0 {
 		return LatLngLiteral{}, errors.New("values do not match required bounds")
 	}
 

@@ -6,11 +6,11 @@ import (
 )
 
 func TestNewLatLngBounds(t *testing.T) {
-	southWest, err := NewLatLngLiteral(49.4126, 11.0111);
+	southWest, err := NewLatLngLiteral(49.4126, 11.0111)
 	if err != nil {
 		t.Error(err)
 	}
-	northEast, err := NewLatLngLiteral(49.5118, 11.2167);
+	northEast, err := NewLatLngLiteral(49.5118, 11.2167)
 	if err != nil {
 		t.Error(err)
 	}
@@ -41,11 +41,11 @@ func TestNewLatLngBounds(t *testing.T) {
 
 func TestLatLngBounds_IncludeLiteral(t *testing.T) {
 
-	southWest, err := NewLatLngLiteral(49.4126, 11.0111);
+	southWest, err := NewLatLngLiteral(49.4126, 11.0111)
 	if err != nil {
 		t.Error(err)
 	}
-	northEast, err := NewLatLngLiteral(49.5118, 11.2167);
+	northEast, err := NewLatLngLiteral(49.5118, 11.2167)
 	if err != nil {
 		t.Error(err)
 	}

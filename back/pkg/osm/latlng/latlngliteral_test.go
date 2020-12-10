@@ -36,8 +36,8 @@ func TestParseLatLngLiteral(t *testing.T) {
 	latPositive1 := "49.5118"
 	lngPositive1 := "11.2167"
 
-	latNegative1 := "49.4126,";
-	lngNegative1 := "xyz11.0111";
+	latNegative1 := "49.4126,"
+	lngNegative1 := "xyz11.0111"
 
 	latPositive2 := "49"
 	lngPositive2 := "-11"

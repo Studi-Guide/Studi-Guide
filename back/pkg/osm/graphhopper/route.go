@@ -1,14 +1,16 @@
 package graphhopper
 
 import (
+	"encoding/json"
 	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"studi-guide/pkg/osm"
 	"studi-guide/pkg/osm/latlng"
 )
 
-func (g *GraphHopper) GetRoute(start, end latlng.LatLngLiteral, locale string) ([]byte, error) {
+func (g *GraphHopper) GetRoute(start, end latlng.LatLngLiteral, locale string) ([]osm.Route, error) {
 
 	if len(g.apiKey) == 0 {
 		return nil, errors.New("no api key was provided")
@@ -43,7 +45,12 @@ func (g *GraphHopper) GetRoute(start, end latlng.LatLngLiteral, locale string) (
 		return nil, err
 	}
 
-	return body, nil
+	var route GraphHopperRoute
+	if err := json.Unmarshal(body, &route); err != nil {
+		return nil, err
+	}
+
+	return route.ToOsmRoute(), nil
 }
 
 func (g *GraphHopper) logRequestStats(h http.Header) {
