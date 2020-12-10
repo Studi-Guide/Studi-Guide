@@ -87,15 +87,15 @@ export class NavigationModel {
 
     public SetGraphHopperRouteAsRoute(route:OsmRoute) {
         const leafletLatLng: [number, number][] = [];
-        for(const coordinate of route.points.coordinates) {
+        for(const coordinate of route.Points.Coordinates) {
             leafletLatLng.push([coordinate.Lat, coordinate.Lng]);
         }
 
         this.Route = {
             Coordinates: leafletLatLng,
-            Distance: Math.round(route.distance),
-            NavigationInstructions: route.instructions,
-            Time: Math.round(route.time/1000/60)
+            Distance: Math.round(route.Distance),
+            NavigationInstructions: route.Instructions,
+            Time: Math.round(route.Time/1000/60)
         }
     }
 }

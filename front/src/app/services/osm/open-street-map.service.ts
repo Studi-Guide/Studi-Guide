@@ -14,25 +14,25 @@ export interface OpenStreetMapBounds {
 }
 
 export interface OsmRouteInstruction {
-  distance: number;
-  heading: number;
-  interval: number[];
-  sign: number;
-  street_name: string;
-  text: string;
-  time: number;
+  Distance: number;
+  Heading: number;
+  Interval: number[];
+  Sign: number;
+  StreetName: string;
+  Text: string;
+  Time: number;
 }
 
 export interface OsmRoutePoints {
-  coordinates: OpenStreetMapLiteral[];
-  type: string;
+  Coordinates: OpenStreetMapLiteral[];
+  Type: string;
 }
 
 export interface OsmRoute {
-  distance: number;
-  time: number;
-  points: OsmRoutePoints;
-  instructions: OsmRouteInstruction[];
+  Distance: number;
+  Time: number;
+  Points: OsmRoutePoints;
+  Instructions: OsmRouteInstruction[];
 }
 
 @Injectable({

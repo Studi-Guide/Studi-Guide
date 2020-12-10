@@ -359,7 +359,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
     await this.inNavigationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
 
-    this.map.flyTo(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].interval[0]], this.MAX_ZOOM);
+    this.map.flyTo(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].Interval[0]], this.MAX_ZOOM);
   }
 
   public onSlideChange(index:number) {
@@ -380,7 +380,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   public onNavigationInstructionClick(instruction:INavigationInstruction) {
-    this.map.flyTo(this.model.Route.Coordinates[instruction.interval[0]], this.MAX_ZOOM);
+    this.map.flyTo(this.model.Route.Coordinates[instruction.Interval[0]], this.MAX_ZOOM);
   }
 
   private handleInputError(ex, searchInput: string) {
