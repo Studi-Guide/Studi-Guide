@@ -57,7 +57,6 @@ func BuildContainer() *dig.Container {
 	})
 
 	container.Provide(env.NewEnv)
-	container.Provide(env.NewArgs)
 	container.Provide(defaultLogger)
 	container.Provide(entitymapper.NewEntityMapper)
 	container.Provide(graphhopper.NewGraphHopper)
