@@ -103,7 +103,7 @@ func TestController_GetRoute_3(t *testing.T) {
 	}, latlng.LatLngLiteral{
 		Lat: 49.50,
 		Lng: 11.2,
-	}, "en-US").Return([]Route{{}}, nil)
+	}, "en").Return([]Route{{}}, nil)
 	os.Setenv("OPENSTREETMAP_BOUNDS", "49.4126,11.0111;49.5118,11.2167")
 	env := env2.NewEnv()
 	router := gin.Default()
@@ -132,7 +132,7 @@ func TestController_GetRoute_4(t *testing.T) {
 	}, latlng.LatLngLiteral{
 		Lat: 49.50,
 		Lng: 11.2,
-	}, "en-US").Return(nil, errors.New("new error"))
+	}, "en").Return(nil, errors.New("new error"))
 	os.Setenv("OPENSTREETMAP_BOUNDS", "49.4126,11.0111;49.5118,11.2167")
 	env := env2.NewEnv()
 	router := gin.Default()

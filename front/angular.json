@@ -11,7 +11,7 @@
       "prefix": "app",
       "schematics": {},
       "i18n": {
-        "sourceLocale": "en-US",
+        "sourceLocale": "en",
         "locales": {
           "de": "src/locale/messages.de.xlf"
         }

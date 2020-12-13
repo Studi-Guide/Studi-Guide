@@ -1,6 +1,9 @@
 package locales
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestGetBestSupportedLocale(t *testing.T) {
 	french := "fr"
@@ -8,8 +11,9 @@ func TestGetBestSupportedLocale(t *testing.T) {
 	swissGerman := "gsw"
 	americanEnglish := "en-US"
 	english := "en"
+	germanGerman := "de-DE"
 
-	if GetBestSupportedLocale(french) != "en-US" {
+	if GetBestSupportedLocale(french) != "en" {
 		t.Error("fallback should be american english")
 	}
 
@@ -21,16 +25,28 @@ func TestGetBestSupportedLocale(t *testing.T) {
 		t.Error("fallback for swiss german should be german")
 	}
 
-	if GetBestSupportedLocale(americanEnglish) != "en-US" {
+	if GetBestSupportedLocale(americanEnglish) != "en" {
 		t.Error("language for american english should be english")
 	}
 
-	if GetBestSupportedLocale(english) != "en-US" {
+	if GetBestSupportedLocale(english) != "en" {
 		t.Error("fallback for english should be american english")
 	}
 
-	if GetBestSupportedLocale("") != "en-US" {
+	if GetBestSupportedLocale("") != "en" {
 		t.Error("fallback for no locale should be american english")
 	}
 
+	if GetBestSupportedLocale(germanGerman) != "de" {
+		t.Error("expected german for de-de")
+	}
+
+}
+
+func TestGetSupportedLocales(t *testing.T) {
+	supported := GetSupportedLocales()
+
+	if !reflect.DeepEqual(supported, supportedLocales) {
+		t.Error("should be equal")
+	}
 }
