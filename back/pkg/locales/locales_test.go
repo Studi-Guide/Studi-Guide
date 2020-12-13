@@ -1,6 +1,9 @@
 package locales
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestGetBestSupportedLocale(t *testing.T) {
 	french := "fr"
@@ -38,4 +41,12 @@ func TestGetBestSupportedLocale(t *testing.T) {
 		t.Error("expected german for de-de")
 	}
 
+}
+
+func TestGetSupportedLocales(t *testing.T) {
+	supported := GetSupportedLocales()
+
+	if !reflect.DeepEqual(supported, supportedLocales) {
+		t.Error("should be equal")
+	}
 }
