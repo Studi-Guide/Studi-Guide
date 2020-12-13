@@ -9,12 +9,18 @@ var supportedLocales = []language.Tag{
 	language.German,
 }
 
+func GetSupportedLocales() []language.Tag {
+	return supportedLocales
+}
+
 func GetBestSupportedLocale(locale string) string {
 	matcher := language.NewMatcher(supportedLocales)
 
 	lang := language.Make(locale)
 
 	tag, _, _ := matcher.Match(lang)
+	base, _ := tag.Base()
 
-	return tag.String()
+
+	return base.String()
 }
