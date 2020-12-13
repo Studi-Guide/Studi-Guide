@@ -119,7 +119,7 @@ func TestCampusController_GetCampus_All(t *testing.T) {
 		},
 		{
 			ID:        2,
-			ShortName: "B",
+			ShortName: "NorthEast",
 			Name:      "Hofbräu",
 			Longitude: 500.5,
 			Latitude:  1100.8,

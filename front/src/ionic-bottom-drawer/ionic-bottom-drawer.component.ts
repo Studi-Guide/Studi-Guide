@@ -69,7 +69,6 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
     const isMediumDevice: boolean = window.matchMedia('(min-width: 768px)').matches;
     const isBigDevice: boolean = window.matchMedia('(min-width: 1200px)').matches;
 
-    console.log(isSmallDevice, )
     if (isSmallDevice && !isHybrid) {
       return DrawerState.Bottom;
     } else if ((isHybrid || isMediumDevice) && !isBigDevice) {

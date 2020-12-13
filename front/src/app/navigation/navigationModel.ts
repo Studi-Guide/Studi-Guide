@@ -3,7 +3,7 @@ import {Injectable} from '@angular/core';
 import {Params} from '@angular/router';
 import {LatLngLiteral} from 'leaflet';
 import {INavigationInstruction} from './navigation-instruction-slides/navigation-instruction-if';
-import {GraphHopperRoute} from '../services/graph-hopper/graph-hopper.service';
+import {OsmRoute} from '../services/osm/open-street-map.service';
 
 
 
@@ -85,17 +85,17 @@ export class NavigationModel {
         };
     }
 
-    public SetGraphHopperRouteAsRoute(route:GraphHopperRoute) {
+    public SetGraphHopperRouteAsRoute(route:OsmRoute) {
         const leafletLatLng: [number, number][] = [];
-        for(const coordinate of route.paths[0].points.coordinates) {
-            leafletLatLng.push([coordinate[1], coordinate[0]]);
+        for(const coordinate of route.Points.Coordinates) {
+            leafletLatLng.push([coordinate.Lat, coordinate.Lng]);
         }
 
         this.Route = {
             Coordinates: leafletLatLng,
-            Distance: Math.round(route.paths[0].distance),
-            NavigationInstructions: route.paths[0].instructions,
-            Time: Math.round(route.paths[0].time/1000/60)
+            Distance: Math.round(route.Distance),
+            NavigationInstructions: route.Instructions,
+            Time: Math.round(route.Time/1000/60)
         }
     }
 }

@@ -3,7 +3,7 @@ package ion18n
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"strings"
+	"studi-guide/pkg/locales"
 )
 
 type Ion18nRouter struct {
@@ -28,10 +28,7 @@ func NewIon18nRouter(router *gin.RouterGroup, ionPath string) (*Ion18nRouter, er
 
 func (i *Ion18nRouter) HandleRequest(c *gin.Context) {
 
-	if strings.Contains(c.GetHeader("Accept-Language"), "de") {
-		c.Redirect(http.StatusTemporaryRedirect, "/de/")
-	} else {
-		c.Redirect(http.StatusTemporaryRedirect, "/en-US/")
-	}
+	bestMatch := locales.GetBestSupportedLocale(c.GetHeader("Accept-Language"))
+	c.Redirect(http.StatusTemporaryRedirect, "/"+bestMatch+"/")
 
 }

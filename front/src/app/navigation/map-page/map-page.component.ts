@@ -13,7 +13,7 @@ import {IonContent, Platform} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
-import {GraphHopperRoute, GraphHopperService} from '../../services/graph-hopper/graph-hopper.service';
+import {OsmRoute, OpenStreetMapBounds, OpenStreetMapService} from '../../services/osm/open-street-map.service';
 import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
@@ -52,7 +52,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
       private storage: Storage,
       private dataService: DataService,
       private geolocation: Geolocation,
-      private ghService: GraphHopperService,
+      private openStreetMapService: OpenStreetMapService,
       private lastOpenStreetMapCenterPersistence: LastOpenStreetMapCenterPersistenceService,
       private platform: Platform
   ) {
@@ -91,6 +91,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+
     if (!this.model.recentSearches || this.model.recentSearches.length === 0) {
       const searches = await SearchResultProvider.readRecentSearch(this.storage);
       if (searches !== null) {
@@ -138,9 +139,12 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   private async initializeMap(router: Router) {
-    const southWest = Leaflet.latLng(49.4126, 11.0111);
-    const northEast = Leaflet.latLng(49.5118, 11.2167);
+    const osmBounds = await this.openStreetMapService.GetBounds()
+    const southWest = Leaflet.latLng(osmBounds.SouthWest.Lat, osmBounds.SouthWest.Lng);
+    const northEast = Leaflet.latLng(osmBounds.NorthEast.Lat, osmBounds.NorthEast.Lng);
+
     const bounds = Leaflet.latLngBounds(southWest, northEast);
+    console.log(osmBounds, bounds);
 
     // maxZoom for leaflet map is 18
     this.map = Leaflet.map('leafletMap', {
@@ -331,12 +335,12 @@ export class MapPageComponent implements OnInit, OnDestroy {
   public async onRouteBtnClick() {
     const position = await this.geolocation.getCurrentPosition();
     console.log(position);
-    const route:GraphHopperRoute = await this.ghService.GetRouteEndpoint(
+    const routes:OsmRoute[] = await this.openStreetMapService.GetRoute(
         {lat: position.coords.latitude, lng: position.coords.longitude},
         this.model.latestSearchResult.LatLng);
 
-    console.log(route);
-    this.model.SetGraphHopperRouteAsRoute(route);
+    console.log(routes);
+    this.model.SetGraphHopperRouteAsRoute(routes[0]);
 
     await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
@@ -355,7 +359,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
     await this.inNavigationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
 
-    this.map.flyTo(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].interval[0]], this.MAX_ZOOM);
+    this.map.flyTo(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].Interval[0]], this.MAX_ZOOM);
   }
 
   public onSlideChange(index:number) {
@@ -376,7 +380,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   public onNavigationInstructionClick(instruction:INavigationInstruction) {
-    this.map.flyTo(this.model.Route.Coordinates[instruction.interval[0]], this.MAX_ZOOM);
+    this.map.flyTo(this.model.Route.Coordinates[instruction.Interval[0]], this.MAX_ZOOM);
   }
 
   private handleInputError(ex, searchInput: string) {

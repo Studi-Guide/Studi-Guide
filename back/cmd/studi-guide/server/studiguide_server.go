@@ -19,6 +19,7 @@ import (
 	"studi-guide/pkg/ion18n"
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
+	"studi-guide/pkg/osm"
 	"studi-guide/pkg/rssFeed"
 	"studi-guide/pkg/utils"
 )
@@ -33,7 +34,8 @@ func NewStudiGuideServer(env *env.Env,
 	navigationProvider services.NavigationServiceProvider,
 	campusProvider campus.CampusProvider,
 	rssFeedProvider rssFeed.Provider,
-	httpClient utils.HttpClient) *StudiGuideServer {
+	httpClient utils.HttpClient,
+	osmNav osm.OpenStreetMapNavigationProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
 
@@ -140,12 +142,23 @@ func NewStudiGuideServer(env *env.Env,
 
 	rssfeedRouter := router.Group("/rssfeed")
 	{
-		log.Println("Creating proxy controller")
+		log.Println("Creating rss feed controller")
 		err := rssFeed.NewRssFeedController(rssfeedRouter, rssFeedProvider, httpClient)
 		if err != nil {
 			log.Fatal(err)
 		} else {
-			log.Println("Successfully initialized campus controller")
+			log.Println("Successfully initialized rss feed controller")
+		}
+	}
+
+	osmRouter := router.Group("/osm")
+	{
+		log.Println("Creating open street map controller")
+		err := osm.NewOpenStreetMapController(osmRouter, osmNav, env)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Println("Successfully initialized open street map controller")
 		}
 	}
 
@@ -183,9 +196,9 @@ func NewStudiGuideServer(env *env.Env,
 }
 
 func (server *StudiGuideServer) Start(port string) error {
-	error := http.ListenAndServe(port, server.router)
-	if error != nil {
-		return error
+	err := http.ListenAndServe(port, server.router)
+	if err != nil {
+		return err
 	}
 	return nil
 }

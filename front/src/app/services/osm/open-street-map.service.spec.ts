@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { GraphHopperService } from './graph-hopper.service';
+import { OpenStreetMapService } from './open-street-map.service';
 
-describe('GraphHopperService', () => {
-  let service: GraphHopperService;
+describe('OpenStreetMapService', () => {
+  let service: OpenStreetMapService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(GraphHopperService);
+    service = TestBed.inject(OpenStreetMapService);
   });
 
   it('should be created', () => {
