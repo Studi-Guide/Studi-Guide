@@ -180,24 +180,23 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   private onEnd(detail) {
     this.renderer.setStyle(this.element.nativeElement, 'transition', 'transform '+this.duration+'ms ease-in-out');
 
-    if (!IonicBottomDrawerComponent.DrawerDocking) {
-      return;
-    }
-
-
     const newTop = detail.currentY;
     const deltaTop = Math.abs(this.distanceTop - newTop);
     const deltaDock = Math.abs(this.platform.height() - this.dockedHeight - newTop);
     const deltaBot = Math.abs(this.platform.height() - this.minimumHeight - newTop);
 
+    let nextState = DrawerState.Hidden;
     if (deltaTop < deltaDock && deltaTop < deltaBot && this.shouldDockTop) {
-      this.SetState(DrawerState.Top);
+      nextState = DrawerState.Top;
     } else if (deltaBot < deltaDock && deltaBot < deltaTop && this.shouldDockMiddle) {
-      this.SetState(DrawerState.Bottom);
+      nextState = DrawerState.Bottom;
     } else if (this.shouldDockBottom) {
-      this.SetState(DrawerState.Docked);
-    } else {
-      this.SetState(DrawerState.Hidden);
+      nextState = DrawerState.Docked;
+    }
+
+    if (IonicBottomDrawerComponent.DrawerDocking ||
+        !IonicBottomDrawerComponent.DrawerDocking && nextState === DrawerState.Hidden) {
+      this.SetState(nextState);
     }
   }
 
