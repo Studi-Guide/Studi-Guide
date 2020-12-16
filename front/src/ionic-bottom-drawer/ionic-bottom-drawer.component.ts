@@ -58,6 +58,12 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
 
   @Input() bounceDelta = 30;
 
+  @Input() shouldDockTop = true;
+
+  @Input() shouldDockMiddle = true;
+
+  @Input() shouldDockBottom = true;
+
   @Output() stateChange: EventEmitter<DrawerState> = new EventEmitter<DrawerState>();
 
   private startPositionTop: number;
@@ -184,12 +190,14 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
     const deltaDock = Math.abs(this.platform.height() - this.dockedHeight - newTop);
     const deltaBot = Math.abs(this.platform.height() - this.minimumHeight - newTop);
 
-    if (deltaTop < deltaDock && deltaTop < deltaBot) {
+    if (deltaTop < deltaDock && deltaTop < deltaBot && this.shouldDockTop) {
       this.SetState(DrawerState.Top);
-    } else if (deltaBot < deltaDock && deltaBot < deltaTop) {
+    } else if (deltaBot < deltaDock && deltaBot < deltaTop && this.shouldDockMiddle) {
       this.SetState(DrawerState.Bottom);
-    } else {
+    } else if (this.shouldDockBottom) {
       this.SetState(DrawerState.Docked);
+    } else {
+      this.SetState(DrawerState.Hidden);
     }
   }
 
