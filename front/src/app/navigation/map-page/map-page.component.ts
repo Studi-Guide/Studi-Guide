@@ -13,7 +13,7 @@ import {IonContent, Platform} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
-import {OsmRoute, OpenStreetMapBounds, OpenStreetMapService} from '../../services/osm/open-street-map.service';
+import {OpenStreetMapService, OsmRoute} from '../../services/osm/open-street-map.service';
 import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
@@ -70,6 +70,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
   @ViewChild('routeDrawer') routeDrawer : IonicBottomDrawerComponent;
   @ViewChild('inNavigationDrawer') inNavigationDrawer : IonicBottomDrawerComponent;
+  @ViewChild('changeRouteDrawer') changeRouteDrawer : IonicBottomDrawerComponent;
 
   @ViewChild('searchInput') searchInput : SearchInputComponent
   @ViewChild('navSlides') navSlides : NavigationInstructionSlidesComponent;
@@ -114,7 +115,8 @@ export class MapPageComponent implements OnInit, OnDestroy {
         this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice()),
         this.locationDrawer.SetState(DrawerState.Hidden),
         this.routeDrawer.SetState(DrawerState.Hidden),
-        this.inNavigationDrawer.SetState(DrawerState.Hidden)]);
+        this.inNavigationDrawer.SetState(DrawerState.Hidden),
+        this.changeRouteDrawer.SetState(DrawerState.Hidden)]);
   }
 
   async ionViewDidEnter() {
@@ -340,7 +342,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
         this.model.latestSearchResult.LatLng);
 
     console.log(routes);
-    this.model.SetGraphHopperRouteAsRoute(routes[0]);
+    this.model.SetOsmRouteAsRoute(routes[0]);
 
     await this.locationDrawer.SetState(DrawerState.Hidden);
     await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
@@ -371,6 +373,11 @@ export class MapPageComponent implements OnInit, OnDestroy {
     await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     this.clearRoutes();
     this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
+  }
+
+  public async onChangeRouteStartEndClick() {
+    await this.routeDrawer.SetState(DrawerState.Hidden);
+    await this.changeRouteDrawer.SetState(DrawerState.Top);
   }
 
   async detailsBtnClick() {

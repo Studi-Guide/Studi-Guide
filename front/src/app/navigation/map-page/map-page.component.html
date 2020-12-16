@@ -102,7 +102,7 @@
         <ion-row class="ion-justify-content-between ion-align-self-center">
           <ion-col>
             <ion-label><h1>To {{this.model.latestSearchResult.Name}}</h1></ion-label>
-            <ion-text>From My Location</ion-text>
+            <ion-text>From <span class="span-button" (click)="onChangeRouteStartEndClick()">My Location</span></ion-text>
           </ion-col>
           <ion-col class="ion-justify-content-end ion-padding-horizontal">
             <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseRouteDrawer($event)">
@@ -154,6 +154,24 @@
             <ion-button color="danger" (click)="onEndRouteClick()" expand="block">
               End Route
             </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</app-ionic-bottom-drawer>
+
+<app-ionic-bottom-drawer id="changeRouteDrawer" #changeRouteDrawer state="DrawerState.Hidden">
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+      <div class="ion-padding-bottom"></div>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-label><h2>Start</h2></ion-label>
+            <ion-label><h2>End</h2></ion-label>
           </ion-col>
         </ion-row>
       </ion-grid>

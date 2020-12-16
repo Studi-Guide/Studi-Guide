@@ -53,6 +53,14 @@ ion-progress-bar {
   height: 38px;
 }
 
+.span-button {
+  color: var(--ion-color-primary, #3880ff);
+}
+
+.span-button:hover {
+  cursor: pointer;
+}
+
 .nav-hbar {
   border-top: 2px solid var(--ion-color-medium, #9d9fa6);
   border-bottom: 2px solid var(--ion-color-medium, #9d9fa6);
