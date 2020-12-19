@@ -9,36 +9,17 @@ env:
 
 jobs:
 
-  build:
-    name: Build
+  build_front:
+    name: Build Frontend
     runs-on: ubuntu-latest
     steps:
-
-      - name: Set up Go 1.13.5
-        uses: actions/setup-go@v1
-        with:
-          go-version: ${{env.GO_VERSION}}
-        id: go
-
       - name: install Node.js and angular
         uses: actions/setup-node@v1 #this installs node and npm for us
 
       - run: npm i -g @ionic/cli
 
-      - name: Check out code into the Go module directory
+      - name: Check out code
         uses: actions/checkout@v1
-
-      - name: Get dependencies
-        working-directory: ${{env.GO_HTTP}}
-        run: go mod download
-
-      - name: Generate Database Schema/Docs/Mocks
-        working-directory: ${{env.GO_HTTP}}
-        run: go generate ./...
-
-      - name: Build backend
-        working-directory: ${{env.GO_HTTP}}
-        run: go build -v ./cmd/...
 
       - name: Get dependencies Frontend
         run: npm install
@@ -57,6 +38,44 @@ jobs:
           # Directory containing files to upload
           path: "${{env.IONIC}}/www"
 
+      - name: Clear workspace
+        run: rm -r ./www
+        working-directory: ${{env.IONIC}}
+
+      - name: Build for android
+        run: ionic capacitor build android --no-open
+        working-directory: ${{env.IONIC}}
+
+      - name: Build apk
+        run: ./gradlew bundle
+        working-directory: ${{env.IONIC}}/android
+
+  build_back:
+    name: Build Backend
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Set up Go 1.13.5
+        uses: actions/setup-go@v1
+        with:
+          go-version: ${{env.GO_VERSION}}
+        id: go
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+
+      - name: Get dependencies
+        working-directory: ${{env.GO_HTTP}}
+        run: go mod download
+
+      - name: Generate Database Schema/Docs/Mocks
+        working-directory: ${{env.GO_HTTP}}
+        run: go generate ./...
+
+      - name: Build backend
+        working-directory: ${{env.GO_HTTP}}
+        run: go build -v ./cmd/...
+
       - name: Upload backend artifact
         uses: actions/upload-artifact@v1.0.0
         with:
@@ -64,7 +83,9 @@ jobs:
           name: back_artefacts
           # Directory containing files to upload
           path: ${{env.GO_HTTP}}
-          
+
+
+
           
       #- name: Deploy to S3
       #  if: github.ref == 'refs/heads/master'
@@ -108,7 +129,7 @@ jobs:
           yml: ./codecov.yml #optional
 
   deploy:
-    needs: [build,test]
+    needs: [build_back,build_front,test]
     name: Deploy
     runs-on: ubuntu-latest
     steps:
