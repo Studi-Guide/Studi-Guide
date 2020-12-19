@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { IonicBottomDrawerComponent } from './ionic-bottom-drawer.component';
@@ -7,7 +7,7 @@ describe('IonicBottomDrawerComponent', () => {
   let component: IonicBottomDrawerComponent;
   let fixture: ComponentFixture<IonicBottomDrawerComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ IonicBottomDrawerComponent ],
       imports: [IonicModule.forRoot()]
