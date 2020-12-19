@@ -43,12 +43,8 @@ jobs:
         working-directory: ${{env.IONIC}}
 
       - name: Build for android
-        run: ionic capacitor build android --no-open
+        run: ionic capacitor copy android && cd android && ./gradlew assembleDebug
         working-directory: ${{env.IONIC}}
-
-      - name: Build apk
-        run: ./gradlew bundle
-        working-directory: ${{env.IONIC}}/android
 
   build_back:
     name: Build Backend
