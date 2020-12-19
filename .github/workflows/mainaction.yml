@@ -48,7 +48,7 @@ jobs:
         working-directory: ${{env.IONIC}}
 
       - name: Build for android
-        run: ionic capacitor copy android && npx cap sync && cd android && ./gradlew assembleDebug
+        run: ionic capacitor copy android && ionic cap sync && cd android && ./gradlew assembleDebug
         working-directory: ${{env.IONIC}}
 
   build_back:
@@ -87,7 +87,7 @@ jobs:
 
 
 
-          
+
       #- name: Deploy to S3
       #  if: github.ref == 'refs/heads/master'
       #  uses: jakejarvis/s3-sync-action@master
@@ -147,7 +147,7 @@ jobs:
         run: |
           docker login --password ${{ secrets.DOCKER_PASSWORD }} --username ${{ secrets.DOCKER_USER }}
           docker push studiguide/studiguide_appservice:latest
-          
+
         #- name: Build & Push to Docker Hub
         #  uses: opspresso/action-docker@master
         #  env:
@@ -156,6 +156,6 @@ jobs:
         #    IMAGE_NAME: "studiguide/studiguide_appservice"
         #    TAG_NAME: "latest"
         #    LATEST: "true"
-      
+
 
 
