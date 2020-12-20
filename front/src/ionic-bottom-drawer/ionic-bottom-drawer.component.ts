@@ -119,7 +119,10 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
     this.SetState(changes.state.currentValue);
   }
 
-  public async SetState(newState:DrawerState) {
+  public async SetState(newState:DrawerState, shouldEmit = true) {
+    if (this.state === newState)
+      return;
+
     this.state = newState;
 
     if (this.state !== DrawerState.Hidden) {
@@ -145,7 +148,8 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
       this.element.nativeElement.hidden = true;
     }
 
-     this.stateChange.emit(this.state);
+    if (shouldEmit)
+      this.stateChange.emit(this.state);
   }
 
   private onStart(detail) {
