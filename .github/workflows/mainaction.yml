@@ -56,12 +56,6 @@ jobs:
           name: app-dev
           path: ${{env.IONIC}}/android/app/build/outputs/apk/debug/app-debug.apk
 
-      - name: Upload release bundle
-        uses: actions/upload-artifact@v1
-        with:
-          name: app-release
-          path: ${{env.IONIC}}/android/app/build/outputs/bundle/release/app.aab
-
   build_back:
     name: Build Backend
     runs-on: ubuntu-latest
