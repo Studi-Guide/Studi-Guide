@@ -99,4 +99,13 @@ export class NavigationModel {
             Time: Math.round(route.Time/1000/60)
         }
     }
+
+    public ClearRoute() {
+        this.Route = {
+            Distance: 0,
+            Coordinates: [],
+            NavigationInstructions: [],
+            Time: 0
+        }
+    }
 }

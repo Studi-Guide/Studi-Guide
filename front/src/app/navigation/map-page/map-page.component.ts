@@ -306,8 +306,10 @@ export class MapPageComponent implements OnInit, OnDestroy {
     console.log(newState);
     switch (newState) {
       case NavDrawerState.SearchView:
-        this.clearRoutes();
         this.clearSearchMarkers();
+        break;
+      case NavDrawerState.LocationView:
+        this.clearRoutes();
         this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
         break;
       case NavDrawerState.RouteView:
@@ -408,6 +410,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
       p.remove();
     }
     this.routes = [];
+    this.model.ClearRoute();
     this.navSlides.hide();
   }
 

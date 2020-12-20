@@ -52,7 +52,10 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
       this.locationDrawer.SetState(DrawerState.Hidden),
       this.routeDrawer.SetState(DrawerState.Hidden),
       this.inNavigationDrawer.SetState(DrawerState.Hidden),
-      this.changeRouteDrawer.SetState(DrawerState.Hidden)]);
+      this.changeRouteDrawer.SetState(DrawerState.Hidden, false)]);
+
+    // currently for debug ...
+    // this.setState(NavDrawerState.ChangeRouteView, false);
   }
 
   async ngOnChanges(changes: SimpleChanges) {
@@ -62,7 +65,7 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
     await this.setState(changes.state.currentValue);
   }
 
-  public async setState(newState:NavDrawerState) {
+  public async setState(newState:NavDrawerState, shouldEmit = true) {
 
     switch (this.state) {
       case NavDrawerState.SearchView:
@@ -78,7 +81,7 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
         await this.inNavigationDrawer.SetState(DrawerState.Hidden);
         break;
       case NavDrawerState.ChangeRouteView:
-        await this.changeRouteDrawer.SetState(DrawerState.Hidden);
+        await this.changeRouteDrawer.SetState(DrawerState.Hidden, false);
         break;
     }
 
@@ -102,7 +105,8 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
         break;
     }
 
-    this.stateChange.emit(this.state);
+    if (shouldEmit)
+      this.stateChange.emit(this.state);
   }
 
   public onRouteClick() {
@@ -139,6 +143,8 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
     await this.setState(NavDrawerState.ChangeRouteView);
   }
 
+  // drawer state change handler
+
   public onSearchDrawerStateChange(state:DrawerState) {
     // in case the view is not initialized
     if (this.drawerContent === undefined) {
@@ -148,7 +154,16 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
     this.drawerContent.scrollY = state === DrawerState.Top;
   }
 
+  public async onChangeRouteDrawerStateChange(state:DrawerState) {
+    console.log(state);
+    if (state === DrawerState.Hidden) {
+      await this.setState(NavDrawerState.RouteView);
+    }
+  }
 
+  public async onCancelChangeRoute() {
+    await this.setState(NavDrawerState.RouteView, false);
+  }
 
   public UseDrawerForNavigation() :boolean {
     return !(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice() === DrawerState.Bottom);
