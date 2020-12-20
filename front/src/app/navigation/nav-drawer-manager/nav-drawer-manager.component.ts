@@ -62,10 +62,10 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
     if (!changes.state)
       return;
 
-    await this.setState(changes.state.currentValue);
+    await this.SetState(changes.state.currentValue);
   }
 
-  public async setState(newState:NavDrawerState, shouldEmit = true) {
+  public async SetState(newState:NavDrawerState, shouldEmit = true) {
 
     switch (this.state) {
       case NavDrawerState.SearchView:
@@ -110,15 +110,15 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
   }
 
   public onRouteClick() {
-    this.setState(NavDrawerState.RouteView);
+    this.SetState(NavDrawerState.RouteView);
   }
 
   public onLaunchNavigationClick() {
-    this.setState(NavDrawerState.InNavigationView);
+    this.SetState(NavDrawerState.InNavigationView);
   }
 
   public onEndNavigationClick() {
-    this.setState(NavDrawerState.LocationView);
+    this.SetState(NavDrawerState.LocationView);
   }
 
   // custom event handler
@@ -132,15 +132,15 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
   }
 
   public async onCloseLocationDrawer() {
-    await this.setState(NavDrawerState.SearchView);
+    await this.SetState(NavDrawerState.SearchView);
   }
 
   public async onCloseRouteDrawer() {
-    await this.setState(NavDrawerState.LocationView);
+    await this.SetState(NavDrawerState.LocationView);
   }
 
   public async onChangeRouteStartEndClick() {
-    await this.setState(NavDrawerState.ChangeRouteView);
+    await this.SetState(NavDrawerState.ChangeRouteView);
   }
 
   // drawer state change handler
@@ -157,12 +157,12 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
   public async onChangeRouteDrawerStateChange(state:DrawerState) {
     console.log(state);
     if (state === DrawerState.Hidden) {
-      await this.setState(NavDrawerState.RouteView);
+      await this.SetState(NavDrawerState.RouteView);
     }
   }
 
   public async onCancelChangeRoute() {
-    await this.setState(NavDrawerState.RouteView, false);
+    await this.SetState(NavDrawerState.RouteView, false);
   }
 
   public UseDrawerForNavigation() :boolean {

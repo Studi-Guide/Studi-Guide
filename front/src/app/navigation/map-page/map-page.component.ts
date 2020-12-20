@@ -281,13 +281,13 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
   public async onCloseLocationDrawer(event:any) {
     this.searchInput.clearDestinationInput();
-    await this.drawerManager.setState(NavDrawerState.SearchView);
+    await this.drawerManager.SetState(NavDrawerState.SearchView);
     this.clearSearchMarkers();
   }
 
   public async onCloseRouteDrawer(event:any) {
     this.clearRoutes();
-    await this.drawerManager.setState(NavDrawerState.LocationView);
+    await this.drawerManager.SetState(NavDrawerState.LocationView);
     this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
   }
 
@@ -295,7 +295,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
     if (this.isHybridPlatform) {
         await Keyboard.hide();
     }
-    await this.drawerManager.setState(NavDrawerState.LocationView);
+    await this.drawerManager.SetState(NavDrawerState.LocationView);
   }
 
   public onCampusClick(c:CampusViewModel) {
