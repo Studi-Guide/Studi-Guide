@@ -4,6 +4,7 @@ import {Params} from '@angular/router';
 import {LatLngLiteral} from 'leaflet';
 import {INavigationInstruction} from './navigation-instruction-slides/navigation-instruction-if';
 import {OsmRoute} from '../services/osm/open-street-map.service';
+import {CampusViewModel} from './campusViewModel';
 
 
 
@@ -37,7 +38,7 @@ export class NavigationModel {
         RouteRouterParams: {},
         LatLng: {lat: 0, lng: 0}
     };
-    public availableCampus: ICampus[] = [];
+    public availableCampus: CampusViewModel[] = [];
     public Route: INavigationRoute = {
         Coordinates: [],
         Distance: 0,

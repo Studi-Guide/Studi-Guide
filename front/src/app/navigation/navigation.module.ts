@@ -10,6 +10,7 @@ import {IonicBottomDrawerModule} from '../../ionic-bottom-drawer/ionic-bottom-dr
 import {MapPageComponent} from './map-page/map-page.component';
 import {FloorButtonComponent} from './floor-button/floor-button.component';
 import {NavigationInstructionSlidesComponent} from './navigation-instruction-slides/navigation-instruction-slides.component';
+import {NavDrawerManagerComponent} from './nav-drawer-manager/nav-drawer-manager.component';
 
 @NgModule({
   imports: [
@@ -28,7 +29,8 @@ import {NavigationInstructionSlidesComponent} from './navigation-instruction-sli
         MapViewComponent,
         MapPageComponent,
         FloorButtonComponent,
-        NavigationInstructionSlidesComponent
+        NavigationInstructionSlidesComponent,
+        NavDrawerManagerComponent
     ]
 })
 export class NavigationPageModule {}

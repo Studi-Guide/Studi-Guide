@@ -92,12 +92,12 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
         if (this.model.availableCampus.length === 0)
         {
-            this.model.availableCampus = await this.dataService.get_campus_search().toPromise()
+            const campus = await this.dataService.get_campus_search().toPromise()
+            for (const c of campus) {
+                this.model.availableCampus.push(new CampusViewModel(c))
+            }
         }
 
-        for (const campus of this.model.availableCampus) {
-            this.availableCampus.push(new CampusViewModel(campus))
-        }
     }
 
     public async onDiscovery(searchInput: string) {
