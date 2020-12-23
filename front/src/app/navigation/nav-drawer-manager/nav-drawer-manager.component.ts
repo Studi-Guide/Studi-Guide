@@ -55,7 +55,7 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
       this.changeRouteDrawer.SetState(DrawerState.Hidden, false)]);
 
     // currently for debug ...
-    // this.setState(NavDrawerState.ChangeRouteView, false);
+    this.SetState(NavDrawerState.ChangeRouteView, false);
   }
 
   async ngOnChanges(changes: SimpleChanges) {

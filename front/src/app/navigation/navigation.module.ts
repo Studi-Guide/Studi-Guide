@@ -11,6 +11,7 @@ import {MapPageComponent} from './map-page/map-page.component';
 import {FloorButtonComponent} from './floor-button/floor-button.component';
 import {NavigationInstructionSlidesComponent} from './navigation-instruction-slides/navigation-instruction-slides.component';
 import {NavDrawerManagerComponent} from './nav-drawer-manager/nav-drawer-manager.component';
+import {RouteInputComponent} from './nav-drawer-manager/route-input/route-input.component';
 
 @NgModule({
   imports: [
@@ -30,7 +31,8 @@ import {NavDrawerManagerComponent} from './nav-drawer-manager/nav-drawer-manager
         MapPageComponent,
         FloorButtonComponent,
         NavigationInstructionSlidesComponent,
-        NavDrawerManagerComponent
+        NavDrawerManagerComponent,
+        RouteInputComponent
     ]
 })
 export class NavigationPageModule {}
