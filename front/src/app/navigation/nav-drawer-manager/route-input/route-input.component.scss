@@ -1,22 +1,30 @@
 
 .container {
   width: 100%;
+  height: fit-content;
   position: relative;
 }
 
 .input-container {
   width: 100%;
-  height: 100%;
+  height: fit-content;
   position: absolute;
   top: 0;
   left: 0;
 }
 
 .icon-container {
-  position: absolute;
   width: 100%;
-  height: 100%;
-  left: 0;
+  height: fit-content;
+  position: absolute;
   top: 0;
+  left: 0;
   z-index: 10;
+}
+
+.icon-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-content: center;
 }

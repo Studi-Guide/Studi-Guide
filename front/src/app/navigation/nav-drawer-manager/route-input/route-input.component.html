@@ -1,21 +1,18 @@
 <div class="container">
-    <div class="icon-container">
-        <ion-grid>
-            <ion-row class="ion-align-items-center">
-                <ion-col class="ion-text-right">
-                    <ion-icon name="swap-vertical-outline"></ion-icon>
-                </ion-col>
-            </ion-row>
-        </ion-grid>
-    </div>
+
     <div class="input-container">
         <ion-item>
             <ion-label>From</ion-label>
-            <ion-input></ion-input>
+            <ion-input #inputFrom></ion-input>
         </ion-item>
         <ion-item>
             <ion-label>To</ion-label>
-            <ion-input></ion-input>
+            <ion-input #inputTo></ion-input>
         </ion-item>
+    </div>
+    <div class="icon-container">
+        <div class="icon-wrapper">
+                <ion-icon button (click)="swapInputs()" name="swap-vertical-outline"></ion-icon>
+        </div>
     </div>
 </div>

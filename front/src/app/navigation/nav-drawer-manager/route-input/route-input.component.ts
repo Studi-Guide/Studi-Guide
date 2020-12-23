@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
+import {IonInput} from '@ionic/angular';
 
 @Component({
   selector: 'app-route-input',
@@ -7,8 +8,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RouteInputComponent implements OnInit {
 
+  @ViewChild('inputFrom') inputFrom:IonInput;
+  @ViewChild('inputTo') inputTo:IonInput;
+
   constructor() { }
 
   ngOnInit() {}
+
+  public swapInputs() {
+    const tmp = this.inputFrom.value;
+    this.inputFrom.value = this.inputTo.value;
+    this.inputTo.value = tmp;
+  }
 
 }
