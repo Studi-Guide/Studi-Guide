@@ -13,18 +13,17 @@
   left: 0;
 }
 
-.icon-container {
-  width: 100%;
-  height: fit-content;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 10;
+.swappicon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.icon-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-  align-content: center;
+.swappicon:hover {
+  cursor: pointer;
+}
+
+.ripple-parent {
+  position: relative;
+  overflow: hidden;
 }
