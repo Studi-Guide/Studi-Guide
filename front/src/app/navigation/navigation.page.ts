@@ -83,7 +83,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     async ngOnInit() {
         if (this.model.recentSearches.length === 0) {
-            const searches = await SearchResultProvider.readRecentSearch(this.storage);
+            const searches = await SearchResultProvider.readRecentSearches(this.storage);
             if (searches !== null) {
                 this.model.recentSearches = searches;
                 console.log(this.model.recentSearches);

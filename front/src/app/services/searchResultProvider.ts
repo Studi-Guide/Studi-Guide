@@ -18,7 +18,7 @@ export class SearchResultProvider{
         console.log(model.recentSearches);
     }
 
-    public static async readRecentSearch(storage: Storage) {
+    public static async readRecentSearches(storage: Storage) {
         const searches = JSON.parse(await storage.get(this.recentSearchesKey));
         return searches != null ? searches[0] : null;
     }
