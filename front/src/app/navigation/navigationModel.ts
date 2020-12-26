@@ -5,6 +5,7 @@ import {LatLngLiteral} from 'leaflet';
 import {INavigationInstruction} from './navigation-instruction-slides/navigation-instruction-if';
 import {OsmRoute} from '../services/osm/open-street-map.service';
 import {CampusViewModel} from './campusViewModel';
+import {RecentSearchesService} from '../services/recent-searches/recent-searches.service';
 
 
 
@@ -28,7 +29,14 @@ export interface INavigationRoute {
     providedIn: 'root'
 })
 export class NavigationModel {
-    public recentSearches : string[] = [];
+
+    constructor(private recentSearchesService:RecentSearchesService) {
+        this.recentSearchesService.readRecentSearches().then(r => {
+            this.recentSearchesVar = r;
+        })
+    }
+
+    private recentSearchesVar : string[] = [];
     public errorMessage: string;
     public latestSearchResult: ISearchResultObject = {
         Name: '',
@@ -44,6 +52,15 @@ export class NavigationModel {
         Distance: 0,
         NavigationInstructions: [],
         Time: 0
+    }
+
+    public get recentSearches() :string[] {
+        return this.recentSearchesVar;
+    }
+
+    public async addRecentSearch(location:string) {
+        await this.recentSearchesService.addRecentSearch(location);
+        this.recentSearchesVar = await this.recentSearchesService.readRecentSearches()
     }
 
     public SetCampusAsSearchResultObject(c:ICampus) {

@@ -9,10 +9,8 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
-import {Storage} from '@ionic/storage';
 import {CampusViewModel} from './campusViewModel';
 import {NavigationModel} from './navigationModel';
-import {SearchResultProvider} from '../services/searchResultProvider';
 import {Plugins} from '@capacitor/core';
 
 const { Keyboard } = Plugins;
@@ -41,7 +39,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 private modalCtrl: ModalController,
                 private  route: ActivatedRoute,
                 private router: Router,
-                private storage: Storage,
                 public model: NavigationModel,
                 private  platform: Platform) {
     }
@@ -82,13 +79,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     async ngOnInit() {
-        if (this.model.recentSearches.length === 0) {
-            const searches = await SearchResultProvider.readRecentSearches(this.storage);
-            if (searches !== null) {
-                this.model.recentSearches = searches;
-                console.log(this.model.recentSearches);
-            }
-        }
 
         if (this.model.availableCampus.length === 0)
         {
@@ -105,7 +95,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
         NavigationPage.progressIsVisible = true;
         try {
             const location = await this.mapView.showDiscoveryLocation(searchInput);
-            SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
+            await this.model.addRecentSearch(searchInput);
 
             await this.showLocationDrawer(location);
         } catch (ex) {

@@ -7,10 +7,7 @@ import {IGpsCoordinate} from '../../building-objects-if';
 import {Router} from '@angular/router';
 import {NavigationModel} from '../navigationModel';
 import {CampusViewModel} from '../campusViewModel';
-import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
-import {SearchResultProvider} from '../../services/searchResultProvider';
 import {Platform} from '@ionic/angular';
-import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
 import {OpenStreetMapService, OsmRoute} from '../../services/osm/open-street-map.service';
@@ -87,14 +84,6 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-
-    if (!this.model.recentSearches || this.model.recentSearches.length === 0) {
-      const searches = await SearchResultProvider.readRecentSearches(this.storage);
-      if (searches !== null) {
-        this.model.recentSearches = searches;
-        console.log(this.model.recentSearches);
-      }
-    }
 
     if (!this.model.availableCampus || this.model.availableCampus.length === 0) {
       const campus = await this.dataService.get_campus_search().toPromise()
@@ -206,7 +195,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
             this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
 
             await this.showElementDrawer();
-            SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
+            await this.model.addRecentSearch(searchInput);
             return;
           }
         } catch (e) {
@@ -223,7 +212,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
               this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
 
           await this.showElementDrawer();
-          SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
+          await this.model.addRecentSearch(searchInput);
           return;
         }
       } catch (e) {
@@ -239,7 +228,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
           this.map.flyTo([campus.Latitude, campus.Longitude], this.DEFAULT_ZOOM);
           await this.showElementDrawer();
-          SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
+          await this.model.addRecentSearch(searchInput);
           return;
         }
       } catch (e) {
@@ -250,7 +239,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
       const buildings = await this.dataService.get_buildings_search(searchInput).toPromise();
       if (buildings !== null && buildings.length > 0) {
         // found building
-        SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
+        await this.model.addRecentSearch(searchInput);
         for (const buld of buildings) {
           const coordinates = this.getCenterCoordinateFromBody(buld.Body);
           this.searchMarker.push(
@@ -262,7 +251,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
         const campusArray = await this.dataService.get_campus_search(searchInput).toPromise();
         if (campusArray !== null && campusArray.length > 0) {
           // found building
-          SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
+          await this.model.addRecentSearch(searchInput);
           for (const camp of campusArray) {
             this.searchMarker.push(
               this.showMarker(camp.Latitude, camp.Longitude, camp.Name, false));
