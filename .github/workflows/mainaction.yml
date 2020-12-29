@@ -43,6 +43,14 @@ jobs:
           # Directory containing files to upload
           path: "${{env.IONIC}}/www"
 
+      - name: GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v2.2.0
+        if: github.ref == 'refs/heads/master'
+        with:
+         # Build directory to deploy
+          build_dir: "${{env.IONIC}}/www"
+
+  
       - name: Clear workspace
         run: rm -r ./www
         working-directory: ${{env.IONIC}}
