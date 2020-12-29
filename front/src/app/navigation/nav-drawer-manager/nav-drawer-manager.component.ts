@@ -43,7 +43,6 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
 
   constructor(
       public model: NavigationModel,
-      private _dataService: DataService,
       private platform: Platform) { }
 
   async ngAfterViewInit() {
