@@ -18,7 +18,14 @@ export interface ISearchResultObject {
     LatLng: LatLngLiteral;
 }
 
+export interface IRouteLocation {
+    Name: string;
+    LatLng: LatLngLiteral;
+}
+
 export interface INavigationRoute {
+    Start: IRouteLocation;
+    Destination: IRouteLocation;
     Coordinates: [number, number][];
     Distance: number;
     NavigationInstructions: INavigationInstruction[];
@@ -48,6 +55,14 @@ export class NavigationModel {
     };
     public availableCampus: CampusViewModel[] = [];
     public Route: INavigationRoute = {
+        Start: {
+            Name: '',
+            LatLng: {lat: 0, lng: 0}
+        },
+        Destination: {
+            Name: '',
+            LatLng: {lat: 0, lng: 0}
+        },
         Coordinates: [],
         Distance: 0,
         NavigationInstructions: [],
@@ -103,13 +118,15 @@ export class NavigationModel {
         };
     }
 
-    public SetOsmRouteAsRoute(route:OsmRoute) {
+    public SetOsmRouteAsRoute(route:OsmRoute, start:IRouteLocation, destination:IRouteLocation) {
         const leafletLatLng: [number, number][] = [];
         for(const coordinate of route.Points.Coordinates) {
             leafletLatLng.push([coordinate.Lat, coordinate.Lng]);
         }
 
         this.Route = {
+            Start: start,
+            Destination: destination,
             Coordinates: leafletLatLng,
             Distance: Math.round(route.Distance),
             NavigationInstructions: route.Instructions,
@@ -119,6 +136,14 @@ export class NavigationModel {
 
     public ClearRoute() {
         this.Route = {
+            Start: {
+                Name: '',
+                LatLng: {lat: 0, lng: 0}
+            },
+            Destination: {
+                Name: '',
+                LatLng: {lat: 0, lng: 0}
+            },
             Distance: 0,
             Coordinates: [],
             NavigationInstructions: [],

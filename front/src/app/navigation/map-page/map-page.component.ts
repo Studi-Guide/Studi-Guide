@@ -57,6 +57,8 @@ export class MapPageComponent implements OnInit, OnDestroy {
      this.isHybridPlatform = this.platform.is('hybrid');
   }
 
+  public static readonly MyLocation = 'My Location';
+
   private readonly isHybridPlatform: boolean;
   map: Leaflet.Map;
   private searchMarker: Leaflet.Marker[] = [];
@@ -317,12 +319,12 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   public async onRouteBtnClick() {
-    const position = await this.geolocation.getCurrentPosition();
+    const geoPosition = await this.geolocation.getCurrentPosition();
+    const position = {lat: geoPosition.coords.latitude, lng: geoPosition.coords.longitude};
     const routes:OsmRoute[] = await this.openStreetMapService.GetRoute(
-        {lat: position.coords.latitude, lng: position.coords.longitude},
-        this.model.latestSearchResult.LatLng);
+        position, this.model.latestSearchResult.LatLng);
 
-    this.model.SetOsmRouteAsRoute(routes[0]);
+    this.model.SetOsmRouteAsRoute(routes[0], {Name: MapPageComponent.MyLocation, LatLng: position}, this.model.latestSearchResult);
     // await this.drawerManager.setState(NavDrawerState.RouteView);
 
     const polyline = Leaflet.polyline(this.model.Route.Coordinates, {color: 'red'}).addTo(this.map);

@@ -87,8 +87,8 @@
       <ion-grid>
         <ion-row class="ion-justify-content-between ion-align-self-center">
           <ion-col>
-            <ion-label><h1>To {{this.model.latestSearchResult.Name}}</h1></ion-label>
-            <ion-text>From <span class="span-button" (click)="onChangeRouteStartEndClick()">My Location</span></ion-text>
+            <ion-label><h1>To {{this.model.Route.Destination.Name}}</h1></ion-label>
+            <ion-text>From <span class="span-button" (click)="onChangeRouteStartEndClick()">{{this.model.Route.Start.Name}}</span></ion-text>
           </ion-col>
           <ion-col class="ion-justify-content-end ion-padding-horizontal">
             <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseRouteDrawer()">
@@ -168,7 +168,7 @@
         </ion-row>
       </ion-grid>
     </div>
-    <app-route-input></app-route-input>
+    <app-route-input #routeInput></app-route-input>
     <ion-content>
     </ion-content>
   </div>

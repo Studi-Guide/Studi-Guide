@@ -6,6 +6,7 @@ import {DataService} from '../../services/data.service';
 import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
 import {CampusViewModel} from '../campusViewModel';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
+import {RouteInputComponent} from './route-input/route-input.component';
 
 export enum NavDrawerState {
   SearchView,
@@ -41,6 +42,8 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
   @ViewChild('inNavigationDrawer') inNavigationDrawer : IonicBottomDrawerComponent;
   @ViewChild('changeRouteDrawer') changeRouteDrawer : IonicBottomDrawerComponent;
 
+  @ViewChild('routeInput') routeInput : RouteInputComponent;
+
   constructor(
       public model: NavigationModel,
       private platform: Platform) { }
@@ -54,7 +57,7 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
       this.changeRouteDrawer.SetState(DrawerState.Hidden, false)]);
 
     // currently for debug ...
-    this.SetState(NavDrawerState.ChangeRouteView, false);
+    // this.SetState(NavDrawerState.ChangeRouteView, false);
   }
 
   async ngOnChanges(changes: SimpleChanges) {
@@ -139,6 +142,7 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
   }
 
   public async onChangeRouteStartEndClick() {
+    this.routeInput.UpdateFromNavigationModel();
     await this.SetState(NavDrawerState.ChangeRouteView);
   }
 
