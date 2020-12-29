@@ -47,7 +47,8 @@ jobs:
         uses: crazy-max/ghaction-github-pages@v2.2.0
         if: github.ref == 'refs/heads/master'
         with:
-         # Build directory to deploy
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Build directory to deploy
           build_dir: "${{env.IONIC}}/www"
 
   
