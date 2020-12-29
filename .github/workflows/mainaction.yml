@@ -50,7 +50,7 @@ jobs:
       - name: Build frontend for Github Pages
         working-directory: ${{env.IONIC}}
         run: |
-          ionic build --engine=browser --localize --prod --base-href=/Studi-Guide/
+          ionic build --engine=browser --localize --prod -- --base-href=/Studi-Guide/
         
       - name: Upload GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
