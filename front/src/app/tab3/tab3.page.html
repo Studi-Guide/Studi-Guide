@@ -13,7 +13,7 @@
     </ion-list-header>
     <ion-item button (click)="onMensaClick()" >
       <ion-icon slot="start" color="dark" name="beer"></ion-icon>
-      <ion-label>
+      <ion-label text-wrap>
         <h2>Mensateria</h2>
         <h3 *ngIf="isMensaExpanded" [innerHTML]="mensaFeedContent.content">
         </h3>
