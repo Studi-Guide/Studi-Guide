@@ -8,7 +8,7 @@ import {WINDOW} from '../app/services/windowProvider';
 
 export const environment = {
   production: false
-}
+};
 
 @Injectable()
 export class Env {
@@ -19,7 +19,7 @@ export class Env {
   constructor(public plt: Platform,
               @Inject(WINDOW) window: Window){
     console.log('window.origin: ', window.origin);
-    if (window != null)  {
+    if (window)  {
         this.serverUrl = window.origin;
         this.serverUrl = this.serverUrl.replace(':8100', ':8080');
     }
@@ -28,8 +28,8 @@ export class Env {
     if (plt.is('hybrid')){
       console.log('Android or iOS app recognized');
       if (plt.platforms().includes('capacitor')){
-        console.log('Native app running setting backend to https://studi-guide.azurewebsites.net');
-        this.serverUrl ='https://studi-guide.azurewebsites.net';
+        console.log('Native app running setting backend to https://studi-guide-ii.azurewebsites.net');
+        this.serverUrl = 'https://studi-guide-ii.azurewebsites.net';
       }
     }
   }
