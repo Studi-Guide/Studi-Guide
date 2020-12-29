@@ -44,7 +44,7 @@ jobs:
           path: "${{env.IONIC}}/www"
 
       - name: GitHub Pages
-        uses: crazy-max/ghaction-github-pages@v2.2.0
+        uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/master'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
