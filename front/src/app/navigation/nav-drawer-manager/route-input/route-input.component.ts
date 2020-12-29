@@ -9,11 +9,11 @@ import {IRouteLocation, NavigationModel} from '../../navigationModel';
 })
 export class RouteInputComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('inputFrom') inputFrom:IonInput;
-  @ViewChild('inputTo') inputTo:IonInput;
+  @ViewChild('inputFrom') inputFrom: IonInput;
+  @ViewChild('inputTo') inputTo: IonInput;
 
   constructor(
-      private model:NavigationModel
+      private model: NavigationModel
   ) { }
 
   ngOnInit() {}
@@ -33,11 +33,11 @@ export class RouteInputComponent implements OnInit, AfterViewInit {
     this.inputTo.value = tmp;
   }
 
-  public get From():IRouteLocation {
+  public get From(): IRouteLocation {
     return this.model.Route.Start;
   }
 
-  public get To() :IRouteLocation {
+  public get To(): IRouteLocation {
     return this.model.Route.Destination;
   }
 
