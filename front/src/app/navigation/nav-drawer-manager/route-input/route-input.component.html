@@ -4,11 +4,11 @@
             <ion-col size="11">
                 <ion-item>
                     <ion-label>From</ion-label>
-                    <ion-input #inputFrom></ion-input>
+                    <ion-input #inputFrom (ionFocus)="onInputFromFocus()"></ion-input>
                 </ion-item>
                 <ion-item>
                     <ion-label>To</ion-label>
-                    <ion-input #inputTo></ion-input>
+                    <ion-input #inputTo (ionFocus)="onInputToFocus()"></ion-input>
                 </ion-item>
             </ion-col>
             <ion-col size="1" class="swappicon ion-activatable ripple-parent" (click)="swapInputs()">
@@ -18,3 +18,13 @@
         </ion-row>
     </ion-grid>
 </div>
+<ion-content>
+    <ion-list class="ion-no-padding">
+        <ion-item *ngIf="showMyLocation()" button (click)="listMyLocationClick()">
+            <ion-text>My Location</ion-text>
+        </ion-item>
+        <ion-item *ngFor="let s of model.recentSearches;" button (click)="listRecentSearchClick(s)">
+            <ion-text>{{s}}</ion-text>
+        </ion-item>
+    </ion-list>
+</ion-content>

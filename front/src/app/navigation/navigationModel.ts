@@ -37,13 +37,13 @@ export interface INavigationRoute {
 })
 export class NavigationModel {
 
-    constructor(private recentSearchesService:RecentSearchesService) {
+    constructor(private recentSearchesService: RecentSearchesService) {
         this.recentSearchesService.readRecentSearches().then(r => {
             this.recentSearchesVar = r;
-        })
+        });
     }
 
-    private recentSearchesVar : string[] = [];
+    private recentSearchesVar: string[] = [];
     public errorMessage: string;
     public latestSearchResult: ISearchResultObject = {
         Name: '',
@@ -67,18 +67,18 @@ export class NavigationModel {
         Distance: 0,
         NavigationInstructions: [],
         Time: 0
-    }
+    };
 
-    public get recentSearches() :string[] {
+    public get recentSearches(): string[] {
         return this.recentSearchesVar;
     }
 
-    public async addRecentSearch(location:string) {
+    public async addRecentSearch(location: string) {
         await this.recentSearchesService.addRecentSearch(location);
-        this.recentSearchesVar = await this.recentSearchesService.readRecentSearches()
+        this.recentSearchesVar = await this.recentSearchesService.readRecentSearches();
     }
 
-    public SetCampusAsSearchResultObject(c:ICampus) {
+    public SetCampusAsSearchResultObject(c: ICampus) {
         this.latestSearchResult = {
             Name: c.Name,
             Description: c.ShortName,
@@ -93,7 +93,7 @@ export class NavigationModel {
             LatLng: {lat: c.Latitude, lng: c.Longitude}
         };
     }
-    public SetBuildingAsSearchResultObject(b:IBuilding, latLng: LatLngLiteral) {
+    public SetBuildingAsSearchResultObject(b: IBuilding, latLng: LatLngLiteral) {
         this.latestSearchResult = {
             Name: b.Name,
             Description: 'Campus:' + b.Campus,
@@ -101,9 +101,9 @@ export class NavigationModel {
             DetailRouterParams: {building: b.Name},
             RouteRouterParams: {},
             LatLng: latLng
-        }
+        };
     }
-    public SetLocationAsSearchResultObject(l:ILocation, latLng: LatLngLiteral) {
+    public SetLocationAsSearchResultObject(l: ILocation, latLng: LatLngLiteral) {
         const details: [string, any][] = [['Building: ',  l.Name]];
         if (l.Tags) {
             details.push(['Tags: ', l.Tags.join(', ')]);
@@ -113,14 +113,14 @@ export class NavigationModel {
             Description: l.Description,
             Information: details,
             DetailRouterParams: {location: l.Name},
-            RouteRouterParams: {start: l.Building+'.Entrance', destination: l.Name},
+            RouteRouterParams: {start: l.Building + '.Entrance', destination: l.Name},
             LatLng: latLng
         };
     }
 
-    public SetOsmRouteAsRoute(route:OsmRoute, start:IRouteLocation, destination:IRouteLocation) {
+    public SetOsmRouteAsRoute(route: OsmRoute, start: IRouteLocation, destination: IRouteLocation) {
         const leafletLatLng: [number, number][] = [];
-        for(const coordinate of route.Points.Coordinates) {
+        for (const coordinate of route.Points.Coordinates) {
             leafletLatLng.push([coordinate.Lat, coordinate.Lng]);
         }
 
@@ -130,8 +130,8 @@ export class NavigationModel {
             Coordinates: leafletLatLng,
             Distance: Math.round(route.Distance),
             NavigationInstructions: route.Instructions,
-            Time: Math.round(route.Time/1000/60)
-        }
+            Time: Math.round(route.Time / 1000 / 60)
+        };
     }
 
     public ClearRoute() {
@@ -148,6 +148,6 @@ export class NavigationModel {
             Coordinates: [],
             NavigationInstructions: [],
             Time: 0
-        }
+        };
     }
 }
