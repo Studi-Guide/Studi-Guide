@@ -14,9 +14,10 @@
     <ion-item button (click)="onMensaClick()" >
       <ion-icon slot="start" color="dark" name="beer"></ion-icon>
       <ion-label text-wrap>
-        <h2>Mensateria</h2>
-        <h3 *ngIf="isMensaExpanded" [innerHTML]="mensaFeedContent.content">
-        </h3>
+        <app-expander header="Mensateria" [expanded]="isMensaExpanded">
+          <h3 [innerHTML]="mensaFeedContent.content">
+          </h3>
+        </app-expander>
       </ion-label>
     </ion-item>
     <ion-item href="https://www.kim-chung.de/speisekarte/mittagsgerichte/">

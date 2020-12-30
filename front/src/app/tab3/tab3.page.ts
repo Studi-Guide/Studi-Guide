@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {LoadingController} from '@ionic/angular';
 import {RssFeedService} from '../services/rss-feed.service';
 import {FeedItem} from '../news/rssElement';
@@ -8,16 +8,16 @@ import {FeedItem} from '../news/rssElement';
   templateUrl: 'tab3.page.html',
   styleUrls: ['tab3.page.scss']
 })
-export class Tab3Page implements AfterViewInit {
+export class Tab3Page implements OnInit {
   private mensaFeed = 'Mensateria-Ohm';
   isMensaExpanded = false;
-  mensaFeedContent: FeedItem;
+  mensaFeedContent = new FeedItem('', '', '', '', Date.prototype, '');
 
   constructor(private loadingController: LoadingController,
               private rssFeedService: RssFeedService
   ) {}
 
-  async ngAfterViewInit() {
+  async ngOnInit() {
     await this.fetchMensaData();
   }
 
