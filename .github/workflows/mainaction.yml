@@ -42,8 +42,17 @@ jobs:
           name: front_artefacts
           # Directory containing files to upload
           path: "${{env.IONIC}}/www"
-
-      - name: GitHub Pages
+      
+      - name: Clear workspace
+        run: rm -r ./www
+        working-directory: ${{env.IONIC}}
+      
+      - name: Build frontend for Github Pages
+        working-directory: ${{env.IONIC}}
+        run: |
+          ionic build --engine=browser --localize --prod -- --base-href=/Studi-Guide/
+        
+      - name: Upload GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         if: github.ref == 'refs/heads/master'
         with:
@@ -51,7 +60,6 @@ jobs:
           # Build directory to deploy
           publish_dir: "${{env.IONIC}}/www"
 
-  
       - name: Clear workspace
         run: rm -r ./www
         working-directory: ${{env.IONIC}}
