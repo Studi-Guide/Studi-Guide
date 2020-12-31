@@ -24,7 +24,7 @@
             <ion-text>My Location</ion-text>
         </ion-item>
         <ion-item *ngFor="let s of model.recentSearches;" button (click)="listRecentSearchClick(s)">
-            <ion-text>{{s}}</ion-text>
+            <ion-text>{{s.Name}}</ion-text>
         </ion-item>
     </ion-list>
 </ion-content>

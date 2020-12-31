@@ -1,7 +1,7 @@
 import {AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
 import {IonContent, Platform} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
-import {NavigationModel} from '../navigationModel';
+import {IRouteLocation, NavigationModel} from '../navigationModel';
 import {DataService} from '../../services/data.service';
 import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
 import {CampusViewModel} from '../campusViewModel';
@@ -34,6 +34,8 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
   @Output() navInstructionClick: EventEmitter<INavigationInstruction> = new EventEmitter<INavigationInstruction>();
 
   @Output() search: EventEmitter<string> = new EventEmitter<string>();
+
+  @Output() newRoute: EventEmitter<IRouteLocation[]> = new EventEmitter<IRouteLocation[]>();
 
   @ViewChild('drawerContent') drawerContent: IonContent;
   @ViewChild('searchDrawer') searchDrawer: IonicBottomDrawerComponent;

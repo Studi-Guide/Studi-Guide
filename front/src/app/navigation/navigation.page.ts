@@ -27,9 +27,9 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     @ViewChild(MapViewComponent) mapView: MapViewComponent;
     @ViewChild(SearchInputComponent) searchInput: SearchInputComponent;
-    @ViewChild('drawerContent') drawerContent : IonContent;
-    @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
-    @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
+    @ViewChild('drawerContent') drawerContent: IonContent;
+    @ViewChild('searchDrawer') searchDrawer: IonicBottomDrawerComponent;
+    @ViewChild('locationDrawer') locationDrawer: IonicBottomDrawerComponent;
 
     public errorMessage: string;
     public availableCampus: CampusViewModel[] = [];
@@ -65,7 +65,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
                     params.destination != null && params.destination.length > 0) {
                     await this.showNavigation(params.start, params.destination);
                 } else if (params != null && params.building != null && params.building.length > 0) {
-                    const building = await this.dataService.get_building(params.building).toPromise()
+                    const building = await this.dataService.get_building(params.building).toPromise();
                     if (building !== null) {
                         await this.mapView.showFloor(
                             building.Floors?.includes('EG') ? 'EG' : building.Floors[0],
@@ -82,9 +82,9 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
         if (this.model.availableCampus.length === 0)
         {
-            const campus = await this.dataService.get_campus_search().toPromise()
+            const campus = await this.dataService.get_campus_search().toPromise();
             for (const c of campus) {
-                this.model.availableCampus.push(new CampusViewModel(c))
+                this.model.availableCampus.push(new CampusViewModel(c));
             }
         }
 
@@ -95,7 +95,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
         NavigationPage.progressIsVisible = true;
         try {
             const location = await this.mapView.showDiscoveryLocation(searchInput);
-            await this.model.addRecentSearch(searchInput);
+            await this.model.addRecentSearchLocation(location, {lat: 0, lng: 0});
 
             await this.showLocationDrawer(location);
         } catch (ex) {
@@ -136,7 +136,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
         }
     }
 
-    public onDrawerStateChange(state:DrawerState) {
+    public onDrawerStateChange(state: DrawerState) {
         // in case the view is not initialized
         if (this.drawerContent === undefined) {
             return;
@@ -145,7 +145,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
         this.drawerContent.scrollY = state === DrawerState.Top;
     }
 
-    public async showLocationDrawer(location:ILocation) {
+    public async showLocationDrawer(location: ILocation) {
         await this.locationDrawer.SetState(DrawerState.Hidden);
         this.model.latestSearchResult.Name = location.Name;
         this.model.latestSearchResult.Description = location.Description;
@@ -162,7 +162,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
         await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     }
 
-    public async onCloseLocationDrawer(event:any) {
+    public async onCloseLocationDrawer(event: any) {
         await this.locationDrawer.SetState(DrawerState.Hidden);
         await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     }
@@ -188,12 +188,12 @@ export class NavigationPage implements OnInit, AfterViewInit{
             componentProps: {
                 floors
             }
-        })
+        });
         await availableFloorModal.present();
 
-        const data = await availableFloorModal.onDidDismiss()
+        const data = await availableFloorModal.onDidDismiss();
         if (data.data) {
-            await this.mapView.showAnotherFloorOfCurrentBuilding(data.data, this.mapView.CurrentBuilding)
+            await this.mapView.showAnotherFloorOfCurrentBuilding(data.data, this.mapView.CurrentBuilding);
         }
     }
 
@@ -241,20 +241,20 @@ export class NavigationPage implements OnInit, AfterViewInit{
         this.searchInput.setDiscoverySearchbarValue(destination);
         this.searchInput.setStartSearchbarValue(start);
         await this.onCloseLocationDrawer(null);
-        await this.onRoute([start, destination])
+        await this.onRoute([start, destination]);
     }
 
     private async showDiscoveryMode() {
         if (this.mapView.CurrentRoute == null && this.mapView.CurrentBuilding == null) {
             // STDG-138 load base map
-            await this.mapView.showDiscoveryMap('', 'EG')
+            await this.mapView.showDiscoveryMap('', 'EG');
 
             // Coordinates of KA.013
             this.mapView.CenterMap(310, 550);
         }
     }
 
-    public async recentSearchClick(locationStr:string) {
+    public async recentSearchClick(locationStr: string) {
         await this.router.navigate(['tabs/navigation/detail'], { queryParams: { location: locationStr } });
     }
 

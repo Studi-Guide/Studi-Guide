@@ -1,22 +1,10 @@
 import {IBuilding, ICampus, ILocation} from '../building-objects-if';
 import {Injectable} from '@angular/core';
-import {Params} from '@angular/router';
 import {LatLngLiteral} from 'leaflet';
 import {INavigationInstruction} from './navigation-instruction-slides/navigation-instruction-if';
 import {OsmRoute} from '../services/osm/open-street-map.service';
 import {CampusViewModel} from './campusViewModel';
-import {RecentSearchesService} from '../services/recent-searches/recent-searches.service';
-
-
-
-export interface ISearchResultObject {
-    Name: string;
-    Description: string;
-    Information: [string, any][];
-    DetailRouterParams: Params;
-    RouteRouterParams: Params;
-    LatLng: LatLngLiteral;
-}
+import {ISearchResultObject, RecentSearchesService} from '../services/recent-searches/recent-searches.service';
 
 export interface IRouteLocation {
     Name: string;
@@ -43,16 +31,18 @@ export class NavigationModel {
         });
     }
 
-    private recentSearchesVar: string[] = [];
+    private recentSearchesVar: ISearchResultObject[] = [];
     public errorMessage: string;
-    public latestSearchResult: ISearchResultObject = {
-        Name: '',
-        Description: '',
-        Information: [],
-        DetailRouterParams: {},
-        RouteRouterParams: {},
-        LatLng: {lat: 0, lng: 0}
-    };
+    public get latestSearchResult(): ISearchResultObject {
+        return this.recentSearches[0] !== undefined ? this.recentSearches[0] : {
+            Name: '',
+            Description: '',
+            Information: [],
+            DetailRouterParams: {},
+            RouteRouterParams: {},
+            LatLng: {lat: 0, lng: 0}
+        };
+    }
     public availableCampus: CampusViewModel[] = [];
     public Route: INavigationRoute = {
         Start: {
@@ -69,32 +59,33 @@ export class NavigationModel {
         Time: 0
     };
 
-    public get recentSearches(): string[] {
+    public get recentSearches(): ISearchResultObject[] {
         return this.recentSearchesVar;
     }
 
-    public async addRecentSearch(location: string) {
+    public async addRecentSearch(location: ISearchResultObject) {
         await this.recentSearchesService.addRecentSearch(location);
         this.recentSearchesVar = await this.recentSearchesService.readRecentSearches();
     }
 
-    public SetCampusAsSearchResultObject(c: ICampus) {
-        this.latestSearchResult = {
+    public async addRecentSearchCampus(c: ICampus) {
+        const details: [string, any][] = [
+            ['ShortName: ', c.ShortName],
+            ['Longitude: ', c.Longitude],
+            ['Latitude: ', c.Latitude],
+        ];
+        const searchResult = {
             Name: c.Name,
             Description: c.ShortName,
-            Information:
-                [
-                    ['ShortName: ', c.ShortName],
-                    ['Longitude: ', c.Longitude],
-                    ['Latitude: ', c.Latitude],
-                ],
+            Information: details,
             DetailRouterParams: {},
             RouteRouterParams: {},
             LatLng: {lat: c.Latitude, lng: c.Longitude}
         };
+        await this.addRecentSearch(searchResult);
     }
-    public SetBuildingAsSearchResultObject(b: IBuilding, latLng: LatLngLiteral) {
-        this.latestSearchResult = {
+    public async addRecentSearchBuilding(b: IBuilding, latLng: LatLngLiteral) {
+        const searchResult = {
             Name: b.Name,
             Description: 'Campus:' + b.Campus,
             Information: [],
@@ -102,13 +93,14 @@ export class NavigationModel {
             RouteRouterParams: {},
             LatLng: latLng
         };
+        await this.addRecentSearch(searchResult);
     }
-    public SetLocationAsSearchResultObject(l: ILocation, latLng: LatLngLiteral) {
+    public async addRecentSearchLocation(l: ILocation, latLng: LatLngLiteral) {
         const details: [string, any][] = [['Building: ',  l.Name]];
         if (l.Tags) {
             details.push(['Tags: ', l.Tags.join(', ')]);
         }
-        this.latestSearchResult = {
+        const searchResult = {
             Name: l.Name,
             Description: l.Description,
             Information: details,
@@ -116,6 +108,7 @@ export class NavigationModel {
             RouteRouterParams: {start: l.Building + '.Entrance', destination: l.Name},
             LatLng: latLng
         };
+        await this.addRecentSearch(searchResult);
     }
 
     public SetOsmRouteAsRoute(route: OsmRoute, start: IRouteLocation, destination: IRouteLocation) {

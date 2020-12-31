@@ -1,6 +1,8 @@
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {IonInput} from '@ionic/angular';
 import {IRouteLocation, NavigationModel} from '../../navigationModel';
+import {Geolocation} from '@ionic-native/geolocation/ngx';
+import {ISearchResultObject} from '../../../services/recent-searches/recent-searches.service';
 
 enum MyLocationInInput {
   No,
@@ -19,7 +21,8 @@ export class RouteInputComponent implements OnInit, AfterViewInit {
   @ViewChild('inputTo') inputTo: IonInput;
 
   constructor(
-      public model: NavigationModel
+      public model: NavigationModel,
+      private geolocation: Geolocation
   ) { }
 
   private inputToCurrentlyActive = false;
@@ -84,18 +87,15 @@ export class RouteInputComponent implements OnInit, AfterViewInit {
     this.updateInputValues();
   }
 
-  public async listRecentSearchClick(s: string) {
-    const location = {
-      Name: s,
-      LatLng: {lat: 0, lng: 0}
-    };
+  public async listRecentSearchClick(s: ISearchResultObject) {
+
     if (this.inputToCurrentlyActive) {
-      this.routeLocationTo = location;
+      this.routeLocationTo = s;
       if (this.myLocationInInput === MyLocationInInput.To) {
         this.myLocationInInput = MyLocationInInput.No;
       }
     } else {
-      this.routeLocationFrom = location;
+      this.routeLocationFrom = s;
       if (this.myLocationInInput === MyLocationInInput.From) {
         this.myLocationInInput = MyLocationInInput.No;
       }
@@ -106,9 +106,10 @@ export class RouteInputComponent implements OnInit, AfterViewInit {
   }
 
   public async listMyLocationClick() {
+    const geoLocation = await this.geolocation.getCurrentPosition();
     const location = {
       Name: 'My Location',
-      LatLng: {lat: 0, lng: 0}
+      LatLng: {lat: geoLocation.coords.latitude, lng: geoLocation.coords.longitude}
     };
     if (this.inputToCurrentlyActive) {
       this.routeLocationTo = location;

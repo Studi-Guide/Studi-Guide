@@ -14,8 +14,8 @@
         <ion-list-header>
           <h2>Recent Searches</h2>
         </ion-list-header>
-        <ion-item *ngFor="let s of model.recentSearches;" button (click)="search.emit(s)">
-          <ion-text>{{s}}</ion-text>
+        <ion-item *ngFor="let s of model.recentSearches;" button (click)="search.emit(s.Name)">
+          <ion-text>{{s.Name}}</ion-text>
         </ion-item>
       </ion-list>
       <ion-list class="ion-no-padding">
@@ -163,7 +163,7 @@
             <h3>Change Route</h3>
           </ion-col>
           <ion-col class="ion-text-center">
-            <span class="span-button" (click)="emitRoute([])">Route</span>
+            <span class="span-button" (click)="newRoute.emit([routeInput.From, routeInput.To])">Route</span>
           </ion-col>
         </ion-row>
       </ion-grid>

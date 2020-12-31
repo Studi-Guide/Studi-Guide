@@ -4,7 +4,8 @@
 (navInstructionClick)="onNavigationInstructionClick($event)"
 (search)="onSearch($event)"
 (detailsClick)="onDetailsClick()"
-(stateChange)="onDrawerManagerStateChange($event)">
+(stateChange)="onDrawerManagerStateChange($event)"
+(newRoute)="onRoute($event)">
 </app-nav-drawer-manager>
 <ion-content data-tap-disabled="true" scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
