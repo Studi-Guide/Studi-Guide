@@ -13,12 +13,10 @@
     </ion-list-header>
     <ion-item button (click)="onMensaClick()" >
       <ion-icon slot="start" color="dark" name="beer"></ion-icon>
-      <ion-label text-wrap>
-        <app-expander header="Mensateria" [expanded]="isMensaExpanded">
+      <app-expander header="Mensateria">
           <h3 [innerHTML]="mensaFeedContent.content">
           </h3>
-        </app-expander>
-      </ion-label>
+      </app-expander>
     </ion-item>
     <ion-item href="https://www.kim-chung.de/speisekarte/mittagsgerichte/">
       <ion-icon slot="start" color="dark" name="pizza"></ion-icon>

@@ -4,6 +4,10 @@
   height: auto;
 }
 
+.expand-icon-rotate {
+  transform: scale(-1);
+}
+
 .collapsed {
   max-height: 0 !important;
 }
