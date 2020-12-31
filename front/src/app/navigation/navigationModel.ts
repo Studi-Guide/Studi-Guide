@@ -1,22 +1,19 @@
 import {IBuilding, ICampus, ILocation} from '../building-objects-if';
 import {Injectable} from '@angular/core';
-import {Params} from '@angular/router';
 import {LatLngLiteral} from 'leaflet';
 import {INavigationInstruction} from './navigation-instruction-slides/navigation-instruction-if';
 import {OsmRoute} from '../services/osm/open-street-map.service';
+import {CampusViewModel} from './campusViewModel';
+import {ISearchResultObject, RecentSearchesService} from '../services/recent-searches/recent-searches.service';
 
-
-
-export interface ISearchResultObject {
+export interface IRouteLocation {
     Name: string;
-    Description: string;
-    Information: [string, any][];
-    DetailRouterParams: Params;
-    RouteRouterParams: Params;
     LatLng: LatLngLiteral;
 }
 
 export interface INavigationRoute {
+    Start: IRouteLocation;
+    Destination: IRouteLocation;
     Coordinates: [number, number][];
     Distance: number;
     NavigationInstructions: INavigationInstruction[];
@@ -27,75 +24,123 @@ export interface INavigationRoute {
     providedIn: 'root'
 })
 export class NavigationModel {
-    public recentSearches : string[] = [];
+
+    constructor(private recentSearchesService: RecentSearchesService) {
+        this.recentSearchesService.readRecentSearches().then(r => {
+            this.recentSearchesVar = r;
+        });
+    }
+
+    private recentSearchesVar: ISearchResultObject[] = [];
     public errorMessage: string;
-    public latestSearchResult: ISearchResultObject = {
-        Name: '',
-        Description: '',
-        Information: [],
-        DetailRouterParams: {},
-        RouteRouterParams: {},
-        LatLng: {lat: 0, lng: 0}
-    };
-    public availableCampus: ICampus[] = [];
+    public get latestSearchResult(): ISearchResultObject {
+        return this.recentSearches[0] !== undefined ? this.recentSearches[0] : {
+            Name: '',
+            Description: '',
+            Information: [],
+            DetailRouterParams: {},
+            RouteRouterParams: {},
+            LatLng: {lat: 0, lng: 0}
+        };
+    }
+    public availableCampus: CampusViewModel[] = [];
     public Route: INavigationRoute = {
+        Start: {
+            Name: '',
+            LatLng: {lat: 0, lng: 0}
+        },
+        Destination: {
+            Name: '',
+            LatLng: {lat: 0, lng: 0}
+        },
         Coordinates: [],
         Distance: 0,
         NavigationInstructions: [],
         Time: 0
+    };
+
+    public get recentSearches(): ISearchResultObject[] {
+        return this.recentSearchesVar;
     }
 
-    public SetCampusAsSearchResultObject(c:ICampus) {
-        this.latestSearchResult = {
+    public async addRecentSearch(location: ISearchResultObject) {
+        await this.recentSearchesService.addRecentSearch(location);
+        this.recentSearchesVar = await this.recentSearchesService.readRecentSearches();
+    }
+
+    public async addRecentSearchCampus(c: ICampus) {
+        const details: [string, any][] = [
+            ['ShortName: ', c.ShortName],
+            ['Longitude: ', c.Longitude],
+            ['Latitude: ', c.Latitude],
+        ];
+        const searchResult = {
             Name: c.Name,
             Description: c.ShortName,
-            Information:
-                [
-                    ['ShortName: ', c.ShortName],
-                    ['Longitude: ', c.Longitude],
-                    ['Latitude: ', c.Latitude],
-                ],
+            Information: details,
             DetailRouterParams: {},
             RouteRouterParams: {},
             LatLng: {lat: c.Latitude, lng: c.Longitude}
         };
+        await this.addRecentSearch(searchResult);
     }
-    public SetBuildingAsSearchResultObject(b:IBuilding, latLng: LatLngLiteral) {
-        this.latestSearchResult = {
+    public async addRecentSearchBuilding(b: IBuilding, latLng: LatLngLiteral) {
+        const searchResult = {
             Name: b.Name,
             Description: 'Campus:' + b.Campus,
             Information: [],
             DetailRouterParams: {building: b.Name},
             RouteRouterParams: {},
             LatLng: latLng
-        }
+        };
+        await this.addRecentSearch(searchResult);
     }
-    public SetLocationAsSearchResultObject(l:ILocation, latLng: LatLngLiteral) {
+    public async addRecentSearchLocation(l: ILocation, latLng: LatLngLiteral) {
         const details: [string, any][] = [['Building: ',  l.Name]];
         if (l.Tags) {
             details.push(['Tags: ', l.Tags.join(', ')]);
         }
-        this.latestSearchResult = {
+        const searchResult = {
             Name: l.Name,
             Description: l.Description,
             Information: details,
             DetailRouterParams: {location: l.Name},
-            RouteRouterParams: {start: l.Building+'.Entrance', destination: l.Name},
+            RouteRouterParams: {start: l.Building + '.Entrance', destination: l.Name},
             LatLng: latLng
         };
+        await this.addRecentSearch(searchResult);
     }
 
-    public SetGraphHopperRouteAsRoute(route:OsmRoute) {
+    public SetOsmRouteAsRoute(route: OsmRoute, start: IRouteLocation, destination: IRouteLocation) {
         const leafletLatLng: [number, number][] = [];
-        for(const coordinate of route.Points.Coordinates) {
+        for (const coordinate of route.Points.Coordinates) {
             leafletLatLng.push([coordinate.Lat, coordinate.Lng]);
         }
 
         this.Route = {
+            Start: start,
+            Destination: destination,
             Coordinates: leafletLatLng,
             Distance: Math.round(route.Distance),
             NavigationInstructions: route.Instructions,
-            Time: Math.round(route.Time/1000/60)
-        }
+            Time: Math.round(route.Time / 1000 / 60)
+        };
+    }
+
+    public ClearRoute() {
+        this.Route = {
+            Start: {
+                Name: '',
+                LatLng: {lat: 0, lng: 0}
+            },
+            Destination: {
+                Name: '',
+                LatLng: {lat: 0, lng: 0}
+            },
+            Distance: 0,
+            Coordinates: [],
+            NavigationInstructions: [],
+            Time: 0
+        };
     }
 }

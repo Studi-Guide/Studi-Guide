@@ -42,6 +42,23 @@ jobs:
           name: front_artefacts
           # Directory containing files to upload
           path: "${{env.IONIC}}/www"
+      
+      - name: Clear workspace
+        run: rm -r ./www
+        working-directory: ${{env.IONIC}}
+      
+      - name: Build frontend for Github Pages
+        working-directory: ${{env.IONIC}}
+        run: |
+          ionic build --engine=browser --localize --prod -- --base-href=/Studi-Guide/
+        
+      - name: Upload GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/master'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Build directory to deploy
+          publish_dir: "${{env.IONIC}}/www"
 
       - name: Clear workspace
         run: rm -r ./www
@@ -146,7 +163,7 @@ jobs:
 
       - name: Build Docker
         # pass production parameter to docker to make user ionic users the right base url
-        run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice . --build-arg ionicproduction=--prod
+        run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice . --build-arg ionicproduction=--configuration=docker
 
       - name: Publish Docker
         if: github.ref == 'refs/heads/master'

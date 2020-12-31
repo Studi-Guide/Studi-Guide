@@ -5,20 +5,18 @@ import {LatLngLiteral, LeafletMouseEvent} from 'leaflet';
 import {DataService} from '../../services/data.service';
 import {IGpsCoordinate} from '../../building-objects-if';
 import {Router} from '@angular/router';
-import {NavigationModel} from '../navigationModel';
+import {IRouteLocation, NavigationModel} from '../navigationModel';
 import {CampusViewModel} from '../campusViewModel';
-import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
-import {SearchResultProvider} from '../../services/searchResultProvider';
-import {IonContent, Platform} from '@ionic/angular';
-import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
+import {Platform} from '@ionic/angular';
 import {Geolocation} from '@ionic-native/geolocation/ngx';
 import {HttpErrorResponse} from '@angular/common/http';
-import {OsmRoute, OpenStreetMapBounds, OpenStreetMapService} from '../../services/osm/open-street-map.service';
+import {OpenStreetMapService, OsmRoute} from '../../services/osm/open-street-map.service';
 import {SearchInputComponent} from '../search-input/search-input.component';
 import {NavigationInstructionSlidesComponent} from '../navigation-instruction-slides/navigation-instruction-slides.component';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
 import {LastOpenStreetMapCenterPersistenceService} from '../../services/LastOpenStreetMapCenterPersistence.service';
 import {Plugins} from '@capacitor/core';
+import {NavDrawerManagerComponent, NavDrawerState} from '../nav-drawer-manager/nav-drawer-manager.component';
 
 const { Keyboard } = Plugins;
 
@@ -46,11 +44,10 @@ Leaflet.Marker.prototype.options.icon = iconDefault;
 export class MapPageComponent implements OnInit, OnDestroy {
 
   constructor(
-      private _dataService: DataService,
+      private dataService: DataService,
       private router: Router,
       public model: NavigationModel,
       private storage: Storage,
-      private dataService: DataService,
       private geolocation: Geolocation,
       private openStreetMapService: OpenStreetMapService,
       private lastOpenStreetMapCenterPersistence: LastOpenStreetMapCenterPersistenceService,
@@ -59,20 +56,17 @@ export class MapPageComponent implements OnInit, OnDestroy {
      this.isHybridPlatform = this.platform.is('hybrid');
   }
 
+  public static readonly MyLocation = 'My Location';
+
   private readonly isHybridPlatform: boolean;
   map: Leaflet.Map;
   private searchMarker: Leaflet.Marker[] = [];
   private routes: Leaflet.Polyline[] = [];
-  public availableCampus: CampusViewModel[] = [];
   public progressIsVisible = false;
-  @ViewChild('drawerContent') drawerContent : IonContent;
-  @ViewChild('searchDrawer') searchDrawer : IonicBottomDrawerComponent;
-  @ViewChild('locationDrawer') locationDrawer : IonicBottomDrawerComponent;
-  @ViewChild('routeDrawer') routeDrawer : IonicBottomDrawerComponent;
-  @ViewChild('inNavigationDrawer') inNavigationDrawer : IonicBottomDrawerComponent;
 
-  @ViewChild('searchInput') searchInput : SearchInputComponent
-  @ViewChild('navSlides') navSlides : NavigationInstructionSlidesComponent;
+  @ViewChild('searchInput') searchInput: SearchInputComponent;
+  @ViewChild('navSlides') navSlides: NavigationInstructionSlidesComponent;
+  @ViewChild('drawerManager') drawerManager: NavDrawerManagerComponent;
   errorMessage: string;
   private currentPositionMarker: Leaflet.Marker = null;
   private isInitialized = false;
@@ -82,7 +76,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   private readonly MIN_ZOOM = 14;
 
   private static convertToLeafLetCoordinates(body: IGpsCoordinate[]) {
-    const leafletBody:LatLngLiteral[] = []
+    const leafletBody: LatLngLiteral[] = [];
     for (const coordinate of body){
       leafletBody.push({lat: coordinate.Latitude, lng: coordinate.Longitude});
     }
@@ -92,29 +86,12 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
 
-    if (!this.model.recentSearches || this.model.recentSearches.length === 0) {
-      const searches = await SearchResultProvider.readRecentSearch(this.storage);
-      if (searches !== null) {
-        this.model.recentSearches = searches;
-        console.log(this.model.recentSearches);
-      }
-    }
-
     if (!this.model.availableCampus || this.model.availableCampus.length === 0) {
-      this.model.availableCampus = await this.dataService.get_campus_search().toPromise()
-    }
-
-    if (this.model.availableCampus) {
-      for (const campus of this.model.availableCampus) {
-        this.availableCampus.push(new CampusViewModel(campus))
+      const campus = await this.dataService.get_campus_search().toPromise();
+      for (const c of campus) {
+        this.model.availableCampus.push(new CampusViewModel(c));
       }
     }
-
-    await Promise.all([
-        this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice()),
-        this.locationDrawer.SetState(DrawerState.Hidden),
-        this.routeDrawer.SetState(DrawerState.Hidden),
-        this.inNavigationDrawer.SetState(DrawerState.Hidden)]);
   }
 
   async ionViewDidEnter() {
@@ -139,7 +116,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   private async initializeMap(router: Router) {
-    const osmBounds = await this.openStreetMapService.GetBounds()
+    const osmBounds = await this.openStreetMapService.GetBounds();
     const southWest = Leaflet.latLng(osmBounds.SouthWest.Lat, osmBounds.SouthWest.Lng);
     const northEast = Leaflet.latLng(osmBounds.NorthEast.Lat, osmBounds.NorthEast.Lng);
 
@@ -148,7 +125,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
     // maxZoom for leaflet map is 18
     this.map = Leaflet.map('leafletMap', {
-      maxBounds:bounds,
+      maxBounds: bounds,
       maxZoom: this.MAX_ZOOM,
       minZoom: this.MIN_ZOOM,
       zoomControl: !this.platform.is('hybrid')
@@ -172,9 +149,9 @@ export class MapPageComponent implements OnInit, OnDestroy {
       this.map.invalidateSize();
     }
 
-    const buildings = await this._dataService.get_buildings_search().toPromise();
+    const buildings = await this.dataService.get_buildings_search().toPromise();
 
-    function onPolygonClick(event:LeafletMouseEvent) {
+    function onPolygonClick(event: LeafletMouseEvent) {
       router.navigate(['tabs/navigation/detail'],
           {queryParams: {building: event.target.options.className}})
           .then(() => console.log(event.latlng, event.target.options.className));
@@ -209,17 +186,16 @@ export class MapPageComponent implements OnInit, OnDestroy {
       // location
       try {
         const location = await this.dataService.get_location(searchInput).toPromise();
-          if (location) {
+        if (location) {
             const locationBuilding = await this.dataService.get_building(location.Building).toPromise();
             const coordinates = this.getCenterCoordinateFromBody(locationBuilding.Body);
-            this.model.SetLocationAsSearchResultObject(location, {lat: coordinates.Latitude, lng: coordinates.Longitude});
+            await this.model.addRecentSearchLocation(location, {lat: coordinates.Latitude, lng: coordinates.Longitude});
             this.searchMarker.push(
                 this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Room ' + location.Name, true));
 
             this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
 
             await this.showElementDrawer();
-            SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
             return;
           }
         } catch (e) {
@@ -230,13 +206,12 @@ export class MapPageComponent implements OnInit, OnDestroy {
         const building = await this.dataService.get_building(searchInput, false).toPromise();
         if (building) {
           const coordinates = this.getCenterCoordinateFromBody(building.Body);
-          this.model.SetBuildingAsSearchResultObject(building, {lat: coordinates.Latitude, lng: coordinates.Longitude});
+          await this.model.addRecentSearchBuilding(building, {lat: coordinates.Latitude, lng: coordinates.Longitude});
           this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
           this.searchMarker.push(
               this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
 
           await this.showElementDrawer();
-          SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
           return;
         }
       } catch (e) {
@@ -246,13 +221,12 @@ export class MapPageComponent implements OnInit, OnDestroy {
       try {
         const campus = await this.dataService.get_campus(searchInput, false).toPromise();
         if (campus) {
-          this.model.SetCampusAsSearchResultObject(campus);
+          await this.model.addRecentSearchCampus(campus);
           this.searchMarker.push(
               this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
 
           this.map.flyTo([campus.Latitude, campus.Longitude], this.DEFAULT_ZOOM);
           await this.showElementDrawer();
-          SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
           return;
         }
       } catch (e) {
@@ -263,11 +237,11 @@ export class MapPageComponent implements OnInit, OnDestroy {
       const buildings = await this.dataService.get_buildings_search(searchInput).toPromise();
       if (buildings !== null && buildings.length > 0) {
         // found building
-        SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
-        for (const buld of buildings) {
-          const coordinates = this.getCenterCoordinateFromBody(buld.Body);
+        // await this.model.addRecentSearch(searchInput);
+        for (const building of buildings) {
+          const coordinates = this.getCenterCoordinateFromBody(building.Body);
           this.searchMarker.push(
-            this.showMarker(coordinates.Latitude, coordinates.Longitude, buld.Name, false));
+            this.showMarker(coordinates.Latitude, coordinates.Longitude, building.Name, false));
         }
       }
       else {
@@ -275,7 +249,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
         const campusArray = await this.dataService.get_campus_search(searchInput).toPromise();
         if (campusArray !== null && campusArray.length > 0) {
           // found building
-          SearchResultProvider.addRecentSearch(searchInput, this.model, this.storage);
+          // await this.model.addRecentSearch(searchInput);
           for (const camp of campusArray) {
             this.searchMarker.push(
               this.showMarker(camp.Latitude, camp.Longitude, camp.Name, false));
@@ -289,33 +263,32 @@ export class MapPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  onRoute(event: string[]) {
+  public async onRoute(event: IRouteLocation[]) {
+    console.log(event);
+    this.clearRoutes();
+    await this.drawerManager.SetState(NavDrawerState.RouteView, false);
+
+    const routes: OsmRoute[] = await this.openStreetMapService.GetRoute(
+        event[0].LatLng, event[1].LatLng);
+
+    this.model.SetOsmRouteAsRoute(routes[0], event[0], event[1]);
+
+
+    const polyline = Leaflet.polyline(this.model.Route.Coordinates, {color: 'red'}).addTo(this.map);
+    this.map.flyTo(polyline.getCenter(), this.DEFAULT_ZOOM);
+    await this.map.fitBounds(polyline.getBounds());
+    this.routes.push(polyline);
   }
 
-  recentSearchClick(s: string) {
-
-  }
-
-  public onDrawerStateChange(state:DrawerState) {
-    // in case the view is not initialized
-    if (this.drawerContent === undefined) {
-      return;
-    }
-
-    this.drawerContent.scrollY = state === DrawerState.Top;
-  }
-
-  public async onCloseLocationDrawer(event:any) {
+  public async onCloseLocationDrawer(event: any) {
     this.searchInput.clearDestinationInput();
-    await this.locationDrawer.SetState(DrawerState.Hidden);
-    await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    await this.drawerManager.SetState(NavDrawerState.SearchView);
     this.clearSearchMarkers();
   }
 
-  public async onCloseRouteDrawer(event:any) {
+  public async onCloseRouteDrawer(event: any) {
     this.clearRoutes();
-    await this.routeDrawer.SetState(DrawerState.Hidden);
-    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    await this.drawerManager.SetState(NavDrawerState.LocationView);
     this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
   }
 
@@ -323,27 +296,46 @@ export class MapPageComponent implements OnInit, OnDestroy {
     if (this.isHybridPlatform) {
         await Keyboard.hide();
     }
-
-    await this.searchDrawer.SetState(DrawerState.Hidden);
-    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    await this.drawerManager.SetState(NavDrawerState.LocationView);
   }
 
-  public onCampusClick(c:CampusViewModel) {
+  public onCampusClick(c: CampusViewModel) {
     this.map.flyTo(c.LatLng, this.DEFAULT_ZOOM);
   }
 
+  public async onDrawerManagerStateChange(newState: NavDrawerState) {
+    console.log(newState);
+    switch (newState) {
+      case NavDrawerState.SearchView:
+        this.clearSearchMarkers();
+        break;
+      case NavDrawerState.LocationView:
+        this.clearRoutes();
+        this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
+        break;
+      case NavDrawerState.RouteView:
+        await this.onRouteBtnClick();
+        break;
+      case NavDrawerState.InNavigationView:
+        await this.onLaunchNavigation();
+        break;
+    }
+  }
+
+  public async onDetailsClick() {
+    await this.router.navigate(['tabs/navigation/detail'],
+        {queryParams: this.routes.length === 0
+              ? this.model.latestSearchResult.DetailRouterParams : this.model.latestSearchResult.RouteRouterParams});
+  }
+
   public async onRouteBtnClick() {
-    const position = await this.geolocation.getCurrentPosition();
-    console.log(position);
-    const routes:OsmRoute[] = await this.openStreetMapService.GetRoute(
-        {lat: position.coords.latitude, lng: position.coords.longitude},
-        this.model.latestSearchResult.LatLng);
+    const geoPosition = await this.geolocation.getCurrentPosition();
+    const position = {lat: geoPosition.coords.latitude, lng: geoPosition.coords.longitude};
+    const routes: OsmRoute[] = await this.openStreetMapService.GetRoute(
+        position, this.model.latestSearchResult.LatLng);
 
-    console.log(routes);
-    this.model.SetGraphHopperRouteAsRoute(routes[0]);
-
-    await this.locationDrawer.SetState(DrawerState.Hidden);
-    await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    this.model.SetOsmRouteAsRoute(routes[0], {Name: MapPageComponent.MyLocation, LatLng: position}, this.model.latestSearchResult);
+    // await this.drawerManager.setState(NavDrawerState.RouteView);
 
     const polyline = Leaflet.polyline(this.model.Route.Coordinates, {color: 'red'}).addTo(this.map);
     this.map.flyTo(polyline.getCenter(), this.DEFAULT_ZOOM);
@@ -352,34 +344,18 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   public async onLaunchNavigation() {
-    await this.routeDrawer.SetState(DrawerState.Hidden);
 
     this.navSlides.instructions = this.model.Route.NavigationInstructions;
-    this.navSlides.show();
-
-    await this.inNavigationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
-
+    await this.navSlides.show();
+    // await this.drawerManager.setState(NavDrawerState.InNavigationView);
     this.map.flyTo(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].Interval[0]], this.MAX_ZOOM);
   }
 
-  public onSlideChange(index:number) {
+  public onSlideChange(index: number) {
     this.onNavigationInstructionClick(this.model.Route.NavigationInstructions[index]);
   }
 
-  public async onEndRouteClick() {
-    await this.inNavigationDrawer.SetState(DrawerState.Hidden);
-    await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
-    this.clearRoutes();
-    this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
-  }
-
-  async detailsBtnClick() {
-      await this.router.navigate(['tabs/navigation/detail'],
-          {queryParams: this.routes.length === 0
-                ? this.model.latestSearchResult.DetailRouterParams : this.model.latestSearchResult.RouteRouterParams});
-  }
-
-  public onNavigationInstructionClick(instruction:INavigationInstruction) {
+  public onNavigationInstructionClick(instruction: INavigationInstruction) {
     this.map.flyTo(this.model.Route.Coordinates[instruction.Interval[0]], this.MAX_ZOOM);
   }
 
@@ -398,7 +374,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
   private showMarker(lat: number, long: number, popupText: string  = '', showPopUp: boolean) {
     const marker = Leaflet.marker([lat, long]).
-    addTo(this.map)
+    addTo(this.map);
 
     return popupText ?
         (showPopUp ? marker.bindPopup(popupText).openPopup() : marker.bindPopup(popupText))
@@ -406,7 +382,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   private getCenterCoordinateFromBody(body: IGpsCoordinate[]) {
-    const leafletLatLng = []
+    const leafletLatLng = [];
     for (const c of body) {
       leafletLatLng.push([c.Latitude, c.Longitude]);
     }
@@ -414,7 +390,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
     // cannot use getCenter if polygon is not added to layer (map)
     const p = new Leaflet.Polygon(leafletLatLng).addTo(this.map);
 
-    const ret:IGpsCoordinate = {
+    const ret: IGpsCoordinate = {
       Longitude: p.getCenter().lng,
       Latitude: p.getCenter().lat
     };
@@ -435,20 +411,12 @@ export class MapPageComponent implements OnInit, OnDestroy {
       p.remove();
     }
     this.routes = [];
+    this.model.ClearRoute();
     this.navSlides.hide();
-  }
-
-  public UseDrawerForNavigation() :boolean {
-    return !(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice() === DrawerState.Bottom);
   }
 
   private delay(ms: number) {
     return new Promise( resolve => setTimeout(resolve, ms) );
   }
 
-  async onSearchFocus($event: string) {
-    if (this.platform.is('hybrid')) {
-      await this.searchDrawer.SetState(DrawerState.Top)
-    }
-  }
 }

@@ -1,0 +1,173 @@
+<app-ionic-bottom-drawer id="searchDrawer" (stateChange)="onSearchDrawerStateChange($event)" #searchDrawer>
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+    </div>
+    <app-search-input #searchInput
+                      (discovery)="search.emit($event)"
+                      (route)="emitRoute($event)"
+                      (searchBarFocus)="onSearchFocus($event)" >
+    </app-search-input>
+    <ion-content #drawerContent>
+      <ion-list *ngIf="model.recentSearches.length > 0" class="ion-no-padding">
+        <ion-list-header>
+          <h2>Recent Searches</h2>
+        </ion-list-header>
+        <ion-item *ngFor="let s of model.recentSearches;" button (click)="search.emit(s.Name)">
+          <ion-text>{{s.Name}}</ion-text>
+        </ion-item>
+      </ion-list>
+      <ion-list class="ion-no-padding">
+        <ion-list-header>
+          <h2>Choose a Campus</h2>
+        </ion-list-header>
+        <ion-item  *ngFor="let campus of model.availableCampus" button (click)="campusClick.emit(campus)">
+          <ion-label>
+            <h2>{{campus.ShortName}}: {{campus.Name}}</h2>
+            <h3>{{campus.Address}}</h3>
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+    </ion-content>
+  </div>
+</app-ionic-bottom-drawer>
+
+<app-ionic-bottom-drawer id="locationDrawer" #locationDrawer state="DrawerState.Hidden">
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+      <div class="ion-padding-bottom"></div>
+    </div>
+    <ion-content >
+      <ion-grid id="locationdrawerContent" >
+        <ion-row class="ion-justify-content-between ion-align-self-center">
+          <ion-col>
+            <ion-label><h1>{{this.model.latestSearchResult.Name}}</h1></ion-label>
+            <ion-text>{{this.model.latestSearchResult.Description}}</ion-text>
+          </ion-col>
+          <ion-col class="ion-justify-content-end ion-padding-horizontal">
+            <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseLocationDrawer()">
+              <ion-icon slot="icon-only" name="close-outline" size="small"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col>
+            <ion-button color="primary" expand="block" (click)="detailsClick.emit()">
+              Details
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button id="routeBtn" color="primary" expand="block" (click)="onRouteClick()">
+              Route
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let item of model.latestSearchResult.Information">
+          <ion-col>{{item[0]}}</ion-col>
+          <ion-col>{{item[1]}}</ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-content>
+  </div>
+</app-ionic-bottom-drawer>
+
+<app-ionic-bottom-drawer id="routeDrawer" #routeDrawer state="DrawerState.Hidden">
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+      <div class="ion-padding-bottom"></div>
+      <ion-progress-bar *ngIf="model.Route.Distance === 0" type="indeterminate"></ion-progress-bar>
+      <ion-grid>
+        <ion-row class="ion-justify-content-between ion-align-self-center">
+          <ion-col>
+            <ion-label><h1>To {{this.model.Route.Destination.Name}}</h1></ion-label>
+            <ion-text>From <span class="span-button" (click)="onChangeRouteStartEndClick()">{{this.model.Route.Start.Name}}</span></ion-text>
+          </ion-col>
+          <ion-col class="ion-justify-content-end ion-padding-horizontal">
+            <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseRouteDrawer()">
+              <ion-icon slot="icon-only" name="close-outline" size="small"></ion-icon>
+            </ion-button>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="model.Route.Distance !== 0">
+          <ion-col>
+            <ion-label><h2>{{this.model.Route.Time}} min</h2></ion-label>
+            <ion-text>{{this.model.Route.Distance}} m</ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-button *ngIf="!UseDrawerForNavigation()" color="success" expand="block" (click)="onLaunchNavigationClick()">
+              Go
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <ion-content>
+      <ion-list *ngIf="model.Route.Distance !== 0">
+        <ion-item *ngFor="let i of model.Route.NavigationInstructions" button (click)="navInstructionClick.emit(i)">
+          <ion-label>{{i.Text}}</ion-label>
+          <ion-text>{{i.Distance}}m</ion-text>
+        </ion-item>
+      </ion-list>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+      <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
+    </ion-content>
+  </div>
+</app-ionic-bottom-drawer>
+
+<app-ionic-bottom-drawer id="inNavigationDrawer" #inNavigationDrawer state="DrawerState.Hidden">
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+      <div class="ion-padding-bottom"></div>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-label><h2>{{this.model.Route.Time}} min</h2></ion-label>
+            <ion-text>{{this.model.Route.Distance}} m</ion-text>
+          </ion-col>
+          <ion-col>
+            <ion-button color="danger" (click)="onEndNavigationClick()" expand="block">
+              End Route
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+  </div>
+</app-ionic-bottom-drawer>
+
+<app-ionic-bottom-drawer id="changeRouteDrawer" #changeRouteDrawer state="DrawerState.Hidden"
+                         [shouldDockBottom]=false [shouldDockMiddle]=false
+                         (stateChange)="onChangeRouteDrawerStateChange($event)">
+  <div class="nav-bottom-drawer">
+    <div class="drawer-grip">
+      <div class="ion-padding-top"></div>
+      <div class="nav-hbar"></div>
+      <ion-grid>
+        <ion-row class="ion-align-items-baseline">
+          <ion-col class="ion-text-center">
+            <span class="span-button" (click)="onCancelChangeRoute()">Cancel</span>
+          </ion-col>
+          <ion-col size="6" class="ion-text-center">
+            <h3>Change Route</h3>
+          </ion-col>
+          <ion-col class="ion-text-center">
+            <span class="span-button" (click)="newRoute.emit([routeInput.From, routeInput.To])">Route</span>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+    <app-route-input #routeInput></app-route-input>
+  </div>
+</app-ionic-bottom-drawer>
