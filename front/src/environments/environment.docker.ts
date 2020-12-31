@@ -1,6 +1,5 @@
 import {Inject, Injectable} from '@angular/core';
 import {DOCUMENT} from '@angular/common';
-import {Platform} from '@ionic/angular';
 
 export const environment = {
   production: true
@@ -8,6 +7,10 @@ export const environment = {
 
 @Injectable()
 export class Env {
-  serverUrl = 'https://studi-guide-ii.azurewebsites.net';
+
+  serverUrl: string;
   production = true;
+  constructor(@Inject(DOCUMENT) private document: Document) {
+    this.serverUrl = document.location.origin;
+  }
 }
