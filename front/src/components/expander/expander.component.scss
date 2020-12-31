@@ -8,6 +8,15 @@
   transform: scale(-1);
 }
 
+
 .collapsed {
   max-height: 0 !important;
+}
+
+.expand-header {
+  --ion-item-background: transparent;
+}
+
+.expand-header:hover {
+  --ion-item-background: transparent;
 }
