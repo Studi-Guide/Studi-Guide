@@ -1,0 +1,22 @@
+.expand-wrapper {
+  transition: max-height 0.4s ease-in-out;
+  overflow: hidden;
+  height: auto;
+}
+
+.expand-icon-rotate {
+  transform: scale(-1);
+}
+
+
+.collapsed {
+  max-height: 0 !important;
+}
+
+.expand-header {
+  --ion-item-background: transparent;
+}
+
+.expand-header:hover {
+  --ion-item-background: transparent;
+}

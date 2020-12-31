@@ -1,28 +1,30 @@
 <ion-content>
-    <app-login
-            (isSignedIn)="onSignIn($event)"
-            (moodleToken)="fetchMoodleData($event)"
-    ></app-login>
-    <div *ngIf="isMoodleUserSignedIn">
-        <ion-refresher slot="fixed" (ionRefresh)="doRefreshEvents($event)">
-            <ion-refresher-content>
-            </ion-refresher-content>
-        </ion-refresher>
-        <ion-list lines="none">
-            <ion-item-sliding *ngFor="let event of calenderEvents">
-                <ion-item>
-                    <ion-card>
-                        <ion-card-header>
-                            <ion-card-title [innerHTML]="event.name"></ion-card-title>
-                            <ion-card-subtitle *ngIf="event.course">{{event.course.fullname}}</ion-card-subtitle>
-                        </ion-card-header>
-                        <ion-card-content>
-                            <div [innerHTML]="event.description"></div>
-                            <ion-text id="location-entry" (click)="onLocationClick(event.location)">Location: {{event.location}}</ion-text>
-                        </ion-card-content>
-                    </ion-card>
-                </ion-item>
-            </ion-item-sliding>
-        </ion-list>
-    </div>
+    <ion-grid fixed>
+        <app-login
+                (isSignedIn)="onSignIn($event)"
+                (moodleToken)="fetchMoodleData($event)"
+        ></app-login>
+        <div *ngIf="isMoodleUserSignedIn">
+            <ion-refresher slot="fixed" (ionRefresh)="doRefreshEvents($event)">
+                <ion-refresher-content>
+                </ion-refresher-content>
+            </ion-refresher>
+            <ion-list lines="none">
+                <ion-item-sliding *ngFor="let event of calenderEvents">
+                    <ion-item>
+                        <ion-card>
+                            <ion-card-header>
+                                <ion-card-title [innerHTML]="event.name"></ion-card-title>
+                                <ion-card-subtitle *ngIf="event.course">{{event.course.fullname}}</ion-card-subtitle>
+                            </ion-card-header>
+                            <ion-card-content>
+                                <div [innerHTML]="event.description"></div>
+                                <ion-text id="location-entry" (click)="onLocationClick(event.location)">Location: {{event.location}}</ion-text>
+                            </ion-card-content>
+                        </ion-card>
+                    </ion-item>
+                </ion-item-sliding>
+            </ion-list>
+        </div>
+    </ion-grid>
 </ion-content>

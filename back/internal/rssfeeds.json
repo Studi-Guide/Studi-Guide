@@ -6,5 +6,9 @@
   {
     "Name": "TH-Ohm-Calendar",
     "URL": "https://www.th-nuernberg.de/calendarRSS.xml"
+  },
+  {
+    "Name": "Mensateria-Ohm",
+    "URL": "https://www.imensa.de/feeds/pois/nue4/speiseplan.rss"
   }
 ]
