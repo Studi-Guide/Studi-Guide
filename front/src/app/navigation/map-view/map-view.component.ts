@@ -20,24 +20,24 @@ import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
 })
 export class MapViewComponent implements AfterViewInit {
   public currentBuilding: string;
-  private currentRoute:IReceivedRoute;
-  public currentFloor:string;
+  private currentRoute: IReceivedRoute;
+  public currentFloor: string;
   private clickThreshold = 20;
 
-  private renderingContext:CanvasRenderingContext2D;
-  private mapItemRenderer:MapItemRendererCanvas[] = [];
-  private locationRenderer:LocationRendererCanvas[] = [];
-  private routeRenderer:RouteRendererCanvas[] = [];
+  private renderingContext: CanvasRenderingContext2D;
+  private mapItemRenderer: MapItemRendererCanvas[] = [];
+  private locationRenderer: LocationRendererCanvas[] = [];
+  private routeRenderer: RouteRendererCanvas[] = [];
   panZoomController: PanZoom;
 
   @Output() locationClick = new EventEmitter<ILocation>();
   @Output() mapScroll = new EventEmitter<any>();
 
-  public get CurrentRoute():IReceivedRoute {
+  public get CurrentRoute(): IReceivedRoute {
     return this.currentRoute;
   }
 
-  public get CurrentBuilding():string {
+  public get CurrentBuilding(): string {
     return this.currentBuilding;
   }
 
@@ -66,14 +66,14 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  public async showRoute(route:IReceivedRoute, startLocation:ILocation) {
+  public async showRoute(route: IReceivedRoute, startLocation: ILocation) {
 
     this.stopAllAnimations();
 
     await this.renderNavigationPage(route, startLocation.Building, startLocation.Floor);
   }
 
-  public async showDiscoveryLocation(location:string) {
+  public async showDiscoveryLocation(location: string) {
     this.stopAllAnimations();
     const foundLocations = await this.dataService.get_locations_search(location).toPromise();
     if (foundLocations === null || foundLocations.length === 0) {
@@ -100,12 +100,12 @@ export class MapViewComponent implements AfterViewInit {
     return res;
   }
 
-  public async showFloor(floor:string, building:string) {
+  public async showFloor(floor: string, building: string) {
     this.stopAllAnimations();
     if (this.currentRoute != null) {
       await this.renderNavigationPage(this.currentRoute, this.currentBuilding, floor);
     } else {
-      const res = await this.dataService.get_map_items('', floor, building).toPromise()
+      const res = await this.dataService.get_map_items('', floor, building).toPromise();
       this.mapItemRenderer = RendererProvider.GetMapItemRendererCanvas(...res);
       this.createNewCanvasMap();
 
@@ -121,7 +121,7 @@ export class MapViewComponent implements AfterViewInit {
     this.FitMap();
   }
 
-  public async showDiscoveryMap(campus:string, floor: string) {
+  public async showDiscoveryMap(campus: string, floor: string) {
       const items = await this.dataService.get_map_items(campus, floor, '').toPromise();
       this.mapItemRenderer = RendererProvider.GetMapItemRendererCanvas(...items);
 
@@ -145,16 +145,16 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  public async onClick(event:MouseEvent) {
-    await this.onElementClick(event.clientX, event.clientY, event.target as HTMLElement)
+  public async onClick(event: MouseEvent) {
+    await this.onElementClick(event.clientX, event.clientY, event.target as HTMLElement);
   }
 
-  public async onElementClick(clientX:number, clientY:number, target: HTMLElement) {
+  public async onElementClick(clientX: number, clientY: number, target: HTMLElement) {
     const transform = this.panZoomController.getTransform();
     const coordinate = CanvasTouchHelper.transformInOriginCoordinate({
-      x: clientX, y:clientY}, transform.scale, target as HTMLElement );
+      x: clientX, y: clientY}, transform.scale, target as HTMLElement );
     const point = [coordinate.x, coordinate.y];
-    if(this.currentRoute != null) {
+    if (this.currentRoute != null) {
       const items: IMapItem[] = [];
       for (const m of this.getInteractiveStairWellMapItemRenderer(this.currentFloor)) {
         items.push(m.MapItem);
@@ -182,7 +182,7 @@ export class MapViewComponent implements AfterViewInit {
     }
   }
 
-  private async renderNavigationPage(route:IReceivedRoute, building: string, floor: string) {
+  private async renderNavigationPage(route: IReceivedRoute, building: string, floor: string) {
     // TODO allow passing a regex to backend to filter map items
     let mapItems = await this.dataService.get_map_floor(building, floor).toPromise<IMapItem[]>() ?? new Array<IMapItem>();
     let locations = await this.dataService.get_locations(building, floor).toPromise<ILocation[]>() ?? new Array<ILocation>();
@@ -209,7 +209,7 @@ export class MapViewComponent implements AfterViewInit {
     this.renderRoutes({floor});
     // TODO animate route call here
 
-    for(const m of this.getInteractiveStairWellMapItemRenderer(floor)) {
+    for (const m of this.getInteractiveStairWellMapItemRenderer(floor)) {
       m.startAnimation(this.renderingContext, {renderer: this.routeRenderer, floor});
     }
 
@@ -250,7 +250,7 @@ export class MapViewComponent implements AfterViewInit {
     this.renderingContext = CanvasResolutionConfigurator.setup(mapCanvas, mapWidthNeeded, mapHeightNeeded);
   }
 
-  private displayPin(pathNode:IPathNode) {
+  private displayPin(pathNode: IPathNode) {
     const x = pathNode.Coordinate.X - 15;
     const y = pathNode.Coordinate.Y - 30;
     const iconOnMapRenderer = new IconOnMapRenderer( 'pin-sharp.png');
@@ -258,28 +258,29 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   private async showNextFloor(item: IMapItem) {
-    for (let i = 0; i < this.currentRoute.RouteSections.length-1; i++) {
+    for (let i = 0; i < this.currentRoute.RouteSections.length - 1; i++) {
       if (this.currentRoute.RouteSections[i].Floor === item.Floor && this.currentRoute.RouteSections[i].Building === item.Building) {
-        this.currentFloor = this.currentRoute.RouteSections[i+1].Floor;
-        this.currentBuilding = this.currentRoute.RouteSections[i+1].Building;
+        this.currentFloor = this.currentRoute.RouteSections[i + 1].Floor;
+        this.currentBuilding = this.currentRoute.RouteSections[i + 1].Building;
         await this.showFloor(this.currentFloor, this.currentBuilding);
         return;
       }
     }
   }
 
-  private getInteractiveStairWellMapItemRenderer(floor:string) {
-    const pNodes:IPathNode[] = [];
+  private getInteractiveStairWellMapItemRenderer(floor: string) {
+    const pNodes: IPathNode[] = [];
 
     for (const r of this.routeRenderer) {
-      for (let i = 0; i < r.Route.RouteSections.length-1; i++) {
-        if (r.Route.RouteSections[i].Building !== r.Route.RouteSections[i+1].Building)
+      for (let i = 0; i < r.Route.RouteSections.length - 1; i++) {
+        if (r.Route.RouteSections[i].Building !== r.Route.RouteSections[i + 1].Building) {
           continue;
-        pNodes.push(r.Route.RouteSections[i].Route[r.Route.RouteSections[i].Route.length-1]);
+        }
+        pNodes.push(r.Route.RouteSections[i].Route[r.Route.RouteSections[i].Route.length - 1]);
       }
     }
 
-    const tmpMItems:MapItemRendererCanvas[] = [];
+    const tmpMItems: MapItemRendererCanvas[] = [];
     for (const pNode of pNodes) {
       for (const m of this.mapItemRenderer) {
         if (m.MapItem.Floor === floor && m.MapItem.PathNodes.filter(p => p.Id === pNode.Id).length > 0) {
@@ -292,29 +293,35 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   private stopAllAnimations() {
-    for (const c of this.routeRenderer)
+    for (const c of this.routeRenderer) {
       c.stopAnimation(this.renderingContext);
+    }
 
-    for (const m of this.mapItemRenderer)
+    for (const m of this.mapItemRenderer) {
       m.stopAnimation(this.renderingContext);
+    }
 
-    for (const l of this.locationRenderer)
+    for (const l of this.locationRenderer) {
       l.stopAnimation(this.renderingContext);
+    }
   }
 
   private renderMapItems() {
-    for (const c of this.mapItemRenderer)
+    for (const c of this.mapItemRenderer) {
       c.render(this.renderingContext);
+    }
   }
 
   private renderLocations() {
-    for (const l of this.locationRenderer)
+    for (const l of this.locationRenderer) {
       l.render(this.renderingContext);
+    }
   }
 
-  private renderRoutes(args:any) {
-    for (const r of this.routeRenderer)
+  private renderRoutes(args: any) {
+    for (const r of this.routeRenderer) {
       r.render(this.renderingContext, args);
+    }
   }
 
   public async onFloorChangeByFloorButton(floorAndBuildingInput: object) {
@@ -328,22 +335,22 @@ export class MapViewComponent implements AfterViewInit {
     NavigationPage.progressIsVisible = false;
   }
 
-  public CenterMap(x: number, y:number) {
+  public CenterMap(x: number, y: number) {
     const positionToMove = this.calulateMovePosition(x, y);
     this.panZoomController.smoothMoveTo(positionToMove.x, positionToMove.y);
   }
 
-  private calulateMovePosition(x: number, y:number) {
+  private calulateMovePosition(x: number, y: number) {
     const element = document.getElementById('canvas-wrapper');
 
     const parentElement = element.parentElement.parentElement;
     // TODO: Desktop hat andere params
-    const height = parentElement.clientHeight/2;
-    const width = element.clientWidth/2;
+    const height = parentElement.clientHeight / 2;
+    const width = element.clientWidth / 2;
     return {x: width - x, y: height - y};
   }
 
-  public MapSize() : DOMRect {
+  public MapSize(): DOMRect {
     const element = document.getElementById('map');
     return element.getBoundingClientRect();
   }
@@ -353,6 +360,6 @@ export class MapViewComponent implements AfterViewInit {
     // const element = document.getElementById('map');
     // this.panZoomController.zoomTo(element.clientWidth, element.clientHeight, 0.7);
     const size = this.MapSize();
-    this.CenterMap(size.width/2, size.height/2);
+    this.CenterMap(size.width / 2, size.height / 2);
   }
 }
