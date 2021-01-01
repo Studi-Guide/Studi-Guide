@@ -31,46 +31,12 @@
       </app-search-input>
     </div>
     <ion-content #drawerContent>
-
-      <ion-grid>
-        <ion-list-header>Current Campus</ion-list-header>
-        <ion-row>
-          <ion-col>
-            <ion-button class="square-md ion-no-padding" shape="round" (click)="presentMapPage()">
-              <ion-icon slot="icon-only" name="business-outline" size="large"></ion-icon>
-            </ion-button>
-          </ion-col>
-          <ion-col>
-            <ion-button class="square-md ion-no-padding" shape="round" color="medium" (click)="presentAvailableFloorModal()">
-              <ion-icon slot="icon-only" name="layers-outline" size="large"></ion-icon>
-            </ion-button>
-          </ion-col>
-          <ion-col>
-            <ion-button class="square-md ion-no-padding" shape="round" color="dark">
-              <ion-icon slot="icon-only" name="library-outline" size="large"></ion-icon>
-            </ion-button>
-          </ion-col>
-          <ion-col></ion-col>
-        </ion-row>
-      </ion-grid>
-
-      <ion-list class="ion-no-padding">
+      <ion-list *ngIf="model.recentSearches.length > 0" class="ion-no-padding">
         <ion-list-header>
           Recent Searches
         </ion-list-header>
-        <ion-item *ngFor="let s of model.recentSearches;" button (click)="recentSearchClick(s)">
-          <ion-label><h2>{{s}}</h2></ion-label>
-        </ion-item>
-      </ion-list>
-      <ion-list class="ion-no-padding">
-        <ion-list-header>
-          Choose a Campus
-        </ion-list-header>
-        <ion-item *ngFor="let campus of availableCampus">
-          <ion-label>
-            <h2>{{campus.ShortName}}: {{campus.Name}}</h2>
-            <h3>{{campus.Address}}</h3>
-          </ion-label>
+        <ion-item *ngFor="let s of model.recentSearches;" button (click)="recentSearchClick(s.Name)">
+          <ion-text>{{s.Name}}</ion-text>
         </ion-item>
       </ion-list>
       <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
