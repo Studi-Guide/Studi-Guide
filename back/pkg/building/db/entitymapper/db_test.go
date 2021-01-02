@@ -612,10 +612,10 @@ func TestEntityMapper_AddLocation(t *testing.T) {
 		t.Error("expected error because of building")
 	}
 
+	loc.Building = "main"
 
-
-	if !reflect.DeepEqual(testRooms[0].Location, getLocation) {
-		t.Error("expected: ", testRooms[0].Location, "; got: ", getLocation)
+	if err := dbService.AddLocation(loc); err != nil {
+		t.Error(err)
 	}
 }
 
