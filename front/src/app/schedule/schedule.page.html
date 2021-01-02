@@ -11,11 +11,11 @@
             </ion-refresher>
             <ion-list lines="none">
                 <ion-item-sliding *ngFor="let event of calenderEvents">
-                    <ion-item>
+                    <ion-item class="ion-no-padding">
                         <ion-card>
                             <ion-card-header>
-                                <ion-card-title [innerHTML]="event.name"></ion-card-title>
-                                <ion-card-subtitle *ngIf="event.course">{{event.course.fullname}}</ion-card-subtitle>
+                                <ion-card-title *ngIf="event.course">{{event.course.fullname}}</ion-card-title>
+                                <ion-card-subtitle [innerHTML]="event.name"></ion-card-subtitle>
                             </ion-card-header>
                             <ion-card-content>
                                 <div [innerHTML]="event.description"></div>

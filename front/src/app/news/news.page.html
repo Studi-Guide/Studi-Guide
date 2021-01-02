@@ -6,18 +6,16 @@
         </ion-refresher>
         <ion-list lines="none">
             <ion-item-sliding *ngFor="let element of rssFeed">
-                <ion-item>
-                    <ion-card  (click)="onFeedClick(element)">
+                <ion-item class="ion-no-padding">
+                    <ion-card (click)="onFeedClick(element)">
                         <ion-card-header>
                             <ion-card-subtitle>{{element.published | date : 'dd.MM.yyyy hh:mm'}}</ion-card-subtitle>
                             <ion-card-title>{{element.title}}</ion-card-title>
                         </ion-card-header>
                         <ion-card-content>
-                            <div [innerHTML]="element.description"></div>
-                            <hr/>
-                            <div *ngIf="element.isExpanded">
+                            <app-expander class="expander" [header]="element.description" [expanded]="element.isExpanded">
                                 <div [innerHTML]="element.content"></div>
-                            </div>
+                            </app-expander>
                         </ion-card-content>
                     </ion-card>
                 </ion-item>
