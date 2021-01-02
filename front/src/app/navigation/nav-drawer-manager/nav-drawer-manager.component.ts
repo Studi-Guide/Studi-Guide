@@ -2,7 +2,6 @@ import {AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, Simple
 import {IonContent, Platform} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {IRouteLocation, NavigationModel} from '../navigationModel';
-import {DataService} from '../../services/data.service';
 import {DrawerState} from '../../../ionic-bottom-drawer/drawer-state';
 import {CampusViewModel} from '../campusViewModel';
 import {INavigationInstruction} from '../navigation-instruction-slides/navigation-instruction-if';
@@ -52,11 +51,12 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
 
   async ngAfterViewInit() {
     await Promise.all([
-      this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice()),
       this.locationDrawer.SetState(DrawerState.Hidden),
       this.routeDrawer.SetState(DrawerState.Hidden),
       this.inNavigationDrawer.SetState(DrawerState.Hidden),
       this.changeRouteDrawer.SetState(DrawerState.Hidden, false)]);
+
+    await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
 
     // currently for debug ...
     // this.SetState(NavDrawerState.ChangeRouteView, false);
@@ -115,16 +115,16 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  public onRouteClick() {
-    this.SetState(NavDrawerState.RouteView);
+  public async onRouteClick() {
+    await this.SetState(NavDrawerState.RouteView);
   }
 
-  public onLaunchNavigationClick() {
-    this.SetState(NavDrawerState.InNavigationView);
+  public async onLaunchNavigationClick() {
+    await this.SetState(NavDrawerState.InNavigationView);
   }
 
-  public onEndNavigationClick() {
-    this.SetState(NavDrawerState.LocationView);
+  public async onEndNavigationClick() {
+    await this.SetState(NavDrawerState.LocationView);
   }
 
   // custom event handler

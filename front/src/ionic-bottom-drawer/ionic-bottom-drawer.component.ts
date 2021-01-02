@@ -18,7 +18,7 @@ import {DrawerState} from './drawer-state';
   templateUrl: './ionic-bottom-drawer.component.html',
   styleUrls: ['./ionic-bottom-drawer.component.scss'],
 })
-export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChanges {
+export class IonicBottomDrawerComponent implements AfterViewInit, OnChanges {
   constructor(
       public element: ElementRef,
       private renderer: Renderer2,
@@ -54,7 +54,7 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
 
   @Input() duration = 150;
 
-  @Input() state: DrawerState = DrawerState.Docked;
+  @Input() state: DrawerState = null;
 
   @Input() bounceDelta = 30;
 
@@ -69,8 +69,8 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   private startPositionTop: number;
   private gesture: Gesture;
 
-  public static GetRecommendedDrawerStateForDevice():DrawerState {
-    const isHybrid:boolean = this.PLATFORM?.is('hybrid');
+  public static GetRecommendedDrawerStateForDevice(): DrawerState {
+    const isHybrid = this.PLATFORM?.is('hybrid');
     const isSmallDevice: boolean = window.matchMedia('(max-width: 767.98px)').matches;
     const isMediumDevice: boolean = window.matchMedia('(min-width: 768px)').matches;
     const isBigDevice: boolean = window.matchMedia('(min-width: 1200px)').matches;
@@ -84,13 +84,12 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
     }
   }
 
-  ngOnInit() {
-
-    const element = this.element.nativeElement.querySelector('.'+this.gripElementsClass);
+  async ngAfterViewInit() {
+    const element = this.element.nativeElement.querySelector('.' + this.gripElementsClass);
 
     if (element === null) {
       throw new Error('can not find any element with the class name "'
-          +this.gripElementsClass+'" for gesture initialization of IonicBottomDrawer');
+          + this.gripElementsClass + '" for gesture initialization of IonicBottomDrawer');
     }
 
     this.gesture = this.gestureCtrl.create({
@@ -104,27 +103,25 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
     });
     this.gesture.enable();
 
-    this.renderer.setStyle(this.element.nativeElement, 'transition', 'transform '+this.duration+'ms ease-in-out');
+    this.renderer.setStyle(this.element.nativeElement, 'transition', 'transform ' + this.duration + 'ms ease-in-out');
+
+    await this.SetState(this.state);
   }
 
-  ngAfterViewInit() {
-    this.SetState(this.state);
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
+  async ngOnChanges(changes: SimpleChanges) {
     if (!changes.state) {
       return;
     }
 
-    this.SetState(changes.state.currentValue);
+    await this.SetState(changes.state.currentValue);
   }
 
-  public async SetState(newState:DrawerState, shouldEmit = true) {
-    if (this.state === newState)
+  public async SetState(newState: DrawerState, shouldEmit = true) {
+    if (this.state === newState || newState === null) {
       return;
+    }
 
     this.state = newState;
-
     if (this.state !== DrawerState.Hidden) {
       this.element.nativeElement.hidden = false;
     }
@@ -148,8 +145,9 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
       this.element.nativeElement.hidden = true;
     }
 
-    if (shouldEmit)
+    if (shouldEmit) {
       this.stateChange.emit(this.state);
+    }
   }
 
   private onStart(detail) {
@@ -176,13 +174,13 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
         }
       }
 
-      const translate = 'translateY('+detail.currentY+'px)';
+      const translate = 'translateY(' + detail.currentY + 'px)';
       this.renderer.setStyle(this.element.nativeElement, 'transform', translate);
     }
   }
 
   private onEnd(detail) {
-    this.renderer.setStyle(this.element.nativeElement, 'transition', 'transform '+this.duration+'ms ease-in-out');
+    this.renderer.setStyle(this.element.nativeElement, 'transition', 'transform ' + this.duration + 'ms ease-in-out');
 
     const newTop = detail.currentY;
     const deltaTop = Math.abs(this.distanceTop - newTop);
@@ -204,8 +202,8 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
     }
   }
 
-  private async animateTo(positionY:number) {
-    const translate = 'translateY('+(this.platform.height()-positionY)+'px)';
+  private async animateTo(positionY: number) {
+    const translate = 'translateY(' + (this.platform.height() - positionY) + 'px)';
     this.renderer.setStyle(this.element.nativeElement, 'transform', translate);
 
     await this.delay(this.duration);
@@ -213,7 +211,7 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   }
 
   private async delay(ms: number) {
-    await new Promise(resolve => setTimeout(()=>resolve(), ms)).then();
+    await new Promise(resolve => setTimeout(() => resolve(), ms)).then();
   }
 
 }
