@@ -13,11 +13,9 @@
                             <ion-card-title>{{element.title}}</ion-card-title>
                         </ion-card-header>
                         <ion-card-content>
-                            <div [innerHTML]="element.description"></div>
-                            <hr/>
-                            <div *ngIf="element.isExpanded">
+                            <app-expander class="expander" [header]="element.description" [expanded]="element.isExpanded">
                                 <div [innerHTML]="element.content"></div>
-                            </div>
+                            </app-expander>
                         </ion-card-content>
                     </ion-card>
                 </ion-item>

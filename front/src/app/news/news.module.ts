@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NewsPage } from './news.page';
+import {IonicExpanderModule} from "../../ionic-expander/ionic-expander.module";
 
 @NgModule({
   imports: [
@@ -11,7 +12,8 @@ import { NewsPage } from './news.page';
     CommonModule,
     FormsModule,
     RouterModule.forChild([
-      { path: '', component: NewsPage }])
+      {path: '', component: NewsPage}]),
+    IonicExpanderModule
   ],
   declarations: [NewsPage]
 })

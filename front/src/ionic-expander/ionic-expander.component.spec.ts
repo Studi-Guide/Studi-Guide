@@ -1,19 +1,19 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { ExpanderComponent } from './expander.component';
+import { IonicExpanderComponent } from './ionic-expander.component';
 
-describe('ExpanderComponent', () => {
-  let component: ExpanderComponent;
-  let fixture: ComponentFixture<ExpanderComponent>;
+describe('IonicExpanderComponent', () => {
+  let component: IonicExpanderComponent;
+  let fixture: ComponentFixture<IonicExpanderComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ExpanderComponent ],
+      declarations: [ IonicExpanderComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ExpanderComponent);
+    fixture = TestBed.createComponent(IonicExpanderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

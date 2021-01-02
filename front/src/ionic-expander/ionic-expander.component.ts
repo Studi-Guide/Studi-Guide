@@ -2,10 +2,10 @@ import {AfterViewInit, Component, ElementRef, Input, Renderer2, ViewChild} from 
 
 @Component({
   selector: 'app-expander',
-  templateUrl: './expander.component.html',
-  styleUrls: ['./expander.component.scss'],
+  templateUrl: './ionic-expander.component.html',
+  styleUrls: ['./ionic-expander.component.scss'],
 })
-export class ExpanderComponent implements AfterViewInit {
+export class IonicExpanderComponent implements AfterViewInit {
   @ViewChild('expandWrapper', { read: ElementRef }) expandWrapper: ElementRef;
   @Input() expanded = false;
   @Input() expandHeight = '150px';
