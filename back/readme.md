@@ -45,5 +45,6 @@ https://github.com/swaggo/swag#getting-started
   - to run the docker:  `docker run -it --rm -p 8080:8080 studiguide/studiguide_appservice:latest`
 
 ## iOS
-  - update assets for ios: `ionic capacitor copy ios`
+  - make sure cocoapods is installed: `brew install cocoapods`
+  - update assets for ios: `ionic capacitor sync ios`
   - open Xcode `ionic capacitor open ios`
