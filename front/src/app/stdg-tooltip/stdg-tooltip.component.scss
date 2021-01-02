@@ -1,8 +1,12 @@
+.stdg-tooltip-hide {
+  display: none;
+}
+
 .stdg-tooltip {
-  border: 3px solid #fff;
   display: inline-block;
-  font-size: .875em;
-  padding: .75em;
+  z-index: 9999;
+  font-size: .75em;
+  padding: .5em;
   position: absolute;
   text-align: center
 }
@@ -19,26 +23,4 @@
   background: linear-gradient(to bottom, #6e6e6e 0%, #242424 100%);
   box-shadow: 0 0 6px 2px #6e6e6e;
   color: #fff
-}
-
-body {
-  font-family: sans-serif;
-  height: 2000px
-}
-
-span {
-  background: #ffe4e1;
-  border: 2px dotted #c00;
-  cursor: default;
-  display: inline-block;
-  padding: 5px
-}
-
-img {
-  display: block
-}
-
-.wrap {
-  margin: 0 auto;
-  width: 800px
 }

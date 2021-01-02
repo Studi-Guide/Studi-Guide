@@ -6,8 +6,6 @@ import { FormsModule } from '@angular/forms';
 import { SettingsPage } from './settings.page';
 import {DetailViewSelectLanguageComponent} from '../detail-view-select-language/detail-view-select-language.component';
 import {DetailViewSelectLanguageModule} from '../detail-view-select-language/detail-view-select-language.module';
-import {StdgTooltipComponent} from '../stdg-tooltip/stdg-tooltip.component';
-import { StdgTooltipModule } from '../stdg-tooltip/stdg-tooltip.module';
 
 @NgModule({
     imports: [
@@ -18,13 +16,8 @@ import { StdgTooltipModule } from '../stdg-tooltip/stdg-tooltip.module';
             {path: '', component: SettingsPage},
             {path: 'language', component: DetailViewSelectLanguageComponent, }
         ]),
-        DetailViewSelectLanguageModule,
-        StdgTooltipModule
+        DetailViewSelectLanguageModule
     ],
   declarations: [SettingsPage]
 })
-export class SettingsPageModule {
-    constructor() {
-        (new StdgTooltipComponent('dark', 5, 0)).init();
-    }
-}
+export class SettingsPageModule {}
