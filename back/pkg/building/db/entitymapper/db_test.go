@@ -604,7 +604,7 @@ func TestEntityMapper_AddLocation(t *testing.T) {
 				Z: 0,
 			},
 			Group:          nil,
-			ConnectedNodes: []*navigation.PathNode{},
+			ConnectedNodes: nil,
 		},
 	}
 
@@ -613,6 +613,25 @@ func TestEntityMapper_AddLocation(t *testing.T) {
 	}
 
 	loc.Building = "main"
+
+	if err := dbService.AddLocation(loc); err != nil {
+		t.Error(err)
+	}
+
+	_, err := dbService.client.PathNode.Create().Save(dbService.context)
+	if err != nil {
+		t.Error("err creating pathnode", err)
+	}
+
+	loc.Name = "another location"
+	loc.Id = 998
+	loc.PathNode.Id = 1112
+	loc.PathNode.ConnectedNodes = append(loc.PathNode.ConnectedNodes, &navigation.PathNode{
+		Id:             1111,
+		Coordinate:     navigation.Coordinate{},
+		Group:          nil,
+		ConnectedNodes: nil,
+	})
 
 	if err := dbService.AddLocation(loc); err != nil {
 		t.Error(err)
