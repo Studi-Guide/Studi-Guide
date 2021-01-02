@@ -43,3 +43,7 @@ https://github.com/swaggo/swag#getting-started
 ## Run Docker
   - to create the docker: `docker build --rm -f Dockerfile -t studiguide/studiguide_appservice .`
   - to run the docker:  `docker run -it --rm -p 8080:8080 studiguide/studiguide_appservice:latest`
+
+## iOS
+  - update assets for ios: `ionic capacitor copy ios`
+  - open Xcode `ionic capacitor open ios`
