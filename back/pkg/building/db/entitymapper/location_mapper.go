@@ -147,3 +147,51 @@ func (r *EntityMapper) getLocationQuery() *ent.LocationQuery {
 	return r.client.Location.Query().
 		WithPathnode().WithBuilding().WithTags()
 }
+
+func (r *EntityMapper) AddLocation(l Location) error {
+
+	pathNode, err := r.mapPathNode(&l.PathNode)
+	if err != nil {
+		return err
+	}
+
+	err = r.linkPathNode(&l.PathNode)
+	if err != nil {
+		return err
+	}
+
+	b, err := r.client.Building.Query().Where(building.Name(l.Building)).First(r.context)
+	if err != nil {
+		return err
+	}
+
+	loc, err := r.client.Location.Create().
+		SetName(l.Name).
+		SetDescription(l.Description).
+		SetPathnode(pathNode).
+		SetBuilding(b).
+		SetFloor(l.Floor).
+		Save(r.context)
+
+	if err != nil {
+		return err
+	}
+
+	for _, c := range l.PathNode.ConnectedNodes {
+		entityConnectedNode, err := r.client.PathNode.Get(r.context, c.Id)
+		if err != nil {
+			return err
+		}
+		update := entityConnectedNode.Update()
+		update.AddLinkedToIDs(l.PathNode.Id)
+		entityConnectedNode, err = update.Save(r.context)
+		if err != nil {
+			return err
+		}
+		fmt.Println("linked ", entityConnectedNode.ID, "to", l.PathNode.Id)
+	}
+
+	fmt.Println("imported location", loc.Name, loc.ID)
+
+	return nil
+}
