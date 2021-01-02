@@ -1,0 +1,29 @@
+
+.container {
+  width: 100%;
+  height: fit-content;
+  position: relative;
+}
+
+.input-container {
+  width: 100%;
+  height: fit-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.swappicon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.swappicon:hover {
+  cursor: pointer;
+}
+
+.ripple-parent {
+  position: relative;
+  overflow: hidden;
+}

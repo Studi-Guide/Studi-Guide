@@ -6,7 +6,7 @@ export class FeedItem {
     published: Date;
     isExpanded: boolean;
     rootUrl: string;
-    constructor(description: string, link: string, rootUrl:string, title: string, published: Date,content:string) {
+    constructor(description: string, link: string, rootUrl: string, title: string, published: Date, content: string) {
         this.description = description;
         this.link = link;
         this.title = title;

@@ -58,6 +58,12 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
 
   @Input() bounceDelta = 30;
 
+  @Input() shouldDockTop = true;
+
+  @Input() shouldDockMiddle = true;
+
+  @Input() shouldDockBottom = true;
+
   @Output() stateChange: EventEmitter<DrawerState> = new EventEmitter<DrawerState>();
 
   private startPositionTop: number;
@@ -113,7 +119,10 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
     this.SetState(changes.state.currentValue);
   }
 
-  public async SetState(newState:DrawerState) {
+  public async SetState(newState:DrawerState, shouldEmit = true) {
+    if (this.state === newState)
+      return;
+
     this.state = newState;
 
     if (this.state !== DrawerState.Hidden) {
@@ -139,7 +148,8 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
       this.element.nativeElement.hidden = true;
     }
 
-     this.stateChange.emit(this.state);
+    if (shouldEmit)
+      this.stateChange.emit(this.state);
   }
 
   private onStart(detail) {
@@ -174,22 +184,23 @@ export class IonicBottomDrawerComponent implements OnInit, AfterViewInit, OnChan
   private onEnd(detail) {
     this.renderer.setStyle(this.element.nativeElement, 'transition', 'transform '+this.duration+'ms ease-in-out');
 
-    if (!IonicBottomDrawerComponent.DrawerDocking) {
-      return;
-    }
-
-
     const newTop = detail.currentY;
     const deltaTop = Math.abs(this.distanceTop - newTop);
     const deltaDock = Math.abs(this.platform.height() - this.dockedHeight - newTop);
     const deltaBot = Math.abs(this.platform.height() - this.minimumHeight - newTop);
 
-    if (deltaTop < deltaDock && deltaTop < deltaBot) {
-      this.SetState(DrawerState.Top);
-    } else if (deltaBot < deltaDock && deltaBot < deltaTop) {
-      this.SetState(DrawerState.Bottom);
-    } else {
-      this.SetState(DrawerState.Docked);
+    let nextState = DrawerState.Hidden;
+    if (deltaTop < deltaDock && deltaTop < deltaBot && this.shouldDockTop) {
+      nextState = DrawerState.Top;
+    } else if (deltaBot < deltaDock && deltaBot < deltaTop && this.shouldDockMiddle) {
+      nextState = DrawerState.Bottom;
+    } else if (this.shouldDockBottom) {
+      nextState = DrawerState.Docked;
+    }
+
+    if (IonicBottomDrawerComponent.DrawerDocking ||
+        !IonicBottomDrawerComponent.DrawerDocking && nextState === DrawerState.Hidden) {
+      this.SetState(nextState);
     }
   }
 

@@ -10,10 +10,10 @@ import {RssFeedService} from '../services/rss-feed.service';
 })
 export class NewsPage implements AfterViewInit{
 
-  private rssFeeds:string[] = [
+  private rssFeeds: string[] = [
       'TH-Ohm-News-Archiv',
       'TH-Ohm-Calendar'
-  ]
+  ];
 
   rssFeed: FeedItem[] = [];
 
@@ -33,12 +33,12 @@ export class NewsPage implements AfterViewInit{
     await loading.present();
 
     const items: FeedItem[] = [];
-    for(const feed of this.rssFeeds)
+    for (const feed of this.rssFeeds)
     {
       try {
         const rssFeedItems = await this.rssFeedService.getArticles(feed);
         if (rssFeedItems) {
-          console.log('Received ' + rssFeedItems.length + ' itens')
+          console.log('Received ' + rssFeedItems.length + ' itens');
           items.push(...rssFeedItems);
         }
       }catch (e) {

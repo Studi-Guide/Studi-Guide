@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
 import { NavigationInstructionSlidesComponent } from './navigation-instruction-slides.component';
@@ -7,7 +7,7 @@ describe('NavigationInstructionSlidesComponent', () => {
   let component: NavigationInstructionSlidesComponent;
   let fixture: ComponentFixture<NavigationInstructionSlidesComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ NavigationInstructionSlidesComponent ],
       imports: [IonicModule.forRoot()]
