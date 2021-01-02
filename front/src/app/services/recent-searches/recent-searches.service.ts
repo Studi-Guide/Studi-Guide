@@ -51,6 +51,17 @@ export class RecentSearchesService {
 
   public async readRecentSearches(): Promise<ISearchResultObject[]> {
     const searches = JSON.parse(await this.storage.get(RecentSearchesService.recentSearchesKey));
-    return searches != null ? searches[0] : [];
+    if (!searches) {
+        return [];
+    }
+
+    const resultArray: ISearchResultObject[] = [];
+    for (const result of searches[0] as ISearchResultObject[]) {
+        if (result?.Name) {
+            resultArray.push(result);
+        }
+    }
+
+    return resultArray;
   }
 }
