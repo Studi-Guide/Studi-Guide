@@ -1,0 +1,119 @@
+[
+  {
+    "Name": "Ausweisvalidierungsautomat KA 3. OG",
+    "Description": "Automat zur Validierung des Studentenausweises",
+    "Tags":        ["Ausweis", "Automat", "Studentenausweis", "Validierung", "Student Card"],
+    "Floor":       "3",
+    "Building":    "KA",
+    "PathNode": {
+      "Id": 501,
+      "ConnectedPathNodes" : [
+        3241
+      ],
+      "X": 240, "Y": 460, "Z": 3
+    }
+  },
+  {
+    "Name": "Aufladeautomat KA 3. OG",
+    "Description": "Automat zur Aufladung des Guthabens auf dem Studentenausweis",
+    "Tags":        ["Ausweis", "Automat", "Studentenausweis", "Guthaben", "Student Card"],
+    "Floor":       "3",
+    "Building":    "KA",
+    "PathNode": {
+      "Id": 502,
+      "ConnectedPathNodes" : [
+        3241
+      ],
+      "X": 240, "Y": 455, "Z": 3
+    }
+  },
+  {
+    "Name": "Aufladeautomat EG",
+    "Description": "Automat zur Aufladung des Guthabens auf dem Studentenausweis",
+    "Tags":        ["Ausweis", "Automat", "Studentenausweis", "Guthaben", "Student Card"],
+    "Floor":       "EG",
+    "Building":    "KA",
+    "PathNode": {
+      "Id": 503,
+      "ConnectedPathNodes" : [
+        900014
+      ],
+      "X": 225, "Y": 185, "Z": 0
+    }
+  },
+  {
+    "Name": "Lernraum EG",
+    "Description": "Raum zum Lernen im Erdgeschoss",
+    "Tags":        ["lernen"],
+    "Floor":       "EG",
+    "Building":    "KA",
+    "PathNode": {
+      "Id": 504,
+      "ConnectedPathNodes" : [
+        9341,
+        9342
+      ],
+      "X": 195, "Y": 700, "Z": 0
+    }
+  },
+  {
+    "Name": "Lernraum 1. OG",
+    "Description": "Raum zum Lernen im Erdgeschoss",
+    "Tags":        ["lernen"],
+    "Floor":       "1",
+    "Building":    "KA",
+    "PathNode": {
+      "Id": 505,
+      "ConnectedPathNodes" : [
+        1341,
+        1342
+      ],
+      "X": 195, "Y": 700, "Z": 1
+    }
+  },
+  {
+    "Name": "Lernraum 2. OG",
+    "Description": "Raum zum Lernen im Erdgeschoss",
+    "Tags":        ["lernen"],
+    "Floor":       "2",
+    "Building":    "KA",
+    "PathNode": {
+      "Id": 506,
+      "ConnectedPathNodes" : [
+        2341,
+        2342
+      ],
+      "X": 195, "Y": 700, "Z": 2
+    }
+  },
+  {
+    "Name": "Lernraum 3. OG",
+    "Description": "Raum zum Lernen im Erdgeschoss",
+    "Tags":        ["lernen"],
+    "Floor":       "3",
+    "Building":    "KA",
+    "PathNode": {
+      "Id": 507,
+      "ConnectedPathNodes" : [
+        3341,
+        3342
+      ],
+      "X": 195, "Y": 700, "Z": 3
+    }
+  },
+  {
+    "Name": "Studienservice",
+    "Description": "Service für Studierende",
+    "Tags":        ["Service", "Studierende", "Studenten"],
+    "Floor":       "EG",
+    "Building":    "KA",
+    "PathNode": {
+      "Id": 508,
+      "ConnectedPathNodes" : [
+        9071,
+        9072
+      ],
+      "X": 335, "Y": 292, "Z": 0
+    }
+  }
+]

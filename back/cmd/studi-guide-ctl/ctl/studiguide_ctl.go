@@ -4,6 +4,7 @@ import (
 	"github.com/urfave/cli/v2"
 	"studi-guide/pkg/building/campus"
 	"studi-guide/pkg/building/db/entitymapper"
+	"studi-guide/pkg/building/location"
 	"studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/rssFeed"
 )
@@ -51,6 +52,17 @@ func StudiGuideCtlCli(dbService *entitymapper.EntityMapper) *cli.App {
 								Usage: "import rssfeed data",
 								Action: func(context *cli.Context) error {
 									importer, err := rssFeed.NewRssFeedImporter(context.Args().First(), dbService)
+									if err != nil {
+										return err
+									}
+									return importer.RunImport()
+								},
+							},
+							{
+								Name:  "location",
+								Usage: "import location data",
+								Action: func(context *cli.Context) error {
+									importer, err := location.NewLocationImporter(context.Args().First(), dbService)
 									if err != nil {
 										return err
 									}

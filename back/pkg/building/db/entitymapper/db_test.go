@@ -586,6 +586,39 @@ func TestEntityService_GetLocation(t *testing.T) {
 	}
 }
 
+func TestEntityMapper_AddLocation(t *testing.T) {
+	dbService, _ := setupTestRoomDbService()
+
+	loc := Location{
+		Id:          999,
+		Name:        "loc",
+		Description: "location in some place",
+		Tags: []string{"a", "b"},
+		Floor:       "f",
+		Building:    "b",
+		PathNode:    navigation.PathNode{
+			Id:             1111,
+			Coordinate:     navigation.Coordinate{
+				X: 0,
+				Y: 0,
+				Z: 0,
+			},
+			Group:          nil,
+			ConnectedNodes: []*navigation.PathNode{},
+		},
+	}
+
+	if dbService.AddLocation(loc) == nil {
+		t.Error("expected error because of building")
+	}
+
+
+
+	if !reflect.DeepEqual(testRooms[0].Location, getLocation) {
+		t.Error("expected: ", testRooms[0].Location, "; got: ", getLocation)
+	}
+}
+
 func TestEntityService_GetAllMapItems(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
