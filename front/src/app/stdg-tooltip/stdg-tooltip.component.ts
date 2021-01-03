@@ -26,15 +26,14 @@ export class StdgTooltipComponent implements AfterViewInit {
    * @param posVertical - Desired vertical position of the tooltip relatively to the trigger (top/center/bottom)
    */
   private positionAt(parent: MouseEvent, posHorizontal: string, posVertical: string) {
+    console.log(parent);
+    const target = (parent.target as HTMLElement);
     const parentCoords = {
-      top: parent.y,
-      left: parent.x,
-      // @ts-ignore
-      bottom: parent.y + parent.srcElement.clientHeight,
-      // @ts-ignore
-      right: parent.x + parent.srcElement.clientWidth,
-      // @ts-ignore
-      width: parent.srcElement.clientWidth
+      top: target.getBoundingClientRect().y,
+      left: target.getBoundingClientRect().x,
+      bottom: target.getBoundingClientRect().y + (parent.target as HTMLElement).clientHeight,
+      right: target.getBoundingClientRect().x + (parent.target as HTMLElement).clientWidth,
+      width: (parent.target as HTMLElement).clientWidth
     };
     let left, top;
 
