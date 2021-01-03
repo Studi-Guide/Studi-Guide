@@ -27,6 +27,7 @@ func (Location) Edges() []ent.Edge {
 		edge.To("pathnode", PathNode.Type).Unique().Required(),
 		edge.From("tags", Tag.Type).Ref("locations"),
 		edge.To("building", Building.Type).Unique(),
+		edge.To("files", File.Type),
 	}
 }
 
