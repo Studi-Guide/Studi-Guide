@@ -12,7 +12,7 @@
       <ion-list-header>
         Meal
       </ion-list-header>
-      <ion-item button (click)="onMensaClick()">
+      <ion-item button (click)="onMensaClick()" detail="false" mode="md">
         <ion-icon slot="start" color="dark" name="beer"></ion-icon>
         <app-expander class="mensa" header="Mensateria" [expanded]="isMensaExpanded">
           <h3 [innerHTML]="mensaFeedContent.content"></h3>
