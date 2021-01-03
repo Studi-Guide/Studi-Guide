@@ -17,6 +17,7 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import {GeolocationMock} from './services/GeolocationMock';
 import {NativeHttpInterceptor} from '../utils/NativeHttpInterceptor';
+import { StdgTooltipModule } from './stdg-tooltip/stdg-tooltip.module';
 
 @NgModule({
   declarations: [AppComponent],
@@ -27,7 +28,8 @@ import {NativeHttpInterceptor} from '../utils/NativeHttpInterceptor';
     LeafletModule,
     IonicModule.forRoot(),
     AppRoutingModule,
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    StdgTooltipModule
   ],
   providers: [
     StatusBar,

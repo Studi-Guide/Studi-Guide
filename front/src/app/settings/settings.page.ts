@@ -19,14 +19,14 @@ export class SettingsPage implements AfterViewInit {
       private settingsModel: SettingsModel
   ) {}
 
-  public isSignedIn:boolean;
-  public moodleUserName:string;
-  public persistedMoodleToken:MoodleToken;
+  public isSignedIn: boolean;
+  public moodleUserName: string;
+  public persistedMoodleToken: MoodleToken;
 
   private readonly MOODLE_TOKEN = 'moodle_token';
   private readonly MOODLE_USER = 'moodle_user';
 
-  @ViewChild('DrawerDockingToggle') drawerDockingToggle : IonToggle;
+  @ViewChild('DrawerDockingToggle') drawerDockingToggle: IonToggle;
 
   actionSheetOptions: any = {
     header: 'Moodle'
@@ -58,7 +58,7 @@ export class SettingsPage implements AfterViewInit {
     });
   }
 
-  private async isMoodleTokenPersisted():Promise<boolean> {
+  private async isMoodleTokenPersisted(): Promise<boolean> {
     return await this.storage.get(this.MOODLE_TOKEN).then( (value) => {
       this.persistedMoodleToken = value;
       return this.persistedMoodleToken != null;
@@ -67,7 +67,7 @@ export class SettingsPage implements AfterViewInit {
 
   private setLoggedOutFromMoodle() {
     this.isSignedIn = false;
-    this.moodleUserName = 'No user signed in.'
+    this.moodleUserName = 'No user signed in.';
   }
 
   private async getMoodleUserName() {
@@ -76,7 +76,7 @@ export class SettingsPage implements AfterViewInit {
     });
   }
 
-  public onDrawerDockingToggleChange(event:any) {
+  public onDrawerDockingToggleChange(event: any) {
     this.settingsModel.DrawerDocking = event.detail.checked;
     IonicBottomDrawerComponent.DrawerDocking = this.settingsModel.DrawerDocking;
   }
