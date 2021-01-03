@@ -31,9 +31,9 @@ export class StdgTooltipComponent implements AfterViewInit {
     const parentCoords = {
       top: target.getBoundingClientRect().y,
       left: target.getBoundingClientRect().x,
-      bottom: target.getBoundingClientRect().y + (parent.target as HTMLElement).clientHeight,
-      right: target.getBoundingClientRect().x + (parent.target as HTMLElement).clientWidth,
-      width: (parent.target as HTMLElement).clientWidth
+      bottom: target.getBoundingClientRect().y + target.clientHeight,
+      right: target.getBoundingClientRect().x + target.clientWidth,
+      width: target.clientWidth
     };
     let left, top;
 
