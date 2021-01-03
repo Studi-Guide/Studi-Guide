@@ -14,6 +14,7 @@ export class StdgTooltipComponent implements AfterViewInit {
   private mouseOverDelay: number;
   private mouseOutDelay: number;
   private dist: number;
+  private rounded: boolean;
 
   @ViewChild('stdgTooltip') stdgTooltip: ElementRef;
 
@@ -25,8 +26,7 @@ export class StdgTooltipComponent implements AfterViewInit {
    * @param posHorizontal - Desired horizontal position of the tooltip relatively to the trigger (left/center/right)
    * @param posVertical - Desired vertical position of the tooltip relatively to the trigger (top/center/bottom)
    */
-  private positionAt(parent: MouseEvent, posHorizontal: string, posVertical: string) {
-    console.log(parent);
+  private async positionAt(parent: MouseEvent, posHorizontal: string, posVertical: string) {
     const target = (parent.target as HTMLElement);
     const parentCoords = {
       top: target.getBoundingClientRect().y,
@@ -37,10 +37,9 @@ export class StdgTooltipComponent implements AfterViewInit {
     };
     let left, top;
 
-    // TODO const offsetWidth = this.stdgTooltip.nativeElement.offsetWidth;
-    // TODO const offsetHeight = this.stdgTooltip.nativeElement.offsetHeight
-    const offsetWidth = this.tooltipText.length * 2.4; // settings drawer docking: 118
-    const offsetHeight = this.tooltipText.length + 24/*(200 / this.tooltipText.length)*/; // settings drawer docking: 54
+    await this.delayAngularRenderingCycles(1);
+    const offsetWidth = this.stdgTooltip.nativeElement.offsetWidth;
+    const offsetHeight = this.stdgTooltip.nativeElement.offsetHeight;
 
     switch (posHorizontal) {
       case 'left':
@@ -83,6 +82,11 @@ export class StdgTooltipComponent implements AfterViewInit {
     this.stdgTooltip.nativeElement.style.top  = top + pageYOffset + 'px';
   }
 
+  private delayAngularRenderingCycles(cycleTimes: number) {
+    const ms = cycleTimes * 16;
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
   private showTooltipByMouseOver(event: MouseEvent) {
     if (!event.target.hasAttribute('data-tooltip')) {
       return;
@@ -96,12 +100,13 @@ export class StdgTooltipComponent implements AfterViewInit {
       const posHorizontal = pos.split(' ')[0];
       const posVertical = pos.split(' ')[1];
 
-      this.positionAt(event, posHorizontal, posVertical);
+      this.positionAt(event, posHorizontal, posVertical).then();
     }, this.mouseOverDelay);
   }
 
   private showTooltip() {
     this.tooltipClass = 'stdg-tooltip stdg-tooltip-' + this.theme;
+    this.tooltipClass += this.rounded ? ' stdg-tooltip-rounded' : '';
   }
 
   private hideTooltipByMouseOut(event: MouseEvent) {
@@ -116,11 +121,20 @@ export class StdgTooltipComponent implements AfterViewInit {
     this.tooltipClass = 'stdg-tooltip-hide';
   }
 
-  private init(theme, mouseOverDelay, mouseOutDelay, dist) {
+  /**
+   * Initializes the tooltip.
+   * @param theme - Theme of the tooltip: light, medium, or dark
+   * @param mouseOverDelay - delay in ms before the tooltip is shown
+   * @param mouseOutDelay - delay in ms before the tooltip is hidden
+   * @param dist - distance in px between target element and tooltip
+   * @param rounded - if the tooltip corners are rounded or not
+   */
+  private init(theme: string, mouseOverDelay: number, mouseOutDelay: number, dist: number, rounded: boolean) {
     this.theme = (theme === undefined || theme === null) ? 'dark' : theme;
     this.mouseOverDelay = (mouseOverDelay === undefined || mouseOverDelay === null) ? 0 : mouseOverDelay;
     this.mouseOutDelay = (mouseOutDelay === undefined || mouseOutDelay === null) ? 0 : mouseOutDelay;
     this.dist = (dist === undefined || dist === null) ? 10 : dist;
+    this.rounded = (rounded === undefined || rounded === null) ? false : rounded;
 
     /** Attaching one mouseover and one mouseout listener to the document instead of listeners for each trigger */
     const body = document.body as HTMLElement;
@@ -133,6 +147,6 @@ export class StdgTooltipComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(){
-    this.init('dark', 0, 0, 0);
+    this.init('medium', 0, 0, 0, true);
   }
 }
