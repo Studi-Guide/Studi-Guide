@@ -11,7 +11,8 @@ export class StdgTooltipComponent implements AfterViewInit {
   public tooltipClass = 'stdg-tooltip-hide';
 
   public theme: string;
-  private delay: number;
+  private mouseOverDelay: number;
+  private mouseOutDelay: number;
   private dist: number;
 
   @ViewChild('stdgTooltip') stdgTooltip: ElementRef;
@@ -88,14 +89,16 @@ export class StdgTooltipComponent implements AfterViewInit {
       return;
     }
 
-    this.tooltipText = event.target.getAttribute('data-tooltip');
-    this.showTooltip();
+    setTimeout(() => {
+      this.tooltipText = event.target.getAttribute('data-tooltip');
+      this.showTooltip();
 
-    const pos = event.target.getAttribute('data-tooltip-pos') || 'center top';
-    const posHorizontal = pos.split(' ')[0];
-    const posVertical = pos.split(' ')[1];
+      const pos = event.target.getAttribute('data-tooltip-pos') || 'center top';
+      const posHorizontal = pos.split(' ')[0];
+      const posVertical = pos.split(' ')[1];
 
-    this.positionAt(event, posHorizontal, posVertical);
+      this.positionAt(event, posHorizontal, posVertical);
+    }, this.mouseOverDelay);
   }
 
   private showTooltip() {
@@ -106,7 +109,7 @@ export class StdgTooltipComponent implements AfterViewInit {
     if (event.target.hasAttribute('data-tooltip')) {
       setTimeout(() => {
         this.hideTooltip();
-      }, this.delay);
+      }, this.mouseOutDelay);
     }
   }
 
@@ -114,9 +117,10 @@ export class StdgTooltipComponent implements AfterViewInit {
     this.tooltipClass = 'stdg-tooltip-hide';
   }
 
-  private init(theme, delay, dist) {
+  private init(theme, mouseOverDelay, mouseOutDelay, dist) {
     this.theme = (theme === undefined || theme === null) ? 'dark' : theme;
-    this.delay = (delay === undefined || delay === null) ? 0 : delay;
+    this.mouseOverDelay = (mouseOverDelay === undefined || mouseOverDelay === null) ? 0 : mouseOverDelay;
+    this.mouseOutDelay = (mouseOutDelay === undefined || mouseOutDelay === null) ? 0 : mouseOutDelay;
     this.dist = (dist === undefined || dist === null) ? 10 : dist;
 
     /** Attaching one mouseover and one mouseout listener to the document instead of listeners for each trigger */
@@ -130,6 +134,6 @@ export class StdgTooltipComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(){
-    this.init('dark', 5, 0);
+    this.init('dark', 0, 0, 0);
   }
 }
