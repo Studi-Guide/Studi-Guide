@@ -7,12 +7,12 @@ import (
 	"github.com/facebook/ent/schema/index"
 )
 
-// Room holds the schema definition for the Room entity.
+// Location holds the schema definition for the Location entity.
 type Location struct {
 	ent.Schema
 }
 
-// Fields of the Room.
+// Fields of the Location.
 func (Location) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("Name").Unique(),
@@ -21,13 +21,13 @@ func (Location) Fields() []ent.Field {
 	}
 }
 
-// Edges of the Room.
+// Edges of the Location.
 func (Location) Edges() []ent.Edge {
 	return []ent.Edge{
 		edge.To("pathnode", PathNode.Type).Unique().Required(),
 		edge.From("tags", Tag.Type).Ref("locations"),
 		edge.To("building", Building.Type).Unique(),
-		edge.To("files", File.Type),
+		edge.To("images", File.Type),
 	}
 }
 

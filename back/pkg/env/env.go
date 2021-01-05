@@ -3,14 +3,17 @@ package env
 import (
 	"github.com/gin-gonic/gin"
 	"log"
+	"net/url"
 	"os"
 	"regexp"
+	"strings"
 	"studi-guide/pkg/osm/latlng"
 )
 
 type Env struct {
 	dbDriverName, dbDataSource, frontendPath string
 	graphHopperApiKey, openStreetMapBounds   string
+	assetStorage                             string
 	develop                                  bool
 }
 
@@ -19,6 +22,7 @@ var dbDataSourceKey string = "DB_DATA_SOURCE"
 var frontendPath string = "FRONTEND_PATH"
 var graphHopperApiKey = "GRAPHHOPPER_API_KEY"
 var openStreetMapBounds = "OPENSTREETMAP_BOUNDS"
+var assetStorage string = "ASSET_STORAGE"
 var develop string = "DEVELOP"
 
 var defaultDbDriverName = "sqlite3"
@@ -33,6 +37,7 @@ func NewEnv() *Env {
 		frontendPath:      os.Getenv(frontendPath),
 		graphHopperApiKey: os.Getenv(graphHopperApiKey),
 		openStreetMapBounds: os.Getenv(openStreetMapBounds),
+		assetStorage: os.Getenv(assetStorage),
 		develop:           false,
 	}
 
@@ -60,6 +65,25 @@ func NewEnv() *Env {
 			env.openStreetMapBounds = ""
 			log.Println("Regex match of OpenStreetMap bounds failed. Check your configuration. Bounds for OpenStreetMap are now disabled.")
 		}
+	}
+
+	if len(env.assetStorage) > 0 {
+		_, err := url.ParseRequestURI(env.assetStorage)
+		if err != nil {
+			log.Fatal("validation of asset storage uri failed", err.Error())
+		}
+
+		u, err := url.Parse(env.assetStorage)
+		if err != nil || u.Scheme == "" || u.Host == "" {
+			log.Fatal("validation of asset storage url failed")
+		}
+
+		if strings.HasSuffix(env.assetStorage, "/") {
+			log.Println("removing trailing / from asset storage variable")
+			env.assetStorage = strings.TrimSuffix(env.assetStorage, "/")
+		}
+
+		log.Println("Using asset storage", env.assetStorage)
 	}
 
 	if os.Getenv(develop) == "TRUE" {
@@ -98,6 +122,10 @@ func (e *Env) GraphHopperApiKey() string {
 
 func (e *Env) OpenStreetMapBounds() string {
 	return e.openStreetMapBounds
+}
+
+func (e *Env) AssetStorage() string {
+	return e.assetStorage
 }
 
 func (e *Env) Develop() bool {

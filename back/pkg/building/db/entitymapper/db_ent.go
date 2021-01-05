@@ -12,13 +12,12 @@ import (
 type EntityMapper struct {
 	client  *ent.Client
 	context context.Context
-	table   string
+	env     *env.Env
 }
 
 func newEntityMapper(env *env.Env) (*EntityMapper, error) {
 	driverName := env.DbDriverName()
 	dataSourceName := env.DbDataSource()
-	table := "rooms"
 	client, ctx, err := openDB(driverName, dataSourceName)
 
 	if err != nil {
@@ -27,7 +26,7 @@ func newEntityMapper(env *env.Env) (*EntityMapper, error) {
 
 	roomCount, _ := client.Room.Query().Count(ctx)
 	log.Println("Found number of rooms:", roomCount)
-	return &EntityMapper{client: client, table: table, context: ctx}, nil
+	return &EntityMapper{client: client, env: env, context: ctx}, nil
 }
 
 func NewEntityMapper(env *env.Env) (*EntityMapper, error) {

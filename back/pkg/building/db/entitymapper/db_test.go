@@ -636,6 +636,24 @@ func TestEntityMapper_AddLocation(t *testing.T) {
 	if err := dbService.AddLocation(loc); err != nil {
 		t.Error(err)
 	}
+
+	loc.Name = "anothernother location"
+	loc.Id = 997
+	loc.PathNode.Id = 1113
+	loc.PathNode.ConnectedNodes = append(loc.PathNode.ConnectedNodes, &navigation.PathNode{
+		Id:             1112,
+		Coordinate:     navigation.Coordinate{},
+		Group:          nil,
+		ConnectedNodes: nil,
+	})
+	loc.Images = append(loc.Images, &ent.File{
+		Name: "myfile.png",
+		Path: "/file.png",
+	})
+
+	if err := dbService.AddLocation(loc); err != nil {
+		t.Error(err)
+	}
 }
 
 func TestEntityService_GetAllMapItems(t *testing.T) {
