@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/env"
+	"studi-guide/pkg/file"
 	"studi-guide/pkg/navigation"
 	"testing"
 )
@@ -169,7 +170,7 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 		SetLongitude(11.5797).
 		AddAddress(address).Save(ctx)
 
-	dbService := EntityMapper{client: client, table: "", context: ctx}
+	dbService := EntityMapper{client: client, env: env.NewEnv(), context: ctx}
 
 	return &dbService, drv.DB()
 }
@@ -646,7 +647,7 @@ func TestEntityMapper_AddLocation(t *testing.T) {
 		Group:          nil,
 		ConnectedNodes: nil,
 	})
-	loc.Images = append(loc.Images, &ent.File{
+	loc.Images = append(loc.Images, file.File{
 		Name: "myfile.png",
 		Path: "/file.png",
 	})
