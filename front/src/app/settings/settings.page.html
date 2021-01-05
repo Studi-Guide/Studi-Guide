@@ -41,7 +41,12 @@
       <ion-label i18n="Settings|About">About</ion-label>
     </ion-item>
     <ion-item>
-      <ion-icon slot="end" color="dark" name="information-circle-outline"></ion-icon>
+      <ion-icon slot="end"
+                color="dark"
+                name="information-circle-outline"
+                data-tooltip="Einrasten der Schublade Ein-/Ausschalten"
+                data-tooltip-pos="left center"
+      ></ion-icon>
       <ion-label i18n="Settings|DrawerDocking">Drawer Docking</ion-label>
       <ion-toggle #DrawerDockingToggle (ionChange)="onDrawerDockingToggleChange($event)"></ion-toggle>
     </ion-item>
@@ -52,14 +57,14 @@
 <ion-footer>
   <ion-grid>
     <ion-row class="ion-justify-content-center">
-      <ion-icon size="large" name="logo-android"></ion-icon>
-      <ion-icon size="large" name="logo-apple"></ion-icon>
-      <ion-icon size="large" name="logo-tux"></ion-icon>
-      <ion-icon size="large" name="logo-windows"></ion-icon>
-      <ion-icon size="large" name="logo-firefox"></ion-icon>
-      <ion-icon size="large" name="logo-chrome"></ion-icon>
-      <ion-icon size="large" name="logo-electron"></ion-icon>
-      <ion-icon size="large" name="logo-ionic"></ion-icon>
+      <ion-icon size="large" name="logo-android" data-tooltip="Android" data-tooltip-pos="left center"></ion-icon>
+      <ion-icon size="large" name="logo-apple" data-tooltip="Apple" data-tooltip-pos="center top"></ion-icon>
+      <ion-icon size="large" name="logo-tux" data-tooltip="Linux" data-tooltip-pos="center bottom"></ion-icon>
+      <ion-icon size="large" name="logo-windows" data-tooltip="Windows"></ion-icon>
+      <ion-icon size="large" name="logo-firefox" data-tooltip="Firefox" data-tooltip-pos="center bottom"></ion-icon>
+      <ion-icon size="large" name="logo-chrome" data-tooltip="Chrome"></ion-icon>
+      <ion-icon size="large" name="logo-electron" data-tooltip="Electron" data-tooltip-pos="center bottom"></ion-icon>
+      <ion-icon size="large" name="logo-ionic" data-tooltip="Ionic" data-tooltip-pos="right center"></ion-icon>
     </ion-row>
   </ion-grid>
 </ion-footer>

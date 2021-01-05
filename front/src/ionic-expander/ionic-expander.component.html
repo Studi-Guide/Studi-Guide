@@ -1,14 +1,13 @@
 <ion-item class="ion-no-padding expand-header">
-  <ion-label *ngIf="!expanded" [textContent]="header">
-  </ion-label>
-  <ion-text *ngIf="expanded" [innerHTML]="header">
-  </ion-text>
+  <ion-text [innerHTML]="header"></ion-text>
   <ion-button slot="end" fill="clear" (click)="expand()">
     <ion-icon slot="icon-only" name="chevron-down-circle-outline" [class.expand-icon-rotate]="expanded"></ion-icon>
   </ion-button>
 </ion-item>
 <ion-label text-wrap>
   <div #expandWrapper class='expand-wrapper' [class.collapsed]="!expanded">
-    <ng-content></ng-content>
+    <div #expandContent>
+      <ng-content></ng-content>
+    </div>
   </div>
 </ion-label>
