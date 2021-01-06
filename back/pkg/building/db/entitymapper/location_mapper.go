@@ -5,7 +5,6 @@ import (
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/db/ent/building"
 	entcampus "studi-guide/pkg/building/db/ent/campus"
-	"studi-guide/pkg/building/db/ent/file"
 	"studi-guide/pkg/building/db/ent/location"
 	"studi-guide/pkg/building/db/ent/tag"
 	"studi-guide/pkg/navigation"
@@ -173,25 +172,9 @@ func (r *EntityMapper) AddLocation(l Location) error {
 		return err
 	}
 
-	var files []*ent.File
-	for _, i := range l.Images {
-		var f *ent.File
-		if q := r.client.File.Query().Where(file.PathEQ(i.Path)); q.ExistX(r.context) {
-			f, err = q.First(r.context)
-			if err != nil {
-				return err
-			}
-		} else {
-			f, err = r.client.File.Create().
-				SetName(i.Name).
-				SetPath(i.Path).
-				Save(r.context)
-			if err != nil {
-				return err
-			}
-		}
-
-		files = append(files, f)
+	files, err := r.fileMapper(l.Images)
+	if err != nil {
+		return err
 	}
 
 	loc, err := r.client.Location.Create().

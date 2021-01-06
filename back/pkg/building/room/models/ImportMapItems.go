@@ -2,6 +2,7 @@ package models
 
 import (
 	"studi-guide/pkg/building/db/entitymapper"
+	"studi-guide/pkg/file"
 	"studi-guide/pkg/navigation"
 )
 
@@ -29,4 +30,5 @@ type ImportMapItems struct {
 	Sections    []entitymapper.Section
 	Building    string
 	PathNodes   []ImportPathNode
+	Images      []file.File
 }
