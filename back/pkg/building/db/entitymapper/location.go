@@ -1,6 +1,9 @@
 package entitymapper
 
-import "studi-guide/pkg/navigation"
+import (
+	"studi-guide/pkg/file"
+	"studi-guide/pkg/navigation"
+)
 
 type Location struct {
 	Id          int
@@ -10,4 +13,5 @@ type Location struct {
 	Floor       string
 	Building    string
 	PathNode    navigation.PathNode
+	Images      []file.File
 }

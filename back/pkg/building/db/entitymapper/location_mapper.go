@@ -5,6 +5,7 @@ import (
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/db/ent/building"
 	entcampus "studi-guide/pkg/building/db/ent/campus"
+	"studi-guide/pkg/building/db/ent/file"
 	"studi-guide/pkg/building/db/ent/location"
 	"studi-guide/pkg/building/db/ent/tag"
 	"studi-guide/pkg/navigation"
@@ -42,6 +43,13 @@ func (r *EntityMapper) locationMapper(entLocation *ent.Location) *Location {
 	b, err := entLocation.Edges.BuildingOrErr()
 	if err == nil {
 		l.Building = b.Name
+	}
+
+	imgs, err := entLocation.Edges.ImagesOrErr()
+	if err == nil {
+		for _, i := range imgs {
+			l.Images = append(l.Images, r.mapFile(i))
+		}
 	}
 
 	return &l
@@ -145,7 +153,7 @@ func (r *EntityMapper) queryLocations(query *ent.LocationQuery) ([]Location, err
 
 func (r *EntityMapper) getLocationQuery() *ent.LocationQuery {
 	return r.client.Location.Query().
-		WithPathnode().WithBuilding().WithTags()
+		WithPathnode().WithBuilding().WithTags().WithImages()
 }
 
 func (r *EntityMapper) AddLocation(l Location) error {
@@ -165,12 +173,34 @@ func (r *EntityMapper) AddLocation(l Location) error {
 		return err
 	}
 
+	var files []*ent.File
+	for _, i := range l.Images {
+		var f *ent.File
+		if q := r.client.File.Query().Where(file.PathEQ(i.Path)); q.ExistX(r.context) {
+			f, err = q.First(r.context)
+			if err != nil {
+				return err
+			}
+		} else {
+			f, err = r.client.File.Create().
+				SetName(i.Name).
+				SetPath(i.Path).
+				Save(r.context)
+			if err != nil {
+				return err
+			}
+		}
+
+		files = append(files, f)
+	}
+
 	loc, err := r.client.Location.Create().
 		SetName(l.Name).
 		SetDescription(l.Description).
 		SetPathnode(pathNode).
 		SetBuilding(b).
 		SetFloor(l.Floor).
+		AddImages(files...).
 		Save(r.context)
 
 	if err != nil {

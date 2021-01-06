@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"studi-guide/pkg/building/db/entitymapper"
+	"studi-guide/pkg/file"
 	"studi-guide/pkg/navigation"
 )
 
@@ -36,6 +37,7 @@ type importLocation struct {
 	Floor       string
 	Building    string
 	PathNode    importPathNode
+	Images      []file.File
 }
 
 
@@ -82,6 +84,7 @@ func (r* JsonImporter) createRealLocations() error {
 				Group:          nil,
 				ConnectedNodes: nil,
 			},
+			Images: importLoc.Images,
 		}
 
 		for _, id := range importLoc.PathNode.ConnectedPathNodes {
