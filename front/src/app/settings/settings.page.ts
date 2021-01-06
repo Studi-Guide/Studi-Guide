@@ -3,7 +3,6 @@ import {AfterViewInit, Component, ViewChild} from '@angular/core';
 import { MoodleService } from '../services/moodle.service';
 import { MoodleToken } from '../moodle-objects-if';
 import {SettingsModel} from './settings.model';
-import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {IonToggle} from '@ionic/angular';
 
 @Component({
@@ -16,7 +15,7 @@ export class SettingsPage implements AfterViewInit {
   constructor(
       private storage: Storage,
       private moodleService: MoodleService,
-      private settingsModel: SettingsModel
+      public settingsModel: SettingsModel
   ) {}
 
   public isSignedIn: boolean;
@@ -78,6 +77,13 @@ export class SettingsPage implements AfterViewInit {
 
   public onDrawerDockingToggleChange(event: any) {
     this.settingsModel.DrawerDocking = event.detail.checked;
-    IonicBottomDrawerComponent.DrawerDocking = this.settingsModel.DrawerDocking;
+  }
+
+  public onDarkModeToggleChange(event: any) {
+    this.settingsModel.DarkMode = event.detail.checked;
+  }
+
+  public onAutoDarkModeToggleChange(event: any) {
+    this.settingsModel.AutoDarkMode = event.detail.checked;
   }
 }
