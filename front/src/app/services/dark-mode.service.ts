@@ -9,15 +9,20 @@ export class DarkModeService {
   private _isDarkMode = false;
   // tslint:disable-next-line:variable-name
   private _isAutoDarkMode = false;
+  private handler: (e) => void;
+  private prefersDark: MediaQueryList;
 
-  constructor() { }
+
+  constructor() {
+    this.prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+  }
 
   get isDarkMode(): boolean {
       return this._isDarkMode;
   }
 
   set isDarkMode(value: boolean) {
-      this.toggleDarkTheme(value);
+      this.setDarkTheme(value);
   }
 
   get isAutoDarkMode(): boolean {
@@ -25,30 +30,26 @@ export class DarkModeService {
   }
 
   enableAutoDarkMode() {
-    // Use matchMedia to check the user preference
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-
-    this.toggleDarkTheme(prefersDark.matches);
+    this.setDarkTheme(this.prefersDark.matches);
+    this.handler = function toggleDarkTheme(e) {
+        document.body.classList.toggle('dark', e.matches);
+    };
 
     // Listen for changes to the prefers-color-scheme media query
-    prefersDark.addListener(this.onThemeChanged);
+    this. prefersDark.addListener(this.handler);
     this._isAutoDarkMode = true;
   }
 
   disableAutoDarkMode() {
-    // Use matchMedia to check the user preference
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    // Listen for changes to the prefers-color-scheme media query
-    prefersDark.removeListener(this.onThemeChanged);
+    this.prefersDark.removeListener(this.handler);
     this._isAutoDarkMode = false;
+    this._isDarkMode = this.prefersDark.matches;
   }
 
-  private toggleDarkTheme(shouldAdd) {
-    document.body.classList.toggle('dark', shouldAdd);
-    this._isDarkMode = shouldAdd;
-  }
-
-  private onThemeChanged(mediaQuery: MediaQueryListEvent) {
-    this.toggleDarkTheme(mediaQuery.matches);
+  private setDarkTheme(enable: boolean) {
+    if (this._isDarkMode !== enable) {
+      document.body.classList.toggle('dark', enable);
+      this._isDarkMode = enable;
+    }
   }
 }

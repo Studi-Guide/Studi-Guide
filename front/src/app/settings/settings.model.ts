@@ -13,7 +13,8 @@ export class SettingsModel {
 
     constructor(private storage: Storage, private darkMode: DarkModeService) {
         this.storage.get(SettingsModel.settingsKey).then(v => {
-            this.entity = JSON.parse(v) as SettingsEntity ?? new SettingsEntity();
+            this.entity = Object.assign(new SettingsEntity(), JSON.parse(v));
+
             IonicBottomDrawerComponent.DrawerDocking = this.entity.DrawerDocking;
             if (this.entity.AutoDarkMode) {
                 darkMode.enableAutoDarkMode();
