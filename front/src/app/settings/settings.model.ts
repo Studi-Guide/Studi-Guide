@@ -14,13 +14,13 @@ export class SettingsModel {
         return IonicBottomDrawerComponent.DrawerDocking;
     }
 
-    public set DrawerDocking(value:boolean) {
+    public set DrawerDocking(value: boolean) {
         IonicBottomDrawerComponent.DrawerDocking = value;
         // this.storage... persist setting
         this.persist();
     }
 
-    constructor(private storage:Storage) {
+    constructor(private storage: Storage) {
         this.storage.get(SettingsModel.settingsKey).then(v => {
             const settings = JSON.parse(v);
             if (settings === null) {
@@ -29,7 +29,7 @@ export class SettingsModel {
             } else {
                 IonicBottomDrawerComponent.DrawerDocking = settings.DrawerDocking;
             }
-        })
+        });
     }
 
     private persist() {
