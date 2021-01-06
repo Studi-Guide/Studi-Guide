@@ -50,6 +50,27 @@
       <ion-label i18n="Settings|DrawerDocking">Drawer Docking</ion-label>
       <ion-toggle #DrawerDockingToggle (ionChange)="onDrawerDockingToggleChange($event)"></ion-toggle>
     </ion-item>
+    <ion-item>
+      <ion-icon name=""></ion-icon>
+      <ion-icon slot="end"
+                color="dark"
+                name="information-circle-outline"
+                data-tooltip="Device Dark Mode "
+                data-tooltip-pos="left center"
+      ></ion-icon>
+      <ion-label i18n="Settings|AutoDarkMode">Auto Dark Mode</ion-label>
+      <ion-toggle [checked]="settingsModel.AutoDarkMode" (ionChange)="onAutoDarkModeToggleChange($event)"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-icon slot="end"
+                color="dark"
+                name="information-circle-outline"
+                data-tooltip="Dark Mode"
+                data-tooltip-pos="left center"
+      ></ion-icon>
+      <ion-label i18n="Settings|DarkMode">Dark Mode</ion-label>
+      <ion-toggle [disabled]="settingsModel.AutoDarkMode" [checked]="settingsModel.DarkMode" (ionChange)="onDarkModeToggleChange($event)"></ion-toggle>
+    </ion-item>
 
   </ion-list>
 </ion-content>
