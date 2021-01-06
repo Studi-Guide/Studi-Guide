@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import {SettingsModel} from './settings/settings.model';
 import {Plugins, StatusBarStyle} from '@capacitor/core';
-import {DarkModeService} from './services/dark-mode.service';
 const { SplashScreen, StatusBar} = Plugins;
 
 @Component({
@@ -27,10 +26,4 @@ export class AppComponent {
       });
     }
   }
-
-  private initializeDarkMode() {
-
-  }
-
-
 }
