@@ -15,7 +15,7 @@
     "Images": [
       {
         "Name": "Ausweisvalidierungsautomat",
-        "Path": "/validierungs-automat.png"
+        "Path": "/images/validierungs-automat.png"
       }
     ]
   },
@@ -35,7 +35,7 @@
     "Images": [
       {
         "Name": "Aufladeautomat",
-        "Path": "/auflade-automat.jpg"
+        "Path": "/images/auflade-automat.jpg"
       }
     ]
   },
@@ -55,7 +55,7 @@
     "Images": [
       {
         "Name": "Aufladeautomat",
-        "Path": "/auflade-automat.jpg"
+        "Path": "/images/auflade-automat.jpg"
       }
     ]
   },
@@ -93,7 +93,7 @@
     "Images": [
       {
         "Name": "Lernraum",
-        "Path": "/lernraum.jpg"
+        "Path": "/images/lernraum.jpg"
       }
     ]
   },
@@ -114,7 +114,7 @@
     "Images": [
       {
         "Name": "Lernraum",
-        "Path": "/lernraum.jpg"
+        "Path": "/images/lernraum.jpg"
       }
     ]
   },
@@ -135,7 +135,7 @@
     "Images": [
       {
         "Name": "Lernraum",
-        "Path": "/lernraum.jpg"
+        "Path": "/images/lernraum.jpg"
       }
     ]
   },

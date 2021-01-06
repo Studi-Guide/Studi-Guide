@@ -4356,6 +4356,20 @@
     ],
     "tags": ["Professor Holz"],
     "description": "Leiter Institut für angewandte Nahkampftechniken\nProfessor Holz",
+    "images": [
+      {
+        "Name": "Harald Holz",
+        "Path": "/images/harald-holz.png"
+      },
+      {
+        "Name": "Nunchaku",
+        "Path": "/images/prof-holz-nunchaku.jpeg"
+      },
+      {
+        "Name": "Mein Professur Holz",
+        "Path": "/images/prof-holz.jpg"
+      }
+    ],
     "pathNodes": [
       {
         "Id": 206,

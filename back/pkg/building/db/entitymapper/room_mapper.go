@@ -193,12 +193,19 @@ func (r *EntityMapper) storeRooms(rooms []Room) error {
 			continue
 		}
 
+		imgs, err := r.fileMapper(rm.Location.Images)
+		if err != nil {
+			errorStr = append(errorStr, err.Error()+" "+strconv.Itoa(rm.Id))
+			continue
+		}
+
 		entLocation, err := r.client.Location.Create().
 			SetName(rm.Location.Name).
 			SetDescription(rm.Location.Description).
 			SetPathnode(entNode).
 			SetBuilding(entBuilding).
 			SetFloor(rm.Location.Floor).
+			AddImages(imgs...).
 			Save(r.context)
 
 		if err != nil {
