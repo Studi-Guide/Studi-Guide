@@ -1,9 +1,9 @@
 package env
 
 import (
+	"github.com/asaskevich/govalidator"
 	"github.com/gin-gonic/gin"
 	"log"
-	"net/url"
 	"os"
 	"regexp"
 	"strings"
@@ -68,16 +68,9 @@ func NewEnv() *Env {
 	}
 
 	if len(env.assetStorage) > 0 {
-		_, err := url.ParseRequestURI(env.assetStorage)
-		if err != nil {
-			log.Println("validation of asset storage uri failed", err.Error(), ", going on without asset storage.")
+		if !govalidator.IsURL(env.assetStorage) {
+			log.Println("validation of asset storage uri failed, going on without asset storage.")
 			env.assetStorage = ""
-		} else {
-			u, err := url.Parse(env.assetStorage)
-			if err != nil || u.Scheme == "" || u.Host == "" {
-				log.Println("validation of asset storage url failed, going on without asset storage.")
-				env.assetStorage = ""
-			}
 		}
 
 		if strings.HasSuffix(env.assetStorage, "/") {
