@@ -70,12 +70,14 @@ func NewEnv() *Env {
 	if len(env.assetStorage) > 0 {
 		_, err := url.ParseRequestURI(env.assetStorage)
 		if err != nil {
-			log.Fatal("validation of asset storage uri failed", err.Error())
-		}
-
-		u, err := url.Parse(env.assetStorage)
-		if err != nil || u.Scheme == "" || u.Host == "" {
-			log.Fatal("validation of asset storage url failed")
+			log.Println("validation of asset storage uri failed", err.Error(), ", going on without asset storage.")
+			env.assetStorage = ""
+		} else {
+			u, err := url.Parse(env.assetStorage)
+			if err != nil || u.Scheme == "" || u.Host == "" {
+				log.Println("validation of asset storage url failed, going on without asset storage.")
+				env.assetStorage = ""
+			}
 		}
 
 		if strings.HasSuffix(env.assetStorage, "/") {
