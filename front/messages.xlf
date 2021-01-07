@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="38eec8cc82959bcbb7c76c9e73880c183bf5b1cf" datatype="html">
         <source>Navigation</source>
@@ -65,29 +65,11 @@
         <note priority="1" from="description">Navigate to Language Selection</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
-      <trans-unit id="38eca8ed965ed27304f3e8f5505492248159100b" datatype="html">
-        <source>Help</source>
+      <trans-unit id="593abd94e84bbbe729cbc30f3c04353b2593ebc8" datatype="html">
+        <source><x id="START_TAG_ION_ICON" ctype="x-ion_icon" equiv-text="&lt;ion-icon slot=&quot;end&quot; name=&quot;moon&quot;&gt;"/><x id="CLOSE_TAG_ION_ICON" ctype="x-ion_icon" equiv-text="&lt;/ion-icon&gt;"/><x id="START_TAG_ION_LABEL" ctype="x-ion_label" equiv-text="&lt;ion-label&gt;"/>Appearance<x id="CLOSE_TAG_ION_LABEL" ctype="x-ion_label" equiv-text="&lt;/ion-label&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">38</context>
-        </context-group>
-        <note priority="1" from="description">Help</note>
-        <note priority="1" from="meaning">Settings</note>
-      </trans-unit>
-      <trans-unit id="e3ac5f8fae66ee7d38924f267b57dbc2ae4d16d8" datatype="html">
-        <source>About</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">42</context>
-        </context-group>
-        <note priority="1" from="description">About</note>
-        <note priority="1" from="meaning">Settings</note>
-      </trans-unit>
-      <trans-unit id="6f9efeb97ca29ce45cc80b9c62684ad97084d312" datatype="html">
-        <source><x id="START_TAG_ION_LABEL" ctype="x-ion_label" equiv-text="&lt;ion-label&gt;"/>Appearance<x id="CLOSE_TAG_ION_LABEL" ctype="x-ion_label" equiv-text="&lt;/ion-label&gt;"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="linenumber">37,38</context>
         </context-group>
         <note priority="1" from="description">Appearance</note>
         <note priority="1" from="meaning">Settings</note>
@@ -96,9 +78,27 @@
         <source>Drawer Docking</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">54</context>
+          <context context-type="linenumber">47</context>
         </context-group>
         <note priority="1" from="description">DrawerDocking</note>
+        <note priority="1" from="meaning">Settings</note>
+      </trans-unit>
+      <trans-unit id="38eca8ed965ed27304f3e8f5505492248159100b" datatype="html">
+        <source>Help</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+        <note priority="1" from="description">Help</note>
+        <note priority="1" from="meaning">Settings</note>
+      </trans-unit>
+      <trans-unit id="e3ac5f8fae66ee7d38924f267b57dbc2ae4d16d8" datatype="html">
+        <source>About</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
+          <context context-type="linenumber">56</context>
+        </context-group>
+        <note priority="1" from="description">About</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
       <trans-unit id="3149bc3f0a5c01aac3807ac5700243e6877464b2" datatype="html">
@@ -159,7 +159,7 @@
         <source>System</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">14</context>
         </context-group>
         <note priority="1" from="description">System</note>
         <note priority="1" from="meaning">Appearance</note>
@@ -168,7 +168,7 @@
         <source>Light</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">18</context>
         </context-group>
         <note priority="1" from="description">Light</note>
         <note priority="1" from="meaning">Appearance</note>
@@ -177,7 +177,7 @@
         <source>Dark</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">22</context>
         </context-group>
         <note priority="1" from="description">Dark</note>
         <note priority="1" from="meaning">Appearance</note>
