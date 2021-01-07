@@ -99,3 +99,35 @@ func Test_NewEnv_3(t *testing.T) {
 		t.Error("expected no bounds")
 	}
 }
+
+func TestNewEnv_4(t *testing.T) {
+	storage := "https://some.url.de/path/"
+
+	os.Setenv(assetStorage, storage)
+
+	env := NewEnv()
+
+	if env.AssetStorage() != storage[:len(storage)-1] {
+		t.Error("expected asset storage to be set")
+	}
+
+	storage = "/xyz/"
+
+	os.Setenv(assetStorage, storage)
+
+	env = NewEnv()
+
+	if len(env.assetStorage) != 0 {
+		t.Error("expected asset storage string to be empty")
+	}
+
+	storage = "jklasdfja fasdklfjdghäöüüüüüüüüüü &&&&&& §§§§§"
+
+	os.Setenv(assetStorage, storage)
+
+	env = NewEnv()
+
+	if len(env.assetStorage) != 0 {
+		t.Error("expected asset storage string to be empty")
+	}
+}

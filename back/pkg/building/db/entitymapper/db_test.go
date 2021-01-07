@@ -11,6 +11,7 @@ import (
 	"strconv"
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/env"
+	"studi-guide/pkg/file"
 	"studi-guide/pkg/navigation"
 	"testing"
 )
@@ -169,7 +170,7 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 		SetLongitude(11.5797).
 		AddAddress(address).Save(ctx)
 
-	dbService := EntityMapper{client: client, table: "", context: ctx}
+	dbService := EntityMapper{client: client, env: env.NewEnv(), context: ctx}
 
 	return &dbService, drv.DB()
 }
@@ -636,6 +637,42 @@ func TestEntityMapper_AddLocation(t *testing.T) {
 	if err := dbService.AddLocation(loc); err != nil {
 		t.Error(err)
 	}
+
+	loc.Name = "anothernother location"
+	loc.Id = 997
+	loc.PathNode.Id = 1113
+	loc.PathNode.ConnectedNodes = append(loc.PathNode.ConnectedNodes, &navigation.PathNode{
+		Id:             1112,
+		Coordinate:     navigation.Coordinate{},
+		Group:          nil,
+		ConnectedNodes: nil,
+	})
+	loc.Images = append(loc.Images, file.File{
+		Name: "myfile.png",
+		Path: "/file.png",
+	})
+
+	if err := dbService.AddLocation(loc); err != nil {
+		t.Error(err)
+	}
+
+	loc.Name = "bla location"
+	loc.Id = 996
+	loc.PathNode.Id = 1114
+	loc.PathNode.ConnectedNodes = append(loc.PathNode.ConnectedNodes, &navigation.PathNode{
+		Id:             1113,
+		Coordinate:     navigation.Coordinate{},
+		Group:          nil,
+		ConnectedNodes: nil,
+	})
+	loc.Images = append(loc.Images, file.File{
+		Name: "myfile.png",
+		Path: "/file.png",
+	})
+
+	if err := dbService.AddLocation(loc); err != nil {
+		t.Error(err)
+	}
 }
 
 func TestEntityService_GetAllMapItems(t *testing.T) {
@@ -934,5 +971,22 @@ func TestEntityMapper_AddRssFeed_InvalidAddress(t *testing.T) {
 	err := dbService.AddRssFeed(testfeed)
 	if err == nil {
 		t.Error("expected error got: ", nil)
+	}
+}
+
+func TestEntityMapper_mapFile(t *testing.T) {
+	entL := ent.File{
+		ID:    0,
+		Name:  "Name of File",
+		Path:  "/Path/to/file",
+		Edges: ent.FileEdges{},
+	}
+
+	dbService, _ := setupTestRoomDbService()
+
+	f := dbService.mapFile(&entL)
+
+	if f.Name != entL.Name || f.Path != entL.Path {
+		t.Error("map file test failed, name or path not equal")
 	}
 }

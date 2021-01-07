@@ -11,7 +11,13 @@
         3241
       ],
       "X": 240, "Y": 460, "Z": 3
-    }
+    },
+    "Images": [
+      {
+        "Name": "Ausweisvalidierungsautomat",
+        "Path": "/images/validierungs-automat.png"
+      }
+    ]
   },
   {
     "Name": "Aufladeautomat KA 3. OG",
@@ -25,7 +31,13 @@
         3241
       ],
       "X": 240, "Y": 455, "Z": 3
-    }
+    },
+    "Images": [
+      {
+        "Name": "Aufladeautomat",
+        "Path": "/images/auflade-automat.jpg"
+      }
+    ]
   },
   {
     "Name": "Aufladeautomat EG",
@@ -39,7 +51,13 @@
         900014
       ],
       "X": 225, "Y": 185, "Z": 0
-    }
+    },
+    "Images": [
+      {
+        "Name": "Aufladeautomat",
+        "Path": "/images/auflade-automat.jpg"
+      }
+    ]
   },
   {
     "Name": "Lernraum EG",
@@ -54,11 +72,13 @@
         9342
       ],
       "X": 195, "Y": 700, "Z": 0
-    }
+    },
+    "Images": [
+    ]
   },
   {
     "Name": "Lernraum 1. OG",
-    "Description": "Raum zum Lernen im Erdgeschoss",
+    "Description": "Raum zum Lernen im 1. OG",
     "Tags":        ["lernen"],
     "Floor":       "1",
     "Building":    "KA",
@@ -69,11 +89,17 @@
         1342
       ],
       "X": 195, "Y": 700, "Z": 1
-    }
+    },
+    "Images": [
+      {
+        "Name": "Lernraum",
+        "Path": "/images/lernraum.jpg"
+      }
+    ]
   },
   {
     "Name": "Lernraum 2. OG",
-    "Description": "Raum zum Lernen im Erdgeschoss",
+    "Description": "Raum zum Lernen im 2. OG",
     "Tags":        ["lernen"],
     "Floor":       "2",
     "Building":    "KA",
@@ -84,11 +110,17 @@
         2342
       ],
       "X": 195, "Y": 700, "Z": 2
-    }
+    },
+    "Images": [
+      {
+        "Name": "Lernraum",
+        "Path": "/images/lernraum.jpg"
+      }
+    ]
   },
   {
     "Name": "Lernraum 3. OG",
-    "Description": "Raum zum Lernen im Erdgeschoss",
+    "Description": "Raum zum Lernen im 3. OG",
     "Tags":        ["lernen"],
     "Floor":       "3",
     "Building":    "KA",
@@ -99,7 +131,13 @@
         3342
       ],
       "X": 195, "Y": 700, "Z": 3
-    }
+    },
+    "Images": [
+      {
+        "Name": "Lernraum",
+        "Path": "/images/lernraum.jpg"
+      }
+    ]
   },
   {
     "Name": "Studienservice",

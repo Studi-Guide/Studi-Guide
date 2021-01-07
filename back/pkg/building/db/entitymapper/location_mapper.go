@@ -44,6 +44,13 @@ func (r *EntityMapper) locationMapper(entLocation *ent.Location) *Location {
 		l.Building = b.Name
 	}
 
+	imgs, err := entLocation.Edges.ImagesOrErr()
+	if err == nil {
+		for _, i := range imgs {
+			l.Images = append(l.Images, r.mapFile(i))
+		}
+	}
+
 	return &l
 }
 
@@ -145,7 +152,7 @@ func (r *EntityMapper) queryLocations(query *ent.LocationQuery) ([]Location, err
 
 func (r *EntityMapper) getLocationQuery() *ent.LocationQuery {
 	return r.client.Location.Query().
-		WithPathnode().WithBuilding().WithTags()
+		WithPathnode().WithBuilding().WithTags().WithImages()
 }
 
 func (r *EntityMapper) AddLocation(l Location) error {
@@ -165,12 +172,18 @@ func (r *EntityMapper) AddLocation(l Location) error {
 		return err
 	}
 
+	files, err := r.fileMapper(l.Images)
+	if err != nil {
+		return err
+	}
+
 	loc, err := r.client.Location.Create().
 		SetName(l.Name).
 		SetDescription(l.Description).
 		SetPathnode(pathNode).
 		SetBuilding(b).
 		SetFloor(l.Floor).
+		AddImages(files...).
 		Save(r.context)
 
 	if err != nil {
