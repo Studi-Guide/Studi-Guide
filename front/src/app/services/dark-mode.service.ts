@@ -47,9 +47,7 @@ export class DarkModeService {
   }
 
   private setDarkTheme(enable: boolean) {
-    if (this._isDarkMode !== enable) {
       document.body.classList.toggle('dark', enable);
       this._isDarkMode = enable;
-    }
   }
 }

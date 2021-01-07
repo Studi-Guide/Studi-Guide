@@ -78,12 +78,4 @@ export class SettingsPage implements AfterViewInit {
   public onDrawerDockingToggleChange(event: any) {
     this.settingsModel.DrawerDocking = event.detail.checked;
   }
-
-  public onDarkModeToggleChange(event: any) {
-    this.settingsModel.DarkMode = event.detail.checked;
-  }
-
-  public onAutoDarkModeToggleChange(event: any) {
-    this.settingsModel.AutoDarkMode = event.detail.checked;
-  }
 }

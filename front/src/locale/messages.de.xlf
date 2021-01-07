@@ -172,6 +172,46 @@
         <note priority="1" from="description">DrawerDocking</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
+      <trans-unit id="1edc8b24c18f495f13f116bd42b3ade124b93f48" datatype="html">
+        <source>Select Appearance</source>
+        <target>Auswahl Darstellung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <note priority="1" from="description">Select Appearance</note>
+        <note priority="1" from="meaning">Appearance</note>
+      </trans-unit>
+      <trans-unit id="947b393e1e409c930df4857cf91075af77c5b354" datatype="html">
+        <source>Dark</source>
+        <target>Dunkel (DarkMode)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <note priority="1" from="description">Dark</note>
+        <note priority="1" from="meaning">Appearance</note>
+      </trans-unit>
+      <trans-unit id="3cc73d43688ba9cd210df5ad4c795bfb29799b07" datatype="html">
+        <source>Light</source>
+        <target>Hell</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <note priority="1" from="description">Light</note>
+        <note priority="1" from="meaning">Appearance</note>
+      </trans-unit>
+      <trans-unit id="bf966718c45207ffb29f0530b27567c2f3fedf71" datatype="html">
+        <source>System</source>
+        <target>System</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <note priority="1" from="description">System</note>
+        <note priority="1" from="meaning">Appearance</note>
+      </trans-unit>
     </body>
   </file>
 </xliff>
