@@ -24,7 +24,7 @@ export class SettingsPage implements AfterViewInit {
 
   private readonly MOODLE_TOKEN = 'moodle_token';
   private readonly MOODLE_USER = 'moodle_user';
-
+  public appearance: string;
   @ViewChild('DrawerDockingToggle') drawerDockingToggle: IonToggle;
 
   actionSheetOptions: any = {
@@ -33,6 +33,11 @@ export class SettingsPage implements AfterViewInit {
 
   ngAfterViewInit() {
     this.drawerDockingToggle.checked = this.settingsModel.DrawerDocking;
+  }
+
+  public get Appearance() {
+    return this.settingsModel.AutoDarkMode ? 'System' :
+        (this.settingsModel.DarkMode ? 'Dark' : 'Light');
   }
 
   async ionViewWillEnter() {
