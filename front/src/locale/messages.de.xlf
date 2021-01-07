@@ -126,20 +126,30 @@
         <note priority="1" from="description">Header</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
-      <trans-unit id="8943e53641a04eb7defe5a7e15698f4924c59196" datatype="html">
+      <trans-unit id="a4ca0895b1eb6a25c7e7f4fbc3808fd05e15ab4e" datatype="html">
         <source>
-      <x id="START_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;ion-label&gt;"/>Language<x id="CLOSE_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;/ion-label&gt;"/>
-      <x id="START_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;ion-note&gt;"/>English<x id="CLOSE_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;/ion-note&gt;"/>
-    </source>
+          <x id="START_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;ion-label&gt;"/>Language<x id="CLOSE_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;/ion-label&gt;"/>
+          <x id="START_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;ion-note&gt;"/>English<x id="CLOSE_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;/ion-note&gt;"/>
+        </source>
         <target>
-      <x id="START_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;ion-label&gt;"/>Sprache<x id="CLOSE_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;/ion-label&gt;"/>
-      <x id="START_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;ion-note&gt;"/>Deutsch<x id="CLOSE_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;/ion-note&gt;"/>
-    </target>
+          <x id="START_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;ion-label&gt;"/>Sprache<x id="CLOSE_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;/ion-label&gt;"/>
+          <x id="START_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;ion-note&gt;"/>Deutsch<x id="CLOSE_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;/ion-note&gt;"/>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">33,34</context>
         </context-group>
         <note priority="1" from="description">Navigate to Language Selection</note>
+        <note priority="1" from="meaning">Settings</note>
+      </trans-unit>
+      <trans-unit id="6ec655cefb257488df55ae0cdc01eacb0157f4cc" datatype="html">
+        <source>Appearance</source>
+        <target>Darstellung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+        <note priority="1" from="description">Appearance</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
       <trans-unit id="38eca8ed965ed27304f3e8f5505492248159100b" datatype="html">

@@ -65,11 +65,11 @@
         <note priority="1" from="description">Navigate to Language Selection</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
-      <trans-unit id="593abd94e84bbbe729cbc30f3c04353b2593ebc8" datatype="html">
-        <source><x id="START_TAG_ION_ICON" ctype="x-ion_icon" equiv-text="&lt;ion-icon slot=&quot;end&quot; name=&quot;moon&quot;&gt;"/><x id="CLOSE_TAG_ION_ICON" ctype="x-ion_icon" equiv-text="&lt;/ion-icon&gt;"/><x id="START_TAG_ION_LABEL" ctype="x-ion_label" equiv-text="&lt;ion-label&gt;"/>Appearance<x id="CLOSE_TAG_ION_LABEL" ctype="x-ion_label" equiv-text="&lt;/ion-label&gt;"/></source>
+      <trans-unit id="6ec655cefb257488df55ae0cdc01eacb0157f4cc" datatype="html">
+        <source>Appearance</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">37,38</context>
+          <context context-type="linenumber">37</context>
         </context-group>
         <note priority="1" from="description">Appearance</note>
         <note priority="1" from="meaning">Settings</note>
@@ -128,24 +128,6 @@
         <note priority="1" from="description">missing place request</note>
         <note priority="1" from="meaning">search error</note>
       </trans-unit>
-      <trans-unit id="6729329861748a1ac918658f7871a97414091deb" datatype="html">
-        <source>Select Language</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
-        <note priority="1" from="description">Header</note>
-        <note priority="1" from="meaning">Select Language</note>
-      </trans-unit>
-      <trans-unit id="b47b79397919ae72f70bdc7252be4e238da67d8d" datatype="html">
-        <source><x id="START_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;ion-item href=&quot;/en&quot;&gt;"/>English<x id="CLOSE_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;/ion-item&gt;"/><x id="START_TAG_ION_ITEM_1" ctype="x-ion_item_1" equiv-text="&lt;ion-item href=&quot;/de&quot;&gt;"/>German<x id="CLOSE_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;/ion-item&gt;"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
-          <context context-type="linenumber">11,12</context>
-        </context-group>
-        <note priority="1" from="description">Languages</note>
-        <note priority="1" from="meaning">Select Language</note>
-      </trans-unit>
       <trans-unit id="1edc8b24c18f495f13f116bd42b3ade124b93f48" datatype="html">
         <source>Select Appearance</source>
         <context-group purpose="location">
@@ -181,6 +163,24 @@
         </context-group>
         <note priority="1" from="description">Dark</note>
         <note priority="1" from="meaning">Appearance</note>
+      </trans-unit>
+      <trans-unit id="6729329861748a1ac918658f7871a97414091deb" datatype="html">
+        <source>Select Language</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <note priority="1" from="description">Header</note>
+        <note priority="1" from="meaning">Select Language</note>
+      </trans-unit>
+      <trans-unit id="b47b79397919ae72f70bdc7252be4e238da67d8d" datatype="html">
+        <source><x id="START_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;ion-item href=&quot;/en&quot;&gt;"/>English<x id="CLOSE_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;/ion-item&gt;"/><x id="START_TAG_ION_ITEM_1" ctype="x-ion_item_1" equiv-text="&lt;ion-item href=&quot;/de&quot;&gt;"/>German<x id="CLOSE_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;/ion-item&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+        <note priority="1" from="description">Languages</note>
+        <note priority="1" from="meaning">Select Language</note>
       </trans-unit>
     </body>
   </file>
