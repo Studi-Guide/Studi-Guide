@@ -7,51 +7,56 @@
 </ion-header>
 
 <ion-content>
-  <div class="padding">
-    <ion-list-header>Accounts</ion-list-header>
-    <ion-list lines="none">
-      <ion-item routerLink="{{ isSignedIn ? '/tabs/settings' : '/tabs/schedule' }}">
-        <ion-avatar slot="start">
-          <ion-icon size="large" name="person-circle-sharp"></ion-icon>
-        </ion-avatar>
-        <ion-label>
-          <h3>Moodle</h3>
-          <p [innerHTML]="moodleUserName"></p>
-        </ion-label>
-        <ion-select *ngIf="isSignedIn" (ionChange)="logoutFromMoodle()" selected-text=""
-                    interface="action-sheet" [interfaceOptions]="actionSheetOptions" mode="ios"
-        >
-          <ion-select-option id="moodle-logout" value="sign-out" selected-text="">sign out</ion-select-option>
-        </ion-select>
+  <ion-grid fixed>
+    <div class="padding">
+      <ion-list-header>Accounts</ion-list-header>
+      <ion-list lines="none">
+        <ion-item routerLink="{{ isSignedIn ? '/tabs/settings' : '/tabs/schedule' }}">
+          <ion-avatar slot="start">
+            <ion-icon size="large" name="person-circle-sharp"></ion-icon>
+          </ion-avatar>
+          <ion-label>
+            <h3>Moodle</h3>
+            <p [innerHTML]="moodleUserName"></p>
+          </ion-label>
+          <ion-select *ngIf="isSignedIn" (ionChange)="logoutFromMoodle()" selected-text=""
+                      interface="action-sheet" [interfaceOptions]="actionSheetOptions" mode="ios"
+          >
+            <ion-select-option id="moodle-logout" value="sign-out" selected-text="">sign out</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+    </div>
+    <hr>
+    <ion-list lines="" class="ion-padding-top ion-margin-top">
+      <ion-item i18n="Settings|Navigate to Language Selection" routerLink="language">
+        <ion-label>Language</ion-label>
+        <ion-note slot="end">English</ion-note>
+      </ion-item>
+      <ion-item routerLink="appearance">
+        <ion-label i18n="Settings|Appearance">Appearance</ion-label>
+        <ion-note [textContent]="Appearance" slot="end"></ion-note>
+      </ion-item>
+      <ion-item>
+        <ion-icon slot="end"
+                  color="dark"
+                  name="information-circle-outline"
+                  data-tooltip="Einrasten der Schublade Ein-/Ausschalten"
+                  data-tooltip-pos="left center"
+        ></ion-icon>
+        <ion-label i18n="Settings|DrawerDocking">Drawer Docking</ion-label>
+        <ion-toggle #DrawerDockingToggle (ionChange)="onDrawerDockingToggleChange($event)"></ion-toggle>
+      </ion-item>
+      <ion-item href="#">
+        <ion-icon slot="end" color="dark" name="help-circle-outline"></ion-icon>
+        <ion-label i18n="Settings|Help">Help</ion-label>
+      </ion-item>
+      <ion-item href="https://github.com/Studi-Guide" target="_blank">
+        <ion-icon slot="end" color="dark" name="information-circle-outline"></ion-icon>
+        <ion-label i18n="Settings|About">About</ion-label>
       </ion-item>
     </ion-list>
-  </div>
-  <hr>
-  <ion-list lines="" class="ion-padding-top ion-margin-top">
-    <ion-item i18n="Settings|Navigate to Language Selection" routerLink="language">
-      <ion-label>Language</ion-label>
-      <ion-note slot="end">English</ion-note>
-    </ion-item>
-    <ion-item href="#">
-      <ion-icon slot="end" color="dark" name="help-circle-outline"></ion-icon>
-      <ion-label i18n="Settings|Help">Help</ion-label>
-    </ion-item>
-    <ion-item href="https://github.com/Studi-Guide" target="_blank">
-      <ion-icon slot="end" color="dark" name="information-circle-outline"></ion-icon>
-      <ion-label i18n="Settings|About">About</ion-label>
-    </ion-item>
-    <ion-item>
-      <ion-icon slot="end"
-                color="dark"
-                name="information-circle-outline"
-                data-tooltip="Einrasten der Schublade Ein-/Ausschalten"
-                data-tooltip-pos="left center"
-      ></ion-icon>
-      <ion-label i18n="Settings|DrawerDocking">Drawer Docking</ion-label>
-      <ion-toggle #DrawerDockingToggle (ionChange)="onDrawerDockingToggleChange($event)"></ion-toggle>
-    </ion-item>
-
-  </ion-list>
+  </ion-grid>
 </ion-content>
 
 <ion-footer>

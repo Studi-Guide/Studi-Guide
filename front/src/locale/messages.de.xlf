@@ -126,20 +126,30 @@
         <note priority="1" from="description">Header</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
-      <trans-unit id="8943e53641a04eb7defe5a7e15698f4924c59196" datatype="html">
+      <trans-unit id="a4ca0895b1eb6a25c7e7f4fbc3808fd05e15ab4e" datatype="html">
         <source>
-      <x id="START_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;ion-label&gt;"/>Language<x id="CLOSE_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;/ion-label&gt;"/>
-      <x id="START_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;ion-note&gt;"/>English<x id="CLOSE_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;/ion-note&gt;"/>
-    </source>
+          <x id="START_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;ion-label&gt;"/>Language<x id="CLOSE_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;/ion-label&gt;"/>
+          <x id="START_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;ion-note&gt;"/>English<x id="CLOSE_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;/ion-note&gt;"/>
+        </source>
         <target>
-      <x id="START_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;ion-label&gt;"/>Sprache<x id="CLOSE_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;/ion-label&gt;"/>
-      <x id="START_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;ion-note&gt;"/>Deutsch<x id="CLOSE_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;/ion-note&gt;"/>
-    </target>
+          <x id="START_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;ion-label&gt;"/>Sprache<x id="CLOSE_TAG_ION-LABEL" ctype="x-ion-label" equiv-text="&lt;/ion-label&gt;"/>
+          <x id="START_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;ion-note&gt;"/>Deutsch<x id="CLOSE_TAG_ION-NOTE" ctype="x-ion-note" equiv-text="&lt;/ion-note&gt;"/>
+        </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">31</context>
+          <context context-type="linenumber">33,34</context>
         </context-group>
         <note priority="1" from="description">Navigate to Language Selection</note>
+        <note priority="1" from="meaning">Settings</note>
+      </trans-unit>
+      <trans-unit id="6ec655cefb257488df55ae0cdc01eacb0157f4cc" datatype="html">
+        <source>Appearance</source>
+        <target>Darstellung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+        <note priority="1" from="description">Appearance</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
       <trans-unit id="38eca8ed965ed27304f3e8f5505492248159100b" datatype="html">
@@ -171,6 +181,46 @@
         </context-group>
         <note priority="1" from="description">DrawerDocking</note>
         <note priority="1" from="meaning">Settings</note>
+      </trans-unit>
+      <trans-unit id="1edc8b24c18f495f13f116bd42b3ade124b93f48" datatype="html">
+        <source>Select Appearance</source>
+        <target>Auswahl Darstellung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <note priority="1" from="description">Select Appearance</note>
+        <note priority="1" from="meaning">Appearance</note>
+      </trans-unit>
+      <trans-unit id="947b393e1e409c930df4857cf91075af77c5b354" datatype="html">
+        <source>Dark</source>
+        <target>Dunkel (DarkMode)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+        <note priority="1" from="description">Dark</note>
+        <note priority="1" from="meaning">Appearance</note>
+      </trans-unit>
+      <trans-unit id="3cc73d43688ba9cd210df5ad4c795bfb29799b07" datatype="html">
+        <source>Light</source>
+        <target>Hell</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <note priority="1" from="description">Light</note>
+        <note priority="1" from="meaning">Appearance</note>
+      </trans-unit>
+      <trans-unit id="bf966718c45207ffb29f0530b27567c2f3fedf71" datatype="html">
+        <source>System</source>
+        <target>System</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+        <note priority="1" from="description">System</note>
+        <note priority="1" from="meaning">Appearance</note>
       </trans-unit>
     </body>
   </file>

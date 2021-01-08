@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { SettingsPage } from './settings.page';
 import {DetailViewSelectLanguageComponent} from '../detail-view-select-language/detail-view-select-language.component';
 import {DetailViewSelectLanguageModule} from '../detail-view-select-language/detail-view-select-language.module';
+import {DetailViewSelectAppearanceComponent} from './detail-view-select-appearance/detail-view-select-appearance.component';
 
 @NgModule({
     imports: [
@@ -14,10 +15,11 @@ import {DetailViewSelectLanguageModule} from '../detail-view-select-language/det
         FormsModule,
         RouterModule.forChild([
             {path: '', component: SettingsPage},
-            {path: 'language', component: DetailViewSelectLanguageComponent, }
+            {path: 'language', component: DetailViewSelectLanguageComponent, },
+            {path: 'appearance', component: DetailViewSelectAppearanceComponent, }
         ]),
         DetailViewSelectLanguageModule
     ],
-  declarations: [SettingsPage]
+  declarations: [SettingsPage, DetailViewSelectAppearanceComponent]
 })
 export class SettingsPageModule {}

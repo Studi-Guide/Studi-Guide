@@ -1,0 +1,31 @@
+<ion-header translucent>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+    </ion-buttons>
+    <ion-title i18n="Appearance|Select Appearance">Select Appearance</ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-grid fixed>
+    <ion-list>
+      <ion-radio-group [value]="selectedAppearance" (ionChange)="onAppearanceChanged($event)">
+        <ion-item>
+          <ion-label i18n="Appearance|System">System</ion-label>
+          <ion-radio slot="end" color="primary" value="system"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label i18n="Appearance|Light">Light</ion-label>
+          <ion-radio slot="end" color="primary" value="light"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label i18n="Appearance|Dark">Dark</ion-label>
+          <ion-radio slot="end" color="primary" value="dark"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+  </ion-grid>
+</ion-content>
+
+
+
