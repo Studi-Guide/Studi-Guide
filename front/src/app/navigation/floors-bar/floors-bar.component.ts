@@ -15,9 +15,7 @@ export class FloorsBarComponent implements OnInit, OnChanges {
 
   public availableFloors: string[];
 
-  constructor(private dataService: DataService) {
-    // this.hack();
-  }
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {}
 
@@ -26,7 +24,6 @@ export class FloorsBarComponent implements OnInit, OnChanges {
       const building = await this.dataService.get_building(this.currentBuilding).toPromise();
       this.availableFloors = building.Floors.reverse();
     }
-    // this.hack();
   }
 
   public async emitAnotherFloorToShow(index: number) {
@@ -36,19 +33,4 @@ export class FloorsBarComponent implements OnInit, OnChanges {
     });
     this.currentFloor = this.availableFloors[index];
   }
-
-  // private hack() {
-  //   this.currentFloor = '1';
-  //   this.currentBuilding = 'KA';
-  //   this.availableFloors = ['0',
-  //     '1',
-  //     '2',
-  //     '3',
-  //     '4',
-  //     '5',
-  //     '6',
-  //     '7',
-  //     '8',
-  //     '9'].reverse();
-  // }
 }
