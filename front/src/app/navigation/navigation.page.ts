@@ -1,8 +1,7 @@
-import {IBuilding, ILocation} from '../building-objects-if';
+import {ILocation} from '../building-objects-if';
 import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {IonContent, ModalController, Platform} from '@ionic/angular';
 import {DataService} from '../services/data.service';
-import {AvailableFloorsPage} from '../available-floors/available-floors.page';
 import {MapViewComponent} from './map-view/map-view.component';
 import {HttpErrorResponse} from '@angular/common/http';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -33,7 +32,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     public errorMessage: string;
     public availableCampus: CampusViewModel[] = [];
-    private isSubscripted = false;
+    private isSubscribed = false;
 
     constructor(private dataService: DataService,
                 private modalCtrl: ModalController,
@@ -43,15 +42,17 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 private  platform: Platform) {
     }
 
-    ngAfterViewInit(): void {
-        this.locationDrawer.SetState(DrawerState.Hidden);
-        this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    async ngAfterViewInit()  {
+        await Promise.all([
+            this.locationDrawer.SetState(DrawerState.Hidden),
+            this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice())
+        ]);
     }
 
     ionViewDidEnter() {
-        if (this.isSubscripted === false){
+        if (this.isSubscribed === false){
             // CanvasTouchHelper.RegisterPinch(this.renderer, this.canvasWrapper);
-            this.isSubscripted = true;
+            this.isSubscribed = true;
             this.route.queryParams.subscribe(async params => {
                 // discover requested location
                 if (params != null && params.location != null && params.location.length > 0) {
@@ -167,36 +168,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
         await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     }
 
-    async presentAvailableFloorModal() {
-        let floors = new Array<string>();
-
-        // STDG-138 discovery mode ... get all floor of all displayed buildings
-        let buildings = await this.dataService.get_buildings_search().toPromise<IBuilding[]>();
-        buildings = buildings.filter((n, i) => buildings.indexOf(n) === i);
-
-        for (const building of buildings) {
-            const buildingData = await this.dataService.get_building(building.Name).toPromise<IBuilding>();
-            floors = floors.concat(buildingData.Floors);
-        }
-
-        // distinct array
-        floors = floors.filter((n, i) => floors.indexOf(n) === i);
-
-        const availableFloorModal = await this.modalCtrl.create({
-            component: AvailableFloorsPage,
-            cssClass: 'floor-modal',
-            componentProps: {
-                floors
-            }
-        });
-        await availableFloorModal.present();
-
-        const data = await availableFloorModal.onDidDismiss();
-        if (data.data) {
-            await this.mapView.showAnotherFloorOfCurrentBuilding(data.data, this.mapView.CurrentBuilding);
-        }
-    }
-
     private handleInputError(ex, searchInput: string) {
         console.log(ex);
         if (ex instanceof HttpErrorResponse) {
@@ -264,5 +235,11 @@ export class NavigationPage implements OnInit, AfterViewInit{
 
     public get ProgressIsVisible(): boolean {
         return NavigationPage.progressIsVisible;
+    }
+
+    async onFloorChanged(event: any) {
+        this.searchInput.clearStartInput();
+        this.searchInput.clearDestinationInput();
+        await this.onCloseLocationDrawer(null);
     }
 }
