@@ -75,12 +75,11 @@
       </ion-grid>
 <!--    </ion-content>-->
     <div class="ion-padding-horizontal">
-      <div class="scroll-x-container">
-        <div class="scroll-img-container"><ion-img src="https://studiguide.blob.core.windows.net/images/harald-holz.png"></ion-img></div>
-        <div class="scroll-img-container"><ion-img src="https://studiguide.blob.core.windows.net/images/prof-holz.jpg"></ion-img></div>
-        <div class="scroll-img-container"><ion-img src="https://studiguide.blob.core.windows.net/images/prof-holz-nunchaku.jpeg"></ion-img></div>
-        <div class="scroll-img-container"><ion-img src="https://studiguide.blob.core.windows.net/images/harald-holz.png"></ion-img></div>
-      </div>
+      <app-ionic-horizontal-scrollable>
+        <div class="scroll-img-container" *ngFor="let i of this.model.latestSearchResult.Images">
+          <ion-img src="{{i.Path}}" alt="{{i.Name}}"></ion-img>
+        </div>
+      </app-ionic-horizontal-scrollable>
     </div>
   </div>
 </app-ionic-bottom-drawer>

@@ -28,13 +28,7 @@
   height: inherit;
 }
 
-.scroll-x-container {
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-.scroll-x-container>.scroll-img-container {
-  display: inline-block;
+.scroll-img-container {
   max-height: 300px;
   max-width: 200px;
 }
