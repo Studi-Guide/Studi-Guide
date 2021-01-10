@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { FloorButtonComponent } from './floor-button.component';
+import { FloorsBarComponent } from './floors-bar.component';
 
 describe('FloorButtonComponent', () => {
-  let component: FloorButtonComponent;
-  let fixture: ComponentFixture<FloorButtonComponent>;
+  let component: FloorsBarComponent;
+  let fixture: ComponentFixture<FloorsBarComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FloorButtonComponent ],
+      declarations: [ FloorsBarComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FloorButtonComponent);
+    fixture = TestBed.createComponent(FloorsBarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

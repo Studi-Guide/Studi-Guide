@@ -26,3 +26,9 @@ body {
 .draggable:active {
   cursor: grabbing;
 }
+
+floors-bar {
+  position: absolute;
+  top: 12px;
+  right: 0;
+}

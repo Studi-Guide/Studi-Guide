@@ -1,0 +1,13 @@
+<div class="level-control-container leaflet-control leaflet-bar olu-level-control-container-full leaflet-control-layers-list">
+  <div class="olu-level-control-levels">
+    <a class="olu-control-levels-building-header">
+      <span data-tooltip="Current Building" data-tooltip-pos="left top">{{this.currentBuilding}}</span>
+    </a>
+    <a *ngFor="let floor of availableFloors; let i = index;"
+       [class]="floor === this.currentFloor ? 'olu-level-control-button-lvl-current' : 'olu-level-control-button'"
+       (click)="emitAnotherFloorToShow(i)"
+    >
+      <span [innerHTML]="floor"></span>
+    </a>
+  </div>
+</div>
