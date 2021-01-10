@@ -1,0 +1,8 @@
+:host ::ng-deep .scroll-x-container > * {
+  display: inline-block;
+}
+
+.scroll-x-container {
+  overflow-x: auto;
+  white-space: nowrap;
+}
