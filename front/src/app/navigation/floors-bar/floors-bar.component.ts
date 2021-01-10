@@ -2,11 +2,11 @@ import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges
 import {DataService} from '../../services/data.service';
 
 @Component({
-  selector: 'app-floor-button',
-  templateUrl: './floor-button.component.html',
-  styleUrls: ['./floor-button.component.scss'],
+  selector: 'floors-bar',
+  templateUrl: './floors-bar.component.html',
+  styleUrls: ['./floors-bar.component.scss'],
 })
-export class FloorButtonComponent implements OnInit, OnChanges {
+export class FloorsBarComponent implements OnInit, OnChanges {
 
   @Input() currentBuilding: string;
   @Input() currentFloor: string;
@@ -22,7 +22,7 @@ export class FloorButtonComponent implements OnInit, OnChanges {
   async ngOnChanges(changes: SimpleChanges) {
     if (changes.currentBuilding !== undefined && this.currentBuilding !== undefined) {
       const building = await this.dataService.get_building(this.currentBuilding).toPromise();
-      this.availableFloors = building.Floors;
+      this.availableFloors = building.Floors.reverse();
     }
   }
 
