@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Output} from '@angular/core';
 import {DataService} from '../../services/data.service';
 import {CanvasResolutionConfigurator} from '../../services/CanvasResolutionConfigurator';
 import {ILocation, IMapItem, IPathNode} from '../../building-objects-if';
@@ -19,6 +19,17 @@ import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
   styleUrls: ['./map-view.component.scss'],
 })
 export class MapViewComponent implements AfterViewInit {
+
+  public get CurrentRoute(): IReceivedRoute {
+    return this.currentRoute;
+  }
+
+  public get CurrentBuilding(): string {
+    return this.currentBuilding;
+  }
+
+  constructor(private dataService: DataService) {
+  }
   public currentBuilding: string;
   private currentRoute: IReceivedRoute;
   public currentFloor: string;
@@ -32,16 +43,16 @@ export class MapViewComponent implements AfterViewInit {
 
   @Output() locationClick = new EventEmitter<ILocation>();
   @Output() mapScroll = new EventEmitter<any>();
+  @Output() floorChanged =  new EventEmitter<any>();
 
-  public get CurrentRoute(): IReceivedRoute {
-    return this.currentRoute;
-  }
+  private static calculateMovePosition(x: number, y: number) {
+    const element = document.getElementById('canvas-wrapper');
 
-  public get CurrentBuilding(): string {
-    return this.currentBuilding;
-  }
-
-  constructor(private dataService: DataService) {
+    const parentElement = element.parentElement.parentElement;
+    // TODO: Desktop hat andere params
+    const height = parentElement.clientHeight / 2;
+    const width = element.clientWidth / 2;
+    return {x: width - x, y: height - y};
   }
 
   ngAfterViewInit() {
@@ -333,21 +344,12 @@ export class MapViewComponent implements AfterViewInit {
     NavigationPage.progressIsVisible = true;
     await this.showFloor(floor, building);
     NavigationPage.progressIsVisible = false;
+    this.floorChanged.emit();
   }
 
   public CenterMap(x: number, y: number) {
-    const positionToMove = this.calulateMovePosition(x, y);
+    const positionToMove = MapViewComponent.calculateMovePosition(x, y);
     this.panZoomController.smoothMoveTo(positionToMove.x, positionToMove.y);
-  }
-
-  private calulateMovePosition(x: number, y: number) {
-    const element = document.getElementById('canvas-wrapper');
-
-    const parentElement = element.parentElement.parentElement;
-    // TODO: Desktop hat andere params
-    const height = parentElement.clientHeight / 2;
-    const width = element.clientWidth / 2;
-    return {x: width - x, y: height - y};
   }
 
   public MapSize(): DOMRect {

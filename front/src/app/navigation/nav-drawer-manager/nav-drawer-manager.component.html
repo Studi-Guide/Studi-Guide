@@ -9,7 +9,7 @@
                         (searchBarFocus)="onSearchFocus($event)" >
       </app-search-input>
     </div>
-    <ion-content #drawerContent>
+    <ion-content #drawerContent class="ion-item-style">
       <ion-list *ngIf="model.recentSearches.length > 0" class="ion-no-padding">
         <ion-list-header>
           <h2>Recent Searches</h2>
@@ -43,7 +43,7 @@
       <div class="nav-hbar"></div>
       <div class="ion-padding-bottom"></div>
     </div>
-    <ion-content >
+    <ion-content class="ion-item-style">
       <ion-grid id="locationdrawerContent" >
         <ion-row class="ion-justify-content-between ion-align-self-center">
           <ion-col>
@@ -84,32 +84,34 @@
       <div class="nav-hbar"></div>
       <div class="ion-padding-bottom"></div>
       <ion-progress-bar *ngIf="model.Route.Distance === 0" type="indeterminate"></ion-progress-bar>
-      <ion-grid>
-        <ion-row class="ion-justify-content-between ion-align-self-center">
-          <ion-col>
-            <ion-label><h1>To {{this.model.Route.Destination.Name}}</h1></ion-label>
-            <ion-text>From <span class="span-button" (click)="onChangeRouteStartEndClick()">{{this.model.Route.Start.Name}}</span></ion-text>
-          </ion-col>
-          <ion-col class="ion-justify-content-end ion-padding-horizontal">
-            <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseRouteDrawer()">
-              <ion-icon slot="icon-only" name="close-outline" size="small"></ion-icon>
-            </ion-button>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="model.Route.Distance !== 0">
-          <ion-col>
-            <ion-label><h2>{{this.model.Route.Time}} min</h2></ion-label>
-            <ion-text>{{this.model.Route.Distance}} m</ion-text>
-          </ion-col>
-          <ion-col>
-            <ion-button *ngIf="!UseDrawerForNavigation()" color="success" expand="block" (click)="onLaunchNavigationClick()">
-              Go
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ion-item class="ion-no-margin">
+        <ion-grid>
+          <ion-row class="ion-justify-content-between ion-align-self-center">
+            <ion-col>
+              <ion-label><h1>To {{this.model.Route.Destination.Name}}</h1></ion-label>
+              <ion-text>From <span class="span-button" (click)="onChangeRouteStartEndClick()">{{this.model.Route.Start.Name}}</span></ion-text>
+            </ion-col>
+            <ion-col class="ion-justify-content-end ion-padding-horizontal">
+              <ion-button class="square-sm ion-no-padding ion-float-right" shape="round" color="medium" (click)="onCloseRouteDrawer()">
+                <ion-icon slot="icon-only" name="close-outline" size="small"></ion-icon>
+              </ion-button>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="model.Route.Distance !== 0">
+            <ion-col>
+              <ion-label><h2>{{this.model.Route.Time}} min</h2></ion-label>
+              <ion-text>{{this.model.Route.Distance}} m</ion-text>
+            </ion-col>
+            <ion-col>
+              <ion-button *ngIf="!UseDrawerForNavigation()" color="success" expand="block" (click)="onLaunchNavigationClick()">
+                Go
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
     </div>
-    <ion-content>
+    <ion-content class="ion-item-style">
       <ion-list *ngIf="model.Route.Distance !== 0">
         <ion-item *ngFor="let i of model.Route.NavigationInstructions" button (click)="navInstructionClick.emit(i)">
           <ion-label>{{i.Text}}</ion-label>
@@ -130,19 +132,21 @@
       <div class="ion-padding-top"></div>
       <div class="nav-hbar"></div>
       <div class="ion-padding-bottom"></div>
-      <ion-grid>
-        <ion-row>
-          <ion-col>
-            <ion-label><h2>{{this.model.Route.Time}} min</h2></ion-label>
-            <ion-text>{{this.model.Route.Distance}} m</ion-text>
-          </ion-col>
-          <ion-col>
-            <ion-button color="danger" (click)="onEndNavigationClick()" expand="block">
-              End Route
-            </ion-button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ion-content class="ion-no-padding ion-item-style">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-label><h2>{{this.model.Route.Time}} min</h2></ion-label>
+              <ion-text>{{this.model.Route.Distance}} m</ion-text>
+            </ion-col>
+            <ion-col>
+              <ion-button color="danger" (click)="onEndNavigationClick()" expand="block">
+                End Route
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-content>
     </div>
   </div>
 </app-ionic-bottom-drawer>

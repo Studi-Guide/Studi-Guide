@@ -8,30 +8,29 @@ import {DataService} from '../../services/data.service';
 })
 export class FloorButtonComponent implements OnInit, OnChanges {
 
-  @Input() currentBuilding:string;
-  @Input() currentFloor:string;
+  @Input() currentBuilding: string;
+  @Input() currentFloor: string;
   @ViewChild('fab') fab;
   @Output() floorWithBuilding = new EventEmitter<object>();
 
-  public availableFloors:string[];
+  public availableFloors: string[];
 
-  constructor(private _dataService: DataService) {}
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {}
 
   async ngOnChanges(changes: SimpleChanges) {
     if (changes.currentBuilding !== undefined && this.currentBuilding !== undefined) {
-      const building = await this._dataService.get_building(this.currentBuilding).toPromise();
+      const building = await this.dataService.get_building(this.currentBuilding).toPromise();
       this.availableFloors = building.Floors;
     }
   }
 
-  public async emitAnotherFloorToShow(index:number) {
+  public async emitAnotherFloorToShow(index: number) {
     this.floorWithBuilding.emit({
       floor: this.availableFloors[index],
       building: this.currentBuilding
     });
     this.currentFloor = this.availableFloors[index];
   }
-
 }
