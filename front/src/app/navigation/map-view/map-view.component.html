@@ -1,8 +1,8 @@
 <div id="canvas-wrapper" class="draggable">
-    <app-floor-button [currentBuilding]="this.CurrentBuilding"
-                      [currentFloor]="this.currentFloor"
-                      (floorWithBuilding)="onFloorChangeByFloorButton($event)"
-    >
-    </app-floor-button>
     <canvas #map id="map" (click)="onClick($event)"></canvas>
 </div>
+<floors-bar [currentBuilding]="this.CurrentBuilding"
+            [currentFloor]="this.currentFloor"
+            (floorWithBuilding)="onFloorChangeByFloorButton($event)"
+>
+</floors-bar>

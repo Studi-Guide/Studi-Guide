@@ -8,7 +8,7 @@ import {SearchInputComponent} from './search-input/search-input.component';
 import {MapViewComponent} from './map-view/map-view.component';
 import {IonicBottomDrawerModule} from '../../ionic-bottom-drawer/ionic-bottom-drawer.module';
 import {MapPageComponent} from './map-page/map-page.component';
-import {FloorButtonComponent} from './floor-button/floor-button.component';
+import {FloorsBarComponent} from './floors-bar/floors-bar.component';
 import {NavigationInstructionSlidesComponent} from './navigation-instruction-slides/navigation-instruction-slides.component';
 import {NavDrawerManagerComponent} from './nav-drawer-manager/nav-drawer-manager.component';
 import {RouteInputComponent} from './nav-drawer-manager/route-input/route-input.component';
@@ -29,7 +29,7 @@ import {RouteInputComponent} from './nav-drawer-manager/route-input/route-input.
         SearchInputComponent,
         MapViewComponent,
         MapPageComponent,
-        FloorButtonComponent,
+        FloorsBarComponent,
         NavigationInstructionSlidesComponent,
         NavDrawerManagerComponent,
         RouteInputComponent
