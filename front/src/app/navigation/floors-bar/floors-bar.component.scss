@@ -1,0 +1,31 @@
+.olu-level-control-levels {
+  border-bottom: 0;
+  color: var(--ion-color-light, #f4f5f8) !important;
+  line-height: 150;
+}
+
+.olu-level-control-levels a {
+  width: 46px;
+  padding-bottom: 30px;
+  padding-top: 8px;
+}
+
+.olu-control-levels-building-header {
+  color: var(--ion-color-dark-contrast, #f4f5f8) !important;
+  background-color: var(--ion-color-dark, #222428) !important;
+  opacity: 0.7;
+}
+
+.olu-level-control-button {
+  background-color: var(--ion-color-primary, #3880ff) !important;
+  color: var(--ion-color-light, #f4f5f8) !important;
+  opacity: 0.7;
+  cursor: pointer;
+}
+
+.olu-level-control-button-lvl-current {
+  background-color: var(--ion-color-secondary, #3dc2ff) !important;
+  color: var(--ion-color-dark, #222428) !important;
+  opacity: 0.7;
+  cursor: pointer;
+}

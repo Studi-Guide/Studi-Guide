@@ -11,8 +11,8 @@ export class SearchInputComponent implements OnInit {
   @Output() route = new EventEmitter<string[]>();
   @Output() searchBarFocus = new EventEmitter<string>();
 
-  @ViewChild('destinationSearchbar') destinationSearchbar : HTMLIonSearchbarElement;
-  @ViewChild('startSearchBar') startSearchBar : HTMLIonSearchbarElement;
+  @ViewChild('destinationSearchbar') destinationSearchbar: HTMLIonSearchbarElement;
+  @ViewChild('startSearchBar') startSearchBar: HTMLIonSearchbarElement;
 
   public searchBtnIsVisible = true;
   public routeInputIsVisible = false;
@@ -70,7 +70,7 @@ export class SearchInputComponent implements OnInit {
     let isDestinationEmpty = this.startSearchBar.value === '' || this.startSearchBar.value === undefined;
     isDestinationEmpty = isDestinationEmpty || this.startSearchBar.value === null;
     if (!isStartEmpty && !isDestinationEmpty) {
-      const route:string[] = [this.startSearchBar.value, this.destinationSearchbar.value];
+      const route: string[] = [this.startSearchBar.value, this.destinationSearchbar.value];
 
       // Workaround for https://github.com/ionic-team/ionic-v3/issues/217
       const activeElement = document.activeElement as HTMLElement;
@@ -83,18 +83,18 @@ export class SearchInputComponent implements OnInit {
   }
 
   public clearDestinationInput() {
-    this.destinationSearchbar.value = '';
+    this.destinationSearchbarValue = '';
   }
 
   public clearStartInput() {
-    this.startSearchBar.value = '';
+    this.startSearchBarValue = '';
   }
 
-  public setDiscoverySearchbarValue(value:string) {
+  public setDiscoverySearchbarValue(value: string) {
     this.destinationSearchbarValue = value;
   }
 
-  public setStartSearchbarValue(value:string) {
+  public setStartSearchbarValue(value: string) {
     this.startSearchBarValue = value;
   }
 

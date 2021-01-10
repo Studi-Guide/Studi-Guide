@@ -228,3 +228,7 @@ body.dark {
 
   --ion-card-background: #1e1e1e;
 }
+
+ion-content.ion-item-style {
+  --background: var(--ion-item-background) !important;
+}
