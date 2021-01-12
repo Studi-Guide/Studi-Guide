@@ -1,0 +1,14 @@
+// This should be changed to ::slot if all major browser support Shadow DOM natively:
+// see https://stackoverflow.com/a/41090797 on how to use ::slot
+// see Angular's view encapsulation documentation: https://angular.io/guide/view-encapsulation
+// check browser support for Shadow DOM on https://caniuse.com/?search=shadow%20dom
+// View Encapsulation must be changed to use Shadow DOM and ::slot
+// but for now, Angular's default is still Emulated View
+:host ::ng-deep .scroll-x-container > * {
+  display: inline-block;
+}
+
+.scroll-x-container {
+  overflow-x: auto;
+  white-space: nowrap;
+}

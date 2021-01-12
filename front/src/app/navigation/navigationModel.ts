@@ -40,7 +40,8 @@ export class NavigationModel {
             Information: [],
             DetailRouterParams: {},
             RouteRouterParams: {},
-            LatLng: {lat: 0, lng: 0}
+            LatLng: {lat: 0, lng: 0},
+            Images: []
         };
     }
     public availableCampus: CampusViewModel[] = [];
@@ -80,7 +81,8 @@ export class NavigationModel {
             Information: details,
             DetailRouterParams: {},
             RouteRouterParams: {},
-            LatLng: {lat: c.Latitude, lng: c.Longitude}
+            LatLng: {lat: c.Latitude, lng: c.Longitude},
+            Images: []
         };
         await this.addRecentSearch(searchResult);
     }
@@ -91,7 +93,8 @@ export class NavigationModel {
             Information: [],
             DetailRouterParams: {building: b.Name},
             RouteRouterParams: {},
-            LatLng: latLng
+            LatLng: latLng,
+            Images: []
         };
         await this.addRecentSearch(searchResult);
     }
@@ -106,7 +109,8 @@ export class NavigationModel {
             Information: details,
             DetailRouterParams: {location: l.Name},
             RouteRouterParams: {start: l.Building + '.Entrance', destination: l.Name},
-            LatLng: latLng
+            LatLng: latLng,
+            Images: l.Images
         };
         await this.addRecentSearch(searchResult);
     }

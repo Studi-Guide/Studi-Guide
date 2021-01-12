@@ -4,6 +4,11 @@ export interface ICoordinate {
   Z: number;
 }
 
+export interface IFile {
+  Name: string;
+  Path: string;
+}
+
 export interface IPathNode {
   Id: number;
   Coordinate: ICoordinate;
@@ -53,6 +58,7 @@ export interface ILocation {
   Floor: string;
   Building: string;
   PathNode: IPathNode;
+  Images: IFile[];
 }
 
 export interface IAddress {

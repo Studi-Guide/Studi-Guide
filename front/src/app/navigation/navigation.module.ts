@@ -12,18 +12,20 @@ import {FloorsBarComponent} from './floors-bar/floors-bar.component';
 import {NavigationInstructionSlidesComponent} from './navigation-instruction-slides/navigation-instruction-slides.component';
 import {NavDrawerManagerComponent} from './nav-drawer-manager/nav-drawer-manager.component';
 import {RouteInputComponent} from './nav-drawer-manager/route-input/route-input.component';
+import {IonicVirtualScrollContentModule} from '../../ionic-virtual-scroll-content/ionic-virtual-scroll-content.module';
 
 @NgModule({
-  imports: [
-    IonicModule,
-    CommonModule,
-    FormsModule,
-    RouterModule.forChild([
-        { path: 'detail', component: NavigationPage},
-        { path: '', component: MapPageComponent },
+    imports: [
+        IonicModule,
+        CommonModule,
+        FormsModule,
+        RouterModule.forChild([
+            {path: 'detail', component: NavigationPage},
+            {path: '', component: MapPageComponent},
         ]),
-    IonicBottomDrawerModule
-  ],
+        IonicBottomDrawerModule,
+        IonicVirtualScrollContentModule
+    ],
     declarations: [
         NavigationPage,
         SearchInputComponent,

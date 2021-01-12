@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {Storage} from '@ionic/storage';
 import {Params} from '@angular/router';
 import {LatLngLiteral} from 'leaflet';
+import {IFile} from '../../building-objects-if';
 
 export interface ISearchResultObject {
     Name: string;
@@ -10,6 +11,7 @@ export interface ISearchResultObject {
     DetailRouterParams: Params;
     RouteRouterParams: Params;
     LatLng: LatLngLiteral;
+    Images: IFile[];
 }
 
 @Injectable({
