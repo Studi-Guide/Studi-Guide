@@ -73,13 +73,11 @@
           <ion-col>{{item[1]}}</ion-col>
         </ion-row>
       </ion-grid>
-      <div class="ion-padding-horizontal">
-      <app-ionic-horizontal-scrollable>
-        <div class="scroll-img-container" *ngFor="let i of this.model.latestSearchResult.Images">
-          <ion-img src="{{i.Path}}" alt="{{i.Name}}"></ion-img>
-        </div>
-      </app-ionic-horizontal-scrollable>
-      </div>
+      <ion-item class="ion-padding-horizontal">
+        <app-ionic-horizontal-scrollable>
+          <img class="ion-no-margin ion-no-padding ion-img" *ngFor="let i of this.model.latestSearchResult.Images" src="{{i.Path}}" alt="{{i.Name}}"/>
+        </app-ionic-horizontal-scrollable>
+      </ion-item>
     </ion-content>
   </div>
 </app-ionic-bottom-drawer>

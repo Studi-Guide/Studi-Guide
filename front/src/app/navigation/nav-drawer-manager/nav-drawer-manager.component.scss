@@ -28,11 +28,6 @@
   height: inherit;
 }
 
-.scroll-img-container {
-  max-height: 300px;
-  max-width: 200px;
-}
-
 .square-md {
   height: 64px;
   width: 64px;
@@ -72,4 +67,8 @@
 
 #searchDrawer {
   z-index: 4;
+}
+
+.ion-img {
+  height: 200px;
 }
