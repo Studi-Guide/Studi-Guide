@@ -594,12 +594,12 @@ func TestEntityMapper_AddLocation(t *testing.T) {
 		Id:          999,
 		Name:        "loc",
 		Description: "location in some place",
-		Tags: []string{"a", "b"},
+		Tags:        []string{"a", "b"},
 		Floor:       "f",
 		Building:    "b",
-		PathNode:    navigation.PathNode{
-			Id:             1111,
-			Coordinate:     navigation.Coordinate{
+		PathNode: navigation.PathNode{
+			Id: 1111,
+			Coordinate: navigation.Coordinate{
 				X: 0,
 				Y: 0,
 				Z: 0,

@@ -1,9 +1,9 @@
 package location
 
 import (
-"github.com/golang/mock/gomock"
-"os"
-"testing"
+	"github.com/golang/mock/gomock"
+	"os"
+	"testing"
 )
 
 func TestNewLocationImporter(t *testing.T) {
@@ -79,4 +79,3 @@ func ensureDir(dirName string) error {
 		return err
 	}
 }
-

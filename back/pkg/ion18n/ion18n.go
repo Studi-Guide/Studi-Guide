@@ -11,8 +11,8 @@ import (
 )
 
 type Ion18nRouter struct {
-	router  *gin.RouterGroup
-	env     *env.Env
+	router *gin.RouterGroup
+	env    *env.Env
 }
 
 func NewIon18nRouter(router *gin.RouterGroup, env *env.Env) (*Ion18nRouter, error) {
@@ -26,7 +26,7 @@ func NewIon18nRouter(router *gin.RouterGroup, env *env.Env) (*Ion18nRouter, erro
 	//i.router.Use(static.Serve("/de/", static.LocalFile(i.ionPath + "/de/", true)))
 
 	for _, tag := range locales.GetSupportedLocales() {
-		base, _ :=tag.Base()
+		base, _ := tag.Base()
 		i.router.Static(base.String()+"/", i.env.FrontendPath()+"/"+base.String()+"/")
 	}
 
@@ -46,7 +46,7 @@ func (i *Ion18nRouter) HandleNoRoute(c *gin.Context) {
 	for _, tag := range locales.GetSupportedLocales() {
 		base, _ := tag.Base()
 		if strings.HasPrefix(c.Request.URL.Path, "/"+base.String()) {
-			c.File(i.env.FrontendPath()+"/"+base.String()+"/index.html")
+			c.File(i.env.FrontendPath() + "/" + base.String() + "/index.html")
 			return
 		}
 	}
@@ -54,7 +54,7 @@ func (i *Ion18nRouter) HandleNoRoute(c *gin.Context) {
 	i.HandleNotFound(c)
 }
 
-func (i * Ion18nRouter) HandleNotFound(c *gin.Context) {
+func (i *Ion18nRouter) HandleNotFound(c *gin.Context) {
 	if i.env.Develop() {
 		type ErrInfo struct {
 			Status int

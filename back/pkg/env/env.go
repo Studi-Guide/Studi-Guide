@@ -32,13 +32,13 @@ var defaultFrontendPath = "./ionic"
 func NewEnv() *Env {
 
 	env := &Env{
-		dbDriverName:      os.Getenv(dBDriverNameKey),
-		dbDataSource:      os.Getenv(dbDataSourceKey),
-		frontendPath:      os.Getenv(frontendPath),
-		graphHopperApiKey: os.Getenv(graphHopperApiKey),
+		dbDriverName:        os.Getenv(dBDriverNameKey),
+		dbDataSource:        os.Getenv(dbDataSourceKey),
+		frontendPath:        os.Getenv(frontendPath),
+		graphHopperApiKey:   os.Getenv(graphHopperApiKey),
 		openStreetMapBounds: os.Getenv(openStreetMapBounds),
-		assetStorage: os.Getenv(assetStorage),
-		develop:           false,
+		assetStorage:        os.Getenv(assetStorage),
+		develop:             false,
 	}
 
 	if len(env.dbDriverName) == 0 && len(env.dbDataSource) == 0 {
@@ -60,7 +60,7 @@ func NewEnv() *Env {
 		log.Println("No OpenStreetMap bounds were given! Make sure to provide bounds via environment variables in production.")
 	} else {
 		// check bounds format
-		regexStr := latlng.LatLngLiteralRegex +";"+ latlng.LatLngLiteralRegex
+		regexStr := latlng.LatLngLiteralRegex + ";" + latlng.LatLngLiteralRegex
 		if match, err := regexp.MatchString(regexStr, env.openStreetMapBounds); err != nil || !match {
 			env.openStreetMapBounds = ""
 			log.Println("Regex match of OpenStreetMap bounds failed. Check your configuration. Bounds for OpenStreetMap are now disabled.")

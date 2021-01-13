@@ -22,7 +22,7 @@ type GraphHopperRoutePoints struct {
 type GraphHopperPath struct {
 	Distance     float64                       `json:"distance"`
 	Time         float64                       `json:"time"`
-	Points       GraphHopperRoutePoints         `json:"points"`
+	Points       GraphHopperRoutePoints        `json:"points"`
 	Instructions []GraphHopperRouteInstruction `json:"instructions"`
 }
 
@@ -36,9 +36,9 @@ func (r *GraphHopperRoute) ToOsmRoute() []osm.Route {
 
 	for _, path := range r.Paths {
 		r := osm.Route{
-			Distance:     path.Distance,
-			Time:         path.Time,
-			Points:       osm.RoutePoints{
+			Distance: path.Distance,
+			Time:     path.Time,
+			Points: osm.RoutePoints{
 				Coordinates: []latlng.LatLngLiteral{},
 				Type:        path.Points.Type,
 			},
@@ -50,7 +50,7 @@ func (r *GraphHopperRoute) ToOsmRoute() []osm.Route {
 			//for _, c := range coordinate.([]interface{})[0].(float64) {
 			//
 			//}
-			
+
 			r.Points.Coordinates = append(r.Points.Coordinates, latlng.LatLngLiteral{
 				Lat: coordinate.([]interface{})[1].(float64),
 				Lng: coordinate.([]interface{})[0].(float64),

@@ -6,14 +6,14 @@ import (
 	"studi-guide/pkg/file"
 )
 
-func (e * EntityMapper) mapFile(entFile *ent.File) file.File {
+func (e *EntityMapper) mapFile(entFile *ent.File) file.File {
 	return file.File{
 		Name: entFile.Name,
 		Path: e.env.AssetStorage() + entFile.Path,
 	}
 }
 
-func (e* EntityMapper) fileMapper(files []file.File) ([]*ent.File, error) {
+func (e *EntityMapper) fileMapper(files []file.File) ([]*ent.File, error) {
 	var entFiles []*ent.File
 	for _, i := range files {
 		var f *ent.File
