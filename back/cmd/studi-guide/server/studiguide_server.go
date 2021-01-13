@@ -7,7 +7,6 @@ import (
 	"github.com/swaggo/gin-swagger"
 	"log"
 	"net/http"
-	"net/url"
 	"os"
 	"studi-guide/pkg/building/campus"
 	buildingInfo "studi-guide/pkg/building/info"
@@ -64,13 +63,14 @@ func NewStudiGuideServer(env *env.Env,
 		log.Print("IONIC found! Serving files using ion18n router....")
 
 		ionRouter := router.Group("/")
-
-		if _, err := ion18n.NewIon18nRouter(ionRouter, env.FrontendPath()); err != nil {
+		ion18nrouter, err := ion18n.NewIon18nRouter(ionRouter, env)
+		if err != nil {
 			log.Fatal(err)
-		} else {
-			log.Print("Successfully initialized ion18n router")
 		}
 
+		router.NoRoute(ion18nrouter.HandleNoRoute)
+
+		log.Print("Successfully initialized ion18n router")
 	}
 
 	roomRouter := router.Group("/rooms")
@@ -161,35 +161,6 @@ func NewStudiGuideServer(env *env.Env,
 			log.Println("Successfully initialized open street map controller")
 		}
 	}
-
-	// redirect refresh to startpage
-	router.GET("/tabs/navigation", func(c *gin.Context) {
-		c.Redirect(http.StatusPermanentRedirect, "/")
-	})
-
-	router.NoRoute(func(c *gin.Context) {
-		if env.Develop() {
-			type ErrInfo struct {
-				Status int
-				Url    url.URL
-				Header http.Header
-				Proto  string
-				Host   string
-				Err    error
-			}
-			c.JSON(http.StatusNotFound, ErrInfo{
-				Status: http.StatusNotFound,
-				Url:    *c.Request.URL,
-				Header: c.Request.Header,
-				Proto:  c.Request.Proto,
-				Host:   c.Request.Host,
-				Err:    c.Err(),
-			})
-		} else {
-			_, _ = c.Writer.WriteString(c.Request.URL.Path + " not found")
-			c.Status(http.StatusNotFound)
-		}
-	})
 
 	server := StudiGuideServer{router: router}
 	return &server

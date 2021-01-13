@@ -21,6 +21,5 @@ func GetBestSupportedLocale(locale string) string {
 	tag, _, _ := matcher.Match(lang)
 	base, _ := tag.Base()
 
-
 	return base.String()
 }

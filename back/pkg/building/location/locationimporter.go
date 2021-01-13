@@ -40,8 +40,6 @@ type importLocation struct {
 	Images      []file.File
 }
 
-
-
 func NewLocationImporter(file string, dbService LocationProvider) (Importer, error) {
 	var i Importer = nil
 	ext := filepath.Ext(file)
@@ -54,7 +52,7 @@ func NewLocationImporter(file string, dbService LocationProvider) (Importer, err
 	return i, nil
 }
 
-func (r* JsonImporter) createRealLocations() error {
+func (r *JsonImporter) createRealLocations() error {
 	file, err := os.Open(r.file)
 	if err != nil {
 		return err
@@ -74,9 +72,9 @@ func (r* JsonImporter) createRealLocations() error {
 			Tags:        importLoc.Tags,
 			Floor:       importLoc.Floor,
 			Building:    importLoc.Building,
-			PathNode:    navigation.PathNode{
-				Id:             importLoc.PathNode.Id,
-				Coordinate:     navigation.Coordinate{
+			PathNode: navigation.PathNode{
+				Id: importLoc.PathNode.Id,
+				Coordinate: navigation.Coordinate{
 					X: importLoc.PathNode.X,
 					Y: importLoc.PathNode.Y,
 					Z: importLoc.PathNode.Z,
