@@ -11,6 +11,7 @@ FROM node:latest as ionicbuilder
 
 ARG ionicproduction
 
+
 COPY /front /www/app
 
 RUN npm install -g @ionic/cli
@@ -23,6 +24,11 @@ RUN ls
 
 # Start from the latest golang base image
 FROM golang:latest as golangbuilder
+
+ARG plattform
+
+RUN if [ "$plattform" == "arm" ]; \
+    then export GOOS=linux export GOARCH=arm;
 
 COPY back /go/src/studi-guide
 WORKDIR /go/src/studi-guide
