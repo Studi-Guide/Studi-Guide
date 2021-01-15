@@ -177,7 +177,7 @@ jobs:
     name: Deploy armv7
     runs-on: ubuntu-latest
     steps:   
-       - name: Docker Setup QEMU
+      - name: Docker Setup QEMU
         # You may pin to the exact commit or the version.
         # uses: docker/setup-qemu-action@6520a2d2cb6db42c90c297c8025839c98e531268
         uses: docker/setup-qemu-action@v1.0.1
