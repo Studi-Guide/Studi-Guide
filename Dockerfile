@@ -27,8 +27,8 @@ FROM golang:latest as golangbuilder
 
 ARG plattform
 
-RUN if [ "$plattform" == "arm" ]; \
-    then export GOOS=linux export GOARCH=arm;
+RUN if [ "$plattform" == "arm" ]; then export GOOS=linux export; fi
+RUN if [ "$plattform" == "arm" ]; then export GOARCH=arm; fi
 
 COPY back /go/src/studi-guide
 WORKDIR /go/src/studi-guide
