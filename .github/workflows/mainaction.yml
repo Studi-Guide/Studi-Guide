@@ -190,16 +190,26 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
 
-      - name: Build Docker armv7
+    # - name: Build Docker armv7
         # pass production parameter to docker to make user ionic users the right base url
-        run: env DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/arm/v7 --rm -f Dockerfile -t studiguide/studiguide_appservice:arm . --build-arg ionicproduction=--configuration=docker --build-arg plattform=arm
+     #   run: env DOCKER_CLI_EXPERIMENTAL=enabled docker buildx build --platform linux/arm/v7 --rm -f Dockerfile -t studiguide/studiguide_appservice:arm . --build-arg ionicproduction=--configuration=docker --build-arg plattform=arm
 
-      - name: Publish Docker armv7
-        if: github.ref == 'refs/heads/master'
-        #working-directory: ${{env.GO_HTTP}}
-        run: |
-          docker login --password ${{ secrets.DOCKER_PASSWORD }} --username ${{ secrets.DOCKER_USER }}
-          docker push studiguide/studiguide_appservice:arm
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USER }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/arm/v7
+          push: true
+          tags: studiguide/studiguide_appservice:arm
+          build-args: |
+            ionicproduction=-configuration=docker
         #- name: Build & Push to Docker Hub
         #  uses: opspresso/action-docker@master
         #  env:
