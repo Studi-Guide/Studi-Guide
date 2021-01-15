@@ -174,7 +174,7 @@ jobs:
 
       - name: Build Docker armv7
         # pass production parameter to docker to make user ionic users the right base url
-        run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice . --build-arg ionicproduction=--configuration=docker --build-arg plattform=arm
+        run: docker build --rm -f Dockerfile -t studiguide/studiguide_appservice:arm . --build-arg ionicproduction=--configuration=docker --build-arg plattform=arm
 
       - name: Publish Docker armv7
         if: github.ref == 'refs/heads/master'
