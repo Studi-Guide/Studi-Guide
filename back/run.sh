@@ -1,5 +1,4 @@
 source env.sh
-echo -n "Type in your graph hopper API Key: "
-read api_key
-export GRAPHHOPPER_API_KEY="$api_key"
+export GRAPHHOPPER_API_KEY="$(cat ../../Deployment-Secrets/GRAPHHOPPER_API_KEY)"
+export ASSET_STORAGE="$(cat ../../Deployment-Secrets/ASSET_STORAGE)"
 go run ./cmd/studi-guide
