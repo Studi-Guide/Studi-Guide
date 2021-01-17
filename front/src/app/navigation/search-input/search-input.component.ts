@@ -1,5 +1,4 @@
 import {Component, Output, EventEmitter, ViewChild, OnInit} from '@angular/core';
-import {ILocation} from '../../building-objects-if';
 import {DataService} from '../../services/data.service';
 import {NavigationModel} from '../navigationModel';
 
@@ -21,7 +20,6 @@ export class SearchInputComponent implements OnInit {
 
   @ViewChild('destinationSearchbar') destinationSearchbar: HTMLIonSearchbarElement;
   @ViewChild('startSearchBar') startSearchBar: HTMLIonSearchbarElement;
-  @ViewChild('locationList') locationList: HTMLIonListElement;
 
   public searchBtnIsVisible = true;
   public routeInputIsVisible = false;
