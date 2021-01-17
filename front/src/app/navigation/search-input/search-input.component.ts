@@ -1,4 +1,11 @@
-import {Component, Output, EventEmitter, OnInit, ViewChild} from '@angular/core';
+import {Component, Output, EventEmitter, ViewChild, OnInit} from '@angular/core';
+import {DataService} from '../../services/data.service';
+import {NavigationModel} from '../navigationModel';
+
+interface IListObject {
+  Name: string;
+  Description: string;
+}
 
 @Component({
   selector: 'app-search-input',
@@ -20,9 +27,46 @@ export class SearchInputComponent implements OnInit {
   public startSearchBarValue: string;
   public destinationSearchbarValue: string;
 
-  constructor() { }
+  public locations: IListObject[];
+
+  constructor(private dataService: DataService,
+              private model: NavigationModel) {}
 
   ngOnInit() {}
+
+  public async onDestinationInputEvent(e: any) {
+    const tmpLocations = await this.dataService.get_locations('', '').toPromise();
+    const query = (e.target as HTMLInputElement).value.toLowerCase();
+
+    if (query.length < 2) {
+      this.locations = [];
+      return;
+    }
+
+    this.locations = [];
+
+    this.filterIListObjects(this.model.recentSearches, query, 2);
+    this.filterIListObjects(tmpLocations, query, 5);
+
+  }
+
+  private filterIListObjects(objects: IListObject[], query: string, maxLength: number) {
+    for (const l of objects) {
+      let shouldShow = l.Name.toLowerCase().indexOf(query) > -1 || l.Description.toLowerCase().indexOf(query) > -1;
+      for (const o of this.locations) {
+        if (o.Name === l.Name) {
+          shouldShow = false;
+          break;
+        }
+      }
+      if (shouldShow) {
+        this.locations.push(l);
+      }
+      if (this.locations.length > maxLength) {
+        return;
+      }
+    }
+  }
 
   public showRouteSearchBar() {
       this.routeInputIsVisible = true;
@@ -84,6 +128,7 @@ export class SearchInputComponent implements OnInit {
 
   public clearDestinationInput() {
     this.destinationSearchbarValue = '';
+    this.locations = [];
   }
 
   public clearStartInput() {

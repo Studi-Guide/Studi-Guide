@@ -2,6 +2,7 @@
   <ion-searchbar #destinationSearchbar search-icon="navigate-circle-outline" inputmode="text"
                  mode="ios" placeholder="destination" color="" icon-color="dark"
                  [value]="destinationSearchbarValue"
+                 (ionInput)="onDestinationInputEvent($event)"
                  (click)="onSearchBarHasFocus('destinationSearchbar')"
                  (window:keydown)="onKey($event, 'destinationSearchbar')">
   </ion-searchbar>
@@ -26,3 +27,11 @@
     <ion-icon size="large" slot="icon-only" name="close-outline"></ion-icon>
   </ion-button>
 </ion-item>
+<ion-list #locationList>
+  <ion-item button *ngFor="let l of locations" (click)="discovery.emit(l.Name)">
+    <ion-label>
+      <h2>{{l.Name}}</h2>
+      <p class="ion-text-wrap">{{l.Description}}</p>
+    </ion-label>
+  </ion-item>
+</ion-list>
