@@ -154,6 +154,8 @@ export class NavigationPage implements OnInit, AfterViewInit{
             [['Tags: ', location.Tags.join(',')]] :
             [];
 
+        this.model.latestSearchResult.Images = location.Images;
+
         const isHybrid = this.platform.is('hybrid');
         if (isHybrid) {
             await Keyboard.hide();
