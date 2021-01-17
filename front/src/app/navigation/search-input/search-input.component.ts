@@ -35,7 +35,7 @@ export class SearchInputComponent implements OnInit {
   ngOnInit() {}
 
   public async onDestinationInputEvent(e: any) {
-    const tmpLocations = await this.dataService.get_locations('', '').toPromise();
+    const tmpLocations = await this.dataService.get_locations_all().toPromise();
     const query = (e.target as HTMLInputElement).value.toLowerCase();
 
     if (query.length < 2) {
