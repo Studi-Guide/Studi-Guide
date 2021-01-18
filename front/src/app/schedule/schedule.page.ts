@@ -16,7 +16,7 @@ export class SchedulePage implements AfterViewInit {
   public calenderEvents: Event[] = [];
   public isMoodleUserSignedIn: boolean;
 
-  @ViewChild(LoginComponent) login:LoginComponent;
+  @ViewChild(LoginComponent) login: LoginComponent;
 
   constructor(
       private moodleService: MoodleService,
@@ -42,11 +42,12 @@ export class SchedulePage implements AfterViewInit {
     const calenderRequestData = await this.moodleService.getCalenderEventsWeek(moodleToken).toPromise();
 
     if (this.moodleService.containsEvents(calenderRequestData)) {
-      this.calenderEvents = calenderRequestData.events;
+      // remove images => needs cookies
+      this.calenderEvents = this.CleanupEvents(calenderRequestData.events);
 
       // add dummy location to KA.206
       for (const event of this.calenderEvents) {
-        event.location = 'KA.206'
+        event.location = 'KA.206';
       }
       await loading.dismiss();
     } else {
@@ -64,7 +65,7 @@ export class SchedulePage implements AfterViewInit {
 
         // add dummy location to KA.206
         for (const calenderEvent of this.calenderEvents) {
-          calenderEvent.location = 'KA.206'
+          calenderEvent.location = 'KA.206';
         }
 
         event.target.complete();
@@ -79,4 +80,17 @@ export class SchedulePage implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {}
+
+   private CleanupEvents(events: Event[]) {
+     const imgRegex = new RegExp('<img[^>]*?>', 'g');
+     for (const event of events) {
+        if (imgRegex.test(event.description)) {
+          for (const match of event.description.match(imgRegex)) {
+            event.description = event.description.replace(match, '');
+          }
+        }
+     }
+
+     return events;
+  }
 }
