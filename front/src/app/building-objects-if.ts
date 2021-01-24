@@ -59,6 +59,7 @@ export interface ILocation {
   Building: string;
   PathNode: IPathNode;
   Images: IFile[];
+  Icon: string;
 }
 
 export interface IAddress {
