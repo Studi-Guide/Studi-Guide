@@ -50,9 +50,9 @@
     "PathNode": {
       "Id": 503,
       "ConnectedPathNodes" : [
-        900014
+        9121
       ],
-      "X": 225, "Y": 185, "Z": 0
+      "X": 225, "Y": 240, "Z": 0
     },
     "Images": [
       {
