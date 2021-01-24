@@ -38,6 +38,7 @@ type importLocation struct {
 	Building    string
 	PathNode    importPathNode
 	Images      []file.File
+	Icon        string
 }
 
 func NewLocationImporter(file string, dbService LocationProvider) (Importer, error) {
@@ -83,6 +84,7 @@ func (r *JsonImporter) createRealLocations() error {
 				ConnectedNodes: nil,
 			},
 			Images: importLoc.Images,
+			Icon:   importLoc.Icon,
 		}
 
 		for _, id := range importLoc.PathNode.ConnectedPathNodes {

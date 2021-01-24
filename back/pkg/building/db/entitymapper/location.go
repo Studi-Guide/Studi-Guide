@@ -14,4 +14,5 @@ type Location struct {
 	Building    string
 	PathNode    navigation.PathNode
 	Images      []file.File
+	Icon        string
 }

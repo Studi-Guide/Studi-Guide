@@ -17,7 +17,8 @@
         "Name": "Ausweisvalidierungsautomat",
         "Path": "/images/validierungs-automat.png"
       }
-    ]
+    ],
+    "Icon": "card"
   },
   {
     "Name": "Aufladeautomat KA 3. OG",
@@ -37,7 +38,8 @@
         "Name": "Aufladeautomat",
         "Path": "/images/auflade-automat.jpg"
       }
-    ]
+    ],
+    "Icon": "wallet"
   },
   {
     "Name": "Aufladeautomat EG",
@@ -48,16 +50,17 @@
     "PathNode": {
       "Id": 503,
       "ConnectedPathNodes" : [
-        900014
+        9121
       ],
-      "X": 225, "Y": 185, "Z": 0
+      "X": 225, "Y": 240, "Z": 0
     },
     "Images": [
       {
         "Name": "Aufladeautomat",
         "Path": "/images/auflade-automat.jpg"
       }
-    ]
+    ],
+    "Icon": "wallet"
   },
   {
     "Name": "Lernraum EG",
@@ -152,6 +155,7 @@
         9072
       ],
       "X": 335, "Y": 292, "Z": 0
-    }
+    },
+    "Icon": "information-circle"
   }
 ]

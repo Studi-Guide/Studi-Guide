@@ -13,13 +13,13 @@ export class RouteRendererCanvas implements IRenderer {
     }
 
     render(renderingContext: CanvasRenderingContext2D, args?: any) {
-        const pin = new IconOnMapRenderer('pin-sharp.png');
+        const pin = new IconOnMapRenderer('assets/pin-sharp.png');
         if (this.route.Start.Floor === args.floor) {
             const x = this.route.Start.Node.Coordinate.X;
             const y = this.route.Start.Node.Coordinate.Y;
             pin.render(renderingContext,x-15, y-30, 30, 30);
         }
-        const flag = new IconOnMapRenderer('flag-sharp.png');
+        const flag = new IconOnMapRenderer('assets/flag-sharp.png');
         if (this.route.End.Floor === args.floor) {
             const x = this.route.End.Node.Coordinate.X;
             const y = this.route.End.Node.Coordinate.Y;

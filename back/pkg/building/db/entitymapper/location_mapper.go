@@ -5,6 +5,7 @@ import (
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/db/ent/building"
 	entcampus "studi-guide/pkg/building/db/ent/campus"
+	icon2 "studi-guide/pkg/building/db/ent/icon"
 	"studi-guide/pkg/building/db/ent/location"
 	"studi-guide/pkg/building/db/ent/tag"
 	"studi-guide/pkg/navigation"
@@ -49,6 +50,11 @@ func (r *EntityMapper) locationMapper(entLocation *ent.Location) *Location {
 		for _, i := range imgs {
 			l.Images = append(l.Images, r.mapFile(i))
 		}
+	}
+
+	i, err := entLocation.Edges.IconOrErr()
+	if err == nil {
+		l.Icon = i.Name
 	}
 
 	return &l
@@ -152,7 +158,7 @@ func (r *EntityMapper) queryLocations(query *ent.LocationQuery) ([]Location, err
 
 func (r *EntityMapper) getLocationQuery() *ent.LocationQuery {
 	return r.client.Location.Query().
-		WithPathnode().WithBuilding().WithTags().WithImages()
+		WithPathnode().WithBuilding().WithTags().WithImages().WithIcon()
 }
 
 func (r *EntityMapper) AddLocation(l Location) error {
@@ -177,6 +183,19 @@ func (r *EntityMapper) AddLocation(l Location) error {
 		return err
 	}
 
+	var icon *ent.Icon
+	if q := r.client.Icon.Query().Where(icon2.NameEQ(l.Icon)); q.ExistX(r.context) {
+		icon, err = q.First(r.context)
+		if err != nil {
+			return err
+		}
+	} else {
+		icon, err = r.client.Icon.Create().SetName(l.Icon).Save(r.context)
+		if err != nil {
+			return err
+		}
+	}
+
 	loc, err := r.client.Location.Create().
 		SetName(l.Name).
 		SetDescription(l.Description).
@@ -184,6 +203,7 @@ func (r *EntityMapper) AddLocation(l Location) error {
 		SetBuilding(b).
 		SetFloor(l.Floor).
 		AddImages(files...).
+		SetIcon(icon).
 		Save(r.context)
 
 	if err != nil {
