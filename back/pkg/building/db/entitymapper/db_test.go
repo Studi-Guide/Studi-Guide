@@ -633,6 +633,7 @@ func TestEntityMapper_AddLocation(t *testing.T) {
 		Group:          nil,
 		ConnectedNodes: nil,
 	})
+	loc.Icon = "my-icon"
 
 	if err := dbService.AddLocation(loc); err != nil {
 		t.Error(err)
