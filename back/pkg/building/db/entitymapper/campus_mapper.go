@@ -82,7 +82,9 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 			if err != nil {
 				log.Print("Error adding address:", building.Edges.Address, " Error:", err)
 			} else {
-				buildingQuery.SetAddress(addressEntity)
+				if addressEntity != nil {
+					buildingQuery.SetAddress(addressEntity)
+				}
 			}
 
 			buildingEntity, err = buildingQuery.Save(r.context)
@@ -106,6 +108,10 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 }
 
 func (r *EntityMapper) GetOrAddAddress(address *ent.Address) (*ent.Address, error) {
+	if address == nil {
+		return nil, nil
+	}
+
 	found, _ := r.client.Address.Query().Where(
 		entaddress.And(
 			entaddress.StreetEqualFold(address.Street),

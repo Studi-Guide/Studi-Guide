@@ -144,6 +144,17 @@ func TestMapRoom(t *testing.T) {
 			PathNode: node1,
 		}}
 
+	address, err := r.client.Address.
+		Create().
+		SetCity("city").
+		SetCountry("germany").
+		SetNumber("1").
+		SetStreet("street").
+		SetPLZ(1).
+		Save(r.context)
+
+	_, err = r.client.Building.Create().SetName("main").SetAddress(address).Save(r.context)
+
 	err = r.storeRooms([]Room{ro})
 	if err != nil {
 		t.Error("expected no error, got:", err)

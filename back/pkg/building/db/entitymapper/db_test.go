@@ -869,23 +869,6 @@ func TestEntityMapper_AddCampus(t *testing.T) {
 	}
 }
 
-func TestEntityMapper_AddCampus_InvalidAddress(t *testing.T) {
-	dbService, _ := setupTestRoomDbService()
-
-	testcampus := ent.Campus{
-		ShortName: "Test",
-		Name:      "TESTTEST",
-		Longitude: 12180840.92938,
-		Latitude:  120480124.29323,
-		Edges:     ent.CampusEdges{},
-	}
-
-	err := dbService.AddCampus(testcampus)
-	if err == nil {
-		t.Error("expected error got: ", nil)
-	}
-}
-
 func TestEntityService_RssFeedEntity(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
