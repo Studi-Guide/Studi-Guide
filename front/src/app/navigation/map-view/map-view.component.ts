@@ -264,7 +264,7 @@ export class MapViewComponent implements AfterViewInit {
   private displayPin(pathNode: IPathNode) {
     const x = pathNode.Coordinate.X - 15;
     const y = pathNode.Coordinate.Y - 30;
-    const iconOnMapRenderer = new IconOnMapRenderer( 'pin-sharp.png');
+    const iconOnMapRenderer = new IconOnMapRenderer( 'assets/pin-sharp.png');
     iconOnMapRenderer.render(this.renderingContext, x, y, 30, 30);
   }
 
