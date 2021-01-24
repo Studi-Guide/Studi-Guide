@@ -28,6 +28,7 @@ func (Location) Edges() []ent.Edge {
 		edge.From("tags", Tag.Type).Ref("locations"),
 		edge.To("building", Building.Type).Unique(),
 		edge.To("images", File.Type),
+		edge.To("icon", Icon.Type),
 	}
 }
 
