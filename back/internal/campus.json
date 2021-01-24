@@ -5,20 +5,19 @@
   "Longitude": 11.0931,
   "Latitude": 49.4529,
   "edges": {
-    "Address": [
-      {
-      "Street": "Keßlerplatz",
-      "Number": "12",
-      "PLZ": 90489,
-      "City": "Nürnberg",
-      "Country": "Deutschland"
-      }
-    ],
     "Buildings" : [
       {
         "Name": "KA",
         "Color":  "#0083C6",
         "edges" : {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body": [
                {"Latitude": 49.45281713007855,"Longitude": 11.092652231454847}, 
                {"Latitude": 49.45273735874004,"Longitude": 11.093349941074848}, 
@@ -52,6 +51,14 @@
         "Name": "KV",
         "Color":  "#0083C6",
         "edges" : {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body": [
                {"Latitude": 49.452645817699796,"Longitude": 11.092427931725979}, 
                {"Latitude": 49.452129479440295,"Longitude": 11.092293485999107}, 
@@ -65,6 +72,14 @@
         "Name": "KB",
         "Color":  "#0083C6",
         "edges" : {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body":   [
             {"Latitude":49.452445, "Longitude":11.09271},
             {"Latitude":49.4524275, "Longitude":11.0928575},
@@ -89,6 +104,14 @@
         "Name": "KL",
         "Color":  "#0083C6",
         "edges": {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body":
           [
             {"Latitude": 49.45247777405956, "Longitude":11.093304678797722},
@@ -107,6 +130,14 @@
         "Name": "KI",
         "Color":  "#0083C6",
         "edges" : {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body":   [
             {"Latitude":49.45222821402363, "Longitude": 11.093689240515232},
             {"Latitude":49.45197276785001, "Longitude": 11.09360910952091},
@@ -120,6 +151,14 @@
         "Name": "KS",
         "Color":  "#0083C6",
         "edges": {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body":   [
             {"Latitude":49.452155416358906, "Longitude":              11.094211265444756},
             {"Latitude":49.45213318471523, "Longitude": 11.094203554093838},
@@ -147,6 +186,14 @@
         "Name": "KJ",
         "Color":  "#0083C6",
         "edges": {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body":   [
             {"Latitude":49.45195969036503, "Longitude": 11.094162985682486},
             {"Latitude":49.45190890609862, "Longitude": 11.094146892428398},
@@ -160,6 +207,14 @@
         "Name": "KR",
         "Color":  "#0083C6",
         "edges": {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body":   [
             {"Latitude":49.45210136293316, "Longitude": 11.094655506312847},
             {"Latitude":49.45192634276253, "Longitude": 11.09459616243839},
@@ -179,6 +234,14 @@
         "Name": "KT",
         "Color":  "#0083C6",
         "edges": {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body":   [
             {"Latitude":49.45209417033571, "Longitude": 11.095182560384274},
             {"Latitude":49.4518402491741, "Longitude": 11.095131263136864},
@@ -192,6 +255,14 @@
         "Name": "KM",
         "Color":  "#0083C6",
         "edges": {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body":   [
             {"Latitude":49.45269943461553, "Longitude": 11.094597838819027},
             {"Latitude":49.452425464637614, "Longitude": 11.094528101384638},
@@ -213,6 +284,14 @@
         "Name": "KH",
         "Color":  "#0083C6",
         "edges": {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body":   [
             {"Latitude":49.452767436473096, "Longitude": 11.094929091632366},
             {"Latitude":49.45223148337728, "Longitude": 11.094790622591972},
@@ -234,6 +313,14 @@
         "Name": "KY",
         "Color":  "#0083C6",
         "edges": {
+          "Address":
+            {
+              "Street": "Keßlerplatz",
+              "Number": "12",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
           "Body":   [
             {"Latitude":49.45253880164793, "Longitude": 11.095610372722149},
             {"Latitude":49.45250044145838, "Longitude": 11.09545849263668},
@@ -252,27 +339,19 @@
     "Longitude": 11.0961,
     "Latitude": 49.4528,
     "edges": {
-      "Address": [
-        {
-        "Street": "Wassertorstraße",
-        "Number": "6",
-        "PLZ": 90489,
-        "City": "Nürnberg",
-        "Country": "Deutschland"
-        },
-        {
-          "Street": "Wassertorstraße",
-          "Number": "10",
-          "PLZ": 90489,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        }
-      ],
       "Buildings" : [
         {
           "Name": "WF",
           "Color":  "#11C811",
           "edges": {
+            "Address":
+              {
+                "Street": "Wassertorstraße",
+                "Number": "6",
+                "PLZ": 90489,
+                "City": "Nürnberg",
+                "Country": "Deutschland"
+              },
             "Body":   [
               {"Latitude":49.45279751418767, "Longitude": 11.0959979519248},
               {"Latitude":49.452629906977755, "Longitude": 11.09607707709074},
@@ -288,6 +367,14 @@
           "Name": "WK",
           "Color":  "#11C811",
           "edges": {
+            "Address":
+              {
+                "Street": "Wassertorstraße",
+                "Number": "6",
+                "PLZ": 90489,
+                "City": "Nürnberg",
+                "Country": "Deutschland"
+              },
             "Body":   [
               {"Latitude":49.45263077879827, "Longitude": 11.096243374049664},
               {"Latitude":49.45258217478062, "Longitude": 11.096084788441658},
@@ -301,6 +388,13 @@
           "Name": "W",
           "Color":  "#11C811",
           "edges": {
+            "Address": {
+              "Street": "Wassertorstraße",
+              "Number": "10",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
             "Body":   [
               {"Latitude":49.452943979316714, "Longitude": 11.096445880830288},
               {"Latitude":49.45290583739818, "Longitude": 11.096798926591873},
@@ -369,27 +463,19 @@
     "Longitude": 11.0962,
     "Latitude": 49.4486,
     "edges": {
-      "Address": [
-        {
-          "Street": "Bahnhofstraße",
-          "Number": "87",
-          "PLZ": 90402,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        },
-        {
-          "Street": "Bahnhofstraße",
-          "Number": "90",
-          "PLZ": 90402,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        }
-      ],
       "Buildings" : [
         {
           "Name": "BB",
           "Color":  "#11C811",
           "edges": {
+            "Address":
+              {
+                "Street": "Bahnhofstraße",
+                "Number": "90",
+                "PLZ": 90402,
+                "City": "Nürnberg",
+                "Country": "Deutschland"
+              },
             "Body":   [
                {"Latitude": 49.448385918891994,"Longitude": 11.096161231398582}, 
                {"Latitude": 49.44807552293013,"Longitude": 11.096240691840649}, 
@@ -403,6 +489,13 @@
           "Name": "BL",
           "Color":  "#11C811",
           "edges": {
+            "Address": {
+                "Street": "Bahnhofstraße",
+                "Number": "87",
+                "PLZ": 90402,
+                "City": "Nürnberg",
+                "Country": "Deutschland"
+              },
             "Body":   [
                {"Latitude": 49.4488852947878,"Longitude": 11.096470691263676}, 
                {"Latitude": 49.449019347250406,"Longitude": 11.096429787576199}, 
@@ -441,20 +534,18 @@
     "Longitude": 11.1022,
     "Latitude": 49.4582,
     "edges": {
-      "Address": [
-        {
-          "Street": "Hohfederstraße",
-          "Number": "40",
-          "PLZ": 90489,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        }
-      ],
       "Buildings" : [
         {
           "Name": "HW",
           "Color":  "#11C811",
           "edges": {
+            "Address": {
+              "Street": "Hohfederstraße",
+              "Number": "40",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
             "Body":   [
                {"Latitude": 49.458319949270965,"Longitude": 11.101967543363571}, 
                {"Latitude": 49.45835220287519,"Longitude": 11.101972907781601}, 
@@ -472,6 +563,13 @@
           "Name": "HQ",
           "Color":  "#11C811",
           "edges": {
+            "Address": {
+              "Street": "Hohfederstraße",
+              "Number": "40",
+              "PLZ": 90489,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
             "Body":   [
                {"Latitude": 49.45821991937687,"Longitude": 11.101966872811317}, 
                {"Latitude": 49.45810550584897,"Longitude": 11.1020178347826}, 
@@ -490,48 +588,19 @@
     "Longitude": 11.0866,
     "Latitude": 49.4554,
     "edges": {
-      "Address": [
-        {
-          "Street": "Innere Cramer-Klett-Straße",
-          "Number": "4",
-          "PLZ": 90403 ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        },
-        {
-          "Street": "Innere Cramer-Klett-Straße",
-          "Number": "5",
-          "PLZ": 90403 ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        },
-        {
-          "Street": "Innere Cramer-Klett-Straße",
-          "Number": "6",
-          "PLZ": 90403 ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        },
-        {
-          "Street": "Innere Cramer-Klett-Straße",
-          "Number": "7",
-          "PLZ": 90403 ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        },
-        {
-          "Street": "Innere Cramer-Klett-Straße",
-          "Number": "8",
-          "PLZ": 90403 ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        }
-      ],
       "Buildings" : [
         {
           "Name": "SC",
           "Color":  "#11C811",
           "edges": {
+            "Address":
+              {
+                "Street": "Innere Cramer-Klett-Straße",
+                "Number": "4",
+                "PLZ": 90403 ,
+                "City": "Nürnberg",
+                "Country": "Deutschland"
+              },
             "Body":   [
                {"Latitude": 49.45535078332544,"Longitude": 11.086088865995407}, 
                {"Latitude": 49.455350129496324,"Longitude": 11.086139157414436}, 
@@ -559,20 +628,19 @@
     "Longitude": 11.0700,
     "Latitude": 49.4516,
     "edges": {
-      "Address": [
-        {
-          "Street": "Karl-Grillenberger-Straße",
-          "Number": "3a",
-          "PLZ": 90403 ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        }
-      ],
       "Buildings" : [
         {
           "Name": "SG",
           "Color":  "#11C811",
           "edges": {
+            "Address":
+              {
+                "Street": "Karl-Grillenberger-Straße",
+                "Number": "3a",
+                "PLZ": 90403 ,
+                "City": "Nürnberg",
+                "Country": "Deutschland"
+              },
             "Body":   [
                {"Latitude": 49.45172603871204,"Longitude": 11.070583686232567}, 
                {"Latitude": 49.45188231517418,"Longitude": 11.070385538041592}, 
@@ -598,15 +666,19 @@
     "Longitude": 11.1145,
     "Latitude": 49.4539,
     "edges": {
-      "Address": [
-        {
-          "Street": "Ostendstraße",
-          "Number": "82b",
-          "PLZ": 90403 ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
+      "Building" : [{
+        "Name": "SH8",
+        "edges": {
+          "Address":
+            {
+              "Street": "Ostendstraße",
+              "Number": "82b",
+              "PLZ": 90403 ,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            }
         }
-      ]
+      }]
     }
   },
   {
@@ -615,34 +687,18 @@
     "Longitude": 11.0883,
     "Latitude": 49.4543,
     "edges": {
-      "Address": [
-        {
-          "Street": "Keßlerstraße",
-          "Number": "1",
-          "PLZ": 90489 ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        },
-        {
-          "Street": "Keßlerstraße",
-          "Number": "2",
-          "PLZ": 90489 ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        },
-        {
-          "Street": "Keßlerstraße",
-          "Number": "3",
-          "PLZ": 90489 ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        }
-      ],
       "Buildings" : [
         {
           "Name": "SP",
           "Color":  "#11C811",
           "edges": {
+            "Address" : {
+              "Street": "Keßlerstraße",
+              "Number": "1",
+              "PLZ": 90489 ,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            },
             "Body":   [
                {"Latitude": 49.45443323456664,"Longitude": 11.0881407558918}, 
                {"Latitude": 49.454491208464496,"Longitude": 11.088178977370262}, 
@@ -670,41 +726,53 @@
     "Longitude": 11.0300,
     "Latitude": 49.4597,
     "edges": {
-      "Address": [
+      "Building" : [
         {
-          "Street": "Fürther Straße",
-          "Number": "246",
-          "PLZ": 90429  ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
+          "Name": "F11",
+          "edges": {
+          "Address": {
+              "Street": "Fürther Straße",
+              "Number": "246",
+              "PLZ": 90429  ,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            }
+          }
+        }, {
+          "Name": "F13",
+          "edges": {
+            "Address": {
+              "Street": "Fürther Straße",
+              "Number": "248",
+              "PLZ": 90429  ,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            }
+          }
         },
         {
-          "Street": "Fürther Straße",
-          "Number": "247",
-          "PLZ": 90429  ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
+          "Name": "F16",
+          "edges": {
+            "Address": {
+              "Street": "Fürther Straße",
+              "Number": "250",
+              "PLZ": 90429  ,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            }
+          }
         },
         {
-          "Street": "Fürther Straße",
-          "Number": "248",
-          "PLZ": 90429  ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        },
-        {
-          "Street": "Fürther Straße",
-          "Number": "249",
-          "PLZ": 90429  ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
-        },
-        {
-          "Street": "Fürther Straße",
-          "Number": "250",
-          "PLZ": 90429  ,
-          "City": "Nürnberg",
-          "Country": "Deutschland"
+          "Name": "F34",
+          "edges": {
+            "Address": {
+              "Street": "Fürther Straße",
+              "Number": "246",
+              "PLZ": 90429  ,
+              "City": "Nürnberg",
+              "Country": "Deutschland"
+            }
+          }
         }
       ]
     }
@@ -715,13 +783,30 @@
     "Longitude": 11.0487,
     "Latitude": 49.3132,
     "edges": {
-      "Address": [
+      "Building" : [
         {
-          "Street": "Siemensstraße",
-          "Number": "1",
-          "PLZ": 91126 ,
-          "City": "Rednitzhembach",
-          "Country": "Deutschland"
+          "Name": "SR",
+          "edges": {
+            "Address": {
+              "Street": "Siemensstraße",
+              "Number": "1",
+              "PLZ": 91126 ,
+              "City": "Rednitzhembach",
+              "Country": "Deutschland"
+            }
+          }
+        },
+        {
+          "Name": "ST",
+          "edges": {
+            "Address": {
+              "Street": "Ziegelstraße 7",
+              "Number": "1",
+              "PLZ": 91126 ,
+              "City": "Rednitzhembach",
+              "Country": "Deutschland"
+            }
+          }
         }
       ]
     }
@@ -732,13 +817,19 @@
     "Longitude": 11.4751,
     "Latitude": 49.2756,
     "edges": {
-      "Address": [
+      "Building": [
         {
-          "Street": "Badstraße",
-          "Number": "88",
-          "PLZ": 92318 ,
-          "City": "Neumarkt",
-          "Country": "Deutschland"
+          "Name": "NP",
+          "edges": {
+            "Address":
+              {
+                "Street": "Badstraße",
+                "Number": "88",
+                "PLZ": 92318 ,
+                "City": "Neumarkt",
+                "Country": "Deutschland"
+              }
+          }
         }
       ]
     }
