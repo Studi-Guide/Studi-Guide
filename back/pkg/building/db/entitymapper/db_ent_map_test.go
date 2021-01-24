@@ -793,7 +793,6 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 		SetShortName("TC").
 		SetLatitude(0).
 		SetLongitude(0).
-		AddAddress(address).
 		Save(r.context)
 
 	if err != nil {
@@ -805,7 +804,7 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 		t.Error(err)
 	}
 
-	building, err := r.client.Building.Create().SetName("building").SetCampus(campus).Save(r.context)
+	building, err := r.client.Building.Create().SetName("building").SetAddress(address).SetCampus(campus).Save(r.context)
 	if err != nil {
 		t.Error(err)
 	}
@@ -820,7 +819,7 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 
 	mItem, err = r.client.MapItem.Query().
 		WithBuilding(
-			func(buildingQuery *ent.BuildingQuery) { buildingQuery.WithCampus() }).
+			func(buildingQuery *ent.BuildingQuery) { buildingQuery.WithCampus().WithAddress() }).
 		WithPathNodes().
 		Where(mapitem.ID(mItem.ID)).
 		First(r.context)

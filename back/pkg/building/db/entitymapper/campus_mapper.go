@@ -9,7 +9,9 @@ import (
 )
 
 func (r *EntityMapper) GetAllCampus() ([]*ent.Campus, error) {
-	campus, err := r.client.Campus.Query().WithBuildings().WithAddress().All(r.context)
+	campus, err := r.client.Campus.Query().WithBuildings(
+		func(b *ent.BuildingQuery) { b.WithAddress() }).All(r.context)
+
 	if err != nil {
 		return nil, err
 	}
@@ -17,7 +19,7 @@ func (r *EntityMapper) GetAllCampus() ([]*ent.Campus, error) {
 }
 
 func (r *EntityMapper) GetCampus(name string) (*ent.Campus, error) {
-	b, err := r.client.Campus.Query().WithBuildings().WithAddress().
+	b, err := r.client.Campus.Query().WithBuildings(func(b *ent.BuildingQuery) { b.WithAddress() }).
 		Where(
 			entcampus.Or(
 				entcampus.NameEqualFold(name),
@@ -32,7 +34,8 @@ func (r *EntityMapper) GetCampus(name string) (*ent.Campus, error) {
 }
 
 func (r *EntityMapper) FilterCampus(name string) ([]*ent.Campus, error) {
-	campus, err := r.client.Campus.Query().WithBuildings().WithAddress().Where(
+	campus, err := r.client.Campus.Query().WithBuildings(
+		func(b *ent.BuildingQuery) { b.WithAddress() }).Where(
 		entcampus.Or(
 			entcampus.NameEqualFold(name),
 			entcampus.ShortNameEqualFold(name))).All(r.context)
@@ -58,19 +61,9 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 		SetName(campus.Name).
 		SetShortName(campus.ShortName)
 
-	for _, address := range campus.Edges.Address {
-		addressEntity, err := r.GetOrAddAddress(address)
-		if err != nil {
-			log.Print("Error adding address:", address, " Error:", err)
-		} else {
-			campusCreate.AddAddress(addressEntity)
-		}
-	}
-
 	for _, building := range campus.Edges.Buildings {
-		buildingEntity, err := r.client.Building.Query().Where(entbuilding.NameEqualFold(building.Name)).First(r.context)
+		buildingEntity, _ := r.client.Building.Query().Where(entbuilding.NameEqualFold(building.Name)).First(r.context)
 		if buildingEntity == nil {
-
 			buildingQuery := r.client.Building.Create().
 				SetColor(building.Color).SetName(building.Name)
 
@@ -83,6 +76,13 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 						buildingQuery.AddBody(entCoordiante)
 					}
 				}
+			}
+
+			addressEntity, err := r.GetOrAddAddress(building.Edges.Address)
+			if err != nil {
+				log.Print("Error adding address:", building.Edges.Address, " Error:", err)
+			} else {
+				buildingQuery.SetAddress(addressEntity)
 			}
 
 			buildingEntity, err = buildingQuery.Save(r.context)
