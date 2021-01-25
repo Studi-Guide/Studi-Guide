@@ -815,6 +815,11 @@ func TestEntityMapper_AddCampus(t *testing.T) {
 		Country: "BlaLand",
 	}
 
+	invalidAddress := ent.Address{
+		City:    "BlaTown",
+		Country: "BlaLand",
+	}
+
 	testcampus := ent.Campus{
 		ShortName: "Test",
 		Name:      "TESTTEST",
@@ -835,11 +840,37 @@ func TestEntityMapper_AddCampus(t *testing.T) {
 				{
 					ID:   2,
 					Name: "Test2",
+					Edges: ent.BuildingEdges{
+						Address: &address,
+					},
 				},
 				{
 					ID:   1,
 					Name: "Test3",
+					Edges: ent.BuildingEdges{
+						Address: &address,
+					},
 				}},
+		},
+	}
+
+	testcampus2 := ent.Campus{
+		ShortName: "Test2",
+		Name:      "TESTTEST2",
+		Longitude: 12180840.92938,
+		Latitude:  120480124.29323,
+		Edges: ent.CampusEdges{
+			Buildings: []*ent.Building{{
+				ID:   2,
+				Name: "Test2",
+				Edges: ent.BuildingEdges{
+					Body: []*ent.Coordinate{{
+						Latitude:  20,
+						Longitude: 10,
+					}},
+					Address: &invalidAddress,
+				},
+			}},
 		},
 	}
 
@@ -867,6 +898,11 @@ func TestEntityMapper_AddCampus(t *testing.T) {
 		realValue.Edges.Buildings[0].Edges.Address.Country != testcampus.Edges.Buildings[0].Edges.Address.Country ||
 		realValue.Edges.Buildings[0].Edges.Address.PLZ != testcampus.Edges.Buildings[0].Edges.Address.PLZ {
 		t.Error("expected equal but got ", testcampus, "; real: ", realValue)
+	}
+
+	err = dbService.AddCampus(testcampus2)
+	if err == nil {
+		t.Error("expected error; got: ", nil)
 	}
 }
 
