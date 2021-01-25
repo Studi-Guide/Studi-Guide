@@ -27,7 +27,7 @@ func (Building) Edges() []ent.Edge {
 		edge.From("location", Location.Type).Ref("building"),
 		edge.From("campus", Campus.Type).Ref("buildings").Unique(),
 		edge.To("body", Coordinate.Type),
-		edge.To("address", Address.Type).Unique().Required(),
+		edge.To("address", Address.Type).Unique(),
 	}
 }
 
