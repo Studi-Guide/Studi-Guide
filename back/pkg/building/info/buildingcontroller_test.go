@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"net/http/httptest"
+	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/building/location"
 	maps "studi-guide/pkg/building/map"
@@ -31,15 +32,13 @@ func TestBuildingController_GetAllBuildings(t *testing.T) {
 	mapRouter := router.Group("/buildings")
 	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider, mapsProvider)
 
-	building := []entitymapper.Building{{
-		Id:     1,
-		Name:   "main",
-		Floors: []string{"1", "3"},
+	building := []*ent.Building{{
+		ID:   1,
+		Name: "main",
 	},
 		{
-			Id:     2,
-			Name:   "sub",
-			Floors: []string{"1", "3"},
+			ID:   2,
+			Name: "sub",
 		},
 	}
 
@@ -92,12 +91,11 @@ func TestBuildingController_GetBuildings_Filter(t *testing.T) {
 	mapRouter := router.Group("/buildings")
 	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider, mapsProvider)
 
-	building := entitymapper.Building{
-		Id:     1,
-		Name:   "main",
-		Floors: []string{"1", "3"},
+	building := ent.Building{
+		ID:   1,
+		Name: "main",
 	}
-	buildingprovider.EXPECT().GetBuilding("main").Return(building, nil)
+	buildingprovider.EXPECT().GetBuilding("main").Return(&building, nil)
 
 	router.ServeHTTP(rec, req)
 
@@ -123,7 +121,7 @@ func TestBuildingController_GetBuildings_Filter_Error(t *testing.T) {
 	mapRouter := router.Group("/buildings")
 	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider, mapsProvider)
 
-	buildingprovider.EXPECT().GetBuilding("random").Return(entitymapper.Building{}, errors.New("bla"))
+	buildingprovider.EXPECT().GetBuilding("random").Return(nil, errors.New("bla"))
 	router.ServeHTTP(rec, req)
 
 	if http.StatusBadRequest != rec.Code {
@@ -190,10 +188,9 @@ func TestBuildingController_GetRoomsFromBuildingFloor(t *testing.T) {
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
 	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
-	testbuilding := entitymapper.Building{
-		Id:     1,
-		Name:   "main",
-		Floors: []string{"1", "3"},
+	testbuilding := ent.Building{
+		ID:   1,
+		Name: "main",
 	}
 
 	router.ServeHTTP(rec, req)

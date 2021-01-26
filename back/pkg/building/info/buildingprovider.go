@@ -1,9 +1,11 @@
 package info
 
-import "studi-guide/pkg/building/db/entitymapper"
+import (
+	"studi-guide/pkg/building/db/ent"
+)
 
 type BuildingProvider interface {
-	GetAllBuildings() ([]entitymapper.Building, error)
-	GetBuilding(name string) (entitymapper.Building, error)
-	FilterBuildings(name string) ([]entitymapper.Building, error)
+	GetAllBuildings() ([]*ent.Building, error)
+	GetBuilding(name string) (*ent.Building, error)
+	FilterBuildings(name string) ([]*ent.Building, error)
 }

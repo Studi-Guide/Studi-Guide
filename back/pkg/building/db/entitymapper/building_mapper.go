@@ -3,19 +3,18 @@ package entitymapper
 import (
 	"studi-guide/pkg/building/db/ent"
 	entbuilding "studi-guide/pkg/building/db/ent/building"
-	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/utils"
 )
 
-func (r *EntityMapper) GetAllBuildings() ([]Building, error) {
+func (r *EntityMapper) GetAllBuildings() ([]*ent.Building, error) {
 	buildings, err := r.client.Building.Query().WithCampus().WithAddress().WithBody().All(r.context)
 	if err != nil {
 		return nil, err
 	}
-	return r.buildingArrayMapper(buildings)
+	return buildings, nil
 }
 
-func (r *EntityMapper) GetBuilding(name string) (Building, error) {
+func (r *EntityMapper) GetBuilding(name string) (*ent.Building, error) {
 	b, err := r.client.Building.
 		Query().
 		WithBody().
@@ -24,16 +23,12 @@ func (r *EntityMapper) GetBuilding(name string) (Building, error) {
 		Where(entbuilding.NameEqualFold(name)).First(r.context)
 
 	if err != nil {
-		return Building{}, err
+		return nil, err
 	}
-	bding, err := r.buildingMapper(b)
-	if err != nil {
-		return Building{}, err
-	}
-	return *bding, nil
+	return b, nil
 }
 
-func (r *EntityMapper) FilterBuildings(name string) ([]Building, error) {
+func (r *EntityMapper) FilterBuildings(name string) ([]*ent.Building, error) {
 	buildings, err := r.client.Building.Query().
 		WithBody().
 		WithCampus().
@@ -42,51 +37,8 @@ func (r *EntityMapper) FilterBuildings(name string) ([]Building, error) {
 	if err != nil {
 		return nil, err
 	}
-	return r.buildingArrayMapper(buildings)
-}
 
-func (r *EntityMapper) buildingArrayMapper(entBuildings []*ent.Building) ([]Building, error) {
-	var buildings []Building
-	for _, b := range entBuildings {
-		bding, err := r.buildingMapper(b)
-		if err != nil {
-			return nil, err
-		}
-		buildings = append(buildings, *bding)
-	}
 	return buildings, nil
-}
-
-func (r *EntityMapper) buildingMapper(entBuilding *ent.Building) (*Building, error) {
-	floors, _ := r.getFloorsFromBuilding(entBuilding)
-	building := Building{
-		Id:     entBuilding.ID,
-		Name:   entBuilding.Name,
-		Color:  entBuilding.Color,
-		Floors: floors,
-	}
-
-	campus, _ := entBuilding.Edges.CampusOrErr()
-	if campus != nil {
-		building.Campus = campus.ShortName
-	}
-
-	body, _ := entBuilding.Edges.BodyOrErr()
-	if body != nil {
-		for _, coordinate := range body {
-			building.Body = append(building.Body, navigation.GpsCoordinate{
-				Longitude: coordinate.Longitude,
-				Latitude:  coordinate.Latitude,
-			})
-		}
-	}
-
-	address, _ := entBuilding.Edges.AddressOrErr()
-	if address != nil {
-		building.Address = *address
-	}
-
-	return &building, nil
 }
 
 func (r *EntityMapper) getFloorsFromBuilding(building *ent.Building) ([]string, error) {

@@ -3,7 +3,7 @@ package info
 import (
 	"fmt"
 	"net/http"
-	"studi-guide/pkg/building/db/entitymapper"
+	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/location"
 	maps "studi-guide/pkg/building/map"
 	"studi-guide/pkg/building/room/models"
@@ -47,12 +47,12 @@ func NewBuildingController(router *gin.RouterGroup, buildingProvider BuildingPro
 // @Produce  json
 // @Tags BuildingController
 // @Param name query string false "name of the building"
-// @Success 200 {array} entitymapper.Building
+// @Success 200 {array} ent.Building
 // @Router /buildings [get]
 func (b BuildingController) GetBuildings(c *gin.Context) {
 	name := c.Query("name")
 
-	var buildings []entitymapper.Building
+	var buildings []*ent.Building
 	var err error
 
 	var useFilterApi bool
@@ -90,7 +90,7 @@ func (b BuildingController) GetBuildings(c *gin.Context) {
 // @Produce  json
 // @Tags BuildingController
 // @Param building path string true "name of the building"
-// @Success 200 {object} entitymapper.Building
+// @Success 200 {object} ent.Building
 // @Router /buildings/{building} [get]
 func (b BuildingController) GetBuildingByName(context *gin.Context) {
 	name := context.Param("building")
