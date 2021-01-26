@@ -68,8 +68,9 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 } else if (params != null && params.building != null && params.building.length > 0) {
                     const building = await this.dataService.get_building(params.building).toPromise();
                     if (building !== null) {
+                        const floors = await this.dataService.get_building_floor(building.Name).toPromise();
                         await this.mapView.showFloor(
-                            building.Floors?.includes('EG') ? 'EG' : building.Floors[0],
+                            floors?.includes('EG') ? 'EG' : floors[0],
                             building.Name);
                     }
                 } else {
@@ -96,7 +97,8 @@ export class NavigationPage implements OnInit, AfterViewInit{
         NavigationPage.progressIsVisible = true;
         try {
             const location = await this.mapView.showDiscoveryLocation(searchInput);
-            await this.model.addRecentSearchLocation(location, {lat: 0, lng: 0});
+            const building = await this.dataService.get_building(location.Building).toPromise();
+            await this.model.addRecentSearchLocation(location, {lat: 0, lng: 0}, building);
 
             await this.showLocationDrawer(location);
         } catch (ex) {

@@ -64,6 +64,10 @@ export class DataService {
         return this.cache.Get<IBuilding>(this.httpClient, this.baseUrl + '/buildings/' + name, logError);
     }
 
+    get_building_floor(name: string, logError: boolean = true) {
+        return this.cache.Get<string[]>(this.httpClient, this.baseUrl + '/buildings/' + name + '/floors', logError);
+    }
+
     get_buildings_search(search: string = '') {
         const searchParam = search ? '?name=' + search : '';
         return this.cache.Get<IBuilding[]>(this.httpClient, this.baseUrl + '/buildings' + searchParam);

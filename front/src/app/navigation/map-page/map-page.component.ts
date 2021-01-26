@@ -159,8 +159,8 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
     if (buildings !== null) {
       for (const building of buildings) {
-        if (building.Body !== null && building.Body.length > 0) {
-          Leaflet.polygon(MapPageComponent.convertToLeafLetCoordinates(building.Body),
+        if (building.edges.Body !== null && building.edges.Body.length > 0) {
+          Leaflet.polygon(MapPageComponent.convertToLeafLetCoordinates(building.edges.Body),
               {className: building.Name, color: building.Color ?? '#0083C6'})
               .addTo(this.map)
               .on('click', onPolygonClick);
@@ -188,8 +188,8 @@ export class MapPageComponent implements OnInit, OnDestroy {
         const location = await this.dataService.get_location(searchInput).toPromise();
         if (location) {
             const locationBuilding = await this.dataService.get_building(location.Building).toPromise();
-            const coordinates = this.getCenterCoordinateFromBody(locationBuilding.Body);
-            await this.model.addRecentSearchLocation(location, {lat: coordinates.Latitude, lng: coordinates.Longitude});
+            const coordinates = this.getCenterCoordinateFromBody(locationBuilding.edges.Body);
+            await this.model.addRecentSearchLocation(location, {lat: coordinates.Latitude, lng: coordinates.Longitude}, locationBuilding);
             this.searchMarker.push(
                 this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Room ' + location.Name, true));
 
@@ -205,7 +205,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
       try {
         const building = await this.dataService.get_building(searchInput, false).toPromise();
         if (building) {
-          const coordinates = this.getCenterCoordinateFromBody(building.Body);
+          const coordinates = this.getCenterCoordinateFromBody(building.edges.Body);
           await this.model.addRecentSearchBuilding(building, {lat: coordinates.Latitude, lng: coordinates.Longitude});
           this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
           this.searchMarker.push(
@@ -239,7 +239,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
         // found building
         // await this.model.addRecentSearch(searchInput);
         for (const building of buildings) {
-          const coordinates = this.getCenterCoordinateFromBody(building.Body);
+          const coordinates = this.getCenterCoordinateFromBody(building.edges.Body);
           this.searchMarker.push(
             this.showMarker(coordinates.Latitude, coordinates.Longitude, building.Name, false));
         }

@@ -22,7 +22,8 @@ export class FloorsBarComponent implements OnInit, OnChanges {
   async ngOnChanges(changes: SimpleChanges) {
     if (changes.currentBuilding !== undefined && this.currentBuilding !== undefined) {
       const building = await this.dataService.get_building(this.currentBuilding).toPromise();
-      this.availableFloors = building.Floors.reverse();
+      const floors = await this.dataService.get_building_floor(building.Name).toPromise();
+      this.availableFloors = floors.reverse();
     }
   }
 
