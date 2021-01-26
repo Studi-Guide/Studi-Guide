@@ -852,7 +852,7 @@ func TestEntityMapper_GetMapItemByPathNodeID(t *testing.T) {
 		t.Error(mappedItem.PathNodes, checkItem.PathNodes)
 	}
 
-	floors, err := r.getFloorsFromBuilding(mItem.Edges.Building)
+	floors, err := r.GetFloorsFromBuilding(mItem.Edges.Building)
 	if len(floors) == 0 {
 		t.Error("expected something and got:", err)
 	}
