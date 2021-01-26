@@ -81,6 +81,11 @@ func (r *EntityMapper) buildingMapper(entBuilding *ent.Building) (*Building, err
 		}
 	}
 
+	address, _ := entBuilding.Edges.AddressOrErr()
+	if address != nil {
+		building.Address = *address
+	}
+
 	return &building, nil
 }
 
