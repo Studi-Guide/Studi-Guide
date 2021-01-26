@@ -8,4 +8,5 @@ type BuildingProvider interface {
 	GetAllBuildings() ([]*ent.Building, error)
 	GetBuilding(name string) (*ent.Building, error)
 	FilterBuildings(name string) ([]*ent.Building, error)
+	GetFloorsFromBuilding(building *ent.Building) ([]string, error)
 }

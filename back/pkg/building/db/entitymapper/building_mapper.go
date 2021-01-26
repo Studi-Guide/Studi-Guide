@@ -41,7 +41,7 @@ func (r *EntityMapper) FilterBuildings(name string) ([]*ent.Building, error) {
 	return buildings, nil
 }
 
-func (r *EntityMapper) getFloorsFromBuilding(building *ent.Building) ([]string, error) {
+func (r *EntityMapper) GetFloorsFromBuilding(building *ent.Building) ([]string, error) {
 	floors, err := building.QueryMapitems().
 		Select("floor").Strings(r.context)
 
