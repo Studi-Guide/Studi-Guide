@@ -87,11 +87,7 @@ func (r *EntityMapper) AddCampus(campus ent.Campus) error {
 				}
 			}
 
-			buildingEntity, err = buildingQuery.Save(r.context)
-			if err != nil {
-				log.Print("Error adding building:", building, " Error:", err)
-				return err
-			}
+			buildingEntity, _ = buildingQuery.Save(r.context)
 		}
 
 		if buildingEntity != nil {
