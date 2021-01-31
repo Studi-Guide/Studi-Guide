@@ -3,7 +3,7 @@ package info
 import (
 	"fmt"
 	"net/http"
-	"studi-guide/pkg/building/db/entitymapper"
+	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/location"
 	maps "studi-guide/pkg/building/map"
 	"studi-guide/pkg/building/room/models"
@@ -32,6 +32,7 @@ func NewBuildingController(router *gin.RouterGroup, buildingProvider BuildingPro
 
 	b.router.GET("", b.GetBuildings)
 	b.router.GET("/:building", b.GetBuildingByName)
+	b.router.GET("/:building/floors", b.GetFloorsFromBuilding)
 	b.router.GET("/:building/floors/:floor/rooms", b.GetRoomsFromBuildingFloor)
 	b.router.GET("/:building/floors/:floor/maps", b.GetMapsFromBuildingFloor)
 	b.router.GET("/:building/floors/:floor/locations", b.GetLocationsFromBuildingFloor)
@@ -47,12 +48,12 @@ func NewBuildingController(router *gin.RouterGroup, buildingProvider BuildingPro
 // @Produce  json
 // @Tags BuildingController
 // @Param name query string false "name of the building"
-// @Success 200 {array} entitymapper.Building
+// @Success 200 {array} ent.Building
 // @Router /buildings [get]
 func (b BuildingController) GetBuildings(c *gin.Context) {
 	name := c.Query("name")
 
-	var buildings []entitymapper.Building
+	var buildings []*ent.Building
 	var err error
 
 	var useFilterApi bool
@@ -90,7 +91,7 @@ func (b BuildingController) GetBuildings(c *gin.Context) {
 // @Produce  json
 // @Tags BuildingController
 // @Param building path string true "name of the building"
-// @Success 200 {object} entitymapper.Building
+// @Success 200 {object} ent.Building
 // @Router /buildings/{building} [get]
 func (b BuildingController) GetBuildingByName(context *gin.Context) {
 	name := context.Param("building")
@@ -183,4 +184,39 @@ func (b BuildingController) GetLocationsFromBuildingFloor(context *gin.Context) 
 	}
 
 	context.JSON(http.StatusOK, location)
+}
+
+// @Summary Get floors of a Building
+// @Description Get floors of a building by name
+// @ID get-building-floor-name
+// @Accept  json
+// @Produce  json
+// @Tags BuildingController
+// @Param building path string false "name of the building"
+// @Success 200 {array} string
+// @Router /buildings/{building}/floors [get]
+func (b BuildingController) GetFloorsFromBuilding(context *gin.Context) {
+	buildingStr := context.Param("building")
+
+	building, err := b.buildingProvider.GetBuilding(buildingStr)
+	if err != nil {
+		fmt.Println("GetFloorsFromBuilding() failed with error", err)
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	floors, err := b.buildingProvider.GetFloorsFromBuilding(building)
+	if err != nil {
+		fmt.Println("GetFloorsFromBuilding() failed with error", err)
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	context.JSON(http.StatusOK, floors)
 }

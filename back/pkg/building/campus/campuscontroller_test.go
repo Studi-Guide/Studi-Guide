@@ -33,6 +33,13 @@ func TestCampusController_GetCampusByName(t *testing.T) {
 		Edges:   ent.AddressEdges{},
 	}
 
+	building := ent.Building{
+		Name: "K",
+		Edges: ent.BuildingEdges{
+			Address: &address,
+		},
+	}
+
 	campus := ent.Campus{
 		ID:        1,
 		ShortName: "K",
@@ -40,7 +47,9 @@ func TestCampusController_GetCampusByName(t *testing.T) {
 		Longitude: 100.5,
 		Latitude:  200.8,
 		Edges: ent.CampusEdges{
-			Address: []*ent.Address{&address},
+			Buildings: []*ent.Building{
+				&building,
+			},
 		},
 	}
 
@@ -106,6 +115,20 @@ func TestCampusController_GetCampus_All(t *testing.T) {
 		Edges:   ent.AddressEdges{},
 	}
 
+	building := ent.Building{
+		Name: "K",
+		Edges: ent.BuildingEdges{
+			Address: &address,
+		},
+	}
+
+	building2 := ent.Building{
+		Name: "KA",
+		Edges: ent.BuildingEdges{
+			Address: &address2,
+		},
+	}
+
 	campus := []*ent.Campus{
 		{
 			ID:        1,
@@ -114,7 +137,7 @@ func TestCampusController_GetCampus_All(t *testing.T) {
 			Longitude: 100.5,
 			Latitude:  200.8,
 			Edges: ent.CampusEdges{
-				Address: []*ent.Address{&address},
+				Buildings: []*ent.Building{&building},
 			},
 		},
 		{
@@ -124,7 +147,7 @@ func TestCampusController_GetCampus_All(t *testing.T) {
 			Longitude: 500.5,
 			Latitude:  1100.8,
 			Edges: ent.CampusEdges{
-				Address: []*ent.Address{&address2},
+				Buildings: []*ent.Building{&building2},
 			},
 		},
 	}
@@ -161,6 +184,13 @@ func TestCampusController_GetCampus_Filter(t *testing.T) {
 		Edges:   ent.AddressEdges{},
 	}
 
+	building := ent.Building{
+		Name: "K",
+		Edges: ent.BuildingEdges{
+			Address: &address,
+		},
+	}
+
 	campus := []*ent.Campus{
 		{
 			ID:        1,
@@ -169,7 +199,7 @@ func TestCampusController_GetCampus_Filter(t *testing.T) {
 			Longitude: 100.5,
 			Latitude:  200.8,
 			Edges: ent.CampusEdges{
-				Address: []*ent.Address{&address},
+				Buildings: []*ent.Building{&building},
 			},
 		},
 	}

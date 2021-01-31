@@ -37,17 +37,21 @@ export interface IMapItem {
 }
 
 export interface IGpsCoordinate {
-  Longitude: number
-  Latitude: number
+  Longitude: number;
+  Latitude: number;
+}
+
+interface IBuildingEdges {
+  Address: IAddress;
+  Body: IGpsCoordinate[];
+  Campus: ICampus;
 }
 
 export interface IBuilding {
   Id: number;
   Name: string;
   Color: string;
-  Floors: string[];
-  Campus: string;
-  Body: IGpsCoordinate[];
+  edges: IBuildingEdges;
 }
 
 export interface ILocation {
@@ -72,7 +76,7 @@ export interface IAddress {
 }
 
 export interface ICampusEdges {
-  Address: IAddress[];
+  Buildings: IBuilding[];
 }
 
 export interface ICampus {
@@ -89,7 +93,7 @@ export interface IRoom extends IMapItem, ILocation{
 }
 
 export interface IRenderer {
-  render(renderingContext:any, args?:any)
-  startAnimation(renderingContext:any, args?:any)
-  stopAnimation(renderingContext:any, args?:any)
+  render(renderingContext: any, args?: any);
+  startAnimation(renderingContext: any, args?: any);
+  stopAnimation(renderingContext: any, args?: any);
 }

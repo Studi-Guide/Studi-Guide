@@ -63,14 +63,13 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 		SetShortName("TC").
 		SetLongitude(0).
 		SetLatitude(0).
-		AddAddress(address).
 		Save(ctx)
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	building, _ := client.Building.Create().SetName("main").SetCampus(campus).Save(ctx)
+	building, _ := client.Building.Create().SetName("main").SetAddress(address).SetCampus(campus).Save(ctx)
 	testRooms = []Room{}
 	for i := 1; i < 4; i++ {
 
@@ -167,8 +166,7 @@ func setupTestRoomDbService() (*EntityMapper, *sql.DB) {
 		SetShortName("HB").
 		SetName("HB Hofbräu Haus").
 		SetLatitude(48.1378).
-		SetLongitude(11.5797).
-		AddAddress(address).Save(ctx)
+		SetLongitude(11.5797).Save(ctx)
 
 	dbService := EntityMapper{client: client, env: env.NewEnv(), context: ctx}
 
@@ -767,10 +765,6 @@ func TestEntityService_CampusEntity(t *testing.T) {
 		t.Error("expected: ", "HB Hofbräu Haus", "; got: ", campusArray[0].Name)
 	}
 
-	if campusArray[1].Edges.Address[0].Street != "Am Platzl" {
-		t.Error("expected: ", "Am Platzl", "; got: ", campusArray[0].Edges.Address[0].Street)
-	}
-
 	campus, err := dbService.GetCampus("HB")
 	if err != nil {
 		t.Error("expected: ", nil, "; got: ", err)
@@ -778,10 +772,6 @@ func TestEntityService_CampusEntity(t *testing.T) {
 
 	if campus.Name != "HB Hofbräu Haus" {
 		t.Error("expected: ", "HB Hofbräu Haus", "; got: ", campus.Name)
-	}
-
-	if campus.Edges.Address[0].Street != "Am Platzl" {
-		t.Error("expected: ", "Am Platzl", "; got: ", campus.Edges.Address[0].Street)
 	}
 
 	campusArray, err = dbService.FilterCampus("HB")
@@ -795,10 +785,6 @@ func TestEntityService_CampusEntity(t *testing.T) {
 
 	if campusArray[0].Name != "HB Hofbräu Haus" {
 		t.Error("expected: ", "HB Hofbräu Haus", "; got: ", campusArray[0].Name)
-	}
-
-	if campusArray[0].Edges.Address[0].Street != "Am Platzl" {
-		t.Error("expected: ", "Am Platzl", "; got: ", campusArray[0].Edges.Address[0].Street)
 	}
 }
 func TestEntityService_CampusEntity_Negative(t *testing.T) {
@@ -821,21 +807,25 @@ func TestEntityService_CampusEntity_Negative(t *testing.T) {
 func TestEntityMapper_AddCampus(t *testing.T) {
 	dbService, _ := setupTestRoomDbService()
 
+	address := ent.Address{
+		Street:  "BlaStreet",
+		Number:  "10",
+		PLZ:     11111,
+		City:    "BlaTown",
+		Country: "BlaLand",
+	}
+
+	invalidAddress := ent.Address{
+		City:    "BlaTown",
+		Country: "BlaLand",
+	}
+
 	testcampus := ent.Campus{
 		ShortName: "Test",
 		Name:      "TESTTEST",
 		Longitude: 12180840.92938,
 		Latitude:  120480124.29323,
 		Edges: ent.CampusEdges{
-			Address: []*ent.Address{
-				{
-					Street:  "BlaStreet",
-					Number:  "10",
-					PLZ:     11111,
-					City:    "BlaTown",
-					Country: "BlaLand",
-				},
-			},
 			Buildings: []*ent.Building{{
 				ID:   1,
 				Name: "Test",
@@ -844,16 +834,43 @@ func TestEntityMapper_AddCampus(t *testing.T) {
 						Latitude:  20,
 						Longitude: 10,
 					}},
+					Address: &address,
 				},
 			},
 				{
 					ID:   2,
 					Name: "Test2",
+					Edges: ent.BuildingEdges{
+						Address: &address,
+					},
 				},
 				{
 					ID:   1,
 					Name: "Test3",
+					Edges: ent.BuildingEdges{
+						Address: &address,
+					},
 				}},
+		},
+	}
+
+	testcampus2 := ent.Campus{
+		ShortName: "Test2",
+		Name:      "TESTTEST2",
+		Longitude: 12180840.92938,
+		Latitude:  120480124.29323,
+		Edges: ent.CampusEdges{
+			Buildings: []*ent.Building{{
+				ID:   2,
+				Name: "Test2",
+				Edges: ent.BuildingEdges{
+					Body: []*ent.Coordinate{{
+						Latitude:  20,
+						Longitude: 10,
+					}},
+					Address: &invalidAddress,
+				},
+			}},
 		},
 	}
 
@@ -876,37 +893,16 @@ func TestEntityMapper_AddCampus(t *testing.T) {
 		realValue.Name != testcampus.Name ||
 		realValue.Latitude != testcampus.Latitude ||
 		realValue.Longitude != testcampus.Longitude ||
-		realValue.Edges.Address[0].Street != testcampus.Edges.Address[0].Street ||
-		realValue.Edges.Address[0].City != testcampus.Edges.Address[0].City ||
-		realValue.Edges.Address[0].Country != testcampus.Edges.Address[0].Country ||
-		realValue.Edges.Address[0].PLZ != testcampus.Edges.Address[0].PLZ {
+		realValue.Edges.Buildings[0].Edges.Address.Street != testcampus.Edges.Buildings[0].Edges.Address.Street ||
+		realValue.Edges.Buildings[0].Edges.Address.City != testcampus.Edges.Buildings[0].Edges.Address.City ||
+		realValue.Edges.Buildings[0].Edges.Address.Country != testcampus.Edges.Buildings[0].Edges.Address.Country ||
+		realValue.Edges.Buildings[0].Edges.Address.PLZ != testcampus.Edges.Buildings[0].Edges.Address.PLZ {
 		t.Error("expected equal but got ", testcampus, "; real: ", realValue)
 	}
-}
 
-func TestEntityMapper_AddCampus_InvalidAddress(t *testing.T) {
-	dbService, _ := setupTestRoomDbService()
-
-	testcampus := ent.Campus{
-		ShortName: "Test",
-		Name:      "TESTTEST",
-		Longitude: 12180840.92938,
-		Latitude:  120480124.29323,
-		Edges: ent.CampusEdges{
-			Address: []*ent.Address{
-				{
-					Street:  "BlaStreet",
-					Number:  "10",
-					Country: "",
-					City:    "BlaCity",
-				},
-			},
-		},
-	}
-
-	err := dbService.AddCampus(testcampus)
+	err = dbService.AddCampus(testcampus2)
 	if err == nil {
-		t.Error("expected error got: ", nil)
+		t.Error("expected error; got: ", nil)
 	}
 }
 

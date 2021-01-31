@@ -87,10 +87,12 @@ export class NavigationModel {
         await this.addRecentSearch(searchResult);
     }
     public async addRecentSearchBuilding(b: IBuilding, latLng: LatLngLiteral) {
+        const address = b.edges.Address.Street + ' ' + b.edges.Address.Number + ', ' + b.edges.Address.PLZ;
+        const details: [string, any][] = [['Campus: ',  b.edges.Campus.Name]];
         const searchResult = {
             Name: b.Name,
-            Description: 'Campus:' + b.Campus,
-            Information: [],
+            Description: address,
+            Information: details,
             DetailRouterParams: {building: b.Name},
             RouteRouterParams: {},
             LatLng: latLng,
@@ -98,11 +100,16 @@ export class NavigationModel {
         };
         await this.addRecentSearch(searchResult);
     }
-    public async addRecentSearchLocation(l: ILocation, latLng: LatLngLiteral) {
+    public async addRecentSearchLocation(l: ILocation, latLng: LatLngLiteral, building: IBuilding) {
         const details: [string, any][] = [['Building: ',  l.Name]];
+        if (building) {
+            details.push(['Address: ', building.edges.Address.Street + ' ' + building.edges.Address.Number]);
+        }
+
         if (l.Tags) {
             details.push(['Tags: ', l.Tags.join(', ')]);
         }
+
         const searchResult = {
             Name: l.Name,
             Description: l.Description,
