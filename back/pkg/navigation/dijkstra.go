@@ -42,7 +42,8 @@ func (d *DijkstraNavigation) GetRoute(start, end PathNode) (path []PathNode, dis
 		return nil, 0, nil
 	}
 
-	bestPath, err := d.graph.Shortest(start.Id, end.Id)
+	graphToUse := *d.graph
+	bestPath, err := graphToUse.Shortest(start.Id, end.Id)
 
 	if err != nil {
 		return nil, 0, err
