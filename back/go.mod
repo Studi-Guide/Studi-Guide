@@ -3,7 +3,7 @@ module studi-guide
 go 1.13
 
 require (
-	github.com/RyanCarrier/dijkstra v1.0.0
+	github.com/Studi-Guide/dijkstra v1.0.2
 	github.com/ahmetb/go-linq/v3 v3.1.0
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
