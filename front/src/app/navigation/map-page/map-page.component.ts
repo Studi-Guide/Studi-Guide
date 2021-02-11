@@ -4,7 +4,7 @@ import * as Leaflet from 'leaflet';
 import {LatLngLiteral, LeafletMouseEvent} from 'leaflet';
 import {DataService} from '../../services/data.service';
 import {IGpsCoordinate} from '../../building-objects-if';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {IRouteLocation, NavigationModel} from '../navigationModel';
 import {CampusViewModel} from '../campusViewModel';
 import {Platform} from '@ionic/angular';
@@ -45,6 +45,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
   constructor(
       private dataService: DataService,
+      private  route: ActivatedRoute,
       private router: Router,
       public model: NavigationModel,
       private storage: Storage,
@@ -70,6 +71,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   errorMessage: string;
   private currentPositionMarker: Leaflet.Marker = null;
   private isInitialized = false;
+  private isSubscribed = false;
 
   private readonly DEFAULT_ZOOM = 17;
   private readonly MAX_ZOOM = 18;
@@ -95,6 +97,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   async ionViewDidEnter() {
+
     if (!this.isInitialized) {
       await this.initializeMap(this.router);
       this.isInitialized = true;
@@ -112,6 +115,25 @@ export class MapPageComponent implements OnInit, OnDestroy {
     }
     catch (error) {
       console.log('Error getting location', error);
+    }
+
+    if (this.isSubscribed === false) {
+      this.isSubscribed = true;
+      this.route.queryParams.subscribe(async params => {
+        console.log(params);
+
+        if (params === null) {
+          return;
+        }
+
+        console.log(params.location);
+        if (params.location !== null && params.location !== undefined) {
+          await this.onSearch(params.location);
+        } else if (params.route !== null) {
+
+        }
+
+      });
     }
   }
 
@@ -152,8 +174,9 @@ export class MapPageComponent implements OnInit, OnDestroy {
     const buildings = await this.dataService.get_buildings_search().toPromise();
 
     function onPolygonClick(event: LeafletMouseEvent) {
-      router.navigate(['tabs/navigation/detail'],
-          {queryParams: {building: event.target.options.className}})
+
+      router.navigate(['tabs/navigation'],
+          {queryParams: {location: event.target.options.className}})
           .then(() => console.log(event.latlng, event.target.options.className));
     }
 
