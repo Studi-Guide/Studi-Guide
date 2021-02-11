@@ -11,8 +11,8 @@ github.com/PuerkitoBio/purell v1.1.1 h1:WEQqlqaGbrPkxLJWfBwQmfEAE1Z7ONdDLqrN38tN
 github.com/PuerkitoBio/purell v1.1.1/go.mod h1:c11w/QuzBsJSee3cPx9rAFu61PvFxuPbtSwDGJws/X0=
 github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578 h1:d+Bc7a5rLufV/sSk/8dngufqelfh6jnri85riMAaF/M=
 github.com/PuerkitoBio/urlesc v0.0.0-20170810143723-de5bf2ad4578/go.mod h1:uGdkoq3SwY9Y+13GIhn11/XLaGBb4BfwItxLd5jeuXE=
-github.com/Studi-Guide/dijkstra v1.0.2 h1:OSMP13UvL7kz7wZMNQyEW4gBcClac1mSztsJS1uL3fQ=
-github.com/Studi-Guide/dijkstra v1.0.2/go.mod h1:sMvNkFJbsGcRP+oaLf7tRb5Q+d+2juMJsEg2nv8ksyk=
+github.com/Studi-Guide/dijkstra v1.0.4 h1:Pdqs/0GyJgPhck5qto7cj6yFdSBIBqG8PVZlXEEHvbA=
+github.com/Studi-Guide/dijkstra v1.0.4/go.mod h1:sMvNkFJbsGcRP+oaLf7tRb5Q+d+2juMJsEg2nv8ksyk=
 github.com/ahmetb/go-linq/v3 v3.1.0 h1:E/eoLrVELxU42gINTWgbj+jK2Z+wXJqt0wsk1NTu4h8=
 github.com/ahmetb/go-linq/v3 v3.1.0/go.mod h1:haQ3JfOeWK8HpVxMtHHEMPVgBKiYyQ+f1/kLZh/cj9U=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
