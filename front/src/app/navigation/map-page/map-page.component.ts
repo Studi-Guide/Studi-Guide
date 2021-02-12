@@ -371,8 +371,8 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
     this.navSlides.instructions = this.model.Route.NavigationInstructions;
     await this.navSlides.show();
-    // await this.drawerManager.setState(NavDrawerState.InNavigationView);
     this.map.flyTo(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].Interval[0]], this.MAX_ZOOM);
+    await this.drawerManager.SetState(NavDrawerState.InNavigationView);
   }
 
   public onSlideChange(index: number) {

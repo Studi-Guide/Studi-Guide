@@ -108,7 +108,7 @@ export class NavDrawerManagerComponent implements AfterViewInit {
   }
 
   public async onLaunchNavigationClick() {
-    await this.SetState(NavDrawerState.InNavigationView, true);
+    this.stateChange.emit(NavDrawerState.InNavigationView);
   }
 
   public async onEndNavigationClick() {
