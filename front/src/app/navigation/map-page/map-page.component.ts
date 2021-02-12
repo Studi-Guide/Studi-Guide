@@ -297,7 +297,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   //   await this.router.navigate(['/tabs/navigation'], {queryParams: {destination: event}});
   // }
 
-  private async onRoute(event: IRouteLocation[]) {
+  public async onRoute(event: IRouteLocation[]) {
     console.log(event);
     this.clearRoutes();
     await this.drawerManager.SetState(NavDrawerState.RouteView, false);
