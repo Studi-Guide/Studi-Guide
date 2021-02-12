@@ -38,7 +38,7 @@ func (l *NavigationController) GetNavigationRoute(c *gin.Context) {
 	coordinates, err := l.service.CalculateFromString(start, end)
 
 	if err != nil {
-		fmt.Println("GetAllRomms() failed with error", err)
+		fmt.Println("GetNavigationRoute() failed with error", err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"code":    http.StatusBadRequest,
 			"message": err.Error(),
