@@ -2,6 +2,7 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import {LoadingController} from '@ionic/angular';
 import {RssFeedService} from '../services/rss-feed.service';
 import {FeedItem} from '../news/rssElement';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-tab3',
@@ -14,7 +15,8 @@ export class Tab3Page implements OnInit {
   mensaFeedContent = new FeedItem('', '', '', '', Date.prototype, '');
 
   constructor(private loadingController: LoadingController,
-              private rssFeedService: RssFeedService
+              private rssFeedService: RssFeedService,
+              private router: Router,
   ) {}
 
   async ngOnInit() {
@@ -40,5 +42,9 @@ export class Tab3Page implements OnInit {
       console.log(e);
     }
     await loading.dismiss();
+  }
+
+  public async routeToMensa() {
+    await this.router.navigate(['/tabs/navigation'], {queryParams: {destination: 'KM'}});
   }
 }
