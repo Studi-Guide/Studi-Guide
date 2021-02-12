@@ -4,7 +4,7 @@ import * as Leaflet from 'leaflet';
 import {LatLngLiteral, LeafletMouseEvent} from 'leaflet';
 import {DataService} from '../../services/data.service';
 import {IGpsCoordinate} from '../../building-objects-if';
-import {Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {IRouteLocation, NavigationModel} from '../navigationModel';
 import {CampusViewModel} from '../campusViewModel';
 import {Platform} from '@ionic/angular';
@@ -45,6 +45,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
   constructor(
       private dataService: DataService,
+      private  route: ActivatedRoute,
       private router: Router,
       public model: NavigationModel,
       private storage: Storage,
@@ -70,6 +71,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   errorMessage: string;
   private currentPositionMarker: Leaflet.Marker = null;
   private isInitialized = false;
+  private isSubscribed = false;
 
   private readonly DEFAULT_ZOOM = 17;
   private readonly MAX_ZOOM = 18;
@@ -95,6 +97,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   async ionViewDidEnter() {
+
     if (!this.isInitialized) {
       await this.initializeMap(this.router);
       this.isInitialized = true;
@@ -112,6 +115,31 @@ export class MapPageComponent implements OnInit, OnDestroy {
     }
     catch (error) {
       console.log('Error getting location', error);
+    }
+
+    if (this.isSubscribed === false) {
+      this.isSubscribed = true;
+      this.route.queryParams.subscribe(async params => {
+
+        if (params === null || params === undefined) {
+          return;
+        }
+
+        if (params.location !== null && params.location !== undefined) {
+          await this.execSearch(params.location); // this will show also the location drawer
+          this.clearRoutes();
+        } else if (params.destination !== null && params.destination !== undefined) {
+          this.drawerManager.SetState(NavDrawerState.RouteView);
+          await this.execDirectSearch(params.destination);
+          await this.routeToLatestSearchResult();
+        } else {
+          // assuming initial state
+          await this.drawerManager.SetState(NavDrawerState.SearchView);
+          this.clearSearchMarkers();
+          this.clearRoutes();
+        }
+
+      });
     }
   }
 
@@ -152,8 +180,9 @@ export class MapPageComponent implements OnInit, OnDestroy {
     const buildings = await this.dataService.get_buildings_search().toPromise();
 
     function onPolygonClick(event: LeafletMouseEvent) {
-      router.navigate(['tabs/navigation/detail'],
-          {queryParams: {building: event.target.options.className}})
+
+      router.navigate(['tabs/navigation'],
+          {queryParams: {location: event.target.options.className}})
           .then(() => console.log(event.latlng, event.target.options.className));
     }
 
@@ -175,62 +204,25 @@ export class MapPageComponent implements OnInit, OnDestroy {
     this.map.remove();
   }
 
-  async onSearch(searchInput: string) {
+  public async onSearch(searchInput: string) {
+    await this.router.navigate(['/tabs/navigation'], {queryParams: {location: searchInput}});
+  }
+
+  private async execSearch(searchInput: string) {
     this.model.errorMessage = '';
     this.progressIsVisible = true;
 
     try {
       this.clearSearchMarkers();
 
-      // look for indexed values
-      // location
-      try {
-        const location = await this.dataService.get_location(searchInput).toPromise();
-        if (location) {
-            const locationBuilding = await this.dataService.get_building(location.Building).toPromise();
-            const coordinates = this.getCenterCoordinateFromBody(locationBuilding.edges.Body);
-            await this.model.addRecentSearchLocation(location, {lat: coordinates.Latitude, lng: coordinates.Longitude}, locationBuilding);
-            this.searchMarker.push(
-                this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Room ' + location.Name, true));
-
-            this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
-
-            await this.showElementDrawer();
-            return;
-          }
-        } catch (e) {
-          console.log(e);
-      }
-      // building
-      try {
-        const building = await this.dataService.get_building(searchInput, false).toPromise();
-        if (building) {
-          const coordinates = this.getCenterCoordinateFromBody(building.edges.Body);
-          await this.model.addRecentSearchBuilding(building, {lat: coordinates.Latitude, lng: coordinates.Longitude});
-          this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
-          this.searchMarker.push(
-              this.showMarker(coordinates.Latitude, coordinates.Longitude, 'Building ' + building.Name, true));
-
-          await this.showElementDrawer();
-          return;
-        }
-      } catch (e) {
-        console.log(e);
-      }
-      // campus
-      try {
-        const campus = await this.dataService.get_campus(searchInput, false).toPromise();
-        if (campus) {
-          await this.model.addRecentSearchCampus(campus);
-          this.searchMarker.push(
-              this.showMarker(campus.Latitude, campus.Longitude, 'Campus ' + campus.Name, true));
-
-          this.map.flyTo([campus.Latitude, campus.Longitude], this.DEFAULT_ZOOM);
-          await this.showElementDrawer();
-          return;
-        }
-      } catch (e) {
-        console.log(e);
+      if (await this.execDirectSearch(searchInput)) {
+        this.searchMarker.push(
+            this.showMarker(this.model.latestSearchResult.LatLng.lat, this.model.latestSearchResult.LatLng.lng,
+                this.model.latestSearchResult.Name, true)
+        );
+        this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
+        await this.showElementDrawer();
+        return;
       }
 
       // Look for all possible buildings via Search-API
@@ -263,6 +255,49 @@ export class MapPageComponent implements OnInit, OnDestroy {
     }
   }
 
+  private async execDirectSearch(searchInput: string): Promise<boolean> {
+    // look for indexed values
+    // location
+    try {
+      const location = await this.dataService.get_location(searchInput).toPromise();
+      if (location) {
+        const locationBuilding = await this.dataService.get_building(location.Building).toPromise();
+        const coordinates = this.getCenterCoordinateFromBody(locationBuilding.edges.Body);
+        await this.model.addRecentSearchLocation(location, {lat: coordinates.Latitude, lng: coordinates.Longitude}, locationBuilding);
+        return true;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    // building
+    try {
+      const building = await this.dataService.get_building(searchInput, false).toPromise();
+      if (building) {
+        const coordinates = this.getCenterCoordinateFromBody(building.edges.Body);
+        await this.model.addRecentSearchBuilding(building, {lat: coordinates.Latitude, lng: coordinates.Longitude});
+        return true;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+    // campus
+    try {
+      const campus = await this.dataService.get_campus(searchInput, false).toPromise();
+      if (campus) {
+        await this.model.addRecentSearchCampus(campus);
+        return true;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+    return false;
+  }
+
+  // public async onRoute(event: IRouteLocation[]) {
+  //   await this.router.navigate(['/tabs/navigation'], {queryParams: {destination: event}});
+  // }
+
   public async onRoute(event: IRouteLocation[]) {
     console.log(event);
     this.clearRoutes();
@@ -280,18 +315,6 @@ export class MapPageComponent implements OnInit, OnDestroy {
     this.routes.push(polyline);
   }
 
-  public async onCloseLocationDrawer(event: any) {
-    this.searchInput.clearDestinationInput();
-    await this.drawerManager.SetState(NavDrawerState.SearchView);
-    this.clearSearchMarkers();
-  }
-
-  public async onCloseRouteDrawer(event: any) {
-    this.clearRoutes();
-    await this.drawerManager.SetState(NavDrawerState.LocationView);
-    this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
-  }
-
   public async showElementDrawer() {
     if (this.isHybridPlatform) {
         await Keyboard.hide();
@@ -307,14 +330,15 @@ export class MapPageComponent implements OnInit, OnDestroy {
     console.log(newState);
     switch (newState) {
       case NavDrawerState.SearchView:
-        this.clearSearchMarkers();
+        await this.router.navigate(['/tabs/navigation']);
         break;
       case NavDrawerState.LocationView:
-        this.clearRoutes();
-        this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
+        await this.router.navigate(['/tabs/navigation'], {queryParams: {location: this.model.latestSearchResult.Name}});
+        // this.clearRoutes();
+        // this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
         break;
       case NavDrawerState.RouteView:
-        await this.onRouteBtnClick();
+        await this.router.navigate(['/tabs/navigation'], {queryParams: {destination: this.model.latestSearchResult.Name}});
         break;
       case NavDrawerState.InNavigationView:
         await this.onLaunchNavigation();
@@ -328,7 +352,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
               ? this.model.latestSearchResult.DetailRouterParams : this.model.latestSearchResult.RouteRouterParams});
   }
 
-  public async onRouteBtnClick() {
+  private async routeToLatestSearchResult() {
     const geoPosition = await this.geolocation.getCurrentPosition();
     const position = {lat: geoPosition.coords.latitude, lng: geoPosition.coords.longitude};
     const routes: OsmRoute[] = await this.openStreetMapService.GetRoute(
