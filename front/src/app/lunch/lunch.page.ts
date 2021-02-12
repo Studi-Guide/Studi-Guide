@@ -6,10 +6,10 @@ import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss']
+  templateUrl: 'lunch.page.html',
+  styleUrls: ['lunch.page.scss']
 })
-export class Tab3Page implements OnInit {
+export class LunchPage implements OnInit {
   private mensaFeed = 'Mensateria-Ohm';
   isMensaExpanded = false;
   mensaFeedContent = new FeedItem('', '', '', '', Date.prototype, '');

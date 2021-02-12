@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Tab3Page } from './tab3.page';
+import { LunchPage } from './lunch.page';
 import {IonicExpanderComponent} from '../../ionic-expander/ionic-expander.component';
 import {IonicExpanderModule} from "../../ionic-expander/ionic-expander.module";
 
@@ -12,9 +12,9 @@ import {IonicExpanderModule} from "../../ionic-expander/ionic-expander.module";
     IonicModule,
     CommonModule,
     FormsModule,
-    RouterModule.forChild([{path: '', component: Tab3Page}]),
+    RouterModule.forChild([{path: '', component: LunchPage}]),
     IonicExpanderModule
   ],
-  declarations: [Tab3Page]
+  declarations: [LunchPage]
 })
-export class Tab3PageModule {}
+export class LunchModule {}
