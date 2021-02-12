@@ -122,15 +122,18 @@ export class MapPageComponent implements OnInit, OnDestroy {
       this.route.queryParams.subscribe(async params => {
         console.log(params);
 
-        if (params === null) {
+        if (params === null || params === undefined) {
           return;
         }
 
-        console.log(params.location);
         if (params.location !== null && params.location !== undefined) {
-          await this.onSearch(params.location);
-        } else if (params.route !== null) {
-
+          await this.execSearch(params.location);
+        } else if (params.destination !== null && params.destination !== undefined) {
+          // await this.execRoute(params.destination);
+        } else {
+          // assuming initial state
+          this.clearSearchMarkers();
+          this.clearRoutes();
         }
 
       });
@@ -198,7 +201,11 @@ export class MapPageComponent implements OnInit, OnDestroy {
     this.map.remove();
   }
 
-  async onSearch(searchInput: string) {
+  public async onSearch(searchInput: string) {
+    await this.router.navigate(['/tabs/navigation'], {queryParams: {location: searchInput}});
+  }
+
+  private async execSearch(searchInput: string) {
     this.model.errorMessage = '';
     this.progressIsVisible = true;
 
@@ -286,7 +293,11 @@ export class MapPageComponent implements OnInit, OnDestroy {
     }
   }
 
-  public async onRoute(event: IRouteLocation[]) {
+  // public async onRoute(event: IRouteLocation[]) {
+  //   await this.router.navigate(['/tabs/navigation'], {queryParams: {destination: event}});
+  // }
+
+  private async onRoute(event: IRouteLocation[]) {
     console.log(event);
     this.clearRoutes();
     await this.drawerManager.SetState(NavDrawerState.RouteView, false);
@@ -301,18 +312,6 @@ export class MapPageComponent implements OnInit, OnDestroy {
     this.map.flyTo(polyline.getCenter(), this.DEFAULT_ZOOM);
     await this.map.fitBounds(polyline.getBounds());
     this.routes.push(polyline);
-  }
-
-  public async onCloseLocationDrawer(event: any) {
-    this.searchInput.clearDestinationInput();
-    await this.drawerManager.SetState(NavDrawerState.SearchView);
-    this.clearSearchMarkers();
-  }
-
-  public async onCloseRouteDrawer(event: any) {
-    this.clearRoutes();
-    await this.drawerManager.SetState(NavDrawerState.LocationView);
-    this.map.flyTo(this.model.latestSearchResult.LatLng, this.DEFAULT_ZOOM);
   }
 
   public async showElementDrawer() {
@@ -330,7 +329,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
     console.log(newState);
     switch (newState) {
       case NavDrawerState.SearchView:
-        this.clearSearchMarkers();
+        await this.router.navigate(['/tabs/navigation']);
         break;
       case NavDrawerState.LocationView:
         this.clearRoutes();
