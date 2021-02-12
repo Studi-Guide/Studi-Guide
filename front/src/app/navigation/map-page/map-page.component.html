@@ -1,4 +1,3 @@
-<app-navigation-instruction-slides #navSlides (nextSlide)="onSlideChange($event)" (previousSlide)="onSlideChange($event)"></app-navigation-instruction-slides>
 <app-nav-drawer-manager #drawerManager
 (campusClick)="onCampusClick($event)"
 (navInstructionClick)="onNavigationInstructionClick($event)"
@@ -7,6 +6,7 @@
 (stateChange)="onDrawerManagerStateChange($event)"
 (newRoute)="onRoute($event)">
 </app-nav-drawer-manager>
+<app-navigation-instruction-slides #navSlides (nextSlide)="onSlideChange($event)" (previousSlide)="onSlideChange($event)"></app-navigation-instruction-slides>
 <ion-content data-tap-disabled="true" scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="progressIsVisible"></ion-progress-bar>
   <div id="map-content">
