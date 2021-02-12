@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, EventEmitter, Input, Output, ViewChild} from '@angular/core';
 import {IonContent, Platform} from '@ionic/angular';
 import {IonicBottomDrawerComponent} from '../../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {IRouteLocation, NavigationModel} from '../navigationModel';
@@ -20,7 +20,7 @@ export enum NavDrawerState {
   templateUrl: './nav-drawer-manager.component.html',
   styleUrls: ['./nav-drawer-manager.component.scss'],
 })
-export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
+export class NavDrawerManagerComponent implements AfterViewInit {
 
   @Input() state: NavDrawerState = NavDrawerState.SearchView;
 
@@ -54,23 +54,11 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
       this.locationDrawer.SetState(DrawerState.Hidden),
       this.routeDrawer.SetState(DrawerState.Hidden),
       this.inNavigationDrawer.SetState(DrawerState.Hidden),
-      this.changeRouteDrawer.SetState(DrawerState.Hidden, false)]);
-
-    await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
-
-    // currently for debug ...
-    // this.SetState(NavDrawerState.ChangeRouteView, false);
+      this.changeRouteDrawer.SetState(DrawerState.Hidden, false),
+      this.searchDrawer.SetState(DrawerState.Hidden)]);
   }
 
-  async ngOnChanges(changes: SimpleChanges) {
-    if (!changes.state) {
-      return;
-    }
-
-    await this.SetState(changes.state.currentValue);
-  }
-
-  public async SetState(newState: NavDrawerState, shouldEmit = true) {
+  public async SetState(newState: NavDrawerState, shouldEmit = false) {
 
     switch (this.state) {
       case NavDrawerState.SearchView:
@@ -116,15 +104,15 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
   }
 
   public async onRouteClick() {
-    await this.SetState(NavDrawerState.RouteView);
+    this.stateChange.emit(NavDrawerState.RouteView);
   }
 
   public async onLaunchNavigationClick() {
-    await this.SetState(NavDrawerState.InNavigationView);
+    await this.SetState(NavDrawerState.InNavigationView, true);
   }
 
   public async onEndNavigationClick() {
-    await this.SetState(NavDrawerState.LocationView);
+    this.stateChange.emit(NavDrawerState.LocationView);
   }
 
   // custom event handler
@@ -138,16 +126,16 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
   }
 
   public async onCloseLocationDrawer() {
-    await this.SetState(NavDrawerState.SearchView);
+    this.stateChange.emit(NavDrawerState.SearchView);
   }
 
   public async onCloseRouteDrawer() {
-    await this.SetState(NavDrawerState.LocationView);
+    this.stateChange.emit(NavDrawerState.LocationView);
   }
 
   public async onChangeRouteStartEndClick() {
     this.routeInput.UpdateFromNavigationModel();
-    await this.SetState(NavDrawerState.ChangeRouteView);
+    await this.SetState(NavDrawerState.ChangeRouteView, true);
     await this.routeInput.SetFocus();
   }
 
@@ -165,7 +153,7 @@ export class NavDrawerManagerComponent implements AfterViewInit, OnChanges {
   public async onChangeRouteDrawerStateChange(state: DrawerState) {
     console.log(state);
     if (state === DrawerState.Hidden) {
-      await this.SetState(NavDrawerState.RouteView);
+      await this.SetState(NavDrawerState.RouteView, true);
     }
   }
 
