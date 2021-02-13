@@ -4,7 +4,7 @@ go 1.13
 
 require (
 	github.com/Studi-Guide/dijkstra v1.0.4
-	github.com/ahmetb/go-linq/v3 v3.1.0
+	github.com/ahmetb/go-linq/v3 v3.2.0
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
 	github.com/facebook/ent v0.4.3
