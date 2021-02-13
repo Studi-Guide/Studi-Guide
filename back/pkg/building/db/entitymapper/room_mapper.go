@@ -23,26 +23,22 @@ func (r *EntityMapper) roomArrayMapper(entRooms []*ent.Room) []Room {
 }
 
 func (r *EntityMapper) roomMapper(entRoom *ent.Room) *Room {
-
-	entRoom, err := r.client.Room.Query().Where(room.ID(entRoom.ID)).
-		WithMapitem(func(q *ent.MapItemQuery) {
-			q.WithPathNodes().
-				WithColor().
-				WithBuilding(func(b *ent.BuildingQuery) { b.WithCampus() }).
-				WithDoors(func(p *ent.DoorQuery) { p.WithPathNode().WithSection() }).WithSections()
-		}).
-		WithLocation(func(q *ent.LocationQuery) {
-			q.WithPathnode().WithTags().WithBuilding()
-		}).
-		First(r.context)
-	if err != nil || entRoom == nil {
+	if entRoom == nil {
 		return nil
 	}
 
 	rm := Room{
-		Id:       entRoom.ID,
-		MapItem:  *r.mapItemMapper(entRoom.Edges.Mapitem),
-		Location: *r.locationMapper(entRoom.Edges.Location),
+		Id: entRoom.ID,
+	}
+
+	location, _ := entRoom.Edges.LocationOrErr()
+	if location != nil {
+		rm.Location = *r.locationMapper(location)
+	}
+
+	mapItem, _ := entRoom.Edges.MapitemOrErr()
+	if location != nil {
+		rm.MapItem = *r.mapItemMapper(mapItem)
 	}
 
 	return &rm
@@ -50,7 +46,7 @@ func (r *EntityMapper) roomMapper(entRoom *ent.Room) *Room {
 
 func (r *EntityMapper) GetAllRooms() ([]Room, error) {
 
-	roomsPtr, err := r.client.Room.Query().WithMapitem().All(r.context)
+	roomsPtr, err := r.getRoomQuery(r.client.Room.Query()).All(r.context)
 	if err != nil {
 		return nil, err
 	}
@@ -62,6 +58,17 @@ func (r *EntityMapper) GetAllRooms() ([]Room, error) {
 	}
 
 	return rooms, nil
+}
+
+func (r *EntityMapper) getRoomQuery(query *ent.RoomQuery) *ent.RoomQuery {
+	return query.WithMapitem(func(q *ent.MapItemQuery) {
+		q.WithPathNodes().
+			WithColor().
+			WithBuilding(func(b *ent.BuildingQuery) { b.WithCampus() }).
+			WithDoors(func(p *ent.DoorQuery) { p.WithPathNode().WithSection() }).WithSections()
+	}).WithLocation(func(q *ent.LocationQuery) {
+		q.WithPathnode().WithTags().WithBuilding()
+	})
 }
 
 func (r *EntityMapper) GetRoom(roomName, buildingName, campusName string) (Room, error) {
@@ -76,7 +83,7 @@ func (r *EntityMapper) GetRoom(roomName, buildingName, campusName string) (Room,
 		// TODO implement campus
 	}
 
-	entRoom, err := q.First(r.context)
+	entRoom, err := r.getRoomQuery(q).First(r.context)
 
 	if err != nil {
 		return Room{}, err
@@ -121,7 +128,7 @@ func (r *EntityMapper) FilterRooms(floorFilter, nameFilter, aliasFilter, roomFil
 	}
 
 	// alias is missing here ...
-	entRooms, err = q.WithMapitem().All(r.context)
+	entRooms, err = r.getRoomQuery(q).All(r.context)
 	if err != nil {
 		return nil, err
 	}
