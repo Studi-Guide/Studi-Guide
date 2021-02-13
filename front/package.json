@@ -24,7 +24,7 @@
     "@capacitor/android": "^2.4.5",
     "@capacitor/core": "^2.4.5",
     "@capacitor/ios": "^2.4.5",
-    "@ionic-native/android-permissions": "^5.30.0",
+    "@ionic-native/android-permissions": "^5.31.1",
     "@ionic-native/core": "^5.30.0",
     "@ionic-native/geolocation": "^5.30.0",
     "@ionic-native/http": "^5.30.0",
