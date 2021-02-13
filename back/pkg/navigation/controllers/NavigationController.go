@@ -44,7 +44,6 @@ func (l *NavigationController) GetNavigationRoute(c *gin.Context) {
 			"message": err.Error(),
 		})
 	} else {
-		fmt.Println(coordinates)
 		c.JSON(http.StatusOK, coordinates)
 	}
 }
