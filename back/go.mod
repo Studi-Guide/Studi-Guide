@@ -5,7 +5,7 @@ go 1.13
 require (
 	github.com/Studi-Guide/dijkstra v1.0.4
 	github.com/ahmetb/go-linq/v3 v3.1.0
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
+	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
 	github.com/facebook/ent v0.4.3
 	github.com/gin-contrib/cors v1.3.1
@@ -17,10 +17,10 @@ require (
 	github.com/golang/protobuf v1.4.2 // indirect
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
-	github.com/prometheus/common v0.4.0
+	github.com/prometheus/common v0.15.0
 	github.com/swaggo/files v0.0.0-20190704085106-630677cd5c14
 	github.com/swaggo/gin-swagger v1.2.0
-	github.com/swaggo/swag v1.6.7
+	github.com/swaggo/swag v1.6.7 // indirect
 	github.com/ugorji/go v1.1.10 // indirect
 	github.com/urfave/cli/v2 v2.2.0
 	go.uber.org/dig v1.10.0
