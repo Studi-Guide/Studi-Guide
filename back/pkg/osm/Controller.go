@@ -80,7 +80,7 @@ func (c *Controller) GetBounds(context *gin.Context) {
 // @Param start query string true "start point of route"
 // @Param end query string true "end point of route"
 // @Param locale query string false "locale for route instructions"
-// @Success @Success 200 {array} osm.Route
+// @Success 200 {array} osm.Route
 // @Router /osm/route [get]
 func (c *Controller) GetRoute(context *gin.Context) {
 
