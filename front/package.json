@@ -22,7 +22,7 @@
     "@angular/router": "^11.0.5",
     "@asymmetrik/ngx-leaflet": "^8.1.0",
     "@capacitor/android": "^2.4.5",
-    "@capacitor/core": "^2.4.5",
+    "@capacitor/core": "^2.4.6",
     "@capacitor/ios": "^2.4.5",
     "@ionic-native/android-permissions": "^5.31.1",
     "@ionic-native/core": "^5.30.0",
