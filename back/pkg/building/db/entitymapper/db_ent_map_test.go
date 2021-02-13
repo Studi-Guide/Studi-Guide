@@ -273,7 +273,7 @@ func TestMapRoom(t *testing.T) {
 			},
 		}}
 
-	entRoom, _ := r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(ro.Location.Name))).First(r.context)
+	entRoom, _ := r.getRoomQuery(r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(ro.Location.Name)))).First(r.context)
 	retRoom := r.roomMapper(entRoom)
 
 	// exclude pathnodes since they are reference types
@@ -424,7 +424,7 @@ func TestMapRoom(t *testing.T) {
 		t.Error("expected no error, got:", err)
 	}
 
-	entRoom, _ = r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(ro.Name))).First(r.context)
+	entRoom, _ = r.getRoomQuery(r.client.Room.Query().Where(room.HasLocationWith(location.NameEQ(ro.Name)))).First(r.context)
 	retRoom = r.roomMapper(entRoom)
 	if !reflect.DeepEqual(checkRoom, *retRoom) {
 		t.Error("expected room equality. expected: ", checkRoom, ", actual: ", retRoom)
