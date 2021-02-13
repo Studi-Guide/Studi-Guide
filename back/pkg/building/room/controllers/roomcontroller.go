@@ -68,12 +68,6 @@ func (l *RoomController) GetRoomList(c *gin.Context) {
 		//fmt.Println(rooms)
 		c.JSON(http.StatusOK, rooms)
 	}
-	return
-
-	fmt.Println(len(c.Request.URL.Query()))
-	fmt.Println(c.Request.URL.Query())
-	fmt.Println("c.Query(\"room\"): ", c.Query("room"))
-
 }
 
 // GetRoom godoc
