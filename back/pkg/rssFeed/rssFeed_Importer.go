@@ -3,7 +3,7 @@ package rssFeed
 import (
 	"encoding/json"
 	"errors"
-	"github.com/prometheus/common/log"
+	"log"
 	"os"
 	"path/filepath"
 	"studi-guide/pkg/building/db/ent"
@@ -45,7 +45,7 @@ func (r *JsonImporter) RunImport() error {
 	for _, feed := range items {
 		err = r.dbService.AddRssFeed(feed)
 		if err != nil {
-			log.Error(err)
+			log.Fatal(err)
 		}
 	}
 

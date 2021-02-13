@@ -3,7 +3,7 @@ package location
 import (
 	"encoding/json"
 	"errors"
-	"github.com/prometheus/common/log"
+	"log"
 	"os"
 	"path/filepath"
 	"studi-guide/pkg/building/db/entitymapper"
@@ -111,7 +111,7 @@ func (r *JsonImporter) RunImport() error {
 	for _, l := range r.locations {
 		err := r.dbService.AddLocation(l)
 		if err != nil {
-			log.Error(err)
+			log.Fatal(err)
 		}
 	}
 

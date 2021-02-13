@@ -3,7 +3,7 @@ package campus
 import (
 	"encoding/json"
 	"errors"
-	"github.com/prometheus/common/log"
+	"log"
 	"os"
 	"path/filepath"
 	"studi-guide/pkg/building/db/ent"
@@ -45,7 +45,7 @@ func (r *CampusJsonImporter) RunImport() error {
 	for _, campus := range items {
 		err = r.dbService.AddCampus(campus)
 		if err != nil {
-			log.Error(err)
+			log.Fatal(err)
 		}
 	}
 
