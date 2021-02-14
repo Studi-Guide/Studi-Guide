@@ -86,7 +86,7 @@ func TestDijkstraNavigation_GetRoute2(t *testing.T) {
 		t.Error("expected route len: ", len(expected), "; got:", len(route))
 	}
 
-	for i, _ := range route {
+	for i := range route {
 		if expected[i].Id != route[i].Id {
 			t.Error("expected Id:", expected[i].Id, "; got:", route[i].Id)
 		}
