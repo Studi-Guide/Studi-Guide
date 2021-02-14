@@ -11,10 +11,12 @@ import (
 	"studi-guide/pkg/navigation"
 )
 
+//Importer general importer interface
 type Importer interface {
 	RunImport() error
 }
 
+//JsonImporter Json implementation of the Importer interface
 type JsonImporter struct {
 	dbService LocationProvider
 	file      string
@@ -41,6 +43,7 @@ type importLocation struct {
 	Icon        string
 }
 
+//NewLocationImporter creates a new location importer
 func NewLocationImporter(file string, dbService LocationProvider) (Importer, error) {
 	var i Importer = nil
 	ext := filepath.Ext(file)
@@ -54,13 +57,13 @@ func NewLocationImporter(file string, dbService LocationProvider) (Importer, err
 }
 
 func (r *JsonImporter) createRealLocations() error {
-	file, err := os.Open(r.file)
+	fileHandle, err := os.Open(r.file)
 	if err != nil {
 		return err
 	}
 
 	var items []importLocation
-	err = json.NewDecoder(file).Decode(&items)
+	err = json.NewDecoder(fileHandle).Decode(&items)
 	if err != nil {
 		return err
 	}
@@ -102,6 +105,7 @@ func (r *JsonImporter) createRealLocations() error {
 	return nil
 }
 
+//RunImport runs the importer
 func (r *JsonImporter) RunImport() error {
 
 	if err := r.createRealLocations(); err != nil {

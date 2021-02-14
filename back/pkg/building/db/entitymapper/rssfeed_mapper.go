@@ -6,6 +6,7 @@ import (
 	entfeed "studi-guide/pkg/building/db/ent/rssfeed"
 )
 
+//GetRssFeed returns a certain rss feed
 func (r *EntityMapper) GetRssFeed(name string) (*ent.RssFeed, error) {
 	b, err := r.client.RssFeed.Query().
 		Where(entfeed.NameEqualFold(name)).
@@ -18,19 +19,20 @@ func (r *EntityMapper) GetRssFeed(name string) (*ent.RssFeed, error) {
 	return b, nil
 }
 
-func (r *EntityMapper) AddRssFeed(rssfeed ent.RssFeed) error {
-	found, _ := r.client.RssFeed.Query().Where(entfeed.NameEqualFold(rssfeed.Name)).First(r.context)
+//AddRssFeed adds a rss feed into the db
+func (r *EntityMapper) AddRssFeed(rssFeed ent.RssFeed) error {
+	found, _ := r.client.RssFeed.Query().Where(entfeed.NameEqualFold(rssFeed.Name)).First(r.context)
 	if found != nil {
-		log.Printf("rssfeed %v already imported", rssfeed.Name)
+		log.Printf("rssFeed %v already imported", rssFeed.Name)
 		return nil
 	}
 
 	_, err := r.client.RssFeed.Create().
-		SetName(rssfeed.Name).
-		SetURL(rssfeed.URL).Save(r.context)
+		SetName(rssFeed.Name).
+		SetURL(rssFeed.URL).Save(r.context)
 
 	if err != nil {
-		log.Print("Error adding rssfeed:", rssfeed.Name, " Error:", err)
+		log.Print("Error adding rssFeed:", rssFeed.Name, " Error:", err)
 		return err
 	}
 
