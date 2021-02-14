@@ -1,9 +1,10 @@
 package utils
 
+//Distinct removes doubled values from string arrays
 func Distinct(elements []string) []string {
 	// Use map to record duplicates as we find them.
 	encountered := map[string]bool{}
-	result := []string{}
+	var result []string
 
 	for v := range elements {
 		if encountered[elements[v]] == true {
