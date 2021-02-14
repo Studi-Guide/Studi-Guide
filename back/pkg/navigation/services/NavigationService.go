@@ -6,11 +6,13 @@ import (
 	"studi-guide/pkg/utils"
 )
 
+// NavigationService provides functionality to calculate routes
 type NavigationService struct {
 	routeCalc        navigation.RouteCalculator
 	pathNodeProvider PathNodeProvider
 }
 
+// Creates a new instance of NavigationService
 func NewNavigationService(routeCalculator navigation.RouteCalculator, pathNodeProvider PathNodeProvider) (NavigationServiceProvider, error) {
 
 	nodes, err := pathNodeProvider.GetAllPathNodes()
@@ -22,6 +24,7 @@ func NewNavigationService(routeCalculator navigation.RouteCalculator, pathNodePr
 	return &NavigationService{routeCalc: routeCalculator, pathNodeProvider: pathNodeProvider}, nil
 }
 
+//CalculateFromString calls the route finder and returns the route
 func (n *NavigationService) CalculateFromString(startLocationName string, endLocationName string) (*navigation.NavigationRoute, error) {
 
 	start, err := n.pathNodeProvider.GetRoutePoint(startLocationName)
@@ -41,19 +44,21 @@ func (n *NavigationService) CalculateFromString(startLocationName string, endLoc
 	}
 
 	nodes, distance, err := n.routeCalc.GetRoute(start.Node, end.Node)
-	route := GenerateNavigationRoute(nodes, distance, n.pathNodeProvider)
+	route := generateNavigationRoute(nodes, distance, n.pathNodeProvider)
 	route.End = end
 	route.Start = start
 	return &route, err
 }
 
+// Not implemented yet
 func (n *NavigationService) CalculateFromCoordinate(startCoordinate navigation.Coordinate, endCoordinate navigation.Coordinate) (*navigation.NavigationRoute, error) {
 
 	//TODO implement
 	return nil, nil
 }
 
-func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provider PathNodeProvider) navigation.NavigationRoute {
+//generateNavigationRoute generates the navigation route for
+func generateNavigationRoute(nodes []navigation.PathNode, distance int64, provider PathNodeProvider) navigation.NavigationRoute {
 
 	// Create array with at least one element
 	var routeSections = []navigation.RouteSection{{}}
@@ -63,7 +68,7 @@ func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provid
 		var routeSection = &routeSections[routeSectionCnt]
 
 		// Try to get the linked building and floor
-		locationData, error := provider.GetPathNodeLocationData(node)
+		locationData, err := provider.GetPathNodeLocationData(node)
 		// go here for initialization
 		if idx == 0 {
 			routeSection.Floor = locationData.Floor
@@ -72,7 +77,7 @@ func GenerateNavigationRoute(nodes []navigation.PathNode, distance int64, provid
 		} else {
 
 			// go here when node fits the route section or no information is found
-			if (routeSection.Building == locationData.Building && routeSection.Floor == locationData.Floor) || error != nil {
+			if (routeSection.Building == locationData.Building && routeSection.Floor == locationData.Floor) || err != nil {
 				routeSection.Route = append(routeSection.Route, node)
 
 				// add distance to last coordinate
