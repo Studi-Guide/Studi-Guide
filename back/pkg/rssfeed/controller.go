@@ -1,4 +1,4 @@
-package rssFeed
+package rssfeed
 
 import (
 	"fmt"

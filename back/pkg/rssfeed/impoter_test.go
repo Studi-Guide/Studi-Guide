@@ -1,4 +1,4 @@
-package rssFeed
+package rssfeed
 
 import (
 	"github.com/golang/mock/gomock"
@@ -75,7 +75,7 @@ func ensureDir(dirName string) error {
 	err := os.MkdirAll(dirName, os.ModeDir)
 	if err == nil || os.IsExist(err) {
 		return nil
-	} else {
-		return err
 	}
+
+	return err
 }

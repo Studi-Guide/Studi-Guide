@@ -16,7 +16,7 @@ import (
 	"studi-guide/pkg/navigation"
 	"studi-guide/pkg/navigation/services"
 	"studi-guide/pkg/osm/graphhopper"
-	"studi-guide/pkg/rssFeed"
+	"studi-guide/pkg/rssfeed"
 	"studi-guide/pkg/utils"
 
 	"go.uber.org/dig"
@@ -88,7 +88,7 @@ func BuildContainer() *dig.Container {
 			return entityserver
 		})
 
-		container.Provide(func() rssFeed.Provider {
+		container.Provide(func() rssfeed.Provider {
 			return entityserver
 		})
 	})

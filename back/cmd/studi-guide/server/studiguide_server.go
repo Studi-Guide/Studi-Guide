@@ -19,7 +19,7 @@ import (
 	navigation "studi-guide/pkg/navigation/controllers"
 	"studi-guide/pkg/navigation/services"
 	"studi-guide/pkg/osm"
-	"studi-guide/pkg/rssFeed"
+	"studi-guide/pkg/rssfeed"
 	"studi-guide/pkg/utils"
 )
 
@@ -32,7 +32,7 @@ func NewStudiGuideServer(env *env.Env,
 	locationProvider buildingLocation.LocationProvider, mapProvider buildingMap.MapServiceProvider,
 	navigationProvider services.NavigationServiceProvider,
 	campusProvider campus.CampusProvider,
-	rssFeedProvider rssFeed.Provider,
+	rssFeedProvider rssfeed.Provider,
 	httpClient utils.HttpClient,
 	osmNav osm.OpenStreetMapNavigationProvider) *StudiGuideServer {
 	log.Print("Starting initializing main controllers ...")
@@ -143,7 +143,7 @@ func NewStudiGuideServer(env *env.Env,
 	rssfeedRouter := router.Group("/rssfeed")
 	{
 		log.Println("Creating rss feed controller")
-		err := rssFeed.NewRssFeedController(rssfeedRouter, rssFeedProvider, httpClient)
+		err := rssfeed.NewRssFeedController(rssfeedRouter, rssFeedProvider, httpClient)
 		if err != nil {
 			log.Fatal(err)
 		} else {
