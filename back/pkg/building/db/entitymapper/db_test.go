@@ -214,7 +214,7 @@ func TestGetRoomAllRooms(t *testing.T) {
 		if len(a) != len(b) {
 			return false
 		}
-		for i, _ := range a {
+		for i := range a {
 			if !reflect.DeepEqual(a[i], b[i]) {
 				return false
 			}
@@ -365,7 +365,7 @@ func TestRoomEntityService_GetAllPathNodes(t *testing.T) {
 	}
 
 	checkNodes := func(a []Room, b []navigation.PathNode) bool {
-		for i, _ := range a {
+		for i := range a {
 			found := linq.From(b).
 				AnyWith(
 					func(p interface{}) bool {
@@ -403,7 +403,7 @@ func TestRoomEntityService_GetRoomsFromFloor(t *testing.T) {
 		if len(a) != len(b) {
 			return false
 		}
-		for i, _ := range a {
+		for i := range a {
 			if !reflect.DeepEqual(a[i], b[i]) {
 				return false
 			}
