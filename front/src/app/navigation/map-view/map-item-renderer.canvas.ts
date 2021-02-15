@@ -2,18 +2,18 @@ import {IMapItem, IRenderer} from '../../building-objects-if';
 
 export class MapItemRendererCanvas implements IRenderer {
 
-    constructor(private mapItem:IMapItem) {
+    constructor(private mapItem: IMapItem) {
     }
 
     private doAnim = false;
     private animationCallback: () => void;
 
-    public get MapItem() : IMapItem {
+    public get MapItem(): IMapItem {
         return this.mapItem;
     }
 
     render(renderingContext: CanvasRenderingContext2D) {
-        if(this.mapItem.Sections && this.mapItem.Sections.length > 0) {
+        if (this.mapItem.Sections && this.mapItem.Sections.length > 0) {
             renderingContext.beginPath();
             this.renderSections(renderingContext);
             renderingContext.strokeStyle = '#FFF';
@@ -24,7 +24,7 @@ export class MapItemRendererCanvas implements IRenderer {
         }
     }
 
-    startAnimation(renderingContext: CanvasRenderingContext2D, args?:any) {
+    startAnimation(renderingContext: CanvasRenderingContext2D, args?: any) {
         this.animationCallback = () => {
             if (this.doAnim !== true) {
                 return;
@@ -51,7 +51,7 @@ export class MapItemRendererCanvas implements IRenderer {
                     r.render(renderingContext, args);
                 }
             }
-        }
+        };
 
         this.doAnim = true;
         window.requestAnimationFrame(this.animationCallback);
@@ -62,7 +62,7 @@ export class MapItemRendererCanvas implements IRenderer {
         this.animationCallback = null;
     }
 
-    private renderSections(renderingContext:CanvasRenderingContext2D) {
+    private renderSections(renderingContext: CanvasRenderingContext2D) {
         renderingContext.moveTo(this.mapItem.Sections[0].Start.X, this.mapItem.Sections[0].Start.Y);
         for (let i = 1; i < this.mapItem.Sections.length; i++) {
             renderingContext.lineTo(this.mapItem.Sections[i].Start.X, this.mapItem.Sections[i].Start.Y);
