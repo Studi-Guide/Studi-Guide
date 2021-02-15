@@ -1,22 +1,24 @@
 <div class="container">
-    <ion-grid>
-        <ion-row>
-            <ion-col size="11">
-                <ion-item>
-                    <ion-label>From</ion-label>
-                    <ion-input #inputFrom (ionFocus)="onInputFromFocus()"></ion-input>
-                </ion-item>
-                <ion-item>
-                    <ion-label>To</ion-label>
-                    <ion-input #inputTo (ionFocus)="onInputToFocus()"></ion-input>
-                </ion-item>
-            </ion-col>
-            <ion-col size="1" class="swappicon ion-activatable ripple-parent" (click)="swapInputs()">
-                    <ion-icon size="large" name="swap-vertical-outline"></ion-icon>
-                    <ion-ripple-effect></ion-ripple-effect>
-            </ion-col>
-        </ion-row>
-    </ion-grid>
+    <ion-item class="ion-no-padding ion-item-style">
+        <ion-grid>
+            <ion-row>
+                <ion-col size="11">
+                    <ion-item>
+                        <ion-label class="ion-margin-end">From:</ion-label>
+                        <ion-input #inputFrom (ionFocus)="onInputFromFocus()"></ion-input>
+                    </ion-item>
+                    <ion-item>
+                        <ion-label class="ion-margin-end">To:</ion-label>
+                        <ion-input #inputTo (ionFocus)="onInputToFocus()"></ion-input>
+                    </ion-item>
+                </ion-col>
+                <ion-col size="1" class="swappicon ion-activatable ripple-parent" (click)="swapInputs()">
+                        <ion-icon size="large" name="swap-vertical-outline"></ion-icon>
+                        <ion-ripple-effect></ion-ripple-effect>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-item>
 </div>
 <ion-content>
     <ion-list class="ion-no-padding">

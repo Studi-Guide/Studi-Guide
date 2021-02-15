@@ -163,19 +163,21 @@
     <div class="drawer-grip">
       <div class="ion-padding-top"></div>
       <div class="nav-hbar"></div>
-      <ion-grid>
-        <ion-row class="ion-align-items-baseline">
-          <ion-col class="ion-text-center">
-            <span class="span-button" (click)="onCancelChangeRoute()">Cancel</span>
-          </ion-col>
-          <ion-col size="6" class="ion-text-center">
-            <h3>Change Route</h3>
-          </ion-col>
-          <ion-col class="ion-text-center">
-            <span class="span-button" (click)="newRoute.emit([routeInput.From, routeInput.To])">Route</span>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+      <ion-item class="ion-no-padding ion-item-style">
+        <ion-grid>
+          <ion-row class="ion-align-items-baseline">
+            <ion-col class="ion-text-center">
+              <span class="span-button" (click)="onCancelChangeRoute()">Cancel</span>
+            </ion-col>
+            <ion-col size="6" class="ion-text-center">
+              <h3>Change Route</h3>
+            </ion-col>
+            <ion-col class="ion-text-center">
+              <span class="span-button" (click)="newRoute.emit([routeInput.From, routeInput.To])">Route</span>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
     </div>
     <app-route-input #routeInput></app-route-input>
   </div>
