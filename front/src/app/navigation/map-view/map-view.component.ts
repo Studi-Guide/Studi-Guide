@@ -163,7 +163,8 @@ export class MapViewComponent implements AfterViewInit {
   public async onElementClick(clientX: number, clientY: number, target: HTMLElement) {
     const transform = this.panZoomController.getTransform();
     const coordinate = CanvasTouchHelper.transformInOriginCoordinate({
-      x: clientX, y: clientY}, transform.scale, target as HTMLElement );
+      x: clientX, y: clientY
+    }, transform.scale, target as HTMLElement);
     const point = [coordinate.x, coordinate.y];
     if (this.currentRoute != null) {
       const items: IMapItem[] = [];
@@ -183,13 +184,30 @@ export class MapViewComponent implements AfterViewInit {
       }
     }
     // Track clicks/touches on locations
+    const clickedLocations: ILocation[] = [];
     for (const l of this.locationRenderer) {
       const location = l.Location;
+
       if (Math.abs(location.PathNode.Coordinate.X - point[0]) < this.clickThreshold
           && Math.abs(location.PathNode.Coordinate.Y - point[1]) < this.clickThreshold) {
-        this.locationClick.emit(location);
-        return;
+        clickedLocations.push(location);
       }
+    }
+
+    if (clickedLocations.length > 0) {
+      // nearest Location will be emitted
+      const sortedLocations = clickedLocations.length === 1 ?
+          clickedLocations :
+          clickedLocations.sort((n1, n2) => {
+        if (Math.abs(n1.PathNode.Coordinate.X - point[0]) + Math.abs(n1.PathNode.Coordinate.Y - point[1]) >
+            Math.abs(n2.PathNode.Coordinate.X - point[0]) + Math.abs(n2.PathNode.Coordinate.Y - point[1])) {
+          return 1;
+        } else {
+          return -1;
+        }
+      });
+
+      this.locationClick.emit(sortedLocations[0]);
     }
   }
 
@@ -262,10 +280,10 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   private displayPin(pathNode: IPathNode) {
-    const x = pathNode.Coordinate.X - 15;
-    const y = pathNode.Coordinate.Y - 30;
-    const iconOnMapRenderer = new IconOnMapRenderer( 'assets/pin-sharp.png');
-    iconOnMapRenderer.render(this.renderingContext, x, y, 30, 30);
+    const x = pathNode.Coordinate.X - 30;
+    const y = pathNode.Coordinate.Y - 40;
+    const iconOnMapRenderer = new IconOnMapRenderer( 'assets/pin-red.png');
+    iconOnMapRenderer.render(this.renderingContext, x, y, 60, 60);
   }
 
   private async showNextFloor(item: IMapItem) {
