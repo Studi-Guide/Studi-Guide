@@ -227,7 +227,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
 
       // Look for all possible buildings via Search-API
       const buildings = await this.dataService.get_buildings_search(searchInput).toPromise();
-      if (buildings !== null && buildings.length > 0) {
+      if (buildings && buildings.length > 0) {
         // found building
         // await this.model.addRecentSearch(searchInput);
         for (const building of buildings) {
@@ -239,7 +239,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
       else {
         // look for campus on Search-API if no building is found
         const campusArray = await this.dataService.get_campus_search(searchInput).toPromise();
-        if (campusArray !== null && campusArray.length > 0) {
+        if (campusArray && campusArray.length > 0) {
           // found building
           // await this.model.addRecentSearch(searchInput);
           for (const camp of campusArray) {
