@@ -246,4 +246,11 @@ export class NavigationPage implements OnInit, AfterViewInit{
         this.searchInput.clearDestinationInput();
         await this.onCloseLocationDrawer(null);
     }
+
+    // custom event handler
+    async onSearchFocus($event: string) {
+        if (this.platform.is('hybrid')) {
+            await this.searchDrawer.SetState(DrawerState.Top);
+        }
+    }
 }
