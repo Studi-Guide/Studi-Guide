@@ -49,11 +49,11 @@ export class DataService {
     }
 
     get_locations_search(name: string) {
-        return this.cache.Get<ILocation[]>(this.httpClient, this.baseUrl + '/locations?search=' + name );
+        return this.cache.Get<ILocation[]>(this.httpClient, this.baseUrl + '/locations?search=' + encodeURI(name) );
     }
 
     get_location(name: string) {
-        return this.cache.Get<ILocation>(this.httpClient, this.baseUrl + '/locations/' + name );
+        return this.cache.Get<ILocation>(this.httpClient, this.baseUrl + '/locations/' +  encodeURI(name));
     }
 
     get_locations(building: string, floor: string) {
@@ -61,11 +61,11 @@ export class DataService {
     }
 
     get_building(name: string, logError: boolean = true) {
-        return this.cache.Get<IBuilding>(this.httpClient, this.baseUrl + '/buildings/' + name, logError);
+        return this.cache.Get<IBuilding>(this.httpClient, this.baseUrl + '/buildings/' + encodeURI(name), logError);
     }
 
     get_building_floor(name: string, logError: boolean = true) {
-        return this.cache.Get<string[]>(this.httpClient, this.baseUrl + '/buildings/' + name + '/floors', logError);
+        return this.cache.Get<string[]>(this.httpClient, this.baseUrl + '/buildings/' + encodeURI(name) + '/floors', logError);
     }
 
     get_buildings_search(search: string = '') {
@@ -78,7 +78,7 @@ export class DataService {
     }
 
     get_campus(name: string, logError: boolean = true) {
-        return this.cache.Get<ICampus>(this.httpClient, this.baseUrl + '/campus/' + name, logError);
+        return this.cache.Get<ICampus>(this.httpClient, this.baseUrl + '/campus/' + encodeURI(name), logError);
     }
 
     get_campus_search(search: string = '') {
