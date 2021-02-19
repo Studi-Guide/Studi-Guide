@@ -68,7 +68,6 @@ export class MapPageComponent implements OnInit, OnDestroy {
   @ViewChild('searchInput') searchInput: SearchInputComponent;
   @ViewChild('navSlides') navSlides: NavigationInstructionSlidesComponent;
   @ViewChild('drawerManager') drawerManager: NavDrawerManagerComponent;
-  errorMessage: string;
   private currentPositionMarker: Leaflet.Marker = null;
   private isInitialized = false;
   private isSubscribed = false;
@@ -129,7 +128,7 @@ export class MapPageComponent implements OnInit, OnDestroy {
           await this.execSearch(params.location); // this will show also the location drawer
           this.clearRoutes();
         } else if (params.destination !== null && params.destination !== undefined) {
-          this.drawerManager.SetState(NavDrawerState.RouteView);
+          await this.drawerManager.SetState(NavDrawerState.RouteView);
           await this.execDirectSearch(params.destination);
           await this.routeToLatestSearchResult();
         } else {
@@ -235,6 +234,8 @@ export class MapPageComponent implements OnInit, OnDestroy {
           this.searchMarker.push(
             this.showMarker(coordinates.Latitude, coordinates.Longitude, building.Name, false));
         }
+
+        return;
       }
       else {
         // look for campus on Search-API if no building is found
@@ -246,8 +247,13 @@ export class MapPageComponent implements OnInit, OnDestroy {
             this.searchMarker.push(
               this.showMarker(camp.Latitude, camp.Longitude, camp.Name, false));
           }
+
+          return;
         }
       }
+
+      // nothing found
+      this.model.errorMessage = 'Studi-Guide can\'t find ' + searchInput;
     } catch (ex) {
       this.handleInputError(ex, searchInput);
     } finally {
@@ -368,7 +374,6 @@ export class MapPageComponent implements OnInit, OnDestroy {
   }
 
   public async onLaunchNavigation() {
-
     this.navSlides.instructions = this.model.Route.NavigationInstructions;
     await this.navSlides.show();
     this.map.flyTo(this.model.Route.Coordinates[this.model.Route.NavigationInstructions[0].Interval[0]], this.MAX_ZOOM);
@@ -387,12 +392,12 @@ export class MapPageComponent implements OnInit, OnDestroy {
     if (ex instanceof HttpErrorResponse) {
       const httpError = ex as HttpErrorResponse;
       if (httpError.status === 400) {
-        this.errorMessage = 'Studi-Guide can\'t find ' + searchInput;
+        this.model.errorMessage = 'Studi-Guide can\'t find ' + searchInput;
       } else {
-        this.errorMessage = httpError.message;
+        this.model.errorMessage = httpError.message;
       }
     } else {
-      this.errorMessage = (ex as Error).message;
+      this.model.errorMessage = (ex as Error).message;
     }
   }
 

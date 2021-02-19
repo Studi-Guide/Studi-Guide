@@ -8,14 +8,6 @@
 <ion-content data-tap-disabled="true" scroll-y="false">
   <ion-progress-bar type="indeterminate" color="secondary" *ngIf="this.ProgressIsVisible"></ion-progress-bar>
   <div id="map-content">
-    <ion-text id="error-message" *ngIf="errorMessage" >
-      <h5><span class="error">{{ errorMessage }}</span></h5>
-      <p i18n="search error|spelling check">Make sure your search is spelled correctly.</p>
-      <p i18n="search error|missing place request">Should this place be on Studi-Guide?
-        <br/>
-        <a href="https://github.com/Studi-Guide/Studi-Guide/issues/new/choose">Request a missing place</a>
-      </p>
-    </ion-text>
     <app-map-view (locationClick)="showLocationDrawer($event)" (floorChanged)="onFloorChanged($event)"></app-map-view>
   </div>
 </ion-content>
@@ -32,6 +24,18 @@
       </app-search-input>
     </div>
     <ion-content #drawerContent class="ion-item-style">
+        <ion-text class="ion-wrap ion-margin" id="error-message" *ngIf="model.errorMessage">
+          <ion-item>
+            <div>
+              <span class="error">{{ model.errorMessage }}</span>
+              <p i18n="search error|spelling check">Make sure your search is spelled correctly.</p>
+              <p i18n="search error|missing place request">Should this place be on Studi-Guide?
+                <br/>
+                <a href="https://github.com/Studi-Guide/Studi-Guide/issues/new/choose">Request a missing place</a>
+              </p>
+            </div>
+          </ion-item>
+        </ion-text>
       <ion-list *ngIf="model.recentSearches.length > 0" class="ion-no-padding">
         <ion-list-header>
           <h2>Recent Searches</h2>

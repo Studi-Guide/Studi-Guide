@@ -11,6 +11,10 @@
   cursor: pointer;
 }
 
+.error {
+  color: red;
+}
+
 .nav-hbar {
   border-top: 2px solid var(--ion-color-medium, #9d9fa6);
   border-bottom: 2px solid var(--ion-color-medium, #9d9fa6);

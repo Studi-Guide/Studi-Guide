@@ -29,8 +29,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     @ViewChild('drawerContent') drawerContent: IonContent;
     @ViewChild('searchDrawer') searchDrawer: IonicBottomDrawerComponent;
     @ViewChild('locationDrawer') locationDrawer: IonicBottomDrawerComponent;
-
-    public errorMessage: string;
     public availableCampus: CampusViewModel[] = [];
     private isSubscribed = false;
 
@@ -109,7 +107,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     public async onRoute(routeInput: string[]) {
-        this.errorMessage = '';
+        this.model.errorMessage = '';
         NavigationPage.progressIsVisible = true;
         try {
             const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<ILocation>();
@@ -178,12 +176,12 @@ export class NavigationPage implements OnInit, AfterViewInit{
         if (ex instanceof HttpErrorResponse) {
             const httpError = ex as HttpErrorResponse;
             if (httpError.status === 400) {
-                this.errorMessage = 'Studi-Guide can\'t find ' + searchInput;
+                this.model.errorMessage = 'Studi-Guide can\'t find ' + searchInput;
             } else {
-                this.errorMessage = httpError.message;
+                this.model.errorMessage = httpError.message;
             }
         } else {
-            this.errorMessage = (ex as Error).message;
+            this.model.errorMessage = (ex as Error).message;
         }
 
         // TODO Remove this code when discovery mode is finished
