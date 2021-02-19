@@ -38,11 +38,11 @@ export class LoginComponent implements OnInit {
     await this.storage.ready();
 
     let autoLogin = false;
-    if (this.platform.is('hybrid')) {
+    if (this.platform.is('hybrid') && this.userInput.length > 0 &&  this.userPassword.length > 0) {
       // Shot face id on hybrid
       try {
         await this.faio.show({});
-        autoLogin = this.userInput.length > 0 &&  this.userPassword.length > 0;
+        autoLogin = true;
         console.log('Face ID result' + autoLogin);
       }
       catch (e) {
