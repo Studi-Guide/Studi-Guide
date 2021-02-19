@@ -78,9 +78,7 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   public async showRoute(route: IReceivedRoute, startLocation: ILocation) {
-
     this.stopAllAnimations();
-
     await this.renderNavigationPage(route, startLocation.Building, startLocation.Floor);
   }
 
@@ -100,11 +98,8 @@ export class MapViewComponent implements AfterViewInit {
     const locations = await this.dataService.get_locations(res.Building, res.Floor).toPromise<ILocation[]>();
     this.locationRenderer = RendererProvider.GetLocationRendererCanvas(...locations);
 
-    // TODO shift map got get res.PathNode into focus
     this.clearMapCanvas();
-    this.createNewCanvasMap();
-    this.renderMapItems();
-    this.renderLocations();
+    this.RefreshMap();
     this.displayPin(res.PathNode);
     this.currentFloor = res.Floor;
     this.CenterMap(res.PathNode.Coordinate.X, res.PathNode.Coordinate.Y);
@@ -118,13 +113,9 @@ export class MapViewComponent implements AfterViewInit {
     } else {
       const res = await this.dataService.get_map_items('', floor, building).toPromise();
       this.mapItemRenderer = RendererProvider.GetMapItemRendererCanvas(...res);
-      this.createNewCanvasMap();
-
       const locations = await this.dataService.get_locations_items('', floor, building).toPromise();
       this.locationRenderer = RendererProvider.GetLocationRendererCanvas(...locations);
-
-      this.renderMapItems();
-      this.renderLocations();
+      this.RefreshMap();
     }
     this.currentFloor = floor;
     this.currentBuilding = building;
@@ -139,13 +130,8 @@ export class MapViewComponent implements AfterViewInit {
       const locations = await this.dataService.get_locations_items(campus, floor, '').toPromise();
       this.locationRenderer = RendererProvider.GetLocationRendererCanvas(...locations);
 
-      this.createNewCanvasMap();
-
-      this.renderMapItems();
-      this.renderLocations();
-
+      this.RefreshMap();
       this.currentFloor = floor;
-
       this.FitMap();
   }
 
@@ -207,6 +193,11 @@ export class MapViewComponent implements AfterViewInit {
         }
       });
 
+      if (sortedLocations[0]?.PathNode){
+        this.RefreshMap();
+        this.displayPin(sortedLocations[0].PathNode);
+      }
+
       this.locationClick.emit(sortedLocations[0]);
     }
   }
@@ -229,12 +220,8 @@ export class MapViewComponent implements AfterViewInit {
     this.locationRenderer = RendererProvider.GetLocationRendererCanvas(...locations);
     this.routeRenderer = RendererProvider.GetRouteRendererCanvas(route);
 
-    this.createNewCanvasMap();
     this.currentBuilding = building;
-
-    this.renderMapItems();
-    this.renderLocations();
-
+    this.RefreshMap();
     this.renderRoutes({floor});
     // TODO animate route call here
 
@@ -366,8 +353,10 @@ export class MapViewComponent implements AfterViewInit {
   }
 
   public CenterMap(x: number, y: number) {
-    const positionToMove = MapViewComponent.calculateMovePosition(x, y);
-    this.panZoomController.smoothMoveTo(positionToMove.x, positionToMove.y);
+    // Modify the X-position to make use of the available space beside the drawer
+    const isBigDevice = window.matchMedia('(min-width: 1200px)').matches;
+    const positionToMove = MapViewComponent.calculateMovePosition( x, y);
+    this.panZoomController.smoothMoveTo(isBigDevice ? (4 * positionToMove.x / 3) : positionToMove.x, positionToMove.y);
   }
 
   public MapSize(): DOMRect {
@@ -380,6 +369,12 @@ export class MapViewComponent implements AfterViewInit {
     // const element = document.getElementById('map');
     // this.panZoomController.zoomTo(element.clientWidth, element.clientHeight, 0.7);
     const size = this.MapSize();
-    this.CenterMap(size.width / 2, size.height / 2);
+    this.CenterMap( size.width / 2, size.height / 2);
+  }
+
+  public RefreshMap() {
+    this.createNewCanvasMap();
+    this.renderMapItems();
+    this.renderLocations();
   }
 }

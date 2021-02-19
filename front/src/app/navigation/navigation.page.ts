@@ -168,6 +168,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     public async onCloseLocationDrawer(event: any) {
+        this.mapView.RefreshMap();
         await this.locationDrawer.SetState(DrawerState.Hidden);
         await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     }
