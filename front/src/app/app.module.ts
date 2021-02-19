@@ -18,6 +18,7 @@ import { Geolocation } from '@ionic-native/geolocation/ngx';
 import {GeolocationMock} from './services/GeolocationMock';
 import {NativeHttpInterceptor} from '../utils/NativeHttpInterceptor';
 import { StdgTooltipModule } from './stdg-tooltip/stdg-tooltip.module';
+import {FingerprintAIO} from '@ionic-native/fingerprint-aio/ngx';
 
 @NgModule({
   declarations: [AppComponent],
@@ -34,6 +35,7 @@ import { StdgTooltipModule } from './stdg-tooltip/stdg-tooltip.module';
   providers: [
     StatusBar,
     SplashScreen,
+    FingerprintAIO,
     Env,
     WINDOW_PROVIDERS,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },

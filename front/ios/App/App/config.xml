@@ -11,6 +11,10 @@
     <param name="onload" value="true"/>
   </feature>
 
+  <feature name="Fingerprint">
+    <param name="ios-package" value="Fingerprint"/>
+  </feature>
+
   <feature name="Geolocation">
     <param name="ios-package" value="CDVLocation"/>
   </feature>

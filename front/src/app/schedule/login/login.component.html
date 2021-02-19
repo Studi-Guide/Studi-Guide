@@ -11,8 +11,8 @@
       <ion-col size="12">
         <ion-item>
           <ion-label position="stacked">user name</ion-label>
-          <ion-input #userNameInput type="text" class="ion-text-center" clear-input
-                     (ionChange)="clearInvalidCredentialsMsg()" value="admin"
+          <ion-input type="text" class="ion-text-center" clear-input
+                     (ionChange)="clearInvalidCredentialsMsg()" [(ngModel)]="userInput"
           >
             <ion-icon name="person-outline"></ion-icon>
           </ion-input>
@@ -20,8 +20,8 @@
         <!-- TODO remove searchbar values -->
         <ion-item>
           <ion-label position="stacked">password</ion-label>
-          <ion-input #passwordInput type="password" class="ion-text-center" clear-input
-                     (ionChange)="clearInvalidCredentialsMsg()" value="administrator"
+          <ion-input type="password" class="ion-text-center" clear-input
+                     (ionChange)="clearInvalidCredentialsMsg()" [(ngModel)]="userPassword"
           >
             <ion-icon name="key-outline"></ion-icon>
           </ion-input>
