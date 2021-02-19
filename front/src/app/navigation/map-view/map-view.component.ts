@@ -47,12 +47,15 @@ export class MapViewComponent implements AfterViewInit {
 
   private static calculateMovePosition(x: number, y: number) {
     const element = document.getElementById('canvas-wrapper');
-
     const parentElement = element.parentElement.parentElement;
-    // TODO: Desktop hat andere params
-    const height = parentElement.clientHeight / 2;
-    const width = element.clientWidth / 2;
-    return {x: width - x, y: height - y};
+    const isBigDevice = window.matchMedia('(min-width: 1200px)').matches;
+
+    const height = isBigDevice ? parentElement.clientHeight / 2 : 2 * parentElement.clientHeight / 5;
+    const width = element.clientWidth / (isBigDevice ? (3.0 / 2.0) : 2.0);
+
+    const targetY =  isBigDevice ? height - y : height - Math.min(y, parentElement.clientHeight);
+    const targetX = width - x;
+    return {x: targetX, y: targetY};
   }
 
   ngAfterViewInit() {
@@ -67,7 +70,8 @@ export class MapViewComponent implements AfterViewInit {
             boundsPadding: 0.1,
             // Enable touch recognition on child events
             async onTouch(e) {
-              if (e.touches.length === 1){
+              if (e.touches.length === 1 ){
+                console.log(e.touches[0]);
                 await element.onElementClick(e.touches[0].clientX, e.touches[0].clientY, e.target as HTMLElement);
               }
 
@@ -354,9 +358,8 @@ export class MapViewComponent implements AfterViewInit {
 
   public CenterMap(x: number, y: number) {
     // Modify the X-position to make use of the available space beside the drawer
-    const isBigDevice = window.matchMedia('(min-width: 1200px)').matches;
     const positionToMove = MapViewComponent.calculateMovePosition( x, y);
-    this.panZoomController.smoothMoveTo(isBigDevice ? (4 * positionToMove.x / 3) : positionToMove.x, positionToMove.y);
+    this.panZoomController.smoothMoveTo(positionToMove.x, positionToMove.y);
   }
 
   public MapSize(): DOMRect {
