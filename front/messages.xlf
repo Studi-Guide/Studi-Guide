@@ -105,28 +105,42 @@
         <source>Make sure your search is spelled correctly.</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/navigation/navigation.page.html</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">31</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/navigation/map-page/map-page.component.html</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="sourcefile">src/app/navigation/nav-drawer-manager/nav-drawer-manager.component.html</context>
+          <context context-type="linenumber">17</context>
         </context-group>
         <note priority="1" from="description">spelling check</note>
         <note priority="1" from="meaning">search error</note>
       </trans-unit>
-      <trans-unit id="c583358f0f963680c102622c2f41dea5db729fb5" datatype="html">
+      <trans-unit id="39e2120624d4859c7409dfced48a3759dfe477f2" datatype="html">
         <source>Should this place be on Studi-Guide? <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;
-        "/><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Studi-Guide/Studi-Guide/issues/new/choose&quot;&gt;"/>Request a missing place<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+                "/><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Studi-Guide/Studi-Guide/issues/new/choose&quot;&gt;"/>Request a missing place<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/navigation/navigation.page.html</context>
-          <context context-type="linenumber">14,16</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/navigation/map-page/map-page.component.html</context>
-          <context context-type="linenumber">16,18</context>
+          <context context-type="linenumber">32,34</context>
         </context-group>
         <note priority="1" from="description">missing place request</note>
         <note priority="1" from="meaning">search error</note>
+      </trans-unit>
+      <trans-unit id="6729329861748a1ac918658f7871a97414091deb" datatype="html">
+        <source>Select Language</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <note priority="1" from="description">Header</note>
+        <note priority="1" from="meaning">Select Language</note>
+      </trans-unit>
+      <trans-unit id="b47b79397919ae72f70bdc7252be4e238da67d8d" datatype="html">
+        <source><x id="START_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;ion-item href=&quot;/en&quot;&gt;"/>English<x id="CLOSE_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;/ion-item&gt;"/><x id="START_TAG_ION_ITEM_1" ctype="x-ion_item_1" equiv-text="&lt;ion-item href=&quot;/de&quot;&gt;"/>German<x id="CLOSE_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;/ion-item&gt;"/></source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+        <note priority="1" from="description">Languages</note>
+        <note priority="1" from="meaning">Select Language</note>
       </trans-unit>
       <trans-unit id="1edc8b24c18f495f13f116bd42b3ade124b93f48" datatype="html">
         <source>Select Appearance</source>
@@ -164,23 +178,15 @@
         <note priority="1" from="description">Dark</note>
         <note priority="1" from="meaning">Appearance</note>
       </trans-unit>
-      <trans-unit id="6729329861748a1ac918658f7871a97414091deb" datatype="html">
-        <source>Select Language</source>
+      <trans-unit id="b70606df97bd6e959b4afee099c048662de94217" datatype="html">
+        <source>Should this place be on Studi-Guide? <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;
+              "/><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Studi-Guide/Studi-Guide/issues/new/choose&quot;&gt;"/>Request a missing place<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
-          <context context-type="linenumber">6</context>
+          <context context-type="sourcefile">src/app/navigation/nav-drawer-manager/nav-drawer-manager.component.html</context>
+          <context context-type="linenumber">18,20</context>
         </context-group>
-        <note priority="1" from="description">Header</note>
-        <note priority="1" from="meaning">Select Language</note>
-      </trans-unit>
-      <trans-unit id="b47b79397919ae72f70bdc7252be4e238da67d8d" datatype="html">
-        <source><x id="START_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;ion-item href=&quot;/en&quot;&gt;"/>English<x id="CLOSE_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;/ion-item&gt;"/><x id="START_TAG_ION_ITEM_1" ctype="x-ion_item_1" equiv-text="&lt;ion-item href=&quot;/de&quot;&gt;"/>German<x id="CLOSE_TAG_ION_ITEM" ctype="x-ion_item" equiv-text="&lt;/ion-item&gt;"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
-          <context context-type="linenumber">11,12</context>
-        </context-group>
-        <note priority="1" from="description">Languages</note>
-        <note priority="1" from="meaning">Select Language</note>
+        <note priority="1" from="description">missing place request</note>
+        <note priority="1" from="meaning">search error</note>
       </trans-unit>
     </body>
   </file>

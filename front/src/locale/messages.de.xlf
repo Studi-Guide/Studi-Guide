@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
-  <file source-language="en-US" datatype="plaintext" original="ng2.template">
+  <file source-language="en" datatype="plaintext" original="ng2.template">
     <body>
       <trans-unit id="38eec8cc82959bcbb7c76c9e73880c183bf5b1cf" datatype="html">
         <source>Navigation</source>
@@ -32,16 +32,6 @@
         <note priority="1" from="description">lunch</note>
         <note priority="1" from="meaning">tab name</note>
       </trans-unit>
-      <trans-unit id="119601e707ede555290f704435164caf75715ad1" datatype="html">
-        <source>Settings</source>
-        <target>Einstellungen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/tabs/tabs.page.html</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-        <note priority="1" from="description">settings</note>
-        <note priority="1" from="meaning">tab name</note>
-      </trans-unit>
       <trans-unit id="b3275a1d52bec049cd8207418fefce3ba9d13464" datatype="html">
         <source>News</source>
         <target>News</target>
@@ -52,76 +42,22 @@
         <note priority="1" from="description">news</note>
         <note priority="1" from="meaning">tab name</note>
       </trans-unit>
-      <trans-unit id="3149bc3f0a5c01aac3807ac5700243e6877464b2" datatype="html">
-        <source>Make sure your search is spelled correctly.</source>
-        <target>Überprüfe deine Eingabe auf Rechtschreibfehler.</target>
+      <trans-unit id="119601e707ede555290f704435164caf75715ad1" datatype="html">
+        <source>Settings</source>
+        <target>Einstellungen</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/navigation/navigation.page.html</context>
-          <context context-type="linenumber">19</context>
+          <context context-type="sourcefile">src/app/tabs/tabs.page.html</context>
+          <context context-type="linenumber">26</context>
         </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/navigation/map-page/map-page.component.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
-        <note priority="1" from="description">spelling check</note>
-        <note priority="1" from="meaning">search error</note>
-      </trans-unit>
-      <trans-unit id="c583358f0f963680c102622c2f41dea5db729fb5" datatype="html">
-        <source>Should this place be on Studi-Guide?
-        <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-        <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Request a missing place<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-      </source>
-        <target>Sollte dieser Ort im Studi-Guide sein?
-        <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
-        <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Füge den Ort hinzu<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
-      </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/navigation/navigation.page.html</context>
-          <context context-type="linenumber">20</context>
-        </context-group>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/navigation/map-page/map-page.component.html</context>
-          <context context-type="linenumber">7</context>
-        </context-group>
-        <note priority="1" from="description">missing place request</note>
-        <note priority="1" from="meaning">search error</note>
-      </trans-unit>
-      <trans-unit id="6729329861748a1ac918658f7871a97414091deb" datatype="html">
-        <source>Select Language</source>
-        <target>Sprache wählen</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
-          <context context-type="linenumber">6</context>
-        </context-group>
-        <note priority="1" from="description">Header</note>
-        <note priority="1" from="meaning">Select Language</note>
-      </trans-unit>
-      <trans-unit id="b47b79397919ae72f70bdc7252be4e238da67d8d" datatype="html">
-        <source>
-    <x id="START_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;ion-item&gt;"/>English<x id="CLOSE_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;/ion-item&gt;"/>
-    <x id="START_TAG_ION-ITEM_1" ctype="x-ion-item" equiv-text="&lt;ion-item&gt;"/>German<x id="CLOSE_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;/ion-item&gt;"/>
-  </source>
-        <target>
-    <x id="START_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;ion-item&gt;"/>Englisch<x id="CLOSE_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;/ion-item&gt;"/>
-    <x id="START_TAG_ION-ITEM_1" ctype="x-ion-item" equiv-text="&lt;ion-item&gt;"/>Deutsch<x id="CLOSE_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;/ion-item&gt;"/>
-  </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
-          <context context-type="linenumber">10</context>
-        </context-group>
-        <note priority="1" from="description">Languages</note>
-        <note priority="1" from="meaning">Select Language</note>
+        <note priority="1" from="description">settings</note>
+        <note priority="1" from="meaning">tab name</note>
       </trans-unit>
       <trans-unit id="cd3c4d3ddc94ff59b452b521a7945485f22a18cf" datatype="html">
-        <source>
-      Settings
-    </source>
-        <target>
-      Einstellungen
-    </target>
+        <source> Settings </source>
+        <target>Einstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">4,5</context>
         </context-group>
         <note priority="1" from="description">Header</note>
         <note priority="1" from="meaning">Settings</note>
@@ -152,12 +88,22 @@
         <note priority="1" from="description">Appearance</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
+      <trans-unit id="54a38692b3cb01fd464eaff18a774cced79962ac" datatype="html">
+        <source>Drawer Docking</source>
+        <target>Drawer einrasten</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
+          <context context-type="linenumber">47</context>
+        </context-group>
+        <note priority="1" from="description">DrawerDocking</note>
+        <note priority="1" from="meaning">Settings</note>
+      </trans-unit>
       <trans-unit id="38eca8ed965ed27304f3e8f5505492248159100b" datatype="html">
         <source>Help</source>
         <target>Hilfe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">37</context>
+          <context context-type="linenumber">52</context>
         </context-group>
         <note priority="1" from="description">Help</note>
         <note priority="1" from="meaning">Settings</note>
@@ -167,20 +113,64 @@
         <target>Über Uns</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">41</context>
+          <context context-type="linenumber">56</context>
         </context-group>
         <note priority="1" from="description">About</note>
         <note priority="1" from="meaning">Settings</note>
       </trans-unit>
-      <trans-unit id="54a38692b3cb01fd464eaff18a774cced79962ac" datatype="html">
-        <source>Drawer Docking</source>
-        <target>Drawer einrasten</target>
+      <trans-unit id="3149bc3f0a5c01aac3807ac5700243e6877464b2" datatype="html">
+        <source>Make sure your search is spelled correctly.</source>
+        <target>Überprüfe deine Eingabe auf Rechtschreibfehler.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/settings/settings.page.html</context>
-          <context context-type="linenumber">45</context>
+          <context context-type="sourcefile">src/app/navigation/navigation.page.html</context>
+          <context context-type="linenumber">31</context>
         </context-group>
-        <note priority="1" from="description">DrawerDocking</note>
-        <note priority="1" from="meaning">Settings</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/navigation/nav-drawer-manager/nav-drawer-manager.component.html</context>
+          <context context-type="linenumber">17</context>
+        </context-group>
+        <note priority="1" from="description">spelling check</note>
+        <note priority="1" from="meaning">search error</note>
+      </trans-unit>
+      <trans-unit id="39e2120624d4859c7409dfced48a3759dfe477f2" datatype="html">
+        <source>Should this place be on Studi-Guide? <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;
+                "/><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Studi-Guide/Studi-Guide/issues/new/choose&quot;&gt;"/>Request a missing place<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+       <target>Sollte dieser Ort im Studi-Guide sein?
+               <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+               <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Füge den Ort hinzu<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+             </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/navigation/navigation.page.html</context>
+          <context context-type="linenumber">32,34</context>
+        </context-group>
+        <note priority="1" from="description">missing place request</note>
+        <note priority="1" from="meaning">search error</note>
+      </trans-unit>
+      <trans-unit id="6729329861748a1ac918658f7871a97414091deb" datatype="html">
+        <source>Select Language</source>
+        <target>Sprache wählen</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <note priority="1" from="description">Header</note>
+        <note priority="1" from="meaning">Select Language</note>
+      </trans-unit>
+      <trans-unit id="b47b79397919ae72f70bdc7252be4e238da67d8d" datatype="html">
+         <source>
+            <x id="START_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;ion-item&gt;"/>English<x id="CLOSE_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;/ion-item&gt;"/>
+            <x id="START_TAG_ION-ITEM_1" ctype="x-ion-item" equiv-text="&lt;ion-item&gt;"/>German<x id="CLOSE_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;/ion-item&gt;"/>
+          </source>
+                <target>
+            <x id="START_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;ion-item&gt;"/>Englisch<x id="CLOSE_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;/ion-item&gt;"/>
+            <x id="START_TAG_ION-ITEM_1" ctype="x-ion-item" equiv-text="&lt;ion-item&gt;"/>Deutsch<x id="CLOSE_TAG_ION-ITEM" ctype="x-ion-item" equiv-text="&lt;/ion-item&gt;"/>
+          </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/detail-view-select-language/detail-view-select-language.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+        <note priority="1" from="description">Languages</note>
+        <note priority="1" from="meaning">Select Language</note>
       </trans-unit>
       <trans-unit id="1edc8b24c18f495f13f116bd42b3ade124b93f48" datatype="html">
         <source>Select Appearance</source>
@@ -192,14 +182,14 @@
         <note priority="1" from="description">Select Appearance</note>
         <note priority="1" from="meaning">Appearance</note>
       </trans-unit>
-      <trans-unit id="947b393e1e409c930df4857cf91075af77c5b354" datatype="html">
-        <source>Dark</source>
-        <target>Dunkel (DarkMode)</target>
+      <trans-unit id="bf966718c45207ffb29f0530b27567c2f3fedf71" datatype="html">
+        <source>System</source>
+        <target>System</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">14</context>
         </context-group>
-        <note priority="1" from="description">Dark</note>
+        <note priority="1" from="description">System</note>
         <note priority="1" from="meaning">Appearance</note>
       </trans-unit>
       <trans-unit id="3cc73d43688ba9cd210df5ad4c795bfb29799b07" datatype="html">
@@ -207,20 +197,34 @@
         <target>Hell</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
-          <context context-type="linenumber">12</context>
+          <context context-type="linenumber">18</context>
         </context-group>
         <note priority="1" from="description">Light</note>
         <note priority="1" from="meaning">Appearance</note>
       </trans-unit>
-      <trans-unit id="bf966718c45207ffb29f0530b27567c2f3fedf71" datatype="html">
-        <source>System</source>
-        <target>System</target>
+      <trans-unit id="947b393e1e409c930df4857cf91075af77c5b354" datatype="html">
+        <source>Dark</source>
+        <target>Dunkel (DarkMode)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/settings/detail-view-select-appearance/detail-view-select-appearance.component.html</context>
-          <context context-type="linenumber">11</context>
+          <context context-type="linenumber">22</context>
         </context-group>
-        <note priority="1" from="description">System</note>
+        <note priority="1" from="description">Dark</note>
         <note priority="1" from="meaning">Appearance</note>
+      </trans-unit>
+      <trans-unit id="b70606df97bd6e959b4afee099c048662de94217" datatype="html">
+        <source>Should this place be on Studi-Guide? <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;
+              "/><x id="START_LINK" ctype="x-a" equiv-text="&lt;a href=&quot;https://github.com/Studi-Guide/Studi-Guide/issues/new/choose&quot;&gt;"/>Request a missing place<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/></source>
+         <target>Sollte dieser Ort im Studi-Guide sein?
+                <x id="LINE_BREAK" ctype="lb" equiv-text="&lt;br/&gt;"/>
+                <x id="START_LINK" ctype="x-a" equiv-text="&lt;a&gt;"/>Füge den Ort hinzu<x id="CLOSE_LINK" ctype="x-a" equiv-text="&lt;/a&gt;"/>
+              </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/navigation/nav-drawer-manager/nav-drawer-manager.component.html</context>
+          <context context-type="linenumber">18,20</context>
+        </context-group>
+        <note priority="1" from="description">missing place request</note>
+        <note priority="1" from="meaning">search error</note>
       </trans-unit>
     </body>
   </file>
