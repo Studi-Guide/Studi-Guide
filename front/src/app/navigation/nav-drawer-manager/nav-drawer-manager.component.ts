@@ -162,7 +162,7 @@ export class NavDrawerManagerComponent implements AfterViewInit {
   }
 
   public UseDrawerForNavigation(): boolean {
-    return !(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice() === DrawerState.Bottom);
+    return !(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice() === DrawerState.Docked);
   }
 
 }
