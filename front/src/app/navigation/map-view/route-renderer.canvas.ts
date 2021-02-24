@@ -5,10 +5,10 @@ import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
 
 export class RouteRendererCanvas implements IRenderer {
 
-    constructor(private route:IReceivedRoute) {
+    constructor(private route: IReceivedRoute) {
     }
 
-    public get Route() : IReceivedRoute {
+    public get Route(): IReceivedRoute {
         return this.route;
     }
 
@@ -17,13 +17,14 @@ export class RouteRendererCanvas implements IRenderer {
         if (this.route.Start.Floor === args.floor) {
             const x = this.route.Start.Node.Coordinate.X;
             const y = this.route.Start.Node.Coordinate.Y;
-            pin.render(renderingContext,x-15, y-30, 30, 30);
+            pin.render(renderingContext, x - 15, y - 30, 30, 30);
         }
-        const flag = new IconOnMapRenderer('assets/flag-sharp.png');
+
+        const flag =  new IconOnMapRenderer( 'assets/pin-red.png');
         if (this.route.End.Floor === args.floor) {
             const x = this.route.End.Node.Coordinate.X;
             const y = this.route.End.Node.Coordinate.Y;
-            flag.render(renderingContext, x-5, y-30, 30, 30);
+            flag.render(renderingContext, x - 30,  y - 40, 60, 60);
         }
 
 
@@ -34,9 +35,9 @@ export class RouteRendererCanvas implements IRenderer {
                 renderingContext.strokeStyle = '#A00';
                 renderingContext.lineWidth = 3;
                 renderingContext.beginPath();
-                renderingContext.moveTo(routeSection.Route[0].Coordinate.X,routeSection.Route[0].Coordinate.Y);
+                renderingContext.moveTo(routeSection.Route[0].Coordinate.X, routeSection.Route[0].Coordinate.Y);
                 for (let i = 1; i < routeSection.Route.length; i++) {
-                    renderingContext.lineTo(routeSection.Route[i].Coordinate.X,routeSection.Route[i].Coordinate.Y);
+                    renderingContext.lineTo(routeSection.Route[i].Coordinate.X, routeSection.Route[i].Coordinate.Y);
                 }
                 renderingContext.stroke();
                 renderingContext.closePath();
@@ -67,4 +68,4 @@ export class RouteRendererCanvas implements IRenderer {
     stopAnimation(renderingContext: CanvasRenderingContext2D) {
     }
 
-};
+}
