@@ -16,7 +16,34 @@ type MapController struct {
 func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) error {
 	r := MapController{router: router, provider: provider}
 	r.router.GET("", r.GetMapItems)
+	r.router.GET("/:building/floors/:floor", r.GetMapsFromBuildingFloor)
 	return nil
+}
+
+// @Summary Get map items of a Building of a floor
+// @Description Get map items of a building filtered by floor
+// @ID get-mapitems-from-building
+// @Accept  json
+// @Produce  json
+// @Tags MapController
+// @Param building path string false "name of the building"
+// @Param floor path string false "name of the floor"
+// @Success 200 {array} entitymapper.MapItem
+// @Router /maps/buildings/{building}/floors/{floor} [get]
+func (b MapController) GetMapsFromBuildingFloor(context *gin.Context) {
+	building := context.Param("building")
+	floor := context.Param("floor")
+	maps, err := b.provider.FilterMapItems(floor, building, "")
+	if err != nil {
+		fmt.Println("GetMapsFromBuildingFloor() failed with error", err)
+		context.JSON(http.StatusBadRequest, gin.H{
+			"code":    http.StatusBadRequest,
+			"message": err.Error(),
+		})
+		return
+	}
+
+	context.JSON(http.StatusOK, maps)
 }
 
 // GetMapItems godoc

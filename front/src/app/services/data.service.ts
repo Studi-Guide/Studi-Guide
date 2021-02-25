@@ -18,7 +18,7 @@ export class DataService {
     }
 
     get_map_floor(building: string, floor: string){
-        return this.cache.Get<IMapItem[]>(this.httpClient, this.baseUrl + '/buildings/' + building + '/floors/' + floor + '/maps');
+        return this.cache.Get<IMapItem[]>(this.httpClient, this.baseUrl + '/maps/buildings/' + building + '/floors/' + floor);
     }
 
     get_map_items(campus: string, floor: string, building: string) {

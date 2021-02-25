@@ -34,7 +34,6 @@ func NewBuildingController(router *gin.RouterGroup, buildingProvider BuildingPro
 	b.router.GET("/:building", b.GetBuildingByName)
 	b.router.GET("/:building/floors", b.GetFloorsFromBuilding)
 	b.router.GET("/:building/floors/:floor/rooms", b.GetRoomsFromBuildingFloor)
-	b.router.GET("/:building/floors/:floor/maps", b.GetMapsFromBuildingFloor)
 	b.router.GET("/:building/floors/:floor/locations", b.GetLocationsFromBuildingFloor)
 
 	return nil
@@ -132,32 +131,6 @@ func (b BuildingController) GetRoomsFromBuildingFloor(context *gin.Context) {
 	}
 
 	context.JSON(http.StatusOK, rooms)
-}
-
-// @Summary Get Rooms of a Building of a floor
-// @Description Get one building by name
-// @ID get-building-room-name
-// @Accept  json
-// @Produce  json
-// @Tags BuildingController
-// @Param building path string false "name of the building"
-// @Param floor path string false "name of the floor"
-// @Success 200 {array} entitymapper.MapItem
-// @Router /buildings/{building}/floors/{floor}/maps [get]
-func (b BuildingController) GetMapsFromBuildingFloor(context *gin.Context) {
-	building := context.Param("building")
-	floor := context.Param("floor")
-	maps, err := b.mapProvider.FilterMapItems(floor, building, "")
-	if err != nil {
-		fmt.Println("GetMapsFromBuildingFloor() failed with error", err)
-		context.JSON(http.StatusBadRequest, gin.H{
-			"code":    http.StatusBadRequest,
-			"message": err.Error(),
-		})
-		return
-	}
-
-	context.JSON(http.StatusOK, maps)
 }
 
 // @Summary Get Rooms of a Building of a floor
