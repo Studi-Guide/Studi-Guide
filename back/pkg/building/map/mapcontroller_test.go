@@ -82,6 +82,77 @@ func TestMapController_GetMapItems_ConnectorError(t *testing.T) {
 	}
 }
 
+func TestBuildingController_GetMapsFromBuildingFloor(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/maps/buildings/main/floors/1", nil)
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mockmaps := []entitymapper.MapItem{{
+		Doors:     nil,
+		Color:     "",
+		Sections:  nil,
+		Building:  "main",
+		PathNodes: nil,
+		Floor:     "1",
+	},
+		{
+			Doors:     nil,
+			Color:     "",
+			Sections:  nil,
+			Building:  "main",
+			PathNodes: nil,
+			Floor:     "1",
+		},
+		{
+			Doors:     nil,
+			Color:     "",
+			Sections:  nil,
+			Building:  "foobar",
+			PathNodes: nil,
+			Floor:     "3",
+		},
+		{
+			Doors:     nil,
+			Color:     "",
+			Sections:  nil,
+			Building:  "main",
+			PathNodes: nil,
+			Floor:     "2",
+		},
+	}
+
+	mapsProvider := NewMockMapServiceProvider(ctrl)
+	router := gin.Default()
+	mapRouter := router.Group("/maps")
+	mapsProvider.EXPECT().FilterMapItems("1", "main", "").Return(mockmaps, nil)
+	NewMapController(mapRouter, mapsProvider)
+	router.ServeHTTP(rec, req)
+	expected, _ := json.Marshal(mockmaps)
+	actual := rec.Body.String()
+	if string(expected) != actual {
+		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
+	}
+}
+
+func TestBuildingController_GetMapsFromBuildingFloor_Exception(t *testing.T) {
+	rec := httptest.NewRecorder()
+	req, _ := http.NewRequest("GET", "/maps/buildings/main/floors/1", nil)
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	mapsProvider := NewMockMapServiceProvider(ctrl)
+	router := gin.Default()
+	mapRouter := router.Group("/maps")
+	NewMapController(mapRouter, mapsProvider)
+	mapsProvider.EXPECT().FilterMapItems("1", "main", "").Return(nil, errors.New("mock exception"))
+	router.ServeHTTP(rec, req)
+	if http.StatusBadRequest != rec.Code {
+		t.Error("expected ", http.StatusOK)
+	}
+}
+
 func TestMapController_GetMapItemsFromFloor_Filter(t *testing.T) {
 	rec := httptest.NewRecorder()
 	req, _ := http.NewRequest("GET", "/maps?floor=1", nil)

@@ -8,7 +8,6 @@ import (
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/db/entitymapper"
 	"studi-guide/pkg/building/location"
-	maps "studi-guide/pkg/building/map"
 	"studi-guide/pkg/building/room/mock"
 	"studi-guide/pkg/navigation"
 	"testing"
@@ -26,11 +25,10 @@ func TestBuildingController_GetAllBuildings(t *testing.T) {
 
 	buildingprovider := NewMockBuildingProvider(ctrl)
 	locationProvider := location.NewMockLocationProvider(ctrl)
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	roomProvider := mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider, mapsProvider)
+	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider)
 
 	building := []*ent.Building{{
 		ID:   1,
@@ -61,11 +59,10 @@ func TestBuildingController_GetBuildings_Error(t *testing.T) {
 
 	buildingprovider := NewMockBuildingProvider(ctrl)
 	locationProvider := location.NewMockLocationProvider(ctrl)
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	roomProvider := mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider, mapsProvider)
+	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider)
 
 	buildingprovider.EXPECT().GetAllBuildings().Return(nil, errors.New("bla"))
 
@@ -85,11 +82,10 @@ func TestBuildingController_GetBuildings_Filter(t *testing.T) {
 
 	buildingprovider := NewMockBuildingProvider(ctrl)
 	locationProvider := location.NewMockLocationProvider(ctrl)
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	roomProvider := mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider, mapsProvider)
+	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider)
 
 	building := ent.Building{
 		ID:   1,
@@ -115,11 +111,10 @@ func TestBuildingController_GetBuildings_Filter_Error(t *testing.T) {
 
 	buildingprovider := NewMockBuildingProvider(ctrl)
 	locationProvider := location.NewMockLocationProvider(ctrl)
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	roomProvider := mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider, mapsProvider)
+	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProvider)
 
 	buildingprovider.EXPECT().GetBuilding("random").Return(nil, errors.New("bla"))
 	router.ServeHTTP(rec, req)
@@ -161,10 +156,9 @@ func TestBuildingController_GetLocationsFromBuildingFloor(t *testing.T) {
 		Return(excepectedLocations, nil)
 
 	roomProvider := mock.NewRoomMockService()
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
+	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock)
 	router.ServeHTTP(rec, req)
 
 	expected, _ := json.Marshal(excepectedLocations)
@@ -184,10 +178,9 @@ func TestBuildingController_GetRoomsFromBuildingFloor(t *testing.T) {
 	buildingprovider := NewMockBuildingProvider(ctrl)
 	locationProviderMock := location.NewMockLocationProvider(ctrl)
 	roomProvider := mock.NewRoomMockService()
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
+	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock)
 	testbuilding := ent.Building{
 		ID:   1,
 		Name: "main",
@@ -214,90 +207,10 @@ func TestBuildingController_GetRoomsFromBuildingFloor_Exception(t *testing.T) {
 	buildingprovider := NewMockBuildingProvider(ctrl)
 	locationProviderMock := location.NewMockLocationProvider(ctrl)
 	roomProvider := mock.NewRoomMockService()
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
+	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock)
 	roomProvider.RoomList = nil
-	router.ServeHTTP(rec, req)
-	if http.StatusBadRequest != rec.Code {
-		t.Error("expected ", http.StatusOK)
-	}
-}
-
-func TestBuildingController_GetMapsFromBuildingFloor(t *testing.T) {
-	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/buildings/main/floors/1/maps", nil)
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	buildingprovider := NewMockBuildingProvider(ctrl)
-	locationProviderMock := location.NewMockLocationProvider(ctrl)
-
-	mockmaps := []entitymapper.MapItem{{
-		Doors:     nil,
-		Color:     "",
-		Sections:  nil,
-		Building:  "main",
-		PathNodes: nil,
-		Floor:     "1",
-	},
-		{
-			Doors:     nil,
-			Color:     "",
-			Sections:  nil,
-			Building:  "main",
-			PathNodes: nil,
-			Floor:     "1",
-		},
-		{
-			Doors:     nil,
-			Color:     "",
-			Sections:  nil,
-			Building:  "foobar",
-			PathNodes: nil,
-			Floor:     "3",
-		},
-		{
-			Doors:     nil,
-			Color:     "",
-			Sections:  nil,
-			Building:  "main",
-			PathNodes: nil,
-			Floor:     "2",
-		},
-	}
-
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
-	roomProvider := mock.NewRoomMockService()
-	router := gin.Default()
-	mapRouter := router.Group("/buildings")
-	mapsProvider.EXPECT().FilterMapItems("1", "main", "").Return(mockmaps, nil)
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
-	router.ServeHTTP(rec, req)
-	expected, _ := json.Marshal(mockmaps)
-	actual := rec.Body.String()
-	if string(expected) != actual {
-		t.Errorf("expected = %v; actual = %v", string(expected), rec.Body.String())
-	}
-}
-
-func TestBuildingController_GetMapsFromBuildingFloor_Exception(t *testing.T) {
-	rec := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/buildings/main/floors/1/maps", nil)
-
-	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
-
-	buildingprovider := NewMockBuildingProvider(ctrl)
-	locationProviderMock := location.NewMockLocationProvider(ctrl)
-	roomProvider := mock.NewRoomMockService()
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
-	router := gin.Default()
-	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
-	mapsProvider.EXPECT().FilterMapItems("1", "main", "").Return(nil, errors.New("mock exception"))
 	router.ServeHTTP(rec, req)
 	if http.StatusBadRequest != rec.Code {
 		t.Error("expected ", http.StatusOK)
@@ -323,11 +236,10 @@ func TestBuildingController_GetFloorsFromBuilding(t *testing.T) {
 	buildingprovider.EXPECT().GetBuilding("main").Return(&testbuilding, nil)
 	buildingprovider.EXPECT().GetFloorsFromBuilding(&testbuilding).Return(floorValue, nil)
 
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	roomProvider := mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
+	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock)
 	router.ServeHTTP(rec, req)
 	expected, _ := json.Marshal(floorValue)
 	actual := rec.Body.String()
@@ -348,11 +260,10 @@ func TestBuildingController_GetFloorsFromBuilding_BuildingNotFound(t *testing.T)
 
 	buildingprovider.EXPECT().GetBuilding("main").Return(nil, errors.New("not found"))
 
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	roomProvider := mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
+	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock)
 	router.ServeHTTP(rec, req)
 	if http.StatusBadRequest != rec.Code {
 		t.Error("expected ", http.StatusOK)
@@ -376,11 +287,10 @@ func TestBuildingController_GetFloorsFromBuilding_FloorError(t *testing.T) {
 
 	buildingprovider.EXPECT().GetBuilding("main").Return(&testbuilding, nil)
 
-	mapsProvider := maps.NewMockMapServiceProvider(ctrl)
 	roomProvider := mock.NewRoomMockService()
 	router := gin.Default()
 	mapRouter := router.Group("/buildings")
-	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock, mapsProvider)
+	NewBuildingController(mapRouter, buildingprovider, roomProvider, locationProviderMock)
 	buildingprovider.EXPECT().GetFloorsFromBuilding(&testbuilding).Return(nil, errors.New("not found"))
 	router.ServeHTTP(rec, req)
 	if http.StatusBadRequest != rec.Code {
