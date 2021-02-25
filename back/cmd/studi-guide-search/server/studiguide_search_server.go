@@ -80,6 +80,17 @@ func NewSearchService(env *env.Env,
 		}
 	}
 
+	mapRouter := router.Group("/maps")
+	{
+		log.Print("Creating map controllers")
+		err := buildingMap.NewMapController(mapRouter, mapProvider)
+		if err != nil {
+			log.Fatal(err)
+		} else {
+			log.Print("Successfully initialized map controllers")
+		}
+	}
+
 	campusRouter := router.Group("/campus")
 	{
 		log.Println("Creating campus controller")
