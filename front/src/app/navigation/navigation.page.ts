@@ -70,6 +70,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
                         await this.mapView.showFloor(
                             floors?.includes('EG') ? 'EG' : floors[0],
                             building.Name);
+                        this.mapView.FitMap();
                     }
                 } else {
                     await this.showDiscoveryMode();
