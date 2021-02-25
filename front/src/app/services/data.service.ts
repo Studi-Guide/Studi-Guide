@@ -41,7 +41,8 @@ export class DataService {
     }
 
     get_route(start: string, end: string){
-        return this.cache.Get<IReceivedRoute>(this.httpClient, this.baseUrl + '/navigation/dir?start=' + start + '&end=' + end );
+        return this.cache.Get<IReceivedRoute>(this.httpClient, this.baseUrl + '/navigation/dir?start='
+            + encodeURI(start) + '&end=' + encodeURI(end));
     }
 
     get_locations_all() {
@@ -70,7 +71,7 @@ export class DataService {
 
     get_buildings_search(search: string = '') {
         const searchParam = search ? '?name=' + search : '';
-        return this.cache.Get<IBuilding[]>(this.httpClient, this.baseUrl + '/buildings' + searchParam);
+        return this.cache.Get<IBuilding[]>(this.httpClient, this.baseUrl + '/buildings' + encodeURI(searchParam));
     }
 
     get_map_item(pathNodeId: number) {
@@ -83,7 +84,7 @@ export class DataService {
 
     get_campus_search(search: string = '') {
         const searchParam = search ? '?search=' + search : '';
-        return this.cache.Get<ICampus[]>(this.httpClient, this.baseUrl + '/campus' + searchParam);
+        return this.cache.Get<ICampus[]>(this.httpClient, this.baseUrl + '/campus' + encodeURI(searchParam));
     }
 
     get_rssFeed(feedId: string){
