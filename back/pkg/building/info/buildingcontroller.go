@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"studi-guide/pkg/building/db/ent"
 	"studi-guide/pkg/building/location"
-	maps "studi-guide/pkg/building/map"
 	"studi-guide/pkg/building/room/models"
 
 	"github.com/gin-gonic/gin"
@@ -16,18 +15,15 @@ type BuildingController struct {
 	buildingProvider BuildingProvider
 	roomProvider     models.RoomServiceProvider
 	locationProvider location.LocationProvider
-	mapProvider      maps.MapServiceProvider
 }
 
 func NewBuildingController(router *gin.RouterGroup, buildingProvider BuildingProvider,
-	roomProvider models.RoomServiceProvider, locationProvider location.LocationProvider,
-	mapProvider maps.MapServiceProvider) error {
+	roomProvider models.RoomServiceProvider, locationProvider location.LocationProvider) error {
 	b := BuildingController{
 		router:           router,
 		buildingProvider: buildingProvider,
 		roomProvider:     roomProvider,
 		locationProvider: locationProvider,
-		mapProvider:      mapProvider,
 	}
 
 	b.router.GET("", b.GetBuildings)

@@ -10,7 +10,6 @@ import (
 	"studi-guide/pkg/building/campus"
 	buildingInfo "studi-guide/pkg/building/info"
 	buildingLocation "studi-guide/pkg/building/location"
-	buildingMap "studi-guide/pkg/building/map"
 	"studi-guide/pkg/building/room/controllers"
 	buildingRoom "studi-guide/pkg/building/room/models"
 	"studi-guide/pkg/env"
@@ -22,7 +21,7 @@ type SearchMicroService struct {
 
 func NewSearchService(env *env.Env,
 	buildingProvider buildingInfo.BuildingProvider, roomProvider buildingRoom.RoomServiceProvider,
-	locationProvider buildingLocation.LocationProvider, mapProvider buildingMap.MapServiceProvider,
+	locationProvider buildingLocation.LocationProvider,
 	campusProvider campus.CampusProvider) *SearchMicroService {
 	log.Print("Starting initializing main controllers ...")
 	router := gin.Default()
@@ -72,22 +71,11 @@ func NewSearchService(env *env.Env,
 	buildingRouter := router.Group("/buildings")
 	{
 		log.Println("Creating building controller")
-		err := buildingInfo.NewBuildingController(buildingRouter, buildingProvider, roomProvider, locationProvider, mapProvider)
+		err := buildingInfo.NewBuildingController(buildingRouter, buildingProvider, roomProvider, locationProvider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
 			log.Println("Successfully initialized building controller")
-		}
-	}
-
-	mapRouter := router.Group("/maps")
-	{
-		log.Print("Creating map controllers")
-		err := buildingMap.NewMapController(mapRouter, mapProvider)
-		if err != nil {
-			log.Fatal(err)
-		} else {
-			log.Print("Successfully initialized map controllers")
 		}
 	}
 

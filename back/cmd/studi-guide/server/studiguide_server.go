@@ -121,7 +121,7 @@ func NewStudiGuideServer(env *env.Env,
 	buildingRouter := router.Group("/buildings")
 	{
 		log.Println("Creating building controller")
-		err := buildingInfo.NewBuildingController(buildingRouter, buildingProvider, roomProvider, locationProvider, mapProvider)
+		err := buildingInfo.NewBuildingController(buildingRouter, buildingProvider, roomProvider, locationProvider)
 		if err != nil {
 			log.Fatal(err)
 		} else {
