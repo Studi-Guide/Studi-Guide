@@ -20,6 +20,7 @@ func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) erro
 	return nil
 }
 
+// GetMapsFromBuildingFloor godoc
 // @Summary Get map items of a Building of a floor
 // @Description Get map items of a building filtered by floor
 // @ID get-mapitems-from-building
