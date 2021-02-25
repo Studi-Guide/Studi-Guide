@@ -16,7 +16,7 @@ type MapController struct {
 func NewMapController(router *gin.RouterGroup, provider MapServiceProvider) error {
 	r := MapController{router: router, provider: provider}
 	r.router.GET("", r.GetMapItems)
-	r.router.GET("/:building/floors/:floor", r.GetMapsFromBuildingFloor)
+	r.router.GET("/buildings/:building/floors/:floor", r.GetMapsFromBuildingFloor)
 	return nil
 }
 
