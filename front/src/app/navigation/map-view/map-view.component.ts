@@ -167,11 +167,13 @@ export class MapViewComponent implements AfterViewInit {
           polygon.push([section.Start.X, section.Start.Y]);
         }
         if (pip(point, polygon)) {
-          await this.showNextFloor(mapItem, false);
-          return;
+          await this.showNextFloor(mapItem);
         }
       }
+
+      return;
     }
+
     // Track clicks/touches on locations
     const clickedLocations: ILocation[] = [];
     for (const l of this.locationRenderer) {
@@ -276,7 +278,7 @@ export class MapViewComponent implements AfterViewInit {
     iconOnMapRenderer.render(this.renderingContext, x, y, 60, 60);
   }
 
-  private async showNextFloor(item: IMapItem, centerMap: boolean) {
+  private async showNextFloor(item: IMapItem) {
     for (let i = 0; i < this.currentRoute.RouteSections.length - 1; i++) {
       if (this.currentRoute.RouteSections[i].Floor === item.Floor && this.currentRoute.RouteSections[i].Building === item.Building) {
         this.currentFloor = this.currentRoute.RouteSections[i + 1].Floor;
@@ -348,10 +350,13 @@ export class MapViewComponent implements AfterViewInit {
     await this.showAnotherFloorOfCurrentBuilding(floorAndBuildingInput.floor, floorAndBuildingInput.building);
   }
 
-  public async showAnotherFloorOfCurrentBuilding(floor: string, building: string) {
+  public async showAnotherFloorOfCurrentBuilding(floor: string, building: string, fitmap: boolean = true) {
     NavigationPage.progressIsVisible = true;
     await this.showFloor(floor, building);
-    this.FitMap();
+    if (fitmap) {
+      this.FitMap();
+    }
+
     NavigationPage.progressIsVisible = false;
     this.floorChanged.emit();
   }

@@ -131,7 +131,7 @@
     </div>
    <ion-content class="ion-item-style">
       <ion-list *ngIf="this.CurrentRoute?.RouteSections && this.CurrentRoute.Distance !== 0">
-        <ion-item *ngFor="let i of this.CurrentRoute.RouteSections"> <!--       button (click)="navInstructionClick.emit(i)">-->
+        <ion-item *ngFor="let i of this.CurrentRoute.RouteSections"button (click)="routeInstructionClick(i)">
           <ion-text *ngIf="i.Distance !== 0" >{{i.Distance}}m on floor {{i.Floor}}</ion-text>
           <ion-text *ngIf="i.Distance === 0" >Stairs through floor {{i.Floor}}</ion-text>
         </ion-item>

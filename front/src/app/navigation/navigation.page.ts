@@ -11,7 +11,7 @@ import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom
 import {CampusViewModel} from './campusViewModel';
 import {NavigationModel} from './navigationModel';
 import {Plugins} from '@capacitor/core';
-import {IReceivedRoute} from '../route-objects-if';
+import {IReceivedRoute, IRouteSection} from '../route-objects-if';
 import {RouteInputComponent} from './nav-drawer-manager/route-input/route-input.component';
 
 const { Keyboard } = Plugins;
@@ -262,9 +262,11 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     async onFloorChanged(event: any) {
-        this.searchInput.clearStartInput();
-        this.searchInput.clearDestinationInput();
-        await this.onCloseLocationDrawer(null);
+        if (!this.CurrentRoute) {
+            this.searchInput.clearStartInput();
+            this.searchInput.clearDestinationInput();
+            await this.onCloseLocationDrawer(null);
+        }
     }
 
     // custom event handler
@@ -300,5 +302,21 @@ export class NavigationPage implements OnInit, AfterViewInit{
     async onChangeRoute(route: any[]) {
         await this.onCancelChangeRoute();
         await this.onRoute( [route[0].toString(), route[1].toString()]);
+    }
+
+    async routeInstructionClick(i: IRouteSection) {
+        if (i?.Floor !== this.mapView.currentFloor && i?.Building === this.mapView.currentBuilding) {
+            await this.mapView.showAnotherFloorOfCurrentBuilding(i.Floor, i.Building, false);
+
+            let sumX = 0;
+            let sumY = 0;
+            // calculate center if the route
+            for (const pathnode of i.Route) {
+                sumX += pathnode.Coordinate.X;
+                sumY += pathnode.Coordinate.Y;
+            }
+
+            this.mapView.CenterMap(sumX / i.Route.length, sumY / i.Route.length);
+        }
     }
 }
