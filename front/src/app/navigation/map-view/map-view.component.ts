@@ -19,6 +19,7 @@ import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
   styleUrls: ['./map-view.component.scss'],
 })
 export class MapViewComponent implements AfterViewInit {
+  public static DISTANCE_SCALAR = 5.0;
 
   public get CurrentRoute(): IReceivedRoute {
     return this.currentRoute;

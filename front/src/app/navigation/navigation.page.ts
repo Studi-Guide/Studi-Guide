@@ -124,6 +124,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
         try {
             const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<ILocation>();
             const route = await this.dataService.get_route(routeInput[0], routeInput[1]).toPromise();
+            route.Distance = Math.round(route.Distance / MapViewComponent.DISTANCE_SCALAR);
             route.Start.Name = startLocation.Name;
             route.End.Name = routeInput[1];
             await this.mapView.showRoute(route, startLocation);
@@ -292,8 +293,8 @@ export class NavigationPage implements OnInit, AfterViewInit{
         await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     }
 
-    async onChangeRoute(route: string[]) {
+    async onChangeRoute(route: any[]) {
         await this.onCancelChangeRoute();
-        await this.onRoute( [route[0], route[1]]);
+        await this.onRoute( [route[0].toString(), route[1].toString()]);
     }
 }
