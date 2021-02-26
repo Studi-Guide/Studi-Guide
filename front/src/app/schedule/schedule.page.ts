@@ -30,7 +30,7 @@ export class SchedulePage implements AfterViewInit {
   // TODO remove when presentation is done
   private floVorlesungDeutsch = [
     {
-      name: 'Dr. Frank Schütz',
+      name: 'Prof. Helmut Holz',
       description: '<div class="no-overflow"><p>- Heute -</p><p>Vorlesung 27.02.2021 11:00</p><p>(Prüfung: 23.04.2021)</p><p>Vertiefungsrichtung: Softwareentwicklung</p></div>',
       location: 'KA.206',
       id: 1,
