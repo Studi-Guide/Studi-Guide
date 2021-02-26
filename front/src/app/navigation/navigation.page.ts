@@ -11,6 +11,7 @@ import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom
 import {CampusViewModel} from './campusViewModel';
 import {NavigationModel} from './navigationModel';
 import {Plugins} from '@capacitor/core';
+import {IReceivedRoute} from '../route-objects-if';
 
 const { Keyboard } = Plugins;
 
@@ -29,6 +30,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
     @ViewChild('drawerContent') drawerContent: IonContent;
     @ViewChild('searchDrawer') searchDrawer: IonicBottomDrawerComponent;
     @ViewChild('locationDrawer') locationDrawer: IonicBottomDrawerComponent;
+    @ViewChild('routeDrawer') routeDrawer: IonicBottomDrawerComponent;
     public availableCampus: CampusViewModel[] = [];
     private isSubscribed = false;
 
@@ -38,6 +40,10 @@ export class NavigationPage implements OnInit, AfterViewInit{
                 private router: Router,
                 public model: NavigationModel,
                 private  platform: Platform) {
+    }
+
+    public get CurrentRoute(): IReceivedRoute {
+        return this.mapView?.CurrentRoute;
     }
 
     async ngAfterViewInit()  {
@@ -113,6 +119,8 @@ export class NavigationPage implements OnInit, AfterViewInit{
         try {
             const startLocation = await this.dataService.get_location(routeInput[0]).toPromise<ILocation>();
             const route = await this.dataService.get_route(routeInput[0], routeInput[1]).toPromise();
+            route.Start.Name = startLocation.Name;
+            route.End.Name = routeInput[1];
             await this.mapView.showRoute(route, startLocation);
             this.mapView.CenterMap(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
         } catch (ex) {
@@ -169,7 +177,11 @@ export class NavigationPage implements OnInit, AfterViewInit{
     public async onCloseLocationDrawer(event: any) {
         this.mapView.RefreshMap();
         await this.locationDrawer.SetState(DrawerState.Hidden);
-        await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+        if (!this.CurrentRoute) {
+            await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+        } else {
+            await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+        }
     }
 
     private handleInputError(ex, searchInput: string) {
@@ -215,8 +227,8 @@ export class NavigationPage implements OnInit, AfterViewInit{
         this.searchInput.showRouteSearchBar();
         this.searchInput.setDiscoverySearchbarValue(destination);
         this.searchInput.setStartSearchbarValue(start);
-        await this.onCloseLocationDrawer(null);
         await this.onRoute([start, destination]);
+        await this.onCloseLocationDrawer(null);
     }
 
     private async showDiscoveryMode() {
@@ -252,5 +264,13 @@ export class NavigationPage implements OnInit, AfterViewInit{
         if (this.platform.is('hybrid')) {
             await this.searchDrawer.SetState(DrawerState.Top);
         }
+    }
+
+   async onCloseRouteDrawer() {
+       this.mapView.ClearRoute();
+       this.mapView.RefreshMap();
+       await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+       await this.routeDrawer.SetState(DrawerState.Hidden);
+       await this.locationDrawer.SetState(DrawerState.Hidden);
     }
 }

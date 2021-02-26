@@ -374,6 +374,11 @@ export class MapViewComponent implements AfterViewInit {
     this.CenterMap( size.width / 2, size.height / 2);
   }
 
+  public ClearRoute() {
+    this.stopAllAnimations();
+    this.currentRoute = null;
+  }
+
   public RefreshMap() {
     this.createNewCanvasMap();
     this.renderMapItems();
