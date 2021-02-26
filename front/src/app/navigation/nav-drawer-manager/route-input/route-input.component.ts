@@ -27,9 +27,10 @@ export class RouteInputComponent implements OnInit, AfterViewInit {
 
   private inputToCurrentlyActive = false;
   public myLocationInInput = MyLocationInInput.From;
+  public myLocationEnabled = true;
 
-  private routeLocationTo: IRouteLocation;
-  private routeLocationFrom: IRouteLocation;
+  public routeLocationTo: IRouteLocation;
+  public routeLocationFrom: IRouteLocation;
 
   ngOnInit() {}
 
@@ -52,7 +53,7 @@ export class RouteInputComponent implements OnInit, AfterViewInit {
     await this.SetFocus();
   }
 
-  private updateInputValues() {
+  public updateInputValues() {
     this.inputFrom.value = this.routeLocationFrom.Name;
     this.inputTo.value = this.routeLocationTo.Name;
   }
@@ -64,7 +65,7 @@ export class RouteInputComponent implements OnInit, AfterViewInit {
   }
 
   public showMyLocation(): boolean {
-    return this.myLocationInInput === MyLocationInInput.No;
+    return this.myLocationInInput === MyLocationInInput.No && this.myLocationEnabled;
   }
 
   public onInputFromFocus() {

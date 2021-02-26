@@ -19,6 +19,7 @@ import {CanvasTouchHelper} from '../../services/CanvasTouchHelper';
   styleUrls: ['./map-view.component.scss'],
 })
 export class MapViewComponent implements AfterViewInit {
+  public static DISTANCE_SCALAR = 5.0;
 
   public get CurrentRoute(): IReceivedRoute {
     return this.currentRoute;
@@ -372,6 +373,11 @@ export class MapViewComponent implements AfterViewInit {
     // this.panZoomController.zoomTo(element.clientWidth, element.clientHeight, 0.7);
     const size = this.MapSize();
     this.CenterMap( size.width / 2, size.height / 2);
+  }
+
+  public ClearRoute() {
+    this.stopAllAnimations();
+    this.currentRoute = null;
   }
 
   public RefreshMap() {

@@ -9,6 +9,7 @@ export interface IReceivedRoute {
 
 export interface IRoutePoint {
     Node: IPathNode;
+    Name: string;
     Floor: string;
 }
 

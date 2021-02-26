@@ -1,6 +1,7 @@
 import {IRenderer} from '../../building-objects-if';
 import {IReceivedRoute} from '../../route-objects-if';
 import {IconOnMapRenderer} from '../../services/IconOnMapRenderer';
+import {MapViewComponent} from './map-view.component';
 
 
 export class RouteRendererCanvas implements IRenderer {
@@ -46,7 +47,7 @@ export class RouteRendererCanvas implements IRenderer {
             // draw route length
             for (const routeSection of routeSections) {
                 const numberOfPathNodes: number = routeSection.Route.length;
-                const value: number = routeSection.Distance;
+                const value: number = Math.round(routeSection.Distance / MapViewComponent.DISTANCE_SCALAR);
                 const x: number = routeSection.Route[Math.round((numberOfPathNodes - 1) / 2)].Coordinate.X;
                 const y: number = routeSection.Route[Math.round((numberOfPathNodes - 1) / 2)].Coordinate.Y;
                 const font = '14px Arial';

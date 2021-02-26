@@ -6,26 +6,13 @@
                  (click)="onSearchBarHasFocus('destinationSearchbar')"
                  (window:keydown)="onKey($event, 'destinationSearchbar')">
   </ion-searchbar>
-  <ion-button size="default" mode="ios" color="medium" (click)="emitDiscoveryEvent()" *ngIf="searchBtnIsVisible">
+  <ion-button slot="end" size="default" mode="ios" color="primary"  (click)="emitDiscoveryEvent()" *ngIf="searchBtnIsVisible">
     <ion-icon size="large" slot="icon-only" name="search" color=""></ion-icon>
   </ion-button>
-  <span class="vertical-line" *ngIf="searchBtnIsVisible"></span>
-  <ion-button size="default" mode="ios" color="primary" (click)="routeBtnClick()">
-    <ion-icon size="large" slot="icon-only" src="assets/navigation-svgs/directions-24px.svg"></ion-icon>
-  </ion-button>
-</ion-item>
-<ion-item *ngIf="routeInputIsVisible" lines="none">
-  <ion-searchbar #startSearchBar
-                 (click)="onSearchBarHasFocus('startSearchBar')"
-                 [value]="startSearchBarValue" animated="true"
-                 (window:keydown)="onKey($event, 'startSearchBar')"
-                 color="" icon-color="dark" inputmode="text"
-                 mode="ios" placeholder="start"
-                 search-icon="locate-outline">
-  </ion-searchbar>
-  <ion-button size="default" mode="ios" color="primary" (click)="hideRouteSearchBar()" *ngIf="closeRouteBtnIsVisible">
-    <ion-icon size="large" slot="icon-only" name="close-outline"></ion-icon>
-  </ion-button>
+<!--  <span class="vertical-line" *ngIf="searchBtnIsVisible"></span>-->
+<!--  <ion-button size="default" mode="ios" color="primary" (click)="routeBtnClick()">-->
+<!--    <ion-icon size="large" slot="icon-only" src="assets/navigation-svgs/directions-24px.svg"></ion-icon>-->
+<!--  </ion-button>-->
 </ion-item>
 <ion-list #locationList>
   <ion-item button *ngFor="let l of locations" (click)="discovery.emit(l.Name)">
