@@ -176,7 +176,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'studi-guide-ii'
-          slot-name: 'production'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_f2c142cba8d840d992ebff76fc35cc34 }}
           images: 'index.docker.io/studiguide/studiguide_appservice:latest'
         #- name: Build & Push to Docker Hub
