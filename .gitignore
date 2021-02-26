@@ -348,3 +348,11 @@ back/pkg/building/room/models/tmp/test.json
 .vscode/studiguide.code-workspace
 .gitignore
 /front/www/
+
+# ionic capacitor ios
+front/ios/App/public
+front/ios/capacitor-cordova-ios-plugins
+front/ios/App/Pods/Target Support Files/Capacitor
+front/ios/App/Pods/Target Support Files/CapacitorCordova
+front/ios/App/Pods/Target Support Files/CordovaPlugins
+front/ios/App/Pods/Target Support Files/Pods-App
