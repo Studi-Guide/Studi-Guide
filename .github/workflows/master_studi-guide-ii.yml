@@ -1,0 +1,35 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+
+name: Build and deploy container app to Azure Web App - studi-guide-ii
+
+on:
+  push:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: 'ubuntu-latest'
+
+    steps:
+    - uses: actions/checkout@master
+
+    - uses: azure/docker-login@v1
+      with:
+        login-server: https://index.docker.io/v1/
+        username: ${{ secrets.AzureAppService_ContainerUsername_c5fa9d235b014aeba2c1673c02b80d23 }}
+        password: ${{ secrets.AzureAppService_ContainerPassword_c7374961745d4e61986821b4aa067289 }}
+
+    - run: |
+        docker build . -t index.docker.io/${{ secrets.AzureAppService_ContainerUsername_c5fa9d235b014aeba2c1673c02b80d23 }}/studiguide/studiguide_appservice:${{ github.sha }}
+        docker push index.docker.io/${{ secrets.AzureAppService_ContainerUsername_c5fa9d235b014aeba2c1673c02b80d23 }}/studiguide/studiguide_appservice:${{ github.sha }}
+
+    - name: Deploy to Azure Web App
+      uses: azure/webapps-deploy@v2
+      with:
+        app-name: 'studi-guide-ii'
+        slot-name: 'production'
+        publish-profile: ${{ secrets.AzureAppService_PublishProfile_f2c142cba8d840d992ebff76fc35cc34 }}
+        images: 'index.docker.io/${{ secrets.AzureAppService_ContainerUsername_c5fa9d235b014aeba2c1673c02b80d23 }}/studiguide/studiguide_appservice:${{ github.sha }}'
