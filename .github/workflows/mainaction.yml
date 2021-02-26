@@ -172,6 +172,15 @@ jobs:
           docker login --password ${{ secrets.DOCKER_PASSWORD }} --username ${{ secrets.DOCKER_USER }}
           docker push studiguide/studiguide_appservice:latest
           
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'studi-guide-ii'
+          slot-name: 'production'
+          publish-profile: ${{ secrets.AzureAppService_PublishProfile_f2c142cba8d840d992ebff76fc35cc34 }}
+          images: 'index.docker.io/studiguide/studiguide_appservice:latest'
+        #- name: Build & Push to Docker Hub
+          
   deploy_armv7:
     needs: [build_back,build_front,test]
     name: Deploy armv7
@@ -211,7 +220,8 @@ jobs:
           tags: studiguide/studiguide_appservice:arm
           build-args: |
             ionicproduction=-configuration=docker
-        #- name: Build & Push to Docker Hub
+          
+    
         #  uses: opspresso/action-docker@master
         #  env:
         #    USERNAME: ${{ secrets.DOCKER_USER }}
