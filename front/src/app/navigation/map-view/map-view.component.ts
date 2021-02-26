@@ -123,8 +123,6 @@ export class MapViewComponent implements AfterViewInit {
     }
     this.currentFloor = floor;
     this.currentBuilding = building;
-
-    this.FitMap();
   }
 
   public async showDiscoveryMap(campus: string, floor: string) {
@@ -168,7 +166,7 @@ export class MapViewComponent implements AfterViewInit {
           polygon.push([section.Start.X, section.Start.Y]);
         }
         if (pip(point, polygon)) {
-          await this.showNextFloor(mapItem);
+          await this.showNextFloor(mapItem, false);
           return;
         }
       }
@@ -277,7 +275,7 @@ export class MapViewComponent implements AfterViewInit {
     iconOnMapRenderer.render(this.renderingContext, x, y, 60, 60);
   }
 
-  private async showNextFloor(item: IMapItem) {
+  private async showNextFloor(item: IMapItem, centerMap: boolean) {
     for (let i = 0; i < this.currentRoute.RouteSections.length - 1; i++) {
       if (this.currentRoute.RouteSections[i].Floor === item.Floor && this.currentRoute.RouteSections[i].Building === item.Building) {
         this.currentFloor = this.currentRoute.RouteSections[i + 1].Floor;
@@ -352,6 +350,7 @@ export class MapViewComponent implements AfterViewInit {
   public async showAnotherFloorOfCurrentBuilding(floor: string, building: string) {
     NavigationPage.progressIsVisible = true;
     await this.showFloor(floor, building);
+    this.FitMap();
     NavigationPage.progressIsVisible = false;
     this.floorChanged.emit();
   }
