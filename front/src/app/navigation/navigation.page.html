@@ -129,18 +129,18 @@
         </ion-grid>
       </ion-item>
     </div>
-   <!-- <ion-content class="ion-item-style">
-      <ion-list *ngIf="model.Route.Distance !== 0">
-        <ion-item *ngFor="let i of model.Route.NavigationInstructions" button (click)="navInstructionClick.emit(i)">
-          <ion-label>{{i.Text}}</ion-label>
-          <ion-text>{{i.Distance}}m</ion-text>
+   <ion-content class="ion-item-style">
+      <ion-list *ngIf="this.CurrentRoute?.RouteSections && this.CurrentRoute.Distance !== 0">
+        <ion-item *ngFor="let i of this.CurrentRoute.RouteSections"> <!--       button (click)="navInstructionClick.emit(i)">-->
+          <ion-text *ngIf="i.Distance !== 0" >{{i.Distance}}m on floor {{i.Floor}}</ion-text>
+          <ion-text *ngIf="i.Distance === 0" >Stairs through floor {{i.Floor}}</ion-text>
         </ion-item>
       </ion-list>
       <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
       <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
       <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
       <div class="ion-padding-vertical"></div><div class="ion-padding-vertical"></div>
-    </ion-content>-->
+    </ion-content>
   </div>
 </app-ionic-bottom-drawer>
 

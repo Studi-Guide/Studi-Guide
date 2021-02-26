@@ -47,7 +47,7 @@ export class RouteRendererCanvas implements IRenderer {
             // draw route length
             for (const routeSection of routeSections) {
                 const numberOfPathNodes: number = routeSection.Route.length;
-                const value: number = Math.round(routeSection.Distance / MapViewComponent.DISTANCE_SCALAR);
+                const value: number = routeSection.Distance;
                 const x: number = routeSection.Route[Math.round((numberOfPathNodes - 1) / 2)].Coordinate.X;
                 const y: number = routeSection.Route[Math.round((numberOfPathNodes - 1) / 2)].Coordinate.Y;
                 const font = '14px Arial';

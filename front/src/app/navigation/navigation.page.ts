@@ -127,6 +127,9 @@ export class NavigationPage implements OnInit, AfterViewInit{
             route.Distance = Math.round(route.Distance / MapViewComponent.DISTANCE_SCALAR);
             route.Start.Name = startLocation.Name;
             route.End.Name = routeInput[1];
+            for (const section of route.RouteSections){
+                section.Distance = Math.round(section.Distance / MapViewComponent.DISTANCE_SCALAR);
+            }
             await this.mapView.showRoute(route, startLocation);
             this.mapView.CenterMap(startLocation.PathNode.Coordinate.X, startLocation.PathNode.Coordinate.Y);
         } catch (ex) {
@@ -176,7 +179,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
             await Keyboard.hide();
         }
 
-        await this.searchDrawer.SetState(DrawerState.Docked);
+        await this.searchDrawer.SetState(DrawerState.Hidden);
         await this.locationDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
     }
 
@@ -274,6 +277,7 @@ export class NavigationPage implements OnInit, AfterViewInit{
    async onCloseRouteDrawer() {
        this.mapView.ClearRoute();
        this.mapView.RefreshMap();
+       this.mapView.FitMap();
        await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
        await this.routeDrawer.SetState(DrawerState.Hidden);
        await this.locationDrawer.SetState(DrawerState.Hidden);
