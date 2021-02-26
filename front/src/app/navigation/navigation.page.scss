@@ -82,6 +82,9 @@ ion-progress-bar {
     z-index: 3;
 }
 
+#routeDrawer {
+    z-index: 4;
+}
 
 .nav-bottom-drawer {
     background-color: var(--ion-item-background, #fff);
@@ -91,3 +94,7 @@ ion-progress-bar {
     height: inherit;
 }
 
+.span-button {
+    color: var(--ion-color-primary, #3880ff);
+    cursor: pointer;
+}

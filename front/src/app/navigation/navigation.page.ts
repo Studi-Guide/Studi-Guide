@@ -9,9 +9,10 @@ import {SearchInputComponent} from './search-input/search-input.component';
 import {DrawerState} from '../../ionic-bottom-drawer/drawer-state';
 import {IonicBottomDrawerComponent} from '../../ionic-bottom-drawer/ionic-bottom-drawer.component';
 import {CampusViewModel} from './campusViewModel';
-import {NavigationModel} from './navigationModel';
+import {IRouteLocation, NavigationModel} from './navigationModel';
 import {Plugins} from '@capacitor/core';
 import {IReceivedRoute} from '../route-objects-if';
+import {RouteInputComponent} from './nav-drawer-manager/route-input/route-input.component';
 
 const { Keyboard } = Plugins;
 
@@ -31,6 +32,8 @@ export class NavigationPage implements OnInit, AfterViewInit{
     @ViewChild('searchDrawer') searchDrawer: IonicBottomDrawerComponent;
     @ViewChild('locationDrawer') locationDrawer: IonicBottomDrawerComponent;
     @ViewChild('routeDrawer') routeDrawer: IonicBottomDrawerComponent;
+    @ViewChild('changeRouteDrawer') changeRouteDrawer: IonicBottomDrawerComponent;
+    @ViewChild('routeInput') routeInput: RouteInputComponent;
     public availableCampus: CampusViewModel[] = [];
     private isSubscribed = false;
 
@@ -49,6 +52,8 @@ export class NavigationPage implements OnInit, AfterViewInit{
     async ngAfterViewInit()  {
         await Promise.all([
             this.locationDrawer.SetState(DrawerState.Hidden),
+            this.routeDrawer.SetState(DrawerState.Hidden),
+            this.changeRouteDrawer.SetState(DrawerState.Hidden),
             this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice())
         ]);
     }
@@ -224,7 +229,6 @@ export class NavigationPage implements OnInit, AfterViewInit{
     }
 
     private async showNavigation(start: string, destination: string) {
-        this.searchInput.showRouteSearchBar();
         this.searchInput.setDiscoverySearchbarValue(destination);
         this.searchInput.setStartSearchbarValue(start);
         await this.onRoute([start, destination]);
@@ -272,5 +276,24 @@ export class NavigationPage implements OnInit, AfterViewInit{
        await this.searchDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
        await this.routeDrawer.SetState(DrawerState.Hidden);
        await this.locationDrawer.SetState(DrawerState.Hidden);
+    }
+
+    public async onChangeRouteStartEndClick() {
+        this.routeInput.myLocationEnabled = false;
+        this.routeInput.routeLocationFrom = { Name: this.CurrentRoute?.Start?.Name ?? '', LatLng: { lat: 0, lng : 0}};
+        this.routeInput.routeLocationTo = { Name: this.CurrentRoute?.End?.Name ?? '', LatLng: { lat: 0, lng : 0}};
+        this.routeInput.updateInputValues();
+        await this.routeDrawer.SetState(DrawerState.Hidden);
+        await this.changeRouteDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    }
+
+    public async onCancelChangeRoute() {
+        await this.changeRouteDrawer.SetState(DrawerState.Hidden);
+        await this.routeDrawer.SetState(IonicBottomDrawerComponent.GetRecommendedDrawerStateForDevice());
+    }
+
+    async onChangeRoute(route: string[]) {
+        await this.onCancelChangeRoute();
+        await this.onRoute( [route[0], route[1]]);
     }
 }
