@@ -21,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   private readonly MOODLE_TOKEN = 'moodle_token';
   private readonly MOODLE_USER = 'moodle_user';
-  public userInput = 'BarthFl81369'/*'admin'*/; // TODO remove when presentation is done
+  public userInput = 'admin';
   public userPassword = 'administrator';
 
   constructor(
@@ -63,9 +63,8 @@ export class LoginComponent implements OnInit {
   }
 
   public async fetchAndPersistMoodleToken() {
-    // TODO remove when presentation is done
-    const userName = this.userInput === 'BarthFl81369' || this.userInput === 'WilhelmSe97531' ? 'admin' : this.userInput;
-    const password = this.userPassword === 'semjon' ? 'administrator' : this.userPassword;
+    const userName = this.userInput;
+    const password = this.userPassword;
 
     const tokenToPersist = await this.moodleService.getLoginToken(userName, password).toPromise();
 
@@ -73,8 +72,7 @@ export class LoginComponent implements OnInit {
       this.isUserLoggedIn = true;
       this.moodleToken.emit(tokenToPersist);
       this.isSignedIn.emit(this.isUserLoggedIn);
-      // TODO remove when presentation is done
-      await this.storage.set(this.MOODLE_USER, /*userName*/this.userInput);
+      await this.storage.set(this.MOODLE_USER, userName);
       await this.storage.set(this.MOODLE_TOKEN, tokenToPersist);
 
       // clear fields
