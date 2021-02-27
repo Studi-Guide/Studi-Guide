@@ -185,8 +185,8 @@ jobs:
         # uses: wei/curl@61d92b5169ea0425820dd13cf6fbad66b483e9f1
         uses: wei/curl@v1.1.1
         with:
-          args: -X POST https://$studi-guide-ii:fyEWETGitHixs79caZhJ0Qb9bbdmQs5o7zBmMBhqo3qM3GgqidJeRh0Xi4Gy@studi-guide-ii.scm.azurewebsites.net/docker/hook
-
+          args: -d "" -X POST https://$studi-guide-ii:fyEWETGitHixs79caZhJ0Qb9bbdmQs5o7zBmMBhqo3qM3GgqidJeRh0Xi4Gy@studi-guide-ii.scm.azurewebsites.net/docker/hook
+          
   deploy_armv7:
     needs: [build_back,build_front,test]
     name: Deploy armv7
