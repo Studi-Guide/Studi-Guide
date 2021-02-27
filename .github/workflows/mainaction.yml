@@ -172,6 +172,7 @@ jobs:
           docker push studiguide/studiguide_appservice:latest
           
       - name: Deploy to Azure Web App
+        if: github.ref == 'refs/heads/master'
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'studi-guide-ii'
@@ -180,6 +181,7 @@ jobs:
         #- name: Build & Push to Docker Hub
         
       - name: Webhook Action
+        if: github.ref == 'refs/heads/master'
         # You may pin to the exact commit or the version.
         # uses: joelwmale/webhook-action@6f6298309b7aa21dc601d8c6271e0be055ce6f0e
         uses: joelwmale/webhook-action@2.1.0
