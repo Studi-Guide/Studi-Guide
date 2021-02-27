@@ -6,7 +6,6 @@ env:
   IONIC: "./front"
   GO_VERSION: 1.13.5
 
-
 jobs:
 
   build_front:
@@ -179,7 +178,15 @@ jobs:
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_f2c142cba8d840d992ebff76fc35cc34 }}
           images: 'index.docker.io/studiguide/studiguide_appservice:latest'
         #- name: Build & Push to Docker Hub
-          
+        
+      - name: Webhook Action
+        # You may pin to the exact commit or the version.
+        # uses: joelwmale/webhook-action@6f6298309b7aa21dc601d8c6271e0be055ce6f0e
+        uses: joelwmale/webhook-action@2.1.0
+        with:
+          # The url to send the webhook event to
+          url: https://$studi-guide-ii:fyEWETGitHixs79caZhJ0Qb9bbdmQs5o7zBmMBhqo3qM3GgqidJeRh0Xi4Gy@studi-guide-ii.scm.azurewebsites.net/docker/hook
+
   deploy_armv7:
     needs: [build_back,build_front,test]
     name: Deploy armv7
