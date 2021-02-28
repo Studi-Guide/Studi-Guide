@@ -13,9 +13,9 @@
  - [Ionic Framework](https://ionicframework.com/docs/installation/cli)
 
 
-## Internationalization i18n
+## [Internationalization i18n](https://angular.io/guide/i18n#create-a-translation-file-for-each-language)
 
- - Extract Messages: `ng xi18n`
+ - Extract Messages: `ng extract-i18n`
  - For each language copy `messages.xlf` to `src/locale/messages.<locale identifier>.xlf`
  - You may use a diff viewer to copy previous translations to the copied file, e.g. `git difftool --tool=meld`
  - Build web app with localization using the command above
