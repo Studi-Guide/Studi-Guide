@@ -29,7 +29,15 @@ export class DarkModeService {
     return this._isAutoDarkMode;
   }
 
-  enableAutoDarkMode() {
+  set isAutoDarkMode(value: boolean) {
+    if (value === true) {
+      this.enableAutoDarkMode();
+    } else {
+      this.disableAutoDarkMode();
+    }
+  }
+
+  private enableAutoDarkMode() {
     this.setDarkTheme(this.prefersDark.matches);
     this.handler = function toggleDarkTheme(e) {
         document.body.classList.toggle('dark', e.matches);
@@ -40,7 +48,7 @@ export class DarkModeService {
     this._isAutoDarkMode = true;
   }
 
-  disableAutoDarkMode() {
+  private disableAutoDarkMode() {
     this.prefersDark.removeListener(this.handler);
     this._isAutoDarkMode = false;
     this._isDarkMode = this.prefersDark.matches;

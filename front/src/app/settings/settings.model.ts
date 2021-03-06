@@ -17,7 +17,7 @@ export class SettingsModel {
 
             IonicBottomDrawerComponent.DrawerDocking = this.entity.DrawerDocking;
             if (this.entity.AutoDarkMode) {
-                darkMode.enableAutoDarkMode();
+                darkMode.isAutoDarkMode = true;
             } else {
                 darkMode.isDarkMode = this.entity.DarkMode;
             }
@@ -50,12 +50,7 @@ export class SettingsModel {
 
     public set AutoDarkMode(value: boolean) {
         this.entity.AutoDarkMode = value;
-        if (value){
-            this.darkMode.enableAutoDarkMode();
-        } else {
-            this.darkMode.disableAutoDarkMode();
-        }
-
+        this.darkMode.isAutoDarkMode = value;
         this.persist();
     }
 
