@@ -5,7 +5,6 @@ go 1.13
 require (
 	github.com/Studi-Guide/dijkstra v1.0.4
 	github.com/ahmetb/go-linq/v3 v3.2.0
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
 	github.com/facebook/ent v0.4.3
 	github.com/gin-contrib/cors v1.3.1
@@ -21,7 +20,7 @@ require (
 	github.com/swaggo/gin-swagger v1.3.0
 	github.com/swaggo/swag v1.6.7 // indirect
 	github.com/urfave/cli/v2 v2.3.0
-	go.uber.org/dig v1.10.0
+	go.uber.org/dig v1.11.0
 	golang.org/x/crypto v0.0.0-20201002170205-7f63de1d35b0 // indirect
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/net v0.0.0-20201006153459-a7d1128ccaa0 // indirect
