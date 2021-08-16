@@ -5,7 +5,6 @@ go 1.13
 require (
 	github.com/Studi-Guide/dijkstra v1.0.4
 	github.com/ahmetb/go-linq/v3 v3.2.0
-	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/asaskevich/govalidator v0.0.0-20200907205600-7a23bdc65eef
 	github.com/facebook/ent v0.4.3
 	github.com/gin-contrib/cors v1.3.1
@@ -26,7 +25,7 @@ require (
 	golang.org/x/lint v0.0.0-20200302205851-738671d3881b // indirect
 	golang.org/x/net v0.0.0-20201006153459-a7d1128ccaa0 // indirect
 	golang.org/x/sys v0.0.0-20201007082116-8445cc04cbdf // indirect
-	golang.org/x/text v0.3.5
+	golang.org/x/text v0.3.7
 	golang.org/x/tools v0.0.0-20201007032633-0806396f153e // indirect
 	google.golang.org/protobuf v1.25.0 // indirect
 	gopkg.in/yaml.v2 v2.3.0 // indirect
